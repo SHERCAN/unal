@@ -29,6 +29,9 @@ services:
       PORT: ${BACKEND_PORT}
     expose:
       - ${BACKEND_PORT}
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - proxy-network
 
@@ -41,6 +44,8 @@ services:
       - API_URL=${FRONTEND_API_URL}
     expose:
       - 3000
+    depends_on:
+      - math-learning-backend
     networks:
       - proxy-network
 
