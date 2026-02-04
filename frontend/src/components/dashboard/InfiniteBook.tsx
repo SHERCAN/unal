@@ -1,0 +1,162 @@
+import { motion } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import React from 'react';
+import { TopicConfig } from '@/types/topic';
+
+interface InfiniteBookProps {
+    topicConfig: TopicConfig;
+    onPageChange?: (page: number, completed: number[]) => void;
+    onNavigationRequest?: (callback: (page: number) => void) => void;
+}
+
+export function InfiniteBook({ topicConfig, onPageChange, onNavigationRequest }: InfiniteBookProps) {
+    const [globalZoom, setGlobalZoom] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [completedPages, setCompletedPages] = useState<number[]>([]);
+    const pageRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+    const handleZoomIn = () => {
+        setGlobalZoom(prev => Math.min(prev + 0.1, 2)); // Max 200%
+    };
+
+    const handleZoomOut = () => {
+        setGlobalZoom(prev => Math.max(prev - 0.1, 0.5)); // Min 50%
+    };
+
+    const handleResetZoom = () => {
+        setGlobalZoom(1);
+    };
+
+    // Intersection Observer for page tracking
+    useEffect(() => {
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+        };
+
+        const observerCallback = (entries: IntersectionObserverEntry[]) => {
+            let maxEntry: IntersectionObserverEntry | null = null;
+            let maxRatio = 0;
+
+            entries.forEach((entry) => {
+                if (entry.intersectionRatio > maxRatio) {
+                    maxRatio = entry.intersectionRatio;
+                    maxEntry = entry;
+                }
+            });
+
+            if (maxEntry && maxRatio > 0.1) {
+                const pageIndex = pageRefs.current.findIndex(ref => ref === maxEntry!.target);
+                if (pageIndex !== -1) {
+                    const pageNumber = pageIndex + 1;
+                    setCurrentPage(pageNumber);
+                    const newCompleted = Array.from(new Set([...Array.from({ length: pageNumber - 1 }, (_, i) => i + 1)]));
+                    setCompletedPages(newCompleted);
+                }
+            }
+        };
+
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+        pageRefs.current.forEach(ref => {
+            if (ref) observer.observe(ref);
+        });
+
+        return () => observer.disconnect();
+    }, []);
+
+    // Notify parent of page changes
+    useEffect(() => {
+        if (onPageChange) {
+            onPageChange(currentPage, completedPages);
+        }
+    }, [currentPage, completedPages, onPageChange]);
+
+    // Expose navigation function to parent
+    useEffect(() => {
+        const navigateToPage = (page: number) => {
+            const element = pageRefs.current[page - 1];
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        };
+
+        if (onNavigationRequest) {
+            onNavigationRequest(navigateToPage);
+        }
+    }, [onNavigationRequest]);
+
+    // Combine lesson pages and exercise pages
+    const pages = [
+        ...topicConfig.pages,
+        ...topicConfig.exercisePages,
+    ];
+
+    return (
+        <div className="max-w-5xl mx-auto bg-transparent min-h-screen px-4 md:px-8 pb-40">
+            {/* Global Zoom Controls - Fixed position with opacity transition */}
+            <div className="fixed top-24 right-8 z-50 flex flex-col gap-2 bg-white dark:bg-[#1a1c23] p-3 rounded-lg shadow-xl dark:shadow-none dark:border dark:border-white/10 opacity-60 hover:opacity-100 transition-opacity duration-300">
+                <button
+                    onClick={handleZoomIn}
+                    disabled={globalZoom >= 2}
+                    className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center gap-2"
+                    title="Zoom In"
+                >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                    </svg>
+                    <span className="text-sm font-medium">Zoom +</span>
+                </button>
+
+                <button
+                    onClick={handleResetZoom}
+                    className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-all duration-200 flex items-center gap-2"
+                    title="Reset Zoom"
+                >
+                    <span className="text-sm font-medium">{Math.round(globalZoom * 100)}%</span>
+                </button>
+
+                <button
+                    onClick={handleZoomOut}
+                    disabled={globalZoom <= 0.5}
+                    className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center gap-2"
+                    title="Zoom Out"
+                >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
+                    </svg>
+                    <span className="text-sm font-medium">Zoom -</span>
+                </button>
+            </div>
+
+            <div className="relative z-10">
+                {pages.map((pageDef, index) => {
+                    const PageComponent = pageDef.component;
+                    return (
+                        <motion.div
+                            key={pageDef.id}
+                            ref={(el) => { pageRefs.current[index] = el; }}
+                            initial={{ opacity: 0, y: 50 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-100px" }}
+                            transition={{ duration: 0.6, delay: index * 0.1 }}
+                            className="snap-start snap-always"
+                            style={{ scrollMarginTop: '1rem' }}
+                        >
+                            <PageComponent zoom={globalZoom} />
+                        </motion.div>
+                    );
+                })}
+            </div>
+
+            {/* Loading/End Indicator */}
+            <div className="relative z-10 text-center py-12 mb-32">
+                <div className="inline-block p-4 rounded-full bg-white/50 backdrop-blur text-primary animate-pulse shadow-sm">
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    );
+}

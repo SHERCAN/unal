@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  nickname  String   @unique
+  password  String
+  nombre    String
+  edad      Int
+  grado     String
+  avatar    String?
+  photoUrl  String?
+  puntos    Int      @default(0)
+  puntosDefinitivos Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  progreso Progreso[]
+  watchedVideos WatchedVideo[]
+  exerciseAttempts ExerciseAttempt[]
+  pageRatings PageRating[]
+  
+  @@map("users")
+}
+
+model Progreso {
+  id        String   @id @default(uuid())
+  userId    String
+  modulo    String
+  completado Boolean @default(false)
+  progreso  Int     @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("progresos")
+}
+
+model WatchedVideo {
+  id        String   @id @default(uuid())
+  userId    String
+  videoId   String
+  watchedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, videoId])
+  @@map("watched_videos")
+}
+
+model ExerciseAttempt {
+  id              String   @id @default(uuid())
+  userId          String
+  exerciseId      String   // e.g., "division-exercises-activity1", "division-game-c-question"
+  attempted       Boolean  @default(false)
+  completed       Boolean  @default(false)
+  attemptCount    Int      @default(1) // Track number of attempts
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, exerciseId])
+  @@map("exercise_attempts")
+}
+
+model PageRating {
+  id        String   @id @default(uuid())
+  userId    String
+  pageId    String
+  rating    Int      // 1=Bad, 2=Regular, 3=Good
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, pageId])
+  @@map("page_ratings")
+}

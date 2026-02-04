@@ -1,0 +1,226 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #dba9f3;
+  --color-primary-light: #f3e8ff;
+  --color-primary-dark: #c084fc;
+  --color-secondary: #fdf4ff;
+  --color-secondary-light: #ffffff;
+  --color-accent: #fbbf24;
+  --color-background: #ffffff;
+  --color-background-secondary: #fbf7ff;
+  --color-text: #111827;
+  --color-text-secondary: #6b7280;
+}
+
+.dark {
+  --color-primary: #a855f7;
+  --color-primary-light: #c084fc;
+  --color-primary-dark: #7e22ce;
+  --color-secondary: #581c87;
+  --color-secondary-light: #6b21a8;
+  --color-accent: #fbbf24;
+  --color-background: #111827;
+  --color-background-secondary: #1f2937;
+  --color-text: #f9fafb;
+  --color-text-secondary: #9ca3af;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 12px;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Animaciones de fondo matemático */
+.math-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.15;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.math-element {
+  position: absolute;
+  font-weight: 600;
+  animation: float 20s infinite ease-in-out, fadeInOut 20s infinite ease-in-out;
+  opacity: 0;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+
+  20% {
+    transform: translateY(-40px) translateX(25px) rotate(8deg);
+  }
+
+  40% {
+    transform: translateY(-80px) translateX(-15px) rotate(-12deg);
+  }
+
+  60% {
+    transform: translateY(-120px) translateX(35px) rotate(6deg);
+  }
+
+  80% {
+    transform: translateY(-60px) translateX(-25px) rotate(-8deg);
+  }
+
+  100% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+}
+
+@keyframes fadeInOut {
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  10%,
+  90% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.dark .math-element {
+  opacity: 0;
+  animation: float 20s infinite ease-in-out, fadeInOutDark 20s infinite ease-in-out;
+}
+
+@keyframes fadeInOutDark {
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  10%,
+  90% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Estilos para scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background-secondary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-dark);
+}
+
+/* Animación de entrada para avatares */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.avatar-enter {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Scrollbar personalizado para el modal de avatares */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--color-background);
+  border-radius: 10px;
+  margin: 8px 0;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 10px;
+  border: 2px solid var(--color-background-secondary);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-dark);
+}
+
+/* Animación de flotación lenta para decoraciones */
+@keyframes float-slow {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--rotate-start, 0deg));
+  }
+
+  50% {
+    transform: translateY(-10px) rotate(var(--rotate-end, 0deg));
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
