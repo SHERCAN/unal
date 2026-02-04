@@ -29,11 +29,6 @@ services:
       PORT: ${BACKEND_PORT}
     expose:
       - ${BACKEND_PORT}
-    # volumes:
-    #   - videos_volume:/app/dist/public/videos  # REMOVIDO: los videos ya están en la imagen Docker
-    depends_on:
-      postgres:
-        condition: service_healthy
     networks:
       - proxy-network
 
@@ -46,8 +41,6 @@ services:
       - API_URL=${FRONTEND_API_URL}
     expose:
       - 3000
-    depends_on:
-      - backend
     networks:
       - proxy-network
 
