@@ -297,8 +297,8 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                         // The screenshot has 2 oranges in the first box of the bottom section.
                                         // I'll just leave them empty for the user to count mentally or fill via input.
                                         <div className="flex">
-                                            <img src="/division/oranges-page/orange.png" alt="Orange" className="w-8 h-8 object-contain" />
-                                            <img src="/division/oranges-page/orange.png" alt="Orange" className="w-8 h-8 object-contain" />
+                                            <img src="/division/oranges-page/orange.png" alt="Orange" className="w-14 h-14 object-contain" />
+                                            <img src="/division/oranges-page/orange.png" alt="Orange" className="w-14 h-14 object-contain" />
                                         </div>
                                     )}
                                 </div>
