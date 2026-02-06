@@ -665,8 +665,8 @@ function InfiniteBookWrapper({
       {/* Progress Navigation Footer - Full width of main content */}
       <div className="sticky bottom-0 z-50 w-full">
         <ProgressNavigation
-          lessonPages={10}
-          exercisePages={1}
+          lessonPages={divisionConfig.pages.length}
+          exercisePages={divisionConfig.exercisePages.length}
           currentPage={currentPage}
           completedPages={completedPages}
           completedModules={completedModules}
