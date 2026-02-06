@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Testing
+coverage/
+
+# Next.js
+.next/
+out/
+build/
+.vercel
+
+# Production & Environments
+.env*
+!.env.example
+*.local
+
+# System Files
+.DS_Store
+Thumbs.db
+*.log
+
+# IDEs
+.vscode/
+.idea/
+
+# Backend / Prisma
+dist/
+*.sqlite
+*.sqlite-journal
+
+# Docker volumes (optional, if you map them locally)
+postgres_data/
