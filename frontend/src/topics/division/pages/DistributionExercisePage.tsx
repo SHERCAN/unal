@@ -210,7 +210,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                             key={i + 1}
                                             onDragOver={handleDragOver}
                                             onDrop={() => handleDropOnBox(i + 1)}
-                                            className="relative w-20 h-20 md:w-24 md:h-24"
+                                            className="relative w-28 h-28 md:w-32 md:h-32"
                                         >
                                             <img src="/division/oranges-page/caja-abierta%2017.png" alt="Box" className="w-full h-full object-contain" />
                                             {/* Oranges inside box */}
@@ -220,7 +220,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                                         key={o.id}
                                                         draggable
                                                         onDragStart={(e) => handleDragStart(e, o.id)}
-                                                        className="w-10 h-10 cursor-grab"
+                                                        className="w-14 h-14 cursor-grab"
                                                     >
                                                         <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain" />
                                                     </div>
@@ -246,7 +246,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                                 key={o.id}
                                                 draggable
                                                 onDragStart={(e) => handleDragStart(e, o.id)}
-                                                className="w-8 h-8 cursor-grab hover:scale-110 transition"
+                                                className="w-12 h-12 cursor-grab hover:scale-110 transition"
                                             >
                                                 <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain" />
                                             </div>
@@ -276,7 +276,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                     <div className="border border-gray-300 rounded-lg p-4 bg-white mb-6">
                         <div className="grid grid-cols-8 gap-y-2 place-items-center">
                             {Array.from({ length: 24 }).map((_, i) => (
-                                <img key={i} src="/division/oranges-page/orange.png" alt="Orange" className="w-10 h-10 object-contain" />
+                                <img key={i} src="/division/oranges-page/orange.png" alt="Orange" className="w-16 h-16 object-contain" />
                             ))}
                         </div>
                     </div>
@@ -297,8 +297,8 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                         // The screenshot has 2 oranges in the first box of the bottom section.
                                         // I'll just leave them empty for the user to count mentally or fill via input.
                                         <div className="flex">
-                                            <img src="/division/oranges-page/orange.png" alt="Orange" className="w-10 h-10 object-contain" />
-                                            <img src="/division/oranges-page/orange.png" alt="Orange" className="w-10 h-10 object-contain" />
+                                            <img src="/division/oranges-page/orange.png" alt="Orange" className="w-16 h-16 object-contain" />
+                                            <img src="/division/oranges-page/orange.png" alt="Orange" className="w-16 h-16 object-contain" />
                                         </div>
                                     )}
                                 </div>
