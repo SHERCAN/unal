@@ -23,14 +23,23 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
     const BOX_COUNT = 4;
     const ORANGES_PER_BOX = TOTAL_ORANGES / BOX_COUNT;
 
-    // Fixed positions for oranges on the tree to look organized (approximate % coordinates)
+    // Fixed positions for oranges on the tree to look organized (groups of 6)
     const TREE_POSITIONS = [
-        { top: '15%', left: '30%' }, { top: '12%', left: '45%' }, { top: '15%', left: '60%' },
-        { top: '25%', left: '20%' }, { top: '22%', left: '35%' }, { top: '20%', left: '50%' }, { top: '24%', left: '65%' }, { top: '28%', left: '78%' },
-        { top: '35%', left: '15%' }, { top: '32%', left: '30%' }, { top: '34%', left: '45%' }, { top: '31%', left: '58%' }, { top: '36%', left: '72%' },
-        { top: '45%', left: '20%' }, { top: '42%', left: '35%' }, { top: '40%', left: '50%' }, { top: '44%', left: '65%' }, { top: '42%', left: '80%' },
-        { top: '55%', left: '25%' }, { top: '52%', left: '40%' }, { top: '50%', left: '55%' }, { top: '54%', left: '70%' },
-        { top: '60%', left: '35%' }, { top: '58%', left: '50%' }
+        // Group 1 (Top Left)
+        { top: '15%', left: '25%' }, { top: '15%', left: '35%' }, { top: '15%', left: '45%' },
+        { top: '25%', left: '20%' }, { top: '25%', left: '30%' }, { top: '25%', left: '40%' },
+
+        // Group 2 (Top Right)
+        { top: '15%', left: '55%' }, { top: '15%', left: '65%' }, { top: '15%', left: '75%' },
+        { top: '25%', left: '60%' }, { top: '25%', left: '70%' }, { top: '25%', left: '80%' },
+
+        // Group 3 (Low Left)
+        { top: '40%', left: '20%' }, { top: '40%', left: '30%' }, { top: '40%', left: '40%' },
+        { top: '50%', left: '25%' }, { top: '50%', left: '35%' }, { top: '50%', left: '45%' },
+
+        // Group 4 (Low Right)
+        { top: '40%', left: '60%' }, { top: '40%', left: '70%' }, { top: '40%', left: '80%' },
+        { top: '50%', left: '55%' }, { top: '50%', left: '65%' }, { top: '50%', left: '75%' }
     ];
 
     // State - Intro (Scene 1)
@@ -237,7 +246,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                             key={o.id}
                                             draggable
                                             onDragStart={(e) => handleIntroDragStart(e, o.id)}
-                                            className="w-5 h-5 -ml-1 -mb-1 pointer-events-auto cursor-grab hover:scale-110 transition z-10"
+                                            className="w-8 h-8 -ml-2 -mb-2 pointer-events-auto cursor-grab hover:scale-110 transition z-10"
                                         // Removing absolute positioning for basket to make them pile up naturally
                                         >
                                             <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain" />
@@ -277,7 +286,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                         key={o.id}
                                         draggable
                                         onDragStart={(e) => handleIntroDragStart(e, o.id)}
-                                        className="absolute w-10 h-10 pointer-events-auto cursor-grab hover:scale-110 transition z-10"
+                                        className="absolute w-12 h-12 pointer-events-auto cursor-grab hover:scale-110 transition z-10"
                                         style={{ top: o.top, left: o.left }}
                                     >
                                         <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain drop-shadow-md" />
@@ -334,7 +343,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                                         key={o.id}
                                                         draggable
                                                         onDragStart={(e) => handleDragStart(e, o.id)}
-                                                        className="w-6 h-6 cursor-grab"
+                                                        className="w-8 h-8 cursor-grab"
                                                     >
                                                         <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain" />
                                                     </div>
@@ -360,7 +369,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                                 key={o.id}
                                                 draggable
                                                 onDragStart={(e) => handleDragStart(e, o.id)}
-                                                className="w-5 h-5 cursor-grab hover:scale-110 transition"
+                                                className="w-8 h-8 cursor-grab hover:scale-110 transition"
                                             >
                                                 <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain" />
                                             </div>
