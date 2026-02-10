@@ -23,6 +23,16 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
     const BOX_COUNT = 4;
     const ORANGES_PER_BOX = TOTAL_ORANGES / BOX_COUNT;
 
+    // Fixed positions for oranges on the tree to look organized (approximate % coordinates)
+    const TREE_POSITIONS = [
+        { top: '15%', left: '30%' }, { top: '12%', left: '45%' }, { top: '15%', left: '60%' },
+        { top: '25%', left: '20%' }, { top: '22%', left: '35%' }, { top: '20%', left: '50%' }, { top: '24%', left: '65%' }, { top: '28%', left: '78%' },
+        { top: '35%', left: '15%' }, { top: '32%', left: '30%' }, { top: '34%', left: '45%' }, { top: '31%', left: '58%' }, { top: '36%', left: '72%' },
+        { top: '45%', left: '20%' }, { top: '42%', left: '35%' }, { top: '40%', left: '50%' }, { top: '44%', left: '65%' }, { top: '42%', left: '80%' },
+        { top: '55%', left: '25%' }, { top: '52%', left: '40%' }, { top: '50%', left: '55%' }, { top: '54%', left: '70%' },
+        { top: '60%', left: '35%' }, { top: '58%', left: '50%' }
+    ];
+
     // State - Intro (Scene 1)
     interface IntroOrange {
         id: number;
@@ -34,10 +44,8 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
         return Array.from({ length: TOTAL_ORANGES }, (_, i) => ({
             id: i,
             location: 'tree',
-            // Random positions for tree (approximate canopy area)
-            // Tree image is ~48 units high. Canopy is roughly top 70%. Width is ~100%.
-            top: `${10 + Math.random() * 50}%`,
-            left: `${10 + Math.random() * 80}%`
+            top: TREE_POSITIONS[i]?.top || '50%',
+            left: TREE_POSITIONS[i]?.left || '50%'
         }));
     });
 
@@ -57,9 +65,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                 return {
                     ...o,
                     location: 'basket',
-                    // Random position in basket area
-                    top: `${40 + Math.random() * 20}%`,
-                    left: `${20 + Math.random() * 60}%`
+                    top: '0%', left: '0%' // Position handled by flex container in basket
                 };
             }
             return o;
@@ -71,11 +77,13 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
         if (introDraggedId === null) return;
         setIntroOranges(prev => prev.map(o => {
             if (o.id === introDraggedId) {
+                // Return to original tree position
+                const originalPos = TREE_POSITIONS[o.id];
                 return {
                     ...o,
                     location: 'tree',
-                    top: `${10 + Math.random() * 50}%`,
-                    left: `${10 + Math.random() * 80}%`
+                    top: originalPos?.top || '50%',
+                    left: originalPos?.left || '50%'
                 };
             }
             return o;
@@ -223,13 +231,13 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                             <div className="relative w-48 h-64">
                                 <img src="/division/oranges-page/girl-basket.png" alt="Girl with Basket" className="w-full h-full object-contain" />
                                 {/* Oranges in Basket - Rendered in a pile/grid over the basket area */}
-                                <div className="absolute bottom-[10%] left-[10%] w-[80%] h-[30%] flex flex-wrap-reverse justify-center content-end pointer-events-none">
+                                <div className="absolute bottom-[2%] left-[15%] w-[70%] h-[25%] flex flex-wrap-reverse justify-center content-end pointer-events-none">
                                     {introOranges.filter(o => o.location === 'basket').map(o => (
                                         <div
                                             key={o.id}
                                             draggable
                                             onDragStart={(e) => handleIntroDragStart(e, o.id)}
-                                            className="w-6 h-6 -ml-2 -mb-1 pointer-events-auto cursor-grab hover:scale-110 transition z-10"
+                                            className="w-5 h-5 -ml-1 -mb-1 pointer-events-auto cursor-grab hover:scale-110 transition z-10"
                                         // Removing absolute positioning for basket to make them pile up naturally
                                         >
                                             <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain" />
