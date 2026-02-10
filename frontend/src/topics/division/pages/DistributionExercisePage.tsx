@@ -169,9 +169,11 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                             <div className="text-center font-bold text-4xl text-purple-700 mb-2">
                                 24
                             </div>
-                            <div className="grid grid-cols-6 gap-1 p-2 bg-orange-100 rounded-lg border border-orange-200">
+                            <div className="grid grid-cols-6 gap-2 p-3 bg-yellow-50 rounded-xl border-2 border-yellow-200">
                                 {Array.from({ length: 24 }).map((_, i) => (
-                                    <img key={i} src="/division/oranges-page/orange.png" alt="Orange" className="w-6 h-6 object-contain" />
+                                    <div key={i} className="relative w-8 h-8 flex items-center justify-center">
+                                        <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain" />
+                                    </div>
                                 ))}
                             </div>
                         </div>
