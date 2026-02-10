@@ -23,6 +23,66 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
     const BOX_COUNT = 4;
     const ORANGES_PER_BOX = TOTAL_ORANGES / BOX_COUNT;
 
+    // State - Intro (Scene 1)
+    interface IntroOrange {
+        id: number;
+        location: 'tree' | 'basket';
+        top: string;
+        left: string;
+    }
+    const [introOranges, setIntroOranges] = useState<IntroOrange[]>(() => {
+        return Array.from({ length: TOTAL_ORANGES }, (_, i) => ({
+            id: i,
+            location: 'tree',
+            // Random positions for tree (approximate canopy area)
+            // Tree image is ~48 units high. Canopy is roughly top 70%. Width is ~100%.
+            top: `${10 + Math.random() * 50}%`,
+            left: `${10 + Math.random() * 80}%`
+        }));
+    });
+
+    // Handlers - Intro
+    const handleIntroDragStart = (e: React.DragEvent, id: number) => {
+        setDraggedOrange(id); // Reusing draggedOrange state since IDs are consistent (0-23)
+        // If we want separate state, we can add it, but reusing is fine if we are careful.
+        // Actually, let's use a separate ID tracker to avoid confusion with Stage C distribution?
+        // Stage C uses 0-23 IDs too. It's fine.
+        e.dataTransfer.effectAllowed = 'move';
+    };
+
+    const handleIntroDropOnBasket = () => {
+        if (draggedOrange === null) return;
+        setIntroOranges(prev => prev.map(o => {
+            if (o.id === draggedOrange) {
+                return {
+                    ...o,
+                    location: 'basket',
+                    // Random position in basket area
+                    top: `${40 + Math.random() * 20}%`,
+                    left: `${20 + Math.random() * 60}%`
+                };
+            }
+            return o;
+        }));
+        setDraggedOrange(null);
+    };
+
+    const handleIntroDropOnTree = () => {
+        if (draggedOrange === null) return;
+        setIntroOranges(prev => prev.map(o => {
+            if (o.id === draggedOrange) {
+                return {
+                    ...o,
+                    location: 'tree',
+                    top: `${10 + Math.random() * 50}%`,
+                    left: `${10 + Math.random() * 80}%`
+                };
+            }
+            return o;
+        }));
+        setDraggedOrange(null);
+    };
+
     // State - Stage C
     const [oranges, setOranges] = useState<Orange[]>(
         Array.from({ length: TOTAL_ORANGES }, (_, i) => ({ id: i, inBox: null }))
@@ -150,35 +210,75 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                 <div className="relative border-2 border-green-300 rounded-xl p-4 bg-white">
                     <div className="absolute -top-4 left-4 px-3 py-1 rounded-md bg-green-300 font-bold text-white text-xl">C</div>
 
+
                     {/* Scene 1: Intro */}
-                    <div className="flex flex-col md:flex-row items-center justify-between mb-8 px-4">
-                        <div className="relative">
-                            <img src="/division/oranges-page/girl-basket.png" alt="Girl with Basket" className="h-40 object-contain" />
+                    <div className="flex flex-col md:flex-row items-center justify-between mb-8 px-4 gap-8">
+
+                        {/* Basket / Girl Area */}
+                        <div
+                            className="relative w-48 h-48 flex-shrink-0"
+                            onDragOver={handleDragOver}
+                            onDrop={handleIntroDropOnBasket}
+                        >
+                            <img src="/division/oranges-page/girl-basket.png" alt="Girl with Basket" className="w-full h-full object-contain" />
+                            {/* Oranges in Basket */}
+                            <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+                                {introOranges.filter(o => o.location === 'basket').map(o => (
+                                    <div
+                                        key={o.id}
+                                        draggable
+                                        onDragStart={(e) => handleIntroDragStart(e, o.id)}
+                                        className="absolute w-6 h-6 pointer-events-auto cursor-grab hover:scale-110 transition z-10"
+                                        style={{ top: o.top, left: o.left }}
+                                    >
+                                        <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain" />
+                                    </div>
+                                ))}
+                            </div>
+
                             {/* Video Trigger */}
                             <button
                                 onClick={() => {
                                     currentTrackingIdRef.current = VIDEO_TRACKING_IDS.C_INTRO;
                                     setVideoModal({ isOpen: true, title: 'Introducción', videoId: VIDEO_IDS.MODULE_DIVISION, trackingId: VIDEO_TRACKING_IDS.C_INTRO });
                                 }}
-                                className="absolute -top-2 -right-2 bg-purple-600 text-white rounded-full p-2 hover:bg-purple-700 transition"
+                                className="absolute -top-2 -right-2 bg-purple-600 text-white rounded-full p-2 hover:bg-purple-700 transition z-20"
                             >
                                 ▶
                             </button>
                         </div>
-                        <div className="flex flex-col items-center my-4 md:my-0">
+
+                        {/* Count Display */}
+                        <div className="flex flex-col items-center">
                             <div className="text-center font-bold text-4xl text-purple-700 mb-2">
-                                24
+                                {introOranges.filter(o => o.location === 'basket').length} / {TOTAL_ORANGES}
                             </div>
-                            <div className="grid grid-cols-6 gap-2 p-3 bg-yellow-50 rounded-xl border-2 border-yellow-200">
-                                {Array.from({ length: 24 }).map((_, i) => (
-                                    <div key={i} className="relative w-8 h-8 flex items-center justify-center">
-                                        <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain" />
+                            <div className="text-gray-500 font-medium">
+                                Naranjas Recolectadas
+                            </div>
+                        </div>
+
+                        {/* Tree Area */}
+                        <div
+                            className="relative w-64 h-64 flex-shrink-0"
+                            onDragOver={handleDragOver}
+                            onDrop={handleIntroDropOnTree}
+                        >
+                            <img src="/division/oranges-page/tree.png" alt="Tree" className="w-full h-full object-contain" />
+                            {/* Oranges on Tree */}
+                            <div className="absolute top-0 left-0 w-full h-full">
+                                {introOranges.filter(o => o.location === 'tree').map(o => (
+                                    <div
+                                        key={o.id}
+                                        draggable
+                                        onDragStart={(e) => handleIntroDragStart(e, o.id)}
+                                        className="absolute w-8 h-8 pointer-events-auto cursor-grab hover:scale-110 transition z-10"
+                                        style={{ top: o.top, left: o.left }}
+                                    >
+                                        <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain drop-shadow-md" />
                                     </div>
                                 ))}
                             </div>
-                        </div>
-                        <div>
-                            <img src="/division/oranges-page/tree.png" alt="Tree" className="h-48 object-contain" />
                         </div>
                     </div>
 
