@@ -1,11 +1,12 @@
 'use client';
+// Force rebuild
 
 import { useEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { MOCK_TOPICS } from '@/lib/mockTopics';
-import { divisionConfig } from '@/topics/division/config';
+import { divisionConfigV2 as divisionConfig } from '@/topics/division/config';
 import { TopicDropdown } from '@/components/dashboard/TopicDropdown';
 import { InfiniteBook } from '@/components/dashboard/InfiniteBook';
 import { ProgressNavigation } from '@/components/navigation/ProgressNavigation';
