@@ -615,7 +615,7 @@ export default function DashboardPage() {
                 onClick={handleLogout}
                 className="px-4 py-2 text-m font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors"
               >
-                Salir (v2)
+                Salir
               </button>
             </div>
           </header>
