@@ -7,7 +7,7 @@ import { PresentationPage } from '@/components/book-pages/shared/PresentationPag
 import { ExplanationPage } from '@/components/book-pages/shared/ExplanationPage';
 import { DistributionExercisePage } from './pages/DistributionExercisePage';
 
-export const divisionConfigV2: TopicConfig = {
+export const divisionConfig: TopicConfig = {
     id: 'division',
     name: 'División',
     icon: '/division-icon.png',
