@@ -6,7 +6,14 @@ import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { MOCK_TOPICS } from '@/lib/mockTopics';
-import { divisionConfigV2 as divisionConfig } from '@/topics/division/config';
+import { divisionConfig } from '@/topics/division/config';
+import { divisionDemoConfig } from '@/topics/division_demo/config';
+import { TopicConfig } from '@/types/topic';
+
+const TOPIC_CONFIGS: Record<string, TopicConfig> = {
+  'division': divisionConfig,
+  'division-demo': divisionDemoConfig,
+};
 import { TopicDropdown } from '@/components/dashboard/TopicDropdown';
 import { InfiniteBook } from '@/components/dashboard/InfiniteBook';
 import { ProgressNavigation } from '@/components/navigation/ProgressNavigation';
@@ -214,6 +221,7 @@ export default function DashboardPage() {
   const [navigateToPage, setNavigateToPage] = useState<((page: number) => void) | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [completedModules, setCompletedModules] = useState<string[]>([]);
+  const [currentTopicConfig, setCurrentTopicConfig] = useState<TopicConfig>(divisionConfig);
   const nextLevelStarRef = useRef<HTMLDivElement>(null);
 
   // Estados para el perfil de usuario
@@ -383,10 +391,14 @@ export default function DashboardPage() {
     setSelectedUser(null);
   };
 
-  const scrollToTopic = (topicId: string) => {
-    const element = document.getElementById(`topic-${topicId}`);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+  const handleSelectTopic = (topicId: string) => {
+    const config = TOPIC_CONFIGS[topicId];
+    if (config) {
+      setCurrentTopicConfig(config);
+      // Reset to page 1 when switching topics
+      if (navigateToPage) {
+        navigateToPage(1);
+      }
     }
   };
 
@@ -588,7 +600,7 @@ export default function DashboardPage() {
               </div>
               <TopicDropdown
                 topics={MOCK_TOPICS}
-                onSelectTopic={scrollToTopic}
+                onSelectTopic={handleSelectTopic}
                 exerciseProgress={{
                   completed: completedPages.filter(p => p > 10).length, // Solo páginas de ejercicios (> 10)
                   total: 1 // Tenemos 1 página de ejercicios
@@ -611,7 +623,7 @@ export default function DashboardPage() {
           <InfiniteBookWrapper
             completedPages={completedPages}
             setCompletedPages={setCompletedPages}
-            scrollToTopic={scrollToTopic}
+            topicConfig={currentTopicConfig}
             setNavigateToPage={setNavigateToPage}
             completedModules={completedModules}
           />
@@ -625,13 +637,13 @@ export default function DashboardPage() {
 function InfiniteBookWrapper({
   completedPages,
   setCompletedPages,
-  scrollToTopic,
+  topicConfig,
   setNavigateToPage,
   completedModules
 }: {
   completedPages: number[];
   setCompletedPages: React.Dispatch<React.SetStateAction<number[]>>;
-  scrollToTopic: (topicId: string) => void;
+  topicConfig: TopicConfig;
   setNavigateToPage: React.Dispatch<React.SetStateAction<((page: number) => void) | null>>;
   completedModules: string[];
 }) {
@@ -658,7 +670,7 @@ function InfiniteBookWrapper({
   return (
     <div className="flex-1 relative">
       <InfiniteBook
-        topicConfig={divisionConfig}
+        topicConfig={topicConfig}
         onPageChange={handlePageChange}
         onNavigationRequest={handleNavigationRequest}
       />
@@ -666,8 +678,8 @@ function InfiniteBookWrapper({
       {/* Progress Navigation Footer - Full width of main content */}
       <div className="sticky bottom-0 z-50 w-full">
         <ProgressNavigation
-          lessonPages={divisionConfig.pages.length}
-          exercisePages={divisionConfig.exercisePages.length}
+          lessonPages={topicConfig.pages.length}
+          exercisePages={topicConfig.exercisePages.length}
           currentPage={currentPage}
           completedPages={completedPages}
           completedModules={completedModules}
