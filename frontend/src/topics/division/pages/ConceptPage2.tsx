@@ -10,6 +10,92 @@ interface DivisionConceptPage2Props {
     zoom?: number;
 }
 
+// SVG Kid Components for better visuals
+const Kid1 = () => (
+    <svg width="60" height="90" viewBox="0 0 100 150" fill="none" xmlns="http://www.w3.org/2000/svg" className="transform hover:scale-105 transition-transform">
+        {/* Hair Back */}
+        <path d="M30 35C25 40 20 50 20 60V70H80V60C80 50 75 40 70 35H30Z" fill="#5D4037" />
+        {/* Neck */}
+        <rect x="40" y="80" width="20" height="15" fill="#FFCCBC" />
+        {/* Face */}
+        <ellipse cx="50" cy="55" rx="28" ry="32" fill="#FFCCBC" />
+        {/* Hair Top */}
+        <path d="M50 20C30 20 20 40 18 55C18 35 25 15 50 15C75 15 82 35 82 55C80 40 70 20 50 20Z" fill="#5D4037" />
+        {/* Eyes */}
+        <circle cx="40" cy="55" r="3" fill="#3E2723" />
+        <circle cx="60" cy="55" r="3" fill="#3E2723" />
+        {/* Mouth */}
+        <path d="M42 70Q50 78 58 70" stroke="#D84315" strokeWidth="2" strokeLinecap="round" />
+        {/* Shirt */}
+        <path d="M25 90L20 120H80L75 90Q50 95 25 90Z" fill="#8BC34A" />
+        <path d="M25 90Q50 95 75 90" stroke="#689F38" strokeWidth="2" fill="none" />
+        {/* Pants */}
+        <rect x="25" y="115" width="24" height="30" fill="#0277BD" />
+        <rect x="51" y="115" width="24" height="30" fill="#0277BD" />
+        {/* Shoes */}
+        <ellipse cx="37" cy="145" rx="10" ry="5" fill="#3E2723" />
+        <ellipse cx="63" cy="145" rx="10" ry="5" fill="#3E2723" />
+    </svg>
+);
+
+const Kid2 = () => (
+    <svg width="60" height="90" viewBox="0 0 100 150" fill="none" xmlns="http://www.w3.org/2000/svg" className="transform hover:scale-105 transition-transform">
+        {/* Hair Back */}
+        <path d="M30 40C20 45 15 65 15 80H85C85 65 80 45 70 40H30Z" fill="#FDD835" />
+        {/* Neck */}
+        <rect x="40" y="80" width="20" height="15" fill="#FFCCBC" />
+        {/* Face */}
+        <ellipse cx="50" cy="55" rx="28" ry="32" fill="#FFCCBC" />
+        {/* Hair Front */}
+        <path d="M50 20C35 20 20 35 15 60C15 40 30 15 50 15C70 15 85 40 85 60C80 35 65 20 50 20Z" fill="#FDD835" />
+        {/* Eyes */}
+        <circle cx="38" cy="55" r="3" fill="#01579B" />
+        <circle cx="62" cy="55" r="3" fill="#01579B" />
+        {/* Mouth */}
+        <path d="M45 72Q50 75 55 72" stroke="#D84315" strokeWidth="2" strokeLinecap="round" />
+        {/* Dress/Shirt */}
+        <path d="M25 90L15 130H85L75 90Q50 95 25 90Z" fill="#03A9F4" />
+        {/* Skirt/Pants */}
+        <rect x="25" y="125" width="50" height="20" fill="#B71C1C" />
+        {/* Shoes */}
+        <ellipse cx="35" cy="145" rx="9" ry="5" fill="#4E342E" />
+        <ellipse cx="65" cy="145" rx="9" ry="5" fill="#4E342E" />
+    </svg>
+);
+
+const Kid3 = () => (
+    <svg width="60" height="90" viewBox="0 0 100 150" fill="none" xmlns="http://www.w3.org/2000/svg" className="transform hover:scale-105 transition-transform">
+        {/* Hair */}
+        <circle cx="50" cy="50" r="35" fill="#E65100" />
+        {/* Neck */}
+        <rect x="40" y="80" width="20" height="15" fill="#FFCCBC" />
+        {/* Face */}
+        <ellipse cx="50" cy="55" rx="28" ry="32" fill="#FFCCBC" />
+        {/* Hair Bangs */}
+        <path d="M25 35Q50 50 75 35" fill="none" stroke="#E65100" strokeWidth="8" />
+        {/* Eyes */}
+        <circle cx="40" cy="55" r="3" fill="#3E2723" />
+        <circle cx="60" cy="55" r="3" fill="#3E2723" />
+        {/* Mouth */}
+        <path d="M40 70Q50 80 60 70" stroke="#D84315" strokeWidth="2" strokeLinecap="round" />
+        {/* Shirt */}
+        <path d="M25 90L20 120H80L75 90Q50 95 25 90Z" fill="#009688" />
+        {/* Pattern */}
+        <path d="M25 90L80 120M20 120L75 90" stroke="#004D40" strokeWidth="2" opacity="0.3" />
+        {/* Pants */}
+        <rect x="28" y="115" width="20" height="30" fill="#5D4037" />
+        <rect x="52" y="115" width="20" height="30" fill="#5D4037" />
+        {/* Shoes */}
+        <ellipse cx="38" cy="145" rx="10" ry="5" fill="#212121" />
+        <ellipse cx="62" cy="145" rx="10" ry="5" fill="#212121" />
+    </svg>
+);
+
+const KidFigure = ({ variant = 0 }: { variant?: number }) => {
+    const kids = [<Kid1 key="k1" />, <Kid2 key="k2" />, <Kid3 key="k3" />];
+    return kids[variant % 3];
+};
+
 export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
@@ -75,13 +161,6 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
         >
             {/* Main Content Box */}
             <div className="relative border-2 rounded-xl p-6 h-full flex flex-col" style={{ borderColor: '#be90de' }}>
-                {/* A Label (Keeping consistent with previous page style, though image implies continuation) */}
-                {/* Image has 'A' tab on previous page, here we see 'Ejemplo' green boxes. 
-                    The text starts with "Ejemplo: 12 manzanas...". 
-                    Then "B -> el número de grupos".
-                    Then "C -> cuánto recibe cada grupo".
-                    So this page covers examples of A, then introduces B and C.
-                */}
 
                 <div className="w-full flex-1 flex flex-col overflow-y-auto gap-6 px-1">
 
@@ -137,11 +216,9 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                                 <div className="bg-green-600 text-white px-3 py-1 rounded-md font-bold text-sm mb-2 w-full text-center">
                                     Ejemplo: <span className="font-normal">Entre</span> 3 niños
                                 </div>
-                                <div className="flex gap-2 justify-center p-2 bg-white rounded-lg border border-gray-200">
+                                <div className="flex gap-4 justify-center p-4 bg-white rounded-lg border border-gray-200">
                                     {[...Array(3)].map((_, i) => (
-                                        <div key={i} className="w-8 h-12 bg-blue-200 rounded-t-full border border-blue-300 relative">
-                                            <div className="w-4 h-4 bg-yellow-200 rounded-full absolute -top-2 left-2 border border-yellow-300"></div>
-                                        </div>
+                                        <KidFigure key={i} variant={i} />
                                     ))}
                                 </div>
                             </div>
@@ -189,12 +266,9 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                             <div className="flex justify-around items-end bg-white p-4 rounded-xl border border-gray-200">
                                 {[...Array(3)].map((_, i) => (
                                     <div key={i} className="flex flex-col items-center gap-1">
-                                        {/* Kid */}
-                                        <div className="w-10 h-14 bg-orange-200 rounded-t-full border border-orange-300 relative mb-1">
-                                            <div className="w-6 h-6 bg-yellow-200 rounded-full absolute -top-3 left-2 border border-yellow-300"></div>
-                                        </div>
+                                        <KidFigure variant={i + 1} />
                                         {/* Apples */}
-                                        <div className="grid grid-cols-2 gap-0.5">
+                                        <div className="grid grid-cols-2 gap-0.5 mt-1">
                                             {[...Array(4)].map((_, j) => (
                                                 <div key={j} className="w-4 h-4 rounded-full bg-green-500 border border-green-600"></div>
                                             ))}
