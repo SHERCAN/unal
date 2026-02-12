@@ -599,6 +599,7 @@ export default function DashboardPage() {
                 </button>
               </div>
               <TopicDropdown
+                key={MOCK_TOPICS.length} // Force re-render if topics change
                 topics={MOCK_TOPICS}
                 onSelectTopic={handleSelectTopic}
                 exerciseProgress={{
