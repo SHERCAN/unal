@@ -433,6 +433,11 @@ export default function DashboardPage() {
         `}
         >
           <div className={isSidebarOpen ? 'w-full' : 'w-0 hidden'}>
+            {/* DEBUG BANNER */}
+            <div className="bg-red-500 text-white p-2 text-xs mb-4 font-mono break-all">
+              DEBUG: Loaded {TOPICS_DATA.length} topics.
+              IDs: {TOPICS_DATA.map(t => t.id).join(', ')}
+            </div>
             {/* Usuario */}
             <button
               onClick={handleUserClick}
