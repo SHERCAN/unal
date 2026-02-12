@@ -8,7 +8,6 @@ import { ExplanationPage } from '@/components/book-pages/shared/ExplanationPage'
 import { DistributionExercisePage } from './pages/DistributionExercisePage';
 import { ConceptPage } from './pages/ConceptPage';
 
-console.log('Loading divisionConfig with ConceptPage');
 export const divisionConfig: TopicConfig = {
     id: 'division',
     name: 'División',

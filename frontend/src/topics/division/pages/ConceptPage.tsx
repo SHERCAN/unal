@@ -228,4 +228,4 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
     );
 }
 
-// FORCE UPDATE 2026-02-12
+
