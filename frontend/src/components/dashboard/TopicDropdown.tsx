@@ -59,7 +59,6 @@ const ProgressIcon = ({ progress, showPercentage }: { progress: number; showPerc
 
 
 export function TopicDropdown({ topics, onSelectTopic, activeTopicId, exerciseProgress, onNavigateToPage }: TopicDropdownProps) {
-    console.log('TopicDropdown topics:', topics);
     const [isOpen, setIsOpen] = useState(false);
     const [expandedTopicId, setExpandedTopicId] = useState<string | null>(topics[0]?.id || null);
     const dropdownRef = useRef<HTMLDivElement>(null);

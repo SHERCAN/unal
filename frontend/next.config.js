@@ -1,5 +1,4 @@
 /** @type {import('next').NextConfig} */
-// Force restart
 const nextConfig = {
   images: {
     domains: ['img.youtube.com'],
