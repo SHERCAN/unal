@@ -6,7 +6,6 @@ import { GuidePage } from '@/components/book-pages/shared/GuidePage';
 import { PresentationPage } from '@/components/book-pages/shared/PresentationPage';
 import { ExplanationPage } from '@/components/book-pages/shared/ExplanationPage';
 import { ExercisePage } from './pages/ExercisePage';
-import { DistributionExercisePage } from './pages/DistributionExercisePage';
 import { ExplanationPage2 } from './pages/ExplanationPage2';
 import { ConceptPage } from './pages/ConceptPage';
 import { ProblemsPage } from './pages/ProblemsPage';
@@ -15,7 +14,7 @@ import { ExercisesPage } from './pages/ExercisesPage';
 /**
  * Configuración del tema de División
  */
-export const divisionConfig: TopicConfig = {
+export const divisionDemoConfig: TopicConfig = {
     id: 'division-demo',
     name: 'División Demo',
     icon: '/division-icon.png',
@@ -31,7 +30,6 @@ export const divisionConfig: TopicConfig = {
         { component: PresentationPage, id: 'presentation', title: 'Presentación' },
         { component: ExplanationPage, id: 'explanation', title: 'Explicación' },
         { component: ExercisePage, id: 'division-exercise', title: 'Ejercicio Práctico' },
-        { component: DistributionExercisePage, id: 'division-distribution-exercise', title: 'Ejercicio de Distribución' },
         { component: ExplanationPage2, id: 'division-explanation-2', title: 'Notación' },
         { component: ConceptPage, id: 'division-concept', title: 'Conceptos' },
         { component: ProblemsPage, id: 'division-problems', title: 'Problemas' },
