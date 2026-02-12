@@ -1,6 +1,6 @@
 import { Topic } from '@/types/dashboard';
 
-export const MOCK_TOPICS: Topic[] = [
+export const TOPICS_LIST: Topic[] = [
     {
         id: 'division',
         title: 'DIVISIÓN',

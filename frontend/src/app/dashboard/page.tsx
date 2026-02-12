@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { MOCK_TOPICS } from '@/lib/mockTopics';
+import { TOPICS_LIST } from '@/lib/mockTopics';
 import { divisionConfig } from '@/topics/division/config';
 import { divisionDemoConfig } from '@/topics/division_demo/config';
 import { TopicConfig } from '@/types/topic';
@@ -599,8 +599,8 @@ export default function DashboardPage() {
                 </button>
               </div>
               <TopicDropdown
-                key={MOCK_TOPICS.length} // Force re-render if topics change
-                topics={MOCK_TOPICS}
+                key={TOPICS_LIST.length} // Force re-render if topics change
+                topics={TOPICS_LIST}
                 onSelectTopic={handleSelectTopic}
                 exerciseProgress={{
                   completed: completedPages.filter(p => p > 10).length, // Solo páginas de ejercicios (> 10)
