@@ -227,3 +227,5 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
         </BookPageContainer>
     );
 }
+
+// FORCE UPDATE 2026-02-12
