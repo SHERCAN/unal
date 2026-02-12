@@ -213,6 +213,7 @@ interface RankingUser {
 }
 
 export default function DashboardPage() {
+  console.log('DashboardPage TOPICS_DATA:', TOPICS_DATA);
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [ranking, setRanking] = useState<RankingUser[]>([]);
