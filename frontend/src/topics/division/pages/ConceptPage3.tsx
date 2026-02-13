@@ -181,29 +181,6 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
         }
     };
 
-    // Helper components
-    const InputBox = ({ value, onChange, className = "w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 focus:outline-none text-lg font-bold" }: any) => (
-        <input type="text" value={value} onChange={onChange} className={className} inputMode="numeric" />
-    );
-
-    const Feedback = ({ status }: { status: 'idle' | 'correct' | 'incorrect' }) => {
-        if (status === 'idle') return null;
-        return (
-            <span className={`font-bold ml-2 ${status === 'correct' ? 'text-green-600' : 'text-orange-500'}`}>
-                {status === 'correct' ? 'CORRECTO' : 'INCORRECTO'}
-            </span>
-        );
-    };
-
-    const CheckButton = ({ onClick }: { onClick: () => void }) => (
-        <button
-            onClick={onClick}
-            className="bg-purple-700 hover:bg-purple-800 text-white font-bold py-1 px-4 rounded shadow-md transform active:scale-95 transition-all text-sm"
-        >
-            ¿LISTO?
-        </button>
-    );
-
     return (
         <BookPageContainer
             zoom={zoom}
@@ -484,3 +461,41 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
         </BookPageContainer>
     );
 }
+
+// --- Helper Components & Hooks ---
+
+// Hook to manage input state
+const useInputState = (initialValue: string = '') => {
+    const [value, setValue] = useState(initialValue);
+    return { value, onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setValue(e.target.value) };
+};
+
+// Input Component
+const InputBox = ({ value, onChange, className = "w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 focus:outline-none text-lg font-bold" }: any) => (
+    <input
+        type="text"
+        value={value}
+        onChange={onChange}
+        className={className}
+        inputMode="numeric"
+        autoComplete="off"
+    />
+);
+
+const Feedback = ({ status }: { status: 'idle' | 'correct' | 'incorrect' }) => {
+    if (status === 'idle') return null;
+    return (
+        <span className={`font-bold ml-2 ${status === 'correct' ? 'text-green-600' : 'text-orange-500'}`}>
+            {status === 'correct' ? 'CORRECTO' : 'INCORRECTO'}
+        </span>
+    );
+};
+
+const CheckButton = ({ onClick }: { onClick: () => void }) => (
+    <button
+        onClick={onClick}
+        className="bg-purple-700 hover:bg-purple-800 text-white font-bold py-1 px-4 rounded shadow-md transform active:scale-95 transition-all text-sm"
+    >
+        ¿LISTO?
+    </button>
+);
