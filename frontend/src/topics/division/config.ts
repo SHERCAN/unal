@@ -9,6 +9,7 @@ import { DistributionExercisePage } from './pages/DistributionExercisePage';
 import { ConceptPage } from './pages/ConceptPage';
 import { ConceptPage2 } from './pages/ConceptPage2';
 import { ConceptPage3 } from './pages/ConceptPage3';
+import { ExercisesPage } from './pages/ExercisesPage';
 
 export const divisionConfig: TopicConfig = {
     id: 'division',
@@ -28,6 +29,7 @@ export const divisionConfig: TopicConfig = {
         { component: ConceptPage, id: 'concept', title: 'Concepto' },
         { component: ConceptPage2, id: 'concept-2', title: 'Concepto 2' },
         { component: ConceptPage3, id: 'concept-3', title: 'Concepto 3' },
+        { component: ExercisesPage, id: 'exercises', title: 'Ejercicios' },
     ],
     // Páginas de ejercicios (sección "EJERCICIOS")
     exercisePages: [],
