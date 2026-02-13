@@ -124,12 +124,6 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
 
     const checkAct4 = (selection: 'V' | 'F') => {
         setAct4Selected(selection);
-        // Statement: 20 pants / 5 boxes = 4 pants/box. Text says "hay 5 pantalones". So FALSE.
-        if (selection === 'F') {
-            setAct4Check('correct');
-        } else {
-            setAct4Check('incorrect');
-        }
     };
 
     return (
@@ -148,38 +142,47 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                     <div className="flex flex-col gap-4 w-full">
                         <div className="flex items-center justify-between">
                             <span className="font-bold text-gray-800">Seleccione el reparto correcto</span>
-                            <span className="text-red-500 font-bold text-xs">ACTIVIDAD INTERACTIVO</span>
                         </div>
 
                         {/* 1A: Balls */}
                         <div className="flex items-start gap-2">
-                            <PlayButton onClick={() => { }} /> {/* Placeholder action */}
+                            <PlayButton onClick={() => { }} />
                             <div className="flex flex-col gap-2 w-full">
                                 <p className="font-medium">El total de 56 pelotas de fútbol se reparte entre 7 bolsas de malla.</p>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     {[0, 1, 2].map(i => (
                                         <div
                                             key={i}
-                                            onClick={() => setAct1_a_selected(i)}
-                                            className={`border-2 rounded-lg p-2 cursor-pointer transition-all h-24 flex items-center justify-center bg-gray-50
-                                                ${act1_a_selected === i ? 'border-purple-600 bg-purple-50 shadow-md transform scale-105' : 'border-gray-200 hover:border-purple-300'}
+                                            onClick={() => {
+                                                setAct1_a_selected(i);
+                                                setAct1Status('idle'); // Reset checking on change
+                                            }}
+                                            className={`border-2 rounded-xl p-4 cursor-pointer transition-all h-32 flex items-center justify-center bg-white relative overflow-hidden shadow-sm
+                                                ${act1_a_selected === i ? 'border-purple-600 ring-2 ring-purple-100 bg-purple-50' : 'border-gray-200 hover:border-purple-300 hover:shadow-md'}
                                             `}
                                         >
-                                            {/* Visual placeholder for balls/bags */}
+                                            {/* Visual representation */}
+                                            {/* Correct Option (Middle): 7 bags */}
                                             {i === 1 ? (
-                                                <div className="text-xs text-center">
-                                                    <div className="flex justify-center gap-1 flex-wrap">
-                                                        {/* Correct: 7 bags. 56/7=8 balls each (implied) */}
-                                                        {[...Array(7)].map((_, j) => <span key={j} className="text-xl">🎒</span>)}
-                                                    </div>
-                                                    <span className="text-green-600 font-bold block mt-1">(Correcto)</span>
+                                                <div className="flex flex-wrap justify-center gap-2 content-center h-full w-full">
+                                                    {[...Array(7)].map((_, j) => (
+                                                        <div key={j} className="relative w-8 h-8 text-3xl leading-none">🎒</div>
+                                                    ))}
                                                 </div>
                                             ) : (
-                                                <div className="text-xs text-center opacity-50">
-                                                    <div className="flex justify-center gap-1 flex-wrap">
-                                                        {[...Array(i === 0 ? 6 : 8)].map((_, j) => <span key={j} className="text-xl">🎒</span>)}
-                                                    </div>
-                                                    <span className="text-red-400 font-bold block mt-1">(Incorrecto)</span>
+                                                <div className="flex flex-wrap justify-center gap-2 content-center h-full w-full opacity-50 grayscale-[0.8]">
+                                                    {/* Incorrect options: 6 bags or 8 bags */}
+                                                    {[...Array(i === 0 ? 6 : 8)].map((_, j) => (
+                                                        <div key={j} className="relative w-8 h-8 text-3xl leading-none">🎒</div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                            {act1Status !== 'idle' && act1_a_selected === i && (
+                                                <div className={`absolute top-2 right-2 rounded-full p-1 shadow-sm ${i === 1 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-500'}`}>
+                                                    {i === 1 ?
+                                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg> :
+                                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
+                                                    }
                                                 </div>
                                             )}
                                         </div>
@@ -193,29 +196,47 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                             <PlayButton onClick={() => { }} />
                             <div className="flex flex-col gap-2 w-full">
                                 <p className="font-medium">Hay 48 jugadores de baloncesto que se dividen en 4 equipos.</p>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     {[0, 1, 2].map(i => (
                                         <div
                                             key={i}
-                                            onClick={() => setAct1_b_selected(i)}
-                                            className={`border-2 rounded-lg p-2 cursor-pointer transition-all h-24 flex items-center justify-center bg-gray-50
-                                                ${act1_b_selected === i ? 'border-purple-600 bg-purple-50 shadow-md transform scale-105' : 'border-gray-200 hover:border-purple-300'}
+                                            onClick={() => {
+                                                setAct1_b_selected(i);
+                                                setAct1Status('idle');
+                                            }}
+                                            className={`border-2 rounded-xl p-4 cursor-pointer transition-all h-32 flex items-center justify-center bg-white relative overflow-hidden shadow-sm
+                                                ${act1_b_selected === i ? 'border-purple-600 ring-2 ring-purple-100 bg-purple-50' : 'border-gray-200 hover:border-purple-300 hover:shadow-md'}
                                             `}
                                         >
-                                            {/* Visual placeholder for teams */}
+                                            {/* Correct Option (Right): 4 groups of players */}
                                             {i === 2 ? (
-                                                <div className="text-xs text-center">
-                                                    <div className="flex justify-center gap-1">
-                                                        {[...Array(4)].map((_, j) => <span key={j} className="text-xl">👕</span>)}
-                                                    </div>
-                                                    <span className="text-green-600 font-bold block mt-1">(Correcto)</span>
+                                                <div className="grid grid-cols-2 gap-3 w-full h-full">
+                                                    {[...Array(4)].map((_, j) => (
+                                                        <div key={j} className="bg-orange-50 border border-orange-200 rounded flex items-center justify-center relative shadow-sm">
+                                                            <div className="flex flex-wrap justify-center gap-0.5 px-0.5">
+                                                                {[...Array(6)].map((_, k) => <div key={k} className="w-1.5 h-3 bg-blue-600 rounded-full"></div>)}
+                                                                {[...Array(6)].map((_, k) => <div key={k} className="w-1.5 h-3 bg-red-600 rounded-full"></div>)}
+                                                            </div>
+                                                        </div>
+                                                    ))}
                                                 </div>
                                             ) : (
-                                                <div className="text-xs text-center opacity-50">
-                                                    <div className="flex justify-center gap-1">
-                                                        {[...Array(i === 0 ? 3 : 5)].map((_, j) => <span key={j} className="text-xl">👕</span>)}
-                                                    </div>
-                                                    <span className="text-red-400 font-bold block mt-1">(Incorrecto)</span>
+                                                <div className="grid grid-cols-2 gap-3 w-full h-full opacity-50 grayscale-[0.8]">
+                                                    {[...Array(i === 0 ? 3 : 5)].map((_, j) => (
+                                                        <div key={j} className="bg-gray-50 border border-gray-200 rounded flex items-center justify-center">
+                                                            <div className="flex flex-wrap justify-center gap-0.5 px-0.5">
+                                                                {[...Array(8)].map((_, k) => <div key={k} className="w-1.5 h-3 bg-gray-400 rounded-full"></div>)}
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                            {act1Status !== 'idle' && act1_b_selected === i && (
+                                                <div className={`absolute top-2 right-2 rounded-full p-1 shadow-sm ${i === 2 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-500'}`}>
+                                                    {i === 2 ?
+                                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg> :
+                                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
+                                                    }
                                                 </div>
                                             )}
                                         </div>
@@ -240,57 +261,66 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                 <PlayButton onClick={() => { }} />
                                 <span className="font-bold text-gray-800">Relaciona cada división con su multiplicación correspondiente</span>
                             </div>
-                            <span className="text-red-500 font-bold text-xs">ACTIVIDAD INTERACTIVO</span>
                         </div>
 
-                        <div className="relative flex justify-between items-center px-8 md:px-20 py-4 select-none">
+                        <div className="relative flex justify-between items-stretch px-4 md:px-12 py-4 select-none min-h-[350px]">
                             {/* SVG Lines Layer */}
+                            {/* Using percentages is tricky because items have height. Let's use simple flex distribution and assume center alignment. */}
+                            {/* If we have 5 items in a column with `justify-between` and known height container, we can calculate % positions. */}
+                            {/* 5 items: 0%, 25%, 50%, 75%, 100% of the *available space*? No. */}
+                            {/* Let's try to map indices to vertical percentage 10% to 90% */}
                             <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
-                                {connections.map((conn, i) => {
-                                    // Calculate approximate coordinates based on row index
-                                    // Assuming 5 rows, evenly spaced.
-                                    // We need refs to get exact positions, but for now implementing with % based approximations or fixed heights
-                                    return (
-                                        <line
-                                            key={i}
-                                            x1="20%" y1={`${10 + conn.from * 20}%`}
-                                            x2="80%" y2={`${10 + conn.to * 20}%`}
-                                            stroke="#9333ea" strokeWidth="2"
-                                        />
-                                    );
-                                })}
+                                {connections.map((conn, i) => (
+                                    <line
+                                        key={i}
+                                        x1="25%"
+                                        y1={`${10 + conn.from * 20}%`} // 0->10%, 1->30%, 2->50%, 3->70%, 4->90%
+                                        x2="75%"
+                                        y2={`${10 + conn.to * 20}%`}
+                                        stroke={act2Status === 'correct' ? '#10b981' : (act2Status === 'incorrect' ? '#ef4444' : '#9333ea')}
+                                        strokeWidth="4"
+                                        strokeLinecap="round"
+                                        className="drop-shadow-sm transition-all duration-300"
+                                    />
+                                ))}
                                 {selectedLeft !== null && (
-                                    // Preview line? Hard to do without mouse tracking. Skip for now.
+                                    // No active line drawing, just highlight points
                                     null
                                 )}
                             </svg>
 
                             {/* Left Column */}
-                            <div className="flex flex-col gap-8 z-10 w-1/3">
+                            <div className="flex flex-col justify-between z-10 w-1/4 h-full py-4 gap-4">
                                 {['24 ÷ 4', '60 ÷ 12', '15 ÷ 3', '40 ÷ 20', '81 ÷ 9'].map((text, i) => (
                                     <div
                                         key={i}
-                                        onClick={() => handleLeftClick(i)}
-                                        className={`flex items-center justify-between cursor-pointer p-2 rounded hover:bg-purple-50
-                                            ${selectedLeft === i ? 'bg-purple-100 ring-2 ring-purple-500' : ''}
+                                        onClick={() => {
+                                            setAct2Status('idle');
+                                            handleLeftClick(i);
+                                        }}
+                                        className={`flex items-center justify-between cursor-pointer p-4 rounded-xl transition-all shadow-sm border h-16
+                                            ${selectedLeft === i ? 'bg-purple-100 border-purple-500 ring-2 ring-purple-300 scale-105' : 'bg-white border-gray-200 hover:border-purple-300 hover:shadow-md'}
                                         `}
                                     >
-                                        <span className="font-bold text-lg">{text}</span>
-                                        <div className={`w-4 h-4 rounded-sm ${connections.some(c => c.from === i) ? 'bg-purple-600' : 'bg-purple-300'}`}></div>
+                                        <span className="font-bold text-xl text-gray-800">{text}</span>
+                                        <div className={`w-4 h-4 rounded-full border-2 ${connections.some(c => c.from === i) ? 'bg-purple-600 border-purple-600' : 'bg-white border-purple-300'}`}></div>
                                     </div>
                                 ))}
                             </div>
 
                             {/* Right Column */}
-                            <div className="flex flex-col gap-8 z-10 w-1/3">
+                            <div className="flex flex-col justify-between z-10 w-1/4 h-full py-4 gap-4">
                                 {['9 × 9', '20 × 2', '4 × 6', '12 × 5', '3 × 5'].map((text, i) => (
                                     <div
                                         key={i}
-                                        onClick={() => handleRightClick(i)}
-                                        className="flex items-center justify-between cursor-pointer p-2 rounded hover:bg-purple-50"
+                                        onClick={() => {
+                                            setAct2Status('idle');
+                                            handleRightClick(i);
+                                        }}
+                                        className={`flex items-center justify-between cursor-pointer p-4 rounded-xl transition-all shadow-sm border h-16 bg-white border-gray-200 hover:border-purple-300 hover:shadow-md`}
                                     >
-                                        <div className={`w-4 h-4 rounded-sm ${connections.some(c => c.to === i) ? 'bg-purple-600' : 'bg-purple-300'}`}></div>
-                                        <span className="font-bold text-lg">{text}</span>
+                                        <div className={`w-4 h-4 rounded-full border-2 ${connections.some(c => c.to === i) ? 'bg-purple-600 border-purple-600' : 'bg-white border-purple-300'}`}></div>
+                                        <span className="font-bold text-xl text-gray-800">{text}</span>
                                     </div>
                                 ))}
                             </div>
@@ -312,39 +342,49 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                 <PlayButton onClick={() => { }} />
                                 <span className="font-bold text-gray-800">Halle el cociente de las siguientes divisiones:</span>
                             </div>
-                            <span className="text-red-500 font-bold text-xs">ACTIVIDAD INTERACTIVO</span>
                         </div>
 
                         <div className="flex justify-between items-start gap-8">
-                            <div className="grid grid-cols-2 gap-x-12 gap-y-4 w-full">
+                            <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-6 w-full">
                                 {['20 ÷ 4 =', '36 ÷ 9 =', '30 ÷ 5 =', '18 ÷ 2 =', '60 ÷ 10 =', '60 ÷ 15 =', '80 ÷ 8 =', '100 ÷ 20 =', '36 ÷ 12 =', '125 ÷ 25 ='].map((text, i) => (
-                                    <div key={i} className="flex items-center gap-2">
-                                        <div className="w-3 h-3 bg-purple-600"></div>
-                                        <span className="font-bold text-lg w-24">{text}</span>
+                                    <div key={i} className="flex items-center gap-3">
+                                        <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                                        <span className="font-bold text-2xl text-gray-700 w-28">{text}</span>
                                         <input
                                             value={act3Inputs[i]}
                                             onChange={(e) => {
                                                 const newInputs = [...act3Inputs];
                                                 newInputs[i] = e.target.value;
                                                 setAct3Inputs(newInputs);
+                                                setAct3Status('idle'); // Clear status on edit
                                             }}
-                                            className="w-12 h-8 border border-gray-300 bg-gray-100 text-center font-bold rounded focus:border-purple-500 focus:outline-none"
+                                            className={`w-20 h-12 border-2 bg-white text-center font-bold text-2xl rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all
+                                                ${act3Status === 'correct' ? 'border-green-400 bg-green-50' : (act3Status === 'incorrect' ? 'border-red-300 bg-red-50' : 'border-gray-300 focus:border-purple-500')}
+                                            `}
+                                            inputMode="numeric"
                                         />
+                                        {/* Individual feedback if checked */}
+                                        {act3Status !== 'idle' && (
+                                            <div className="w-6">
+                                                {/* Correct answer logic check for this specific index */}
+                                                {((): boolean => {
+                                                    const answers = ['5', '6', '6', '10', '3', '4', '9', '4', '5', '5'];
+                                                    return act3Inputs[i].trim() === answers[i];
+                                                })() ? (
+                                                    <span className="text-green-500 font-bold text-xl">✓</span>
+                                                ) : (
+                                                    <span className="text-red-500 font-bold text-xl">✕</span>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-4 mt-2 justify-end">
-                            <span className="text-red-500 font-bold text-sm">Señalar "CORRECTO"</span>
-                            <div className="w-6 h-6 bg-green-500 text-white flex items-center justify-center rounded text-xs">✓</div>
-                            <span className="text-orange-500 font-bold text-sm ml-4">Señalar "INCORRECTO"</span>
-                            <div className="w-6 h-6 bg-orange-500 text-white flex items-center justify-center rounded text-xs font-bold">!</div>
-
-                            <div className="ml-auto flex items-center gap-4">
-                                <Feedback status={act3Status} />
-                                <CheckButton onClick={checkAct3} />
-                            </div>
+                        <div className="flex items-center gap-4 mt-6 justify-end">
+                            <Feedback status={act3Status} />
+                            <CheckButton onClick={checkAct3} />
                         </div>
                     </div>
                 </div>
@@ -358,22 +398,32 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                             <span className="font-bold text-gray-800">Observa la situación y responde V o F</span>
                         </div>
 
-                        <div className="flex items-center gap-4 ml-8 bg-gray-50 p-4 rounded-lg border border-gray-100">
+                        <div className="flex items-center flex-wrap gap-4 ml-8 bg-gray-50 p-6 rounded-2xl border-2 border-gray-100 shadow-sm">
                             <PlayButton onClick={() => { }} />
-                            <p className="font-medium text-gray-800">
+                            <p className="font-medium text-lg text-gray-800">
                                 Una diseñadora de moda tiene 20 pantalones y los reparte en 5 cajas.
                                 En cada caja <strong>hay 5 pantalones</strong>
                             </p>
-                            <div className="ml-auto flex gap-2">
+                            <div className="ml-auto flex gap-3">
                                 <button
-                                    onClick={() => checkAct4('V')}
-                                    className={`w-10 h-10 font-bold text-xl rounded shadow-sm transition-all ${act4Selected === 'V' ? 'bg-purple-600 text-white scale-110' : 'bg-gray-200 hover:bg-gray-300 text-gray-600'}`}
+                                    onClick={() => {
+                                        setAct4Selected('V');
+                                        setAct4Check('idle');
+                                    }}
+                                    className={`w-12 h-12 font-bold text-2xl rounded-xl shadow-sm transition-all border-2
+                                        ${act4Selected === 'V' ? 'bg-purple-600 text-white border-purple-600 scale-110 ring-2 ring-purple-200' : 'bg-white border-gray-200 text-gray-500 hover:border-purple-300 hover:text-purple-600'}
+                                    `}
                                 >
                                     V
                                 </button>
                                 <button
-                                    onClick={() => checkAct4('F')}
-                                    className={`w-10 h-10 font-bold text-xl rounded shadow-sm transition-all ${act4Selected === 'F' ? 'bg-purple-600 text-white scale-110' : 'bg-gray-200 hover:bg-gray-300 text-gray-600'}`}
+                                    onClick={() => {
+                                        setAct4Selected('F');
+                                        setAct4Check('idle');
+                                    }}
+                                    className={`w-12 h-12 font-bold text-2xl rounded-xl shadow-sm transition-all border-2
+                                        ${act4Selected === 'F' ? 'bg-purple-600 text-white border-purple-600 scale-110 ring-2 ring-purple-200' : 'bg-white border-gray-200 text-gray-500 hover:border-purple-300 hover:text-purple-600'}
+                                    `}
                                 >
                                     F
                                 </button>
@@ -382,6 +432,11 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
 
                         <div className="flex items-center gap-4 justify-end">
                             <Feedback status={act4Check} />
+                            <CheckButton onClick={() => {
+                                if (!act4Selected) return;
+                                if (act4Selected === 'F') setAct4Check('correct');
+                                else setAct4Check('incorrect');
+                            }} />
                         </div>
                     </div>
                 </div>
