@@ -8,6 +8,7 @@ import { ExplanationPage } from '@/components/book-pages/shared/ExplanationPage'
 import { DistributionExercisePage } from './pages/DistributionExercisePage';
 import { ConceptPage } from './pages/ConceptPage';
 import { ConceptPage2 } from './pages/ConceptPage2';
+import { ConceptPage3 } from './pages/ConceptPage3';
 
 export const divisionConfig: TopicConfig = {
     id: 'division',
@@ -26,6 +27,7 @@ export const divisionConfig: TopicConfig = {
         { component: DistributionExercisePage, id: 'division-distribution-exercise', title: 'Ejercicio de Distribución' },
         { component: ConceptPage, id: 'concept', title: 'Concepto' },
         { component: ConceptPage2, id: 'concept-2', title: 'Concepto 2' },
+        { component: ConceptPage3, id: 'concept-3', title: 'Concepto 3' },
     ],
     // Páginas de ejercicios (sección "EJERCICIOS")
     exercisePages: [],
