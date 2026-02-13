@@ -72,21 +72,67 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
     };
 
     // --- Exercise 1 State (21 / 7) ---
+    // Dividend: 2 digits (Tens, Units) -> 21
+    const ex1_div_tens = useInputState();
+    const ex1_div_units = useInputState();
+    // Divisor: 1 digit -> 7
+    const ex1_divisor = useInputState();
+    // Quotient: 1 digit -> 3
     const ex1_quotient = useInputState();
-    const ex1_subtraction = useInputState();
+    // Subtraction: 2 digits (Tens, Units) -> 21
+    const ex1_sub_tens = useInputState();
+    const ex1_sub_units = useInputState();
+    // Remainder: 1 digit -> 0
     const ex1_remainder = useInputState();
-    const ex1_mult_factor = useInputState();
-    const ex1_mult_result = useInputState();
+
+    // Multiplication Checks (3 rows)
+    // Row 1
+    const ex1_m1_a = useInputState();
+    const ex1_m1_b = useInputState();
+    const ex1_m1_res = useInputState();
+    // Row 2
+    const ex1_m2_a = useInputState();
+    const ex1_m2_b = useInputState();
+    const ex1_m2_res = useInputState();
+    // Row 3
+    const ex1_m3_a = useInputState();
+    const ex1_m3_b = useInputState();
+    const ex1_m3_res = useInputState();
+
     const [ex1Status, setEx1Status] = useState<'idle' | 'correct' | 'incorrect'>('idle');
 
     const checkEx1 = () => {
-        if (
+        // Validation Logic:
+        // Division must be correct:
+        // Dividend: 2, 1
+        // Divisor: 7
+        // Quotient: 3
+        // Subtraction: 2, 1
+        // Remainder: 0
+        const isDivisionCorrect =
+            ex1_div_tens.value === '2' &&
+            ex1_div_units.value === '1' &&
+            ex1_divisor.value === '7' &&
             ex1_quotient.value === '3' &&
-            ex1_subtraction.value === '21' &&
-            ex1_remainder.value === '0' &&
-            ex1_mult_factor.value === '3' &&
-            ex1_mult_result.value === '21'
-        ) {
+            ex1_sub_tens.value === '2' &&
+            ex1_sub_units.value === '1' &&
+            ex1_remainder.value === '0';
+
+        // Multiplication check:
+        // Must have at least ONE correct row: 7 x 3 = 21 (or 3 x 7 = 21)
+        const checkRow = (a: string, b: string, res: string) => {
+            return (
+                (a === '7' && b === '3' && res === '21') ||
+                (a === '3' && b === '7' && res === '21')
+            );
+        };
+
+        const isMultiplicationCorrect =
+            checkRow(ex1_m1_a.value, ex1_m1_b.value, ex1_m1_res.value) ||
+            checkRow(ex1_m2_a.value, ex1_m2_b.value, ex1_m2_res.value) ||
+            checkRow(ex1_m3_a.value, ex1_m3_b.value, ex1_m3_res.value);
+
+        if (isDivisionCorrect && isMultiplicationCorrect) {
             setEx1Status('correct');
         } else {
             setEx1Status('incorrect');
@@ -94,8 +140,6 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
     };
 
     // --- Exercise 2 State (Term Identification) ---
-    const ex2_term1 = useInputState('dividendo'); // Pre-filled in image? No, image has dropdowns. Let's assume empty nicely.
-    // Actually image shows "El número 21 es [dividendo]..." with a dropdown.
     const [ex2_val1, setEx2_val1] = useState('');
     const [ex2_val2, setEx2_val2] = useState('');
     const [ex2_val3, setEx2_val3] = useState('');
@@ -138,7 +182,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
     };
 
     // Helper components
-    const InputBox = ({ value, onChange, className = "w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 focus:outline-none" }: any) => (
+    const InputBox = ({ value, onChange, className = "w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 focus:outline-none text-lg font-bold" }: any) => (
         <input type="text" value={value} onChange={onChange} className={className} inputMode="numeric" />
     );
 
@@ -246,56 +290,81 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                             </p>
                         </div>
 
-                        <div className="flex flex-wrap items-end gap-12 sm:gap-24 pl-4 md:pl-12">
+                        <div className="flex flex-wrap items-start gap-8 sm:gap-16 pl-4 md:pl-12">
 
                             {/* Interactive Division */}
-                            <div className="relative">
+                            <div className="relative pt-8">
                                 <div className="flex">
                                     <div className="flex flex-col items-end gap-1 relative mb-2">
-                                        {/* Box for dividend isn't editable in image, but let's just make it text for simplicity 21 */}
-                                        <span className="font-black text-2xl pr-2">21</span>
+                                        {/* Dividend Inputs: [ ] [ ] */}
+                                        <div className="flex gap-1 pr-2 pb-1">
+                                            <InputBox value={ex1_div_tens.value} onChange={ex1_div_tens.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
+                                            <InputBox value={ex1_div_units.value} onChange={ex1_div_units.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
+                                        </div>
+
+                                        {/* Subtraction Inputs: - [ ] [ ] */}
                                         <div className="flex items-center gap-1">
                                             <span className="font-bold text-xl">-</span>
-                                            <InputBox value={ex1_subtraction.value} onChange={ex1_subtraction.onChange} />
+                                            <InputBox value={ex1_sub_tens.value} onChange={ex1_sub_tens.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
+                                            <InputBox value={ex1_sub_units.value} onChange={ex1_sub_units.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
                                         </div>
-                                        <div className="border-t-2 border-black w-full flex justify-center pt-1">
-                                            <InputBox value={ex1_remainder.value} onChange={ex1_remainder.onChange} />
+
+                                        {/* Remainder Input: [ ] */}
+                                        <div className="border-t-2 border-black w-full flex justify-end pt-1 pr-[3px]">
+                                            <InputBox value={ex1_remainder.value} onChange={ex1_remainder.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
                                         </div>
                                     </div>
-                                    {/* Line separator */}
-                                    <div className="border-l-2 border-b-2 border-black pl-2 pb-1">
-                                        <span className="font-black text-2xl px-2">7</span>
+
+                                    {/* Vertical Line */}
+                                    <div className="border-l-2 border-black pl-2 pb-1 flex flex-col gap-2">
+                                        {/* Divisor Input [ ] (with underline) */}
+                                        <div className="border-b-2 border-black pb-2 pr-2">
+                                            <InputBox value={ex1_divisor.value} onChange={ex1_divisor.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
+                                        </div>
+                                        {/* Quotient Input [ ] */}
+                                        <div className="pt-1">
+                                            <InputBox value={ex1_quotient.value} onChange={ex1_quotient.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
+                                        </div>
                                     </div>
-                                </div>
-                                {/* Quotient Input */}
-                                <div className="absolute top-[35px] left-[70px]">
-                                    {/* Positioning relative to the 7. 
-                                        Actually, standard layout: 
-                                        Dividend | Divisor
-                                                 | Quotient
-                                     */}
-                                    <InputBox value={ex1_quotient.value} onChange={ex1_quotient.onChange} />
                                 </div>
                             </div>
 
-                            {/* Verification Multiplication */}
-                            <div className="flex flex-col items-start gap-2">
+                            {/* Verification Multiplication (3 Rows) */}
+                            <div className="flex flex-col gap-4 border-l border-gray-200 pl-4 sm:pl-8">
+                                {/* Row 1 */}
                                 <div className="flex items-center gap-2">
-                                    <div className="w-10 h-10 border-2 border-gray-300 rounded flex items-center justify-center bg-gray-50 font-bold">7</div>
+                                    <InputBox value={ex1_m1_a.value} onChange={ex1_m1_a.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
                                     <span className="font-bold">×</span>
-                                    <InputBox value={ex1_mult_factor.value} onChange={ex1_mult_factor.onChange} />
+                                    <InputBox value={ex1_m1_b.value} onChange={ex1_m1_b.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
                                     <span className="font-bold">=</span>
-                                    <InputBox value={ex1_mult_result.value} onChange={ex1_mult_result.onChange} />
+                                    <InputBox value={ex1_m1_res.value} onChange={ex1_m1_res.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
                                 </div>
+                                {/* Row 2 */}
+                                <div className="flex items-center gap-2">
+                                    <InputBox value={ex1_m2_a.value} onChange={ex1_m2_a.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
+                                    <span className="font-bold">×</span>
+                                    <InputBox value={ex1_m2_b.value} onChange={ex1_m2_b.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
+                                    <span className="font-bold">=</span>
+                                    <InputBox value={ex1_m2_res.value} onChange={ex1_m2_res.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
+                                </div>
+                                {/* Row 3 */}
+                                <div className="flex items-center gap-2">
+                                    <InputBox value={ex1_m3_a.value} onChange={ex1_m3_a.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
+                                    <span className="font-bold">×</span>
+                                    <InputBox value={ex1_m3_b.value} onChange={ex1_m3_b.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
+                                    <span className="font-bold">=</span>
+                                    <InputBox value={ex1_m3_res.value} onChange={ex1_m3_res.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
+                                </div>
+
                                 <div className="flex items-center gap-2 mt-2">
                                     <CheckButton onClick={checkEx1} />
                                     <Feedback status={ex1Status} />
                                 </div>
-                            </div>
 
-                            <p className="text-red-500 font-bold text-xs max-w-[150px] self-center">
-                                Ingrese los numeros en cada cuadro y compruebe
-                            </p>
+                                <p className="text-red-500 font-bold text-xs max-w-[200px]">
+                                    Ingrese los numeros en cada y compruebe
+                                </p>
+                            </div>
                         </div>
                     </div>
 
