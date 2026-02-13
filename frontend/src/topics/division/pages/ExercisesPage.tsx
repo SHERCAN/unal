@@ -210,22 +210,24 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                         >
                                             {/* Correct Option (Right): 4 groups of players */}
                                             {i === 2 ? (
-                                                <div className="grid grid-cols-2 gap-3 w-full h-full">
+                                                <div className="grid grid-cols-2 gap-3 w-full h-full p-1">
                                                     {[...Array(4)].map((_, j) => (
-                                                        <div key={j} className="bg-orange-50 border border-orange-200 rounded flex items-center justify-center relative shadow-sm">
-                                                            <div className="flex flex-wrap justify-center gap-0.5 px-0.5">
-                                                                {[...Array(6)].map((_, k) => <div key={k} className="w-1.5 h-3 bg-blue-600 rounded-full"></div>)}
-                                                                {[...Array(6)].map((_, k) => <div key={k} className="w-1.5 h-3 bg-red-600 rounded-full"></div>)}
+                                                        <div key={j} className="bg-orange-50 border border-orange-200 rounded flex items-center justify-center relative shadow-sm overflow-hidden">
+                                                            <div className="flex flex-wrap justify-center items-center gap-0.5 w-full h-full">
+                                                                {/* 12 players per team */}
+                                                                {[...Array(12)].map((_, k) => <div key={k} className="text-xs leading-none">⛹🏽</div>)}
                                                             </div>
                                                         </div>
                                                     ))}
                                                 </div>
                                             ) : (
-                                                <div className="grid grid-cols-2 gap-3 w-full h-full opacity-50 grayscale-[0.8]">
+                                                <div className="grid grid-cols-2 gap-3 w-full h-full p-1">
+                                                    {/* Incorrect: 3 groups or 5 groups */}
                                                     {[...Array(i === 0 ? 3 : 5)].map((_, j) => (
-                                                        <div key={j} className="bg-gray-50 border border-gray-200 rounded flex items-center justify-center">
-                                                            <div className="flex flex-wrap justify-center gap-0.5 px-0.5">
-                                                                {[...Array(8)].map((_, k) => <div key={k} className="w-1.5 h-3 bg-gray-400 rounded-full"></div>)}
+                                                        <div key={j} className="bg-gray-50 border border-gray-200 rounded flex items-center justify-center relative shadow-sm overflow-hidden">
+                                                            <div className="flex flex-wrap justify-center items-center gap-0.5 w-full h-full">
+                                                                {/* Incorrect number of players to fill visual */}
+                                                                {[...Array(10)].map((_, k) => <div key={k} className="text-xs leading-none grayscale opacity-70">⛹🏽</div>)}
                                                             </div>
                                                         </div>
                                                     ))}
