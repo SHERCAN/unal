@@ -72,29 +72,24 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
     };
 
     // --- Exercise 1 State (21 / 7) ---
-    // Dividend: 2 digits (Tens, Units) -> 21
-    const ex1_div_tens = useInputState();
-    const ex1_div_units = useInputState();
-    // Divisor: 1 digit -> 7
+    // Dividend: 21 (Single input)
+    const ex1_dividend = useInputState();
+    // Divisor: 7 (Single input)
     const ex1_divisor = useInputState();
-    // Quotient: 1 digit -> 3
+    // Quotient: 3 (Single input)
     const ex1_quotient = useInputState();
-    // Subtraction: 2 digits (Tens, Units) -> 21
-    const ex1_sub_tens = useInputState();
-    const ex1_sub_units = useInputState();
-    // Remainder: 1 digit -> 0
+    // Subtraction: 21 (Single input)
+    const ex1_subtraction = useInputState();
+    // Remainder: 0 (Single input)
     const ex1_remainder = useInputState();
 
     // Multiplication Checks (3 rows)
-    // Row 1
     const ex1_m1_a = useInputState();
     const ex1_m1_b = useInputState();
     const ex1_m1_res = useInputState();
-    // Row 2
     const ex1_m2_a = useInputState();
     const ex1_m2_b = useInputState();
     const ex1_m2_res = useInputState();
-    // Row 3
     const ex1_m3_a = useInputState();
     const ex1_m3_b = useInputState();
     const ex1_m3_res = useInputState();
@@ -103,19 +98,11 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
 
     const checkEx1 = () => {
         // Validation Logic:
-        // Division must be correct:
-        // Dividend: 2, 1
-        // Divisor: 7
-        // Quotient: 3
-        // Subtraction: 2, 1
-        // Remainder: 0
         const isDivisionCorrect =
-            ex1_div_tens.value === '2' &&
-            ex1_div_units.value === '1' &&
+            ex1_dividend.value === '21' &&
             ex1_divisor.value === '7' &&
             ex1_quotient.value === '3' &&
-            ex1_sub_tens.value === '2' &&
-            ex1_sub_units.value === '1' &&
+            ex1_subtraction.value === '21' &&
             ex1_remainder.value === '0';
 
         // Multiplication check:
@@ -273,17 +260,15 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                             <div className="relative pt-8">
                                 <div className="flex">
                                     <div className="flex flex-col items-end gap-1 relative mb-2">
-                                        {/* Dividend Inputs: [ ] [ ] */}
-                                        <div className="flex gap-1 pr-2 pb-1">
-                                            <InputBox value={ex1_div_tens.value} onChange={ex1_div_tens.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
-                                            <InputBox value={ex1_div_units.value} onChange={ex1_div_units.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
+                                        {/* Dividend Inputs: [    ] */}
+                                        <div className="pr-2 pb-1">
+                                            <InputBox value={ex1_dividend.value} onChange={ex1_dividend.onChange} className="w-20 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
                                         </div>
 
-                                        {/* Subtraction Inputs: - [ ] [ ] */}
+                                        {/* Subtraction Inputs: - [    ] */}
                                         <div className="flex items-center gap-1">
                                             <span className="font-bold text-xl">-</span>
-                                            <InputBox value={ex1_sub_tens.value} onChange={ex1_sub_tens.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
-                                            <InputBox value={ex1_sub_units.value} onChange={ex1_sub_units.onChange} className="w-10 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
+                                            <InputBox value={ex1_subtraction.value} onChange={ex1_subtraction.onChange} className="w-20 h-10 text-center border-2 border-gray-300 rounded focus:border-purple-500 text-lg font-bold" />
                                         </div>
 
                                         {/* Remainder Input: [ ] */}
@@ -337,10 +322,6 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                     <CheckButton onClick={checkEx1} />
                                     <Feedback status={ex1Status} />
                                 </div>
-
-                                <p className="text-red-500 font-bold text-xs max-w-[200px]">
-                                    Ingrese los numeros en cada y compruebe
-                                </p>
                             </div>
                         </div>
                     </div>
@@ -361,7 +342,6 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                     <option value="divisor">divisor</option>
                                     <option value="cociente">cociente</option>
                                 </select>
-                                <span className="text-red-500 font-bold text-xs ml-auto hidden sm:block">ACTIVIDAD INTERACTIVO</span>
                             </div>
 
                             <div className="flex items-center flex-wrap gap-2">
