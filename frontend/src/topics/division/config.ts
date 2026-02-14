@@ -10,6 +10,7 @@ import { ConceptPage } from './pages/ConceptPage';
 import { ConceptPage2 } from './pages/ConceptPage2';
 import { ConceptPage3 } from './pages/ConceptPage3';
 import { ExercisesPage } from './pages/ExercisesPage';
+import { ExercisesPage2 } from './pages/ExercisesPage2'; // Added import
 
 export const divisionConfig: TopicConfig = {
     id: 'division',
@@ -30,9 +31,13 @@ export const divisionConfig: TopicConfig = {
         { component: ConceptPage2, id: 'concept-2', title: 'Concepto 2' },
         { component: ConceptPage3, id: 'concept-3', title: 'Concepto 3' },
         { component: ExercisesPage, id: 'exercises', title: 'Ejercicios' },
+        { component: ExercisesPage2, id: 'exercises-2', title: 'Ejercicios 2' },
     ],
     // Páginas de ejercicios (sección "EJERCICIOS")
-    exercisePages: [],
+    exercisePages: [
+        { component: ExercisesPage, id: 'exercises', title: 'Ejercicios' },
+        { component: ExercisesPage2, id: 'exercises-2', title: 'Ejercicios 2' },
+    ],
     // Configuración de videos del tema
     videos: {
         MODULE_DIVISION: 'division-main',
