@@ -171,9 +171,13 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                         </div>
                     </div>
 
-                    <div className="flex justify-end items-center gap-4 mt-2 flex-wrap">
-                        <CheckButton onClick={checkAct1} />
-                        <Feedback status={act1Status} />
+                    <div className="flex justify-end gap-4 mt-2">
+                        <div className="grid grid-cols-[auto_auto] gap-4 items-center bg-gray-50 px-4 py-2 rounded-xl">
+                            <CheckButton onClick={checkAct1} />
+                            <div className="min-w-[100px] text-center">
+                                <Feedback status={act1Status} />
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -263,9 +267,13 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                             </div>
                         </div>
 
-                        <div className="flex justify-end items-center gap-4 mt-2 flex-wrap">
-                            <CheckButton onClick={checkAct4} />
-                            <Feedback status={act4Status} />
+                        <div className="flex justify-end gap-4 mt-2">
+                            <div className="grid grid-cols-[auto_auto] gap-4 items-center bg-gray-50 px-4 py-2 rounded-xl">
+                                <CheckButton onClick={checkAct4} />
+                                <div className="min-w-[100px] text-center">
+                                    <Feedback status={act4Status} />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
