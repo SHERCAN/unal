@@ -30,8 +30,6 @@ export const divisionConfig: TopicConfig = {
         { component: ConceptPage, id: 'concept', title: 'Concepto' },
         { component: ConceptPage2, id: 'concept-2', title: 'Concepto 2' },
         { component: ConceptPage3, id: 'concept-3', title: 'Concepto 3' },
-        { component: ExercisesPage, id: 'exercises', title: 'Ejercicios' },
-        { component: ExercisesPage2, id: 'exercises-2', title: 'Ejercicios 2' },
     ],
     // Páginas de ejercicios (sección "EJERCICIOS")
     exercisePages: [
