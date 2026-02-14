@@ -206,20 +206,36 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                         <hr className="border-gray-200" />
 
                         <div className="flex flex-col md:flex-row gap-12 items-start">
-                            {/* Vertical Algorithm */}
-                            <div className="flex gap-4 items-start">
-                                <span className="text-4xl font-bold text-gray-400 select-none">-</span>
+                            {/* Vertical Algorithm - Redesigned Layout */}
+                            <div className="flex gap-4 font-mono text-xl items-start">
+                                {/* Left Side: Dividend, Subtraction, Remainder */}
                                 <div className="flex flex-col items-end gap-1">
-                                    <InputBox value={act4_v_dividend} onChange={v => { setAct4_v_dividend(v); setAct4Status('idle'); }} className="w-16 h-16 text-2xl" />
-                                    <InputBox value={act4_v_sub} onChange={v => { setAct4_v_sub(v); setAct4Status('idle'); }} className="w-16 h-16 text-2xl border-b-4 border-black" />
-                                    <InputBox value={act4_v_rem} onChange={v => { setAct4_v_rem(v); setAct4Status('idle'); }} className="w-16 h-16 text-2xl" />
+                                    {/* Dividend */}
+                                    <InputBox value={act4_v_dividend} onChange={v => { setAct4_v_dividend(v); setAct4Status('idle'); }} className="w-16 h-16 text-3xl" />
+
+                                    {/* Subtraction with minus sign */}
+                                    <div className="relative">
+                                        <span className="absolute -left-8 top-2 text-4xl font-bold text-gray-800 select-none">-</span>
+                                        <InputBox value={act4_v_sub} onChange={v => { setAct4_v_sub(v); setAct4Status('idle'); }} className="w-16 h-16 text-3xl" />
+                                    </div>
+
+                                    {/* Line */}
+                                    <div className="w-16 h-1 bg-black rounded-full"></div>
+
+                                    {/* Remainder */}
+                                    <InputBox value={act4_v_rem} onChange={v => { setAct4_v_rem(v); setAct4Status('idle'); }} className="w-16 h-16 text-3xl" />
                                 </div>
-                                <div className="relative">
-                                    {/* Bracket drawing */}
-                                    <div className="border-l-4 border-t-4 border-black w-24 h-12 ml-2 mt-4 absolute pointer-events-none" style={{ borderRadius: '0 0 0 0' }}></div>
-                                    <div className="flex flex-col gap-4 pl-4 pt-4">
-                                        <InputBox value={act4_v_divisor} onChange={v => { setAct4_v_divisor(v); setAct4Status('idle'); }} className="w-16 h-12 text-2xl relative z-10" />
-                                        <InputBox value={act4_v_quotient} onChange={v => { setAct4_v_quotient(v); setAct4Status('idle'); }} className="w-16 h-12 text-2xl" />
+
+                                {/* Right Side: Bracket + Divisor + Quotient */}
+                                <div className="flex flex-col">
+                                    {/* Top part: Bracket L-shape + Divisor */}
+                                    <div className="border-l-4 border-b-4 border-black pl-2 pb-2 mb-2">
+                                        <InputBox value={act4_v_divisor} onChange={v => { setAct4_v_divisor(v); setAct4Status('idle'); }} className="w-16 h-16 text-3xl border-none focus:ring-0 bg-transparent" />
+                                    </div>
+
+                                    {/* Quotient (under the line) */}
+                                    <div className="pl-2">
+                                        <InputBox value={act4_v_quotient} onChange={v => { setAct4_v_quotient(v); setAct4Status('idle'); }} className="w-16 h-16 text-3xl" />
                                     </div>
                                 </div>
                             </div>
