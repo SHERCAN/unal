@@ -170,7 +170,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                                     ))}
                                                 </div>
                                             ) : (
-                                                <div className="flex flex-wrap justify-center gap-2 content-center h-full w-full opacity-50 grayscale-[0.8]">
+                                                <div className="flex flex-wrap justify-center gap-2 content-center h-full w-full">
                                                     {/* Incorrect options: 6 bags or 8 bags */}
                                                     {[...Array(i === 0 ? 6 : 8)].map((_, j) => (
                                                         <div key={j} className="relative w-8 h-8 text-3xl leading-none">🎒</div>
@@ -224,10 +224,10 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                                 <div className="grid grid-cols-2 gap-3 w-full h-full p-1">
                                                     {/* Incorrect: 3 groups or 5 groups */}
                                                     {[...Array(i === 0 ? 3 : 5)].map((_, j) => (
-                                                        <div key={j} className="bg-gray-50 border border-gray-200 rounded flex items-center justify-center relative shadow-sm overflow-hidden">
+                                                        <div key={j} className="bg-orange-50 border border-orange-200 rounded flex items-center justify-center relative shadow-sm overflow-hidden">
                                                             <div className="flex flex-wrap justify-center items-center gap-0.5 w-full h-full">
-                                                                {/* Incorrect number of players to fill visual */}
-                                                                {[...Array(10)].map((_, k) => <div key={k} className="text-xs leading-none grayscale opacity-70">⛹🏽</div>)}
+                                                                {/* Incorrect number of players to fill visual - 10 players */}
+                                                                {[...Array(10)].map((_, k) => <div key={k} className="text-xs leading-none">⛹🏽</div>)}
                                                             </div>
                                                         </div>
                                                     ))}
