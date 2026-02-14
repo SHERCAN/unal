@@ -171,9 +171,9 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                         </div>
                     </div>
 
-                    <div className="flex justify-end items-center gap-4 mt-2">
-                        <Feedback status={act1Status} />
+                    <div className="flex justify-end items-center gap-4 mt-2 flex-wrap">
                         <CheckButton onClick={checkAct1} />
+                        <Feedback status={act1Status} />
                     </div>
                 </div>
 
@@ -263,9 +263,9 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                             </div>
                         </div>
 
-                        <div className="flex justify-end items-center gap-4 mt-2">
-                            <Feedback status={act4Status} />
+                        <div className="flex justify-end items-center gap-4 mt-2 flex-wrap">
                             <CheckButton onClick={checkAct4} />
+                            <Feedback status={act4Status} />
                         </div>
                     </div>
                 </div>
@@ -304,9 +304,9 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                             </div>
                         ))}
 
-                        <div className="flex justify-end items-center gap-4 mt-2">
-                            <Feedback status={act5Status} />
+                        <div className="flex justify-end items-center gap-4 mt-2 flex-wrap">
                             <CheckButton onClick={checkAct5} />
+                            <Feedback status={act5Status} />
                         </div>
                     </div>
                 </div>
@@ -340,7 +340,7 @@ const PlayButton = ({ onClick }: { onClick: () => void }) => (
 const CheckButton = ({ onClick }: { onClick: () => void }) => (
     <button
         onClick={onClick}
-        className="bg-purple-700 hover:bg-purple-800 text-white font-bold py-2 px-8 rounded-lg shadow-md transform active:scale-95 transition-all text-sm uppercase tracking-wide"
+        className="bg-purple-700 hover:bg-purple-800 text-white font-bold py-2 px-8 rounded-lg shadow-md transform active:scale-95 transition-all text-sm uppercase tracking-wide whitespace-nowrap shrink-0"
     >
         ¿Listo?
     </button>
