@@ -5,6 +5,13 @@ import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import manzanaVerdeImg from '../manzanaverde.png';
+import dulceImg from '../dulce.png';
+import estrellaImg from '../estrella.png';
+import infantesImg from '../infantes.png';
+import cajasImg from '../cajas.png';
+import equiposImg from '../equipos.png';
+import infantesManzanasImg from '../infantesmanzanas.png';
 
 interface DivisionConceptPage2Props {
     zoom?: number;
@@ -160,175 +167,164 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
             pageId="division-concept-2"
         >
             {/* Main Content Box */}
-            <div className="relative border-2 rounded-xl p-6 h-full flex flex-col" style={{ borderColor: '#be90de' }}>
+            <div className="relative ml-2 flex items-start h-full">
+                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#be90de' }}>
+                    A
+                </div>
+                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 h-full flex flex-col" style={{ borderColor: '#be90de' }}>
 
-                <div className="w-full flex-1 flex flex-col overflow-y-auto gap-6 px-1">
+                    <div className="w-full flex-1 flex flex-col overflow-y-auto gap-6 px-1">
 
-                    {/* SECTION A EXAMPLES */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {/* 12 manzanas */}
-                        <div className="flex flex-col items-center">
-                            <div className="bg-green-600 text-white px-3 py-1 rounded-md font-bold text-sm mb-2 w-full text-center">
-                                Ejemplo: <span className="text-white">12 manzanas</span>
-                            </div>
-                            <div className="grid grid-cols-4 gap-1 p-2 border border-green-200 rounded-lg bg-white">
-                                {[...Array(12)].map((_, i) => (
-                                    <div key={i} className="w-6 h-6 rounded-full bg-green-500 border border-green-600"></div>
-                                ))}
-                            </div>
-                        </div>
-                        {/* 30 dulces */}
-                        <div className="flex flex-col items-center">
-                            <div className="font-bold text-gray-700 mb-2">30 dulces</div>
-                            <div className="grid grid-cols-6 gap-1 p-2 border border-purple-200 rounded-lg bg-white">
-                                {[...Array(30)].map((_, i) => (
-                                    <div key={i} className="w-3 h-3 rotate-45 bg-purple-500 border border-purple-600"></div>
-                                ))}
-                            </div>
-                        </div>
-                        {/* 100 estrellas */}
-                        <div className="flex flex-col items-center">
-                            <div className="font-bold text-gray-700 mb-2">100 estrellas</div>
-                            <div className="grid grid-cols-10 gap-0.5 p-2 border border-orange-200 rounded-lg bg-white">
-                                {[...Array(100)].map((_, i) => (
-                                    <div key={i} className="w-1.5 h-1.5 clip-path-star bg-orange-400"></div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* SECTION B: Divisor */}
-                    <div>
-                        <div className="flex items-start gap-2 mb-2">
-                            <span className="bg-red-400 w-4 h-4 mt-1 block rounded-sm flex-shrink-0"></span>
-                            <div className="flex-1">
-                                <p className="font-medium text-gray-800 dark:text-gray-200">
-                                    <span className="font-bold">B</span> <span className="mx-1">→</span> <span className="italic font-bold">el número de grupos (el divisor).</span> Es entre cuántos vamos a repartir o en cuántas partes iguales queremos dividir el total.
-                                </p>
-                            </div>
-                            <PlayButton trackingId={VIDEO_TRACKING_IDS.DIVISOR} title="El Divisor" />
-                        </div>
-
-                        {/* B Examples */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pl-6">
-                            {/* 3 niños */}
+                        {/* SECTION A EXAMPLES */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {/* 12 manzanas */}
                             <div className="flex flex-col items-center">
                                 <div className="bg-green-600 text-white px-3 py-1 rounded-md font-bold text-sm mb-2 w-full text-center">
-                                    Ejemplo: <span className="font-normal">Entre</span> 3 niños
+                                    Ejemplo: <span className="text-white">12 manzanas</span>
                                 </div>
-                                <div className="flex gap-4 justify-center p-4 bg-white rounded-lg border border-gray-200">
-                                    {[...Array(3)].map((_, i) => (
-                                        <KidFigure key={i} variant={i} />
+                                <div className="grid grid-cols-4 gap-1 p-1 border border-green-200 dark:border-green-800 rounded-lg bg-white dark:bg-gray-800 w-[150px] h-[150px] justify-items-center">
+                                    {[...Array(12)].map((_, i) => (
+                                        <img key={i} src={manzanaVerdeImg.src} alt="manzana" className="w-full h-full object-contain" />
                                     ))}
                                 </div>
                             </div>
-                            {/* 6 cajas */}
+                            {/* 30 dulces */}
                             <div className="flex flex-col items-center">
-                                <div className="font-bold text-gray-700 mb-2">Entre 6 cajas</div>
-                                <div className="grid grid-cols-3 gap-2 justify-center p-2 bg-white rounded-lg border border-gray-200">
-                                    {[...Array(6)].map((_, i) => (
-                                        <div key={i} className="w-8 h-6 bg-yellow-600 rounded-sm border-2 border-yellow-800"></div>
+                                <div className="font-bold text-gray-700 mb-2">30 dulces</div>
+                                <div className="grid grid-cols-6 gap-0.5 p-1 border border-purple-200 dark:border-purple-800 rounded-lg bg-white dark:bg-gray-800 w-[150px] h-[150px] justify-items-center">
+                                    {[...Array(30)].map((_, i) => (
+                                        <img key={i} src={dulceImg.src} alt="dulce" className="w-full h-full object-contain" />
                                     ))}
                                 </div>
                             </div>
-                            {/* 4 equipos */}
+                            {/* 100 estrellas */}
                             <div className="flex flex-col items-center">
-                                <div className="font-bold text-gray-700 mb-2">Entre 4 equipos</div>
-                                <div className="grid grid-cols-2 gap-2 justify-center p-2 bg-white rounded-lg border border-gray-200">
-                                    {[...Array(4)].map((_, i) => (
-                                        <div key={i} className="w-8 h-8 bg-blue-100 rounded-lg border border-blue-500 flex items-center justify-center text-xs font-bold text-blue-800">Team</div>
+                                <div className="font-bold text-gray-700 mb-2">100 estrellas</div>
+                                <div className="grid grid-cols-10 gap-px p-0.5 border border-orange-200 dark:border-orange-800 rounded-lg bg-white dark:bg-gray-800 w-[150px] h-[150px] justify-items-center">
+                                    {[...Array(50)].map((_, i) => (
+                                        <img key={i} src={estrellaImg.src} alt="estrella" className="w-full h-full object-contain" />
                                     ))}
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    {/* SECTION C: Cociente */}
-                    <div>
-                        <div className="flex items-start gap-2 mb-2">
-                            <span className="bg-red-400 w-4 h-4 mt-1 block rounded-sm flex-shrink-0"></span>
-                            <div className="flex-1">
-                                <p className="font-medium text-gray-800 dark:text-gray-200">
-                                    <span className="font-bold">C</span> <span className="mx-1">→</span> <span className="italic font-bold">cuánto recibe cada grupo (el cociente).</span> Es el resultado de la división. Cuánto corresponde a cada parte.
+                        {/* SECTION B: Divisor */}
+                        <div>
+                            <div className="flex items-start gap-2 mb-2">
+                                <span className="bg-red-400 w-4 h-4 mt-1 block rounded-sm flex-shrink-0"></span>
+                                <div className="flex-1">
+                                    <p className="font-medium text-gray-800 dark:text-gray-200">
+                                        <span className="font-bold">B</span> <span className="mx-1">→</span> <span className="italic font-bold">el número de grupos (el divisor).</span> Es entre cuántos vamos a repartir o en cuántas partes iguales queremos dividir el total.
+                                    </p>
+                                </div>
+                                <PlayButton trackingId={VIDEO_TRACKING_IDS.DIVISOR} title="El Divisor" />
+                            </div>
+
+                            {/* B Examples */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pl-6">
+                                {/* 3 niños */}
+                                <div className="flex flex-col items-center">
+                                    <div className="bg-green-600 text-white px-3 py-1 rounded-md font-bold text-sm mb-2 w-full text-center">
+                                        Ejemplo: <span className="font-normal">Entre</span> 3 niños
+                                    </div>
+                                    <div className="flex justify-center p-1 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                                        <img src={infantesImg.src} alt="infantes" className="w-[150px] h-[150px] object-contain" />
+                                    </div>
+                                </div>
+                                {/* 6 cajas */}
+                                <div className="flex flex-col items-center">
+                                    <div className="font-bold text-gray-700 mb-2">Entre 6 cajas</div>
+                                    <div className="flex justify-center p-1 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                                        <img src={cajasImg.src} alt="cajas" className="w-[150px] h-[150px] object-contain" />
+                                    </div>
+                                </div>
+                                {/* 4 equipos */}
+                                <div className="flex flex-col items-center">
+                                    <div className="font-bold text-gray-700 mb-2">Entre 4 equipos</div>
+                                    <div className="flex justify-center p-1 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                                        <img src={equiposImg.src} alt="equipos" className="w-[150px] h-[150px] object-contain" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* SECTION C: Cociente */}
+                        <div>
+                            <div className="flex items-start gap-2 mb-2">
+                                <span className="bg-red-400 w-4 h-4 mt-1 block rounded-sm flex-shrink-0"></span>
+                                <div className="flex-1">
+                                    <p className="font-medium text-gray-800 dark:text-gray-200">
+                                        <span className="font-bold">C</span> <span className="mx-1">→</span> <span className="italic font-bold">cuánto recibe cada grupo (el cociente).</span> Es el resultado de la división. Cuánto corresponde a cada parte.
+                                    </p>
+                                </div>
+                                <PlayButton trackingId={VIDEO_TRACKING_IDS.QUOTIENT} title="El Cociente" />
+                            </div>
+
+                            {/* C Example */}
+                            <div className="pl-6">
+                                <div className="flex items-center gap-2 mb-2 bg-green-600 text-white px-3 py-1 rounded-md w-fit font-bold text-sm">
+                                    Ejemplo:
+                                </div>
+                                <p className="mb-4 font-medium text-gray-800 dark:text-gray-200">
+                                    Dividir 12 manzanas entre 3 niños. Cada niño recibe <span className="font-bold">4 manzanas</span>
+                                </p>
+                                <div className="flex justify-center bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                                    <img src={infantesManzanasImg.src} alt="infantes comiendo manzanas" className="w-[300px] h-[150px] object-contain" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* FINAL EXAMPLE */}
+                        <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                            <div className="flex items-center gap-2 mb-2">
+                                <PlayButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE} title="Ejemplo Final" />
+                                <div className="bg-green-600 text-white px-3 py-1 rounded-md font-bold text-sm">Example:</div>
+                                <p className="font-bold text-gray-800 dark:text-white">Tenemos 28 galletas y queremos repartirlas en 4 cajas.</p>
+                            </div>
+
+                            <div className="pl-8 space-y-1 font-bold font-mono text-lg">
+                                <p><span className="text-purple-600">A = 28</span> <span className="text-black dark:text-white text-base font-sans">(total de galletas)</span></p>
+                                <p><span className="text-pink-600">B = 4</span> <span className="text-black dark:text-white text-base font-sans">(número de cajas)</span></p>
+                                <p><span className="text-green-600">C = 7</span> <span className="text-black dark:text-white text-base font-sans">(galletas en cada caja)</span></p>
+                            </div>
+
+                            <div className="mt-3 pl-8">
+                                <p className="font-bold text-gray-800 dark:text-white text-lg">
+                                    Entonces, <span className="text-purple-600">28</span> ÷ <span className="text-pink-600">4</span> = <span className="text-green-600">7</span>. <span className="text-base font-normal text-gray-700 dark:text-gray-300">Eso significa que a cada caja le corresponden <span className="font-bold text-green-600 underline">7 galletas</span>.</span>
                                 </p>
                             </div>
-                            <PlayButton trackingId={VIDEO_TRACKING_IDS.QUOTIENT} title="El Cociente" />
                         </div>
 
-                        {/* C Example */}
-                        <div className="pl-6">
-                            <div className="flex items-center gap-2 mb-2 bg-green-600 text-white px-3 py-1 rounded-md w-fit font-bold text-sm">
-                                Ejemplo:
+                        {/* PARTS DIAGRAM */}
+                        <div className="flex flex-col items-center mt-2">
+                            <div className="flex items-center gap-2 mb-2">
+                                <h4 className="font-black uppercase text-gray-900 dark:text-white">PARTES DE LA DIVISIÓN</h4>
+                                <PlayButton trackingId={VIDEO_TRACKING_IDS.PARTS} title="Partes de la división" />
                             </div>
-                            <p className="mb-4 font-medium text-gray-800 dark:text-gray-200">
-                                Dividir 12 manzanas entre 3 niños. Cada niño recibe <span className="font-bold">4 manzanas</span>
-                            </p>
-                            <div className="flex justify-around items-end bg-white p-4 rounded-xl border border-gray-200">
-                                {[...Array(3)].map((_, i) => (
-                                    <div key={i} className="flex flex-col items-center gap-1">
-                                        <KidFigure variant={i + 1} />
-                                        {/* Apples */}
-                                        <div className="grid grid-cols-2 gap-0.5 mt-1">
-                                            {[...Array(4)].map((_, j) => (
-                                                <div key={j} className="w-4 h-4 rounded-full bg-green-500 border border-green-600"></div>
-                                            ))}
-                                        </div>
+
+                            <div className="flex items-center gap-8 text-xl font-bold">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-red-500">Dividendo</span>
+                                    <span className="text-red-500">←</span>
+                                    <span className="text-purple-800 dark:text-purple-300 text-2xl">A</span>
+                                </div>
+
+                                <div className="flex flex-col gap-2">
+                                    <div className="flex items-center gap-4 border-b-2 border-black dark:border-white pb-1">
+                                        <span className="text-pink-600 text-2xl">B</span>
+                                        <span className="text-red-500">→</span>
+                                        <span className="text-red-500">Divisor</span>
                                     </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* FINAL EXAMPLE */}
-                    <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
-                        <div className="flex items-center gap-2 mb-2">
-                            <PlayButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE} title="Ejemplo Final" />
-                            <div className="bg-green-600 text-white px-3 py-1 rounded-md font-bold text-sm">Example:</div>
-                            <p className="font-bold text-gray-800 dark:text-white">Tenemos 28 galletas y queremos repartirlas en 4 cajas.</p>
-                        </div>
-
-                        <div className="pl-8 space-y-1 font-bold font-mono text-lg">
-                            <p><span className="text-purple-600">A = 28</span> <span className="text-black dark:text-white text-base font-sans">(total de galletas)</span></p>
-                            <p><span className="text-pink-600">B = 4</span> <span className="text-black dark:text-white text-base font-sans">(número de cajas)</span></p>
-                            <p><span className="text-green-600">C = 7</span> <span className="text-black dark:text-white text-base font-sans">(galletas en cada caja)</span></p>
-                        </div>
-
-                        <div className="mt-3 pl-8">
-                            <p className="font-bold text-gray-800 dark:text-white text-lg">
-                                Entonces, <span className="text-purple-600">28</span> ÷ <span className="text-pink-600">4</span> = <span className="text-green-600">7</span>. <span className="text-base font-normal text-gray-700 dark:text-gray-300">Eso significa que a cada caja le corresponden <span className="font-bold text-green-600 underline">7 galletas</span>.</span>
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* PARTS DIAGRAM */}
-                    <div className="flex flex-col items-center mt-2">
-                        <div className="flex items-center gap-2 mb-2">
-                            <h4 className="font-black uppercase text-gray-900 dark:text-white">PARTES DE LA DIVISIÓN</h4>
-                            <PlayButton trackingId={VIDEO_TRACKING_IDS.PARTS} title="Partes de la división" />
-                        </div>
-
-                        <div className="flex items-center gap-8 text-xl font-bold">
-                            <div className="flex items-center gap-2">
-                                <span className="text-red-500">Dividendo</span>
-                                <span className="text-red-500">←</span>
-                                <span className="text-purple-800 dark:text-purple-300 text-2xl">A</span>
-                            </div>
-
-                            <div className="flex flex-col gap-2">
-                                <div className="flex items-center gap-4 border-b-2 border-black dark:border-white pb-1">
-                                    <span className="text-pink-600 text-2xl">B</span>
-                                    <span className="text-red-500">→</span>
-                                    <span className="text-red-500">Divisor</span>
-                                </div>
-                                <div className="flex items-center gap-4">
-                                    <span className="text-green-600 text-2xl">C</span>
-                                    <span className="text-red-500">→</span>
-                                    <span className="text-red-500">Cociente</span>
+                                    <div className="flex items-center gap-4">
+                                        <span className="text-green-600 text-2xl">C</span>
+                                        <span className="text-red-500">→</span>
+                                        <span className="text-red-500">Cociente</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
             </div>
 

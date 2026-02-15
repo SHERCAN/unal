@@ -63,80 +63,83 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones Equivalentes' }} pageId="frac-equiv-concepto-abstracto-1">
-            <div className="relative border-2 rounded-xl p-6" style={{ borderColor: '#be90de' }}>
-                <div className="absolute -top-4 left-4 px-3 py-1 rounded font-black text-xl text-white" style={{ backgroundColor: '#be90de' }}>
+            {/* A - ABSTRACTO Section */}
+            <div className="relative ml-2 flex items-start">
+                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#be90de' }}>
                     A
                 </div>
+                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white" style={{ borderColor: '#be90de' }}>
 
-                <div className="mt-4 space-y-5">
-                    <div className="flex items-center gap-2">
-                        <PlayBtn trackingId={VIDEO_TRACKING.A1_CROSS} title="Productos Cruzados" />
-                        <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-                            Productos Cruzados — Práctica
-                        </p>
-                    </div>
+                    <div className="mt-4 space-y-5">
+                        <div className="flex items-center gap-2">
+                            <PlayBtn trackingId={VIDEO_TRACKING.A1_CROSS} title="Productos Cruzados" />
+                            <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+                                Productos Cruzados — Práctica
+                            </p>
+                        </div>
 
-                    <div className="bg-purple-50 dark:bg-purple-900/20 rounded-xl border border-purple-300 dark:border-purple-700 p-3">
-                        <p className="text-sm text-gray-800 dark:text-gray-200">
-                            <span className="font-bold">Regla:</span> a/b = c/d si{' '}
-                            <span className="font-bold text-purple-600">a × d = b × c</span>
-                        </p>
-                    </div>
+                        <div className="bg-purple-50 dark:bg-purple-900/20 rounded-xl border border-purple-300 dark:border-purple-700 p-3">
+                            <p className="text-sm text-gray-800 dark:text-gray-200">
+                                <span className="font-bold">Regla:</span> a/b = c/d si{' '}
+                                <span className="font-bold text-purple-600">a × d = b × c</span>
+                            </p>
+                        </div>
 
-                    <div className="space-y-4">
-                        {exercises.map((ex, i) => (
-                            <div key={i} className={`rounded-xl border-2 p-4 ${listoResult === 'correct' ? 'border-green-300 bg-green-50 dark:bg-green-900/10' :
-                                listoResult === 'incorrect' && answers[i] !== (ex.equivalent ? 'si' : 'no')
-                                    ? 'border-red-300 bg-red-50 dark:bg-red-900/10' :
-                                    'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50'
-                                }`}>
-                                <div className="flex items-center gap-4 flex-wrap">
-                                    {/* Fraction pair */}
-                                    <div className="flex items-center gap-2">
-                                        <div className="text-center">
-                                            <span className="text-xl font-bold text-blue-600">{ex.a}</span>
-                                            <span className="text-lg text-gray-400">/</span>
-                                            <span className="text-xl font-bold text-red-600">{ex.b}</span>
+                        <div className="space-y-4">
+                            {exercises.map((ex, i) => (
+                                <div key={i} className={`rounded-xl border-2 p-4 ${listoResult === 'correct' ? 'border-green-300 bg-green-50 dark:bg-green-900/10' :
+                                    listoResult === 'incorrect' && answers[i] !== (ex.equivalent ? 'si' : 'no')
+                                        ? 'border-red-300 bg-red-50 dark:bg-red-900/10' :
+                                        'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50'
+                                    }`}>
+                                    <div className="flex items-center gap-4 flex-wrap">
+                                        {/* Fraction pair */}
+                                        <div className="flex items-center gap-2">
+                                            <div className="text-center">
+                                                <span className="text-xl font-bold text-blue-600">{ex.a}</span>
+                                                <span className="text-lg text-gray-400">/</span>
+                                                <span className="text-xl font-bold text-red-600">{ex.b}</span>
+                                            </div>
+                                            <span className="text-gray-400 text-lg">y</span>
+                                            <div className="text-center">
+                                                <span className="text-xl font-bold text-blue-600">{ex.c}</span>
+                                                <span className="text-lg text-gray-400">/</span>
+                                                <span className="text-xl font-bold text-red-600">{ex.d}</span>
+                                            </div>
                                         </div>
-                                        <span className="text-gray-400 text-lg">y</span>
-                                        <div className="text-center">
-                                            <span className="text-xl font-bold text-blue-600">{ex.c}</span>
-                                            <span className="text-lg text-gray-400">/</span>
-                                            <span className="text-xl font-bold text-red-600">{ex.d}</span>
+
+                                        {/* Cross products */}
+                                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                                            <p>{ex.a}×{ex.d}={ex.a * ex.d}</p>
+                                            <p>{ex.b}×{ex.c}={ex.b * ex.c}</p>
                                         </div>
-                                    </div>
 
-                                    {/* Cross products */}
-                                    <div className="text-xs text-gray-500 dark:text-gray-400">
-                                        <p>{ex.a}×{ex.d}={ex.a * ex.d}</p>
-                                        <p>{ex.b}×{ex.c}={ex.b * ex.c}</p>
+                                        <select
+                                            value={answers[i] || ''}
+                                            onChange={(e) => { setAnswers(prev => ({ ...prev, [i]: e.target.value })); setListoResult(null); }}
+                                            className="border-2 rounded px-2 py-1 text-sm font-bold border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+                                            disabled={listoResult === 'correct'}
+                                        >
+                                            <option value="">¿Equivalentes?</option>
+                                            <option value="si">Sí ✓</option>
+                                            <option value="no">No ✗</option>
+                                        </select>
                                     </div>
-
-                                    <select
-                                        value={answers[i] || ''}
-                                        onChange={(e) => { setAnswers(prev => ({ ...prev, [i]: e.target.value })); setListoResult(null); }}
-                                        className="border-2 rounded px-2 py-1 text-sm font-bold border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
-                                        disabled={listoResult === 'correct'}
-                                    >
-                                        <option value="">¿Equivalentes?</option>
-                                        <option value="si">Sí ✓</option>
-                                        <option value="no">No ✗</option>
-                                    </select>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
 
-                    <div className="flex items-center gap-3 justify-center">
-                        {listoResult !== 'correct' && (
-                            <button onClick={handleListo}
-                                className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg text-sm">
-                                ¿LISTO?
-                            </button>
-                        )}
+                        <div className="flex items-center gap-3 justify-center">
+                            {listoResult !== 'correct' && (
+                                <button onClick={handleListo}
+                                    className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg text-sm">
+                                    ¿LISTO?
+                                </button>
+                            )}
+                        </div>
+                        {listoResult === 'correct' && <p className="text-center text-green-600 font-bold">✅ ¡Correcto!</p>}
+                        {listoResult === 'incorrect' && <p className="text-center text-red-500 font-bold text-sm">❌ Compara los productos cruzados e intenta de nuevo.</p>}
                     </div>
-                    {listoResult === 'correct' && <p className="text-center text-green-600 font-bold">✅ ¡Correcto!</p>}
-                    {listoResult === 'incorrect' && <p className="text-center text-red-500 font-bold text-sm">❌ Compara los productos cruzados e intenta de nuevo.</p>}
                 </div>
             </div>
 

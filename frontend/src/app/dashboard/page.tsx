@@ -1,7 +1,7 @@
 'use client';
 // Force rebuild
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
@@ -663,22 +663,22 @@ function InfiniteBookWrapper({
   const [currentPage, setCurrentPage] = useState(1);
   const navigateCallbackRef = useRef<((page: number) => void) | null>(null);
 
-  const handlePageChange = (page: number, completed: number[]) => {
+  const handlePageChange = useCallback((page: number, completed: number[]) => {
     setCurrentPage(page);
     setCompletedPages(completed);
-  };
+  }, [setCompletedPages]);
 
-  const handleNavigationRequest = (callback: (page: number) => void) => {
+  const handleNavigationRequest = useCallback((callback: (page: number) => void) => {
     navigateCallbackRef.current = callback;
     // Update parent state once without causing re-renders
     setNavigateToPage(() => callback);
-  };
+  }, [setNavigateToPage]);
 
-  const handleNavigateToPage = (page: number) => {
+  const handleNavigateToPage = useCallback((page: number) => {
     if (navigateCallbackRef.current) {
       navigateCallbackRef.current(page);
     }
-  };
+  }, []);
 
   return (
     <div className="flex-1 relative">

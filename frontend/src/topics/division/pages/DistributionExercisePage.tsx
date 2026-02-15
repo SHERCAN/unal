@@ -112,10 +112,41 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
     const [finalAnswer, setFinalAnswer] = useState('');
     const [pStageCheck, setPStageCheck] = useState<'idle' | 'correct' | 'incorrect'>('idle');
 
+    // State - Stage P (Pictorial - Interactive)
+    const [pOranges, setPOranges] = useState<{ id: number; boxId: number | null }[]>(
+        Array.from({ length: TOTAL_ORANGES }, (_, i) => ({ id: i, boxId: null }))
+    );
+    const [pDraggedId, setPDraggedId] = useState<number | null>(null);
+
+    const handlePDragStart = (e: React.DragEvent, id: number) => {
+        setPDraggedId(id);
+        e.dataTransfer.effectAllowed = 'move';
+    };
+
+    const handlePDropOnPBox = (boxIndex: number) => {
+        if (pDraggedId === null) return;
+        setPOranges(prev => prev.map(o => o.id === pDraggedId ? { ...o, boxId: boxIndex + 1 } : o));
+        setPDraggedId(null);
+    };
+
+    const handlePDropOnPSource = () => {
+        if (pDraggedId === null) return;
+        setPOranges(prev => prev.map(o => o.id === pDraggedId ? { ...o, boxId: null } : o));
+        setPDraggedId(null);
+    };
+
+    const resetStageP = () => {
+        setPOranges(Array.from({ length: TOTAL_ORANGES }, (_, i) => ({ id: i, boxId: null })));
+        setFinalAnswer('');
+        setPStageCheck('idle');
+    };
+
     // Video Tracking
     const VIDEO_TRACKING_IDS = {
         C_INTRO: 'division-dist-c-intro',
-        P_INTRO: 'division-dist-p-intro'
+        C_DISTRIBUTION: 'division-dist-c-distribution',
+        P_INTRO: 'division-dist-p-intro',
+        P_DISTRIBUTION: 'division-dist-p-distribution'
     };
 
     // Stage C Logic
@@ -174,17 +205,14 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
     };
 
     // Stage P Logic
-    const handleInputChange = (index: number, value: string) => {
-        const newInputs = [...boxInputs];
-        newInputs[index] = value;
-        setBoxInputs(newInputs);
-    };
+    // Inputs are now read-only derived from pOranges state
 
     const checkStageP = () => {
-        const allBoxesCorrect = boxInputs.every(val => parseInt(val) === ORANGES_PER_BOX);
-        const finalAnswerCorrect = parseInt(finalAnswer) === ORANGES_PER_BOX;
+        // Validation per user request: "debe dar correcto si son 6 e incorrecto si es diferente"
+        // referring to the final answer input.
+        const isCorrect = finalAnswer.trim() === '6';
 
-        if (allBoxesCorrect && finalAnswerCorrect) {
+        if (isCorrect) {
             setPStageCheck('correct');
             completeStage('division-dist-p');
         } else {
@@ -224,253 +252,352 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
             <div className="w-full max-w-5xl mx-auto space-y-6">
 
                 {/* --- STAGE C: CONCRETE --- */}
-                <div className="relative border-2 border-green-300 rounded-xl p-4 bg-white">
-                    <div className="absolute -top-4 left-4 px-3 py-1 rounded-md bg-green-300 font-bold text-white text-xl">C</div>
+                <div className="relative ml-2 flex items-start">
+                    <div className="bg-green-300 text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center ">C</div>
+                    <div className="flex-1 relative border-2 border-green-300 p-4 rounded-r-lg -ml-0.5 rounded-tl-none">
 
-
-                    {/* Scene 1: Intro */}
-                    <div className="flex flex-col md:flex-row items-center justify-around mb-8 px-4 gap-8 min-h-[300px]">
-
-                        {/* Basket / Girl Area */}
-                        <div
-                            className="relative flex items-end"
-                            onDragOver={handleDragOver}
-                            onDrop={handleIntroDropOnBasket}
-                        >
-                            <div className="relative w-48 h-64">
-                                <img src="/division/oranges-page/girl-basket.png" alt="Girl with Basket" className="w-full h-full object-contain" />
-                                {/* Oranges in Basket - Rendered in a pile/grid over the basket area */}
-                                <div className="absolute bottom-[2%] left-[15%] w-[70%] h-[25%] flex flex-wrap-reverse justify-center content-end pointer-events-none">
-                                    {introOranges.filter(o => o.location === 'basket').map(o => (
-                                        <div
-                                            key={o.id}
-                                            draggable
-                                            onDragStart={(e) => handleIntroDragStart(e, o.id)}
-                                            className="w-8 h-8 -ml-2 -mb-2 pointer-events-auto cursor-grab hover:scale-110 transition z-10"
-                                        // Removing absolute positioning for basket to make them pile up naturally
-                                        >
-                                            <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain" />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Count Display - Next to basket */}
-                            <div className="text-6xl font-black text-purple-700 ml-2 mb-4">
-                                {introOranges.filter(o => o.location === 'basket').length}
-                            </div>
-
+                        {/* Scene 1: Intro */}
+                        <div className="flex flex-col md:flex-row items-center justify-around mb-8 px-4 gap-8 min-h-[300px]">
                             {/* Video Trigger */}
                             <button
-                                onClick={() => {
+                                type="button"
+                                onMouseEnter={() => {
                                     currentTrackingIdRef.current = VIDEO_TRACKING_IDS.C_INTRO;
                                     setVideoModal({ isOpen: true, title: 'Introducción', videoId: VIDEO_IDS.MODULE_DIVISION, trackingId: VIDEO_TRACKING_IDS.C_INTRO });
                                 }}
-                                className="absolute top-0 left-0 bg-purple-600 text-white rounded-full p-2 hover:bg-purple-700 transition z-20"
+                                className={`absolute top-4 left-4 p-1 text-white rounded-full transition-all flex-shrink-0 z-20 ${isVideoWatched(VIDEO_TRACKING_IDS.C_INTRO)
+                                    ? 'bg-green-600 hover:bg-green-700'
+                                    : 'bg-purple-600 hover:bg-purple-700'
+                                    }`}
                             >
-                                ▶
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    {isVideoWatched(VIDEO_TRACKING_IDS.C_INTRO) ? (
+                                        <path d="M8 5v14l11-7z" />
+                                    ) : (
+                                        <path d="M8 5v14l11-7z" />
+                                    )}
+                                </svg>
                             </button>
-                        </div>
-
-                        {/* Tree Area */}
-                        <div
-                            className="relative w-80 h-80 flex-shrink-0"
-                            onDragOver={handleDragOver}
-                            onDrop={handleIntroDropOnTree}
-                        >
-                            <img src="/division/oranges-page/tree.png" alt="Tree" className="w-full h-full object-contain" />
-                            {/* Oranges on Tree */}
-                            <div className="absolute top-0 left-0 w-full h-full">
-                                {introOranges.filter(o => o.location === 'tree').map(o => (
-                                    <div
-                                        key={o.id}
-                                        draggable
-                                        onDragStart={(e) => handleIntroDragStart(e, o.id)}
-                                        className="absolute w-12 h-12 pointer-events-auto cursor-grab hover:scale-110 transition z-10"
-                                        style={{ top: o.top, left: o.left }}
-                                    >
-                                        <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain drop-shadow-md" />
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    <hr className="my-6 border-gray-200" />
-
-                    {/* Scene 2: Distribution Activity */}
-                    <div className="relative">
-                        {/* Video Trigger 2 */}
-                        <div className="absolute top-0 left-0 z-10">
-                            <button
-                                className="bg-purple-600 text-white rounded-full p-2 hover:bg-purple-700 transition shadow-md"
-                            // Add logic for second video if needed
+                            {/* Basket / Girl Area */}
+                            <div
+                                className="relative flex items-end"
+                                onDragOver={handleDragOver}
+                                onDrop={handleIntroDropOnBasket}
                             >
-                                ▶
-                            </button>
-                        </div>
-
-                        <div className="flex flex-col items-center">
-                            <div className="flex items-center gap-4 mb-2">
-                                <button
-                                    onClick={checkStageC}
-                                    className="bg-purple-600 text-white px-4 py-1 rounded-md font-bold uppercase text-sm hover:bg-purple-700 transition"
-                                >
-                                    ¿LISTO?
-                                </button>
-                                <button onClick={resetStageC} className="bg-purple-600 text-white p-2 rounded-md hover:bg-purple-700 transition">
-                                    🔄
-                                </button>
-                            </div>
-
-                            {cStageComplete && <div className="text-green-600 font-bold mb-2 celebrate-animation">CORRECTO!</div>}
-
-                            <div className="flex flex-col md:flex-row items-end justify-center w-full gap-8">
-                                {/* Boxes Area */}
-                                <div className="flex gap-2">
-                                    {Array.from({ length: BOX_COUNT }).map((_, i) => (
-                                        <div
-                                            key={i + 1}
-                                            onDragOver={handleDragOver}
-                                            onDrop={() => handleDropOnBox(i + 1)}
-                                            className="relative w-20 h-20 md:w-24 md:h-24"
-                                        >
-                                            <img src="/division/oranges-page/caja-abierta%2017.png" alt="Box" className="w-full h-full object-contain" />
-                                            {/* Oranges inside box */}
-                                            <div className="absolute bottom-2 left-0 w-full flex flex-wrap justify-center -space-x-1 px-1">
-                                                {getOrangesInBox(i + 1).map(o => (
-                                                    <div
-                                                        key={o.id}
-                                                        draggable
-                                                        onDragStart={(e) => handleDragStart(e, o.id)}
-                                                        className="w-8 h-8 cursor-grab"
-                                                    >
-                                                        <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain" />
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <div className="absolute -bottom-6 w-full text-center font-bold text-gray-700">
-                                                {getOrangesInBox(i + 1).length}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* Girl & Pool Area */}
-                                <div
-                                    className="relative"
-                                    onDragOver={handleDragOver}
-                                    onDrop={handleDropOnPool}
-                                >
-                                    <img src="/division/oranges-page/girl-basket.png" alt="Girl" className="h-48 object-contain" />
-                                    <div className="absolute top-[40%] left-[20%] w-[60%] h-[30%] flex flex-wrap justify-center items-center overflow-hidden">
-                                        {getOrangesInPool().map(o => (
+                                <div className="relative w-48 h-64">
+                                    <img src="/division/oranges-page/girl-basket.png" alt="Girl with Basket" className="w-full h-full object-contain" />
+                                    {/* Oranges in Basket - Rendered in a pile/grid over the basket area */}
+                                    <div className="absolute bottom-[2%] left-[15%] w-[70%] h-[25%] flex flex-wrap-reverse justify-center content-end pointer-events-none">
+                                        {introOranges.filter(o => o.location === 'basket').map(o => (
                                             <div
                                                 key={o.id}
                                                 draggable
-                                                onDragStart={(e) => handleDragStart(e, o.id)}
-                                                className="w-8 h-8 cursor-grab hover:scale-110 transition"
+                                                onDragStart={(e) => handleIntroDragStart(e, o.id)}
+                                                className="w-8 h-8 -ml-2 -mb-2 pointer-events-auto cursor-grab hover:scale-110 transition z-10"
+                                            // Removing absolute positioning for basket to make them pile up naturally
                                             >
                                                 <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain" />
                                             </div>
                                         ))}
                                     </div>
-                                    <div className="absolute bottom-0 right-0 text-3xl font-bold text-purple-600 bg-white bg-opacity-80 rounded-full px-2">
-                                        {getOrangesInPool().length}
+                                </div>
+
+                                {/* Count Display - Next to basket */}
+                                <div className="text-6xl font-black text-purple-700 ml-2 mb-4">
+                                    {introOranges.filter(o => o.location === 'basket').length}
+                                </div>
+
+
+                            </div>
+
+                            {/* Tree Area */}
+                            <div
+                                className="relative w-80 h-80 flex-shrink-0"
+                                onDragOver={handleDragOver}
+                                onDrop={handleIntroDropOnTree}
+                            >
+                                <img src="/division/oranges-page/tree.png" alt="Tree" className="w-full h-full object-contain" />
+                                {/* Oranges on Tree */}
+                                <div className="absolute top-0 left-0 w-full h-full">
+                                    {introOranges.filter(o => o.location === 'tree').map(o => (
+                                        <div
+                                            key={o.id}
+                                            draggable
+                                            onDragStart={(e) => handleIntroDragStart(e, o.id)}
+                                            className="absolute w-12 h-12 pointer-events-auto cursor-grab hover:scale-110 transition z-10"
+                                            style={{ top: o.top, left: o.left }}
+                                        >
+                                            <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain drop-shadow-md" />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr className="my-6 border-gray-200" />
+
+                        {/* Scene 2: Distribution Activity */}
+                        <div className="relative">
+                            {/* Video Trigger 2 */}
+                            <div className="absolute top-0 left-0 z-10">
+                                <button
+                                    type="button"
+                                    onMouseEnter={() => {
+                                        currentTrackingIdRef.current = VIDEO_TRACKING_IDS.C_DISTRIBUTION;
+                                        setVideoModal({ isOpen: true, title: 'Distribución', videoId: VIDEO_IDS.MODULE_DIVISION, trackingId: VIDEO_TRACKING_IDS.C_DISTRIBUTION });
+                                    }}
+                                    className={`p-1 text-white rounded-full transition-all flex-shrink-0 shadow-md ${isVideoWatched(VIDEO_TRACKING_IDS.C_DISTRIBUTION)
+                                        ? 'bg-green-600 hover:bg-green-700'
+                                        : 'bg-purple-600 hover:bg-purple-700'
+                                        }`}
+                                >
+                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        {isVideoWatched(VIDEO_TRACKING_IDS.C_DISTRIBUTION) ? (
+                                            <path d="M8 5v14l11-7z" />
+                                        ) : (
+                                            <path d="M8 5v14l11-7z" />
+                                        )}
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div className="flex flex-col items-center py-4">
+                                <div className="flex items-center gap-4 mb-2">
+                                    <button
+                                        onClick={checkStageC}
+                                        className="bg-purple-600 text-white px-4 py-1 rounded-md font-bold uppercase text-sm hover:bg-purple-700 transition"
+                                    >
+                                        ¿LISTO?
+                                    </button>
+
+                                </div>
+
+                                {cStageComplete && <div className="text-green-600 font-bold mb-2 celebrate-animation">CORRECTO!</div>}
+
+                                <div className="flex flex-col md:flex-row items-end justify-center w-full gap-8">
+                                    {/* Boxes Area */}
+                                    <div className="relative flex justify-center pb-2">
+                                        <img
+                                            src="/division/oranges-page/mesa.png"
+                                            alt="Mesa"
+                                            className="absolute bottom-[-20px] left-1/2 -translate-x-1/2 w-[120%] max-w-none h-auto z-0 pointer-events-none opacity-90"
+                                        />
+                                        <div className="flex gap-4 relative z-10 -translate-y-10">
+                                            {Array.from({ length: BOX_COUNT }).map((_, i) => (
+                                                <div
+                                                    key={i + 1}
+                                                    onDragOver={handleDragOver}
+                                                    onDrop={() => handleDropOnBox(i + 1)}
+                                                    className="relative w-20 h-20 md:w-24 md:h-24 p-1"
+                                                >
+                                                    <img src="/division/oranges-page/caja-abierta%2017.png" alt="Box" className="w-full h-full object-contain drop-shadow-sm" />
+                                                    {/* Oranges inside box */}
+                                                    <div className="absolute bottom-2 left-0 w-full flex flex-wrap justify-center -space-x-1 px-1">
+                                                        {getOrangesInBox(i + 1).map(o => (
+                                                            <div
+                                                                key={o.id}
+                                                                draggable
+                                                                onDragStart={(e) => handleDragStart(e, o.id)}
+                                                                className="w-8 h-8 cursor-grab hover:scale-110 transition"
+                                                            >
+                                                                <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain" />
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                    {/* <div className="absolute -bottom-8 w-full text-center font-bold text-gray-700 bg-white/80 rounded px-1 text-sm shadow-sm">
+                                                        {getOrangesInBox(i + 1).length}
+                                                    </div> */}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Girl & Pool Area */}
+                                    <div
+                                        className="relative"
+                                        onDragOver={handleDragOver}
+                                        onDrop={handleDropOnPool}
+                                    >
+                                        <img src="/division/oranges-page/girl-basket.png" alt="Girl" className="h-48 object-contain" />
+                                        <div className="absolute top-[40%] left-[20%] w-[60%] h-[30%] flex flex-wrap justify-center items-center overflow-hidden">
+                                            {getOrangesInPool().map(o => (
+                                                <div
+                                                    key={o.id}
+                                                    draggable
+                                                    onDragStart={(e) => handleDragStart(e, o.id)}
+                                                    className="w-8 h-8 cursor-grab hover:scale-110 transition"
+                                                >
+                                                    <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain" />
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="absolute bottom-0 right-0 text-3xl font-bold text-purple-600 bg-white bg-opacity-80 rounded-full px-2">
+                                            {getOrangesInPool().length}
+                                        </div>
                                     </div>
                                 </div>
+
                             </div>
-                            <p className="text-red-500 font-bold text-sm text-center mt-4 w-full">
-                                Colócalo con mouse para repartirse en 4 cajas.
-                            </p>
                         </div>
-                    </div>
-                </div>
+                    </div></div>
 
                 {/* --- STAGE P: PICTORIAL --- */}
-                <div className="relative border-2 border-blue-300 rounded-xl p-4 bg-white">
-                    <div className="absolute -top-4 left-4 px-3 py-1 rounded-md bg-blue-300 font-bold text-white text-xl">P</div>
+                <div className="relative ml-2 flex items-start mb-8">
+                    <div className="bg-blue-300 text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center">P</div>
+                    <div className="flex-1 relative border-2 border-blue-300 p-4 rounded-r-lg -ml-0.5 rounded-tl-none">
 
-                    <div className="flex items-center gap-2 mb-4">
-                        <span className="font-medium text-gray-800">Hay 24 naranjas en cuadro</span>
-                        <button className="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold text-xs hover:bg-purple-700">▶</button>
-                    </div>
-
-                    <div className="border border-gray-300 rounded-lg p-4 bg-white mb-6">
-                        <div className="grid grid-cols-8 gap-y-2 place-items-center">
-                            {Array.from({ length: 24 }).map((_, i) => (
-                                <img key={i} src="/division/oranges-page/orange.png" alt="Orange" className="w-8 h-8 object-contain" />
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 mb-4">
-                        <span className="font-medium text-gray-800">Se reparte en 4 partes iguales</span>
-                        <button className="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold text-xs hover:bg-purple-700">▶</button>
-                    </div>
-
-                    {/* Boxes Grid */}
-                    <div className="grid grid-cols-4 gap-4 mb-4">
-                        {Array.from({ length: BOX_COUNT }).map((_, i) => (
-                            <div key={i} className="flex flex-col items-center gap-2">
-                                <div className="w-full h-24 border-2 border-green-200 rounded-lg flex items-center justify-center">
-                                    {/* Placeholder for distributed oranges visual if needed, currently empty as per image */}
-                                    {i === 0 && (
-                                        // Image shows first box with oranges, others checks? No, shows 2 oranges in first box?
-                                        // The screenshot has 2 oranges in the first box of the bottom section.
-                                        // I'll just leave them empty for the user to count mentally or fill via input.
-                                        <div className="flex">
-                                            <img src="/division/oranges-page/orange.png" alt="Orange" className="w-14 h-14 object-contain" />
-                                            <img src="/division/oranges-page/orange.png" alt="Orange" className="w-14 h-14 object-contain" />
-                                        </div>
+                        <div className="flex items-center gap-2 mb-4">
+                            <p className="font-medium text-gray-700 dark:text-gray-300" style={{ fontSize: 'clamp(0.75rem, 1.9vmin, 1rem)' }}>
+                                Hay 24 naranjas en cuadro
+                            </p>
+                            <button
+                                type="button"
+                                onMouseEnter={() => {
+                                    currentTrackingIdRef.current = VIDEO_TRACKING_IDS.P_INTRO;
+                                    setVideoModal({ isOpen: true, title: 'Introducción Pictórica', videoId: VIDEO_IDS.MODULE_DIVISION, trackingId: VIDEO_TRACKING_IDS.P_INTRO });
+                                }}
+                                className={`p-1 text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(VIDEO_TRACKING_IDS.P_INTRO)
+                                    ? 'bg-green-600 hover:bg-green-700'
+                                    : 'bg-purple-600 hover:bg-purple-700'
+                                    }`}
+                            >
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                    {isVideoWatched(VIDEO_TRACKING_IDS.P_INTRO) ? (
+                                        <path d="M8 5v14l11-7z" />
+                                    ) : (
+                                        <path d="M8 5v14l11-7z" />
                                     )}
-                                </div>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div
+                            className="border border-gray-300 rounded-lg p-4 bg-white mb-6 min-h-[100px]"
+                            onDragOver={handleDragOver}
+                            onDrop={handlePDropOnPSource}
+                        >
+                            <div className="grid grid-cols-8 gap-y-2 place-items-center">
+                                {pOranges.filter(o => o.boxId === null).map((orange) => (
+                                    <div
+                                        key={orange.id}
+                                        draggable
+                                        onDragStart={(e) => handlePDragStart(e, orange.id)}
+                                        className="cursor-grab hover:scale-110 transition"
+                                    >
+                                        <img src="/division/oranges-page/orange.png" alt="Orange" className="w-8 h-8 object-contain" />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 mb-4">
+                            <p className="font-medium text-gray-700 dark:text-gray-300" style={{ fontSize: 'clamp(0.75rem, 1.9vmin, 1rem)' }}>
+                                Se reparte en 4 partes iguales
+                            </p>
+                            <button
+                                type="button"
+                                onMouseEnter={() => {
+                                    currentTrackingIdRef.current = VIDEO_TRACKING_IDS.P_DISTRIBUTION;
+                                    setVideoModal({ isOpen: true, title: 'Distribución Pictórica', videoId: VIDEO_IDS.MODULE_DIVISION, trackingId: VIDEO_TRACKING_IDS.P_DISTRIBUTION });
+                                }}
+                                className={`p-1 text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(VIDEO_TRACKING_IDS.P_DISTRIBUTION)
+                                    ? 'bg-green-600 hover:bg-green-700'
+                                    : 'bg-purple-600 hover:bg-purple-700'
+                                    }`}
+                            >
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                    {isVideoWatched(VIDEO_TRACKING_IDS.P_DISTRIBUTION) ? (
+                                        <path d="M8 5v14l11-7z" />
+                                    ) : (
+                                        <path d="M8 5v14l11-7z" />
+                                    )}
+                                </svg>
+                            </button>
+                        </div>
+
+                        {/* Boxes Grid */}
+                        <div className="grid grid-cols-4 gap-4 mb-4">
+                            {Array.from({ length: BOX_COUNT }).map((_, i) => {
+                                const orangesInThisBox = pOranges.filter(o => o.boxId === i + 1);
+                                return (
+                                    <div key={i} className="flex flex-col items-center gap-2">
+                                        <div
+                                            className="w-full h-24 border-2 border-green-200 rounded-lg flex items-center justify-center bg-gray-50"
+                                            onDragOver={handleDragOver}
+                                            onDrop={() => handlePDropOnPBox(i)}
+                                        >
+                                            <div className="flex flex-wrap justify-center content-center w-full h-full p-1 gap-1 overflow-hidden">
+                                                {orangesInThisBox.map((orange) => (
+                                                    <div
+                                                        key={orange.id}
+                                                        draggable
+                                                        onDragStart={(e) => handlePDragStart(e, orange.id)}
+                                                        className="w-8 h-8 cursor-grab hover:scale-110 transition flex-shrink-0"
+                                                    >
+                                                        <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain" />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <input
+                                            type="number"
+                                            className="w-12 h-8 border border-gray-300 text-center rounded-md bg-gray-100 text-gray-600"
+                                            value={orangesInThisBox.length}
+                                            readOnly
+                                        />
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        <div className="flex flex-wrap items-center justify-center gap-6 mt-6">
+                            <div className="flex items-center gap-2">
+                                <p className="font-bold text-gray-700 dark:text-gray-300" style={{ fontSize: 'clamp(0.75rem, 1.9vmin, 1rem)' }}>
+                                    Cada caja tiene
+                                </p>
                                 <input
                                     type="number"
-                                    className="w-12 h-8 border border-gray-300 text-center rounded-md focus:ring-2 focus:ring-purple-500"
-                                    value={boxInputs[i]}
-                                    onChange={(e) => handleInputChange(i, e.target.value)}
+                                    className="w-16 h-10 border border-gray-300 text-center rounded-md focus:ring-2 focus:ring-purple-500 text-lg font-bold text-gray-900"
+                                    value={finalAnswer}
+                                    onChange={(e) => setFinalAnswer(e.target.value)}
                                 />
+                                <p className="font-bold text-gray-700 dark:text-gray-300" style={{ fontSize: 'clamp(0.75rem, 1.9vmin, 1rem)' }}>
+                                    naranjas.
+                                </p>
                             </div>
-                        ))}
-                    </div>
 
-                    <div className="flex items-center justify-center gap-4 mt-6">
-                        <span className="font-bold text-gray-800">Cada caja tiene</span>
-                        <input
-                            type="number"
-                            className="w-16 h-10 border border-gray-300 text-center rounded-md focus:ring-2 focus:ring-purple-500 text-lg font-bold"
-                            value={finalAnswer}
-                            onChange={(e) => setFinalAnswer(e.target.value)}
-                        />
-                        <span className="font-bold text-gray-800">naranjas.</span>
-                    </div>
-
-                    <div className="flex justify-center mt-6 gap-4">
-                        <button
-                            onClick={checkStageP}
-                            className="bg-purple-600 text-white px-6 py-2 rounded-md font-bold uppercase hover:bg-purple-700 transition shadow-lg"
-                        >
-                            ¿LISTO?
-                        </button>
-                        <button
-                            onClick={() => { setBoxInputs(Array(BOX_COUNT).fill('')); setFinalAnswer(''); setPStageCheck('idle'); }}
-                            className="bg-purple-600 text-white p-2 rounded-md hover:bg-purple-700 transition shadow-lg"
-                        >
-                            🔄
-                        </button>
-                    </div>
-
-                    {pStageCheck === 'correct' && (
-                        <div className="text-center mt-4 text-green-600 text-xl font-black celebrate-animation">
-                            CORRECTO
+                            <button
+                                onClick={checkStageP}
+                                className="bg-purple-600 text-white px-6 py-2 rounded-md font-bold uppercase hover:bg-purple-700 transition shadow-lg"
+                            >
+                                ¿LISTO?
+                            </button>
                         </div>
-                    )}
-                    {pStageCheck === 'incorrect' && (
-                        <div className="text-center mt-4 text-orange-500 text-xl font-black">
-                            INCORRECTO
-                        </div>
-                    )}
+
+                        {pStageCheck === 'correct' && (
+                            <div className="relative flex items-center justify-center gap-2 mt-4">
+                                <span className="text-green-600 font-black text-2xl celebrate-animation">
+                                    CORRECTO
+                                </span>
+                            </div>
+                        )}
+                        {pStageCheck === 'incorrect' && (
+                            <div className="relative flex items-center justify-center gap-3 mt-4">
+                                <span className="text-orange-500 font-black text-2xl shake-animation">
+                                    INCORRECTO
+                                </span>
+                                <button
+                                    onClick={() => setPStageCheck('idle')}
+                                    className="p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-all shadow-md"
+                                    title="Reintentar"
+                                >
+                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 

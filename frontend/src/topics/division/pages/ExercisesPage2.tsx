@@ -137,69 +137,65 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
         >
             <div className="flex flex-col gap-10 max-w-4xl mx-auto pb-32">
                 {/* Header */}
-                <h1 className="text-3xl font-black text-purple-700 uppercase">Ejercicios</h1>
+                <h1 className="text-3xl font-black text-purple-700 dark:text-purple-400 uppercase">Ejercicios</h1>
 
                 {/* --- ACTIVITY 1 --- */}
-                <div className="flex bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex-col gap-6">
-                    {/* Item 1 */}
+                <div className="flex bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex-col gap-6">
                     <div className="flex items-start gap-4">
                         <PlayButton onClick={() => { }} />
-                        <div className="flex-1 flex items-center justify-between gap-4 flex-wrap">
-                            <p className="font-medium text-lg leading-relaxed">
+                        <div className="flex-1">
+                            <p className="font-medium text-lg leading-relaxed text-gray-800 dark:text-gray-200">
                                 Hay 40 caramelos para repartir en partes iguales entre 10 niños. <br />
                                 Cada niño recibe 4 caramelos.
+                                <span className="inline-flex gap-2 ml-4 align-middle">
+                                    <SelectButton label="V" selected={act1_q1 === 'V'} onClick={() => { setAct1Status('idle'); setAct1_q1('V'); }} />
+                                    <SelectButton label="F" selected={act1_q1 === 'F'} onClick={() => { setAct1Status('idle'); setAct1_q1('F'); }} />
+                                </span>
                             </p>
-                            <div className="flex gap-2 shrink-0">
-                                <SelectButton label="V" selected={act1_q1 === 'V'} onClick={() => { setAct1Status('idle'); setAct1_q1('V'); }} />
-                                <SelectButton label="F" selected={act1_q1 === 'F'} onClick={() => { setAct1Status('idle'); setAct1_q1('F'); }} />
-                            </div>
                         </div>
                     </div>
 
-                    {/* Item 2 */}
                     <div className="flex items-start gap-4">
                         <PlayButton onClick={() => { }} />
-                        <div className="flex-1 flex items-center justify-between gap-4 flex-wrap">
-                            <p className="font-medium text-lg leading-relaxed">
+                        <div className="flex-1">
+                            <p className="font-medium text-lg leading-relaxed text-gray-800 dark:text-gray-200">
                                 En una competencia participan 88 atletas. Se reparten en 10 carriles de la pista. <br />
                                 Las 8 atletas corren en cada carril.
+                                <span className="inline-flex gap-2 ml-4 align-middle">
+                                    <SelectButton label="V" selected={act1_q2 === 'V'} onClick={() => { setAct1Status('idle'); setAct1_q2('V'); }} />
+                                    <SelectButton label="F" selected={act1_q2 === 'F'} onClick={() => { setAct1Status('idle'); setAct1_q2('F'); }} />
+                                </span>
                             </p>
-                            <div className="flex gap-2 shrink-0">
-                                <SelectButton label="V" selected={act1_q2 === 'V'} onClick={() => { setAct1Status('idle'); setAct1_q2('V'); }} />
-                                <SelectButton label="F" selected={act1_q2 === 'F'} onClick={() => { setAct1Status('idle'); setAct1_q2('F'); }} />
-                            </div>
                         </div>
                     </div>
 
-                    <div className="flex justify-end gap-4 mt-2">
-                        <div className="grid grid-cols-[auto_auto] gap-4 items-center bg-gray-50 px-4 py-2 rounded-xl">
-                            <CheckButton onClick={checkAct1} />
-                            <div className="min-w-[100px] text-center">
-                                <Feedback status={act1Status} />
-                            </div>
+                    <div className="flex justify-start gap-4 mt-2">
+                        <CheckButton onClick={checkAct1} />
+                        <div className="min-w-[100px] text-center">
+                            <Feedback status={act1Status} />
                         </div>
                     </div>
                 </div>
 
                 {/* --- ACTIVITY 4 --- */}
-                <div className="flex bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex-col gap-6">
+                <div className="flex bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex-col gap-6">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-purple-700 text-white font-black text-xl flex items-center justify-center rounded-lg">4</div>
                         <div className="flex items-center gap-2">
                             <PlayButton onClick={() => { }} />
-                            <p className="font-bold text-gray-800">Resuelve una situación problemática:</p>
+                            <p className="font-bold text-gray-800 dark:text-gray-200">Resuelve una situación problemática:</p>
                         </div>
                     </div>
 
                     <div className="ml-0 md:ml-12 flex flex-col gap-6">
-                        <p className="text-lg">
+                        <p className="text-lg text-gray-800 dark:text-gray-200">
                             En una piscina entrenan 36 nadadores. Se organizan en 12 grupos iguales.
                             <br />
                             <strong>¿Cuántos nadadores hay en cada grupo?</strong>
                         </p>
 
                         {/* Horizontal Division */}
-                        <div className="flex items-center gap-2 text-2xl font-bold justify-center md:justify-start">
+                        <div className="flex items-center gap-2 text-2xl font-bold justify-center md:justify-start text-gray-800 dark:text-white">
                             <InputBox value={act4_h_div[0]} onChange={v => { const n = [...act4_h_div]; n[0] = v; setAct4_h_div(n); setAct4Status('idle'); }} />
                             <span>÷</span>
                             <InputBox value={act4_h_div[1]} onChange={v => { const n = [...act4_h_div]; n[1] = v; setAct4_h_div(n); setAct4Status('idle'); }} />
@@ -207,7 +203,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                             <InputBox value={act4_h_div[2]} onChange={v => { const n = [...act4_h_div]; n[2] = v; setAct4_h_div(n); setAct4Status('idle'); }} />
                         </div>
 
-                        <hr className="border-gray-200" />
+                        <hr className="border-gray-200 dark:border-gray-700" />
 
                         <div className="flex flex-col md:flex-row gap-12 items-start">
                             {/* Vertical Algorithm - Redesigned Layout */}
@@ -219,12 +215,12 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
 
                                     {/* Subtraction with minus sign */}
                                     <div className="relative">
-                                        <span className="absolute -left-8 top-2 text-4xl font-bold text-gray-800 select-none">-</span>
+                                        <span className="absolute -left-8 top-2 text-4xl font-bold text-gray-800 dark:text-gray-200 select-none">-</span>
                                         <InputBox value={act4_v_sub} onChange={v => { setAct4_v_sub(v); setAct4Status('idle'); }} className="w-16 h-16 text-3xl" />
                                     </div>
 
                                     {/* Line */}
-                                    <div className="w-16 h-1 bg-black rounded-full"></div>
+                                    <div className="w-16 h-1 bg-black dark:bg-white rounded-full"></div>
 
                                     {/* Remainder */}
                                     <InputBox value={act4_v_rem} onChange={v => { setAct4_v_rem(v); setAct4Status('idle'); }} className="w-16 h-16 text-3xl" />
@@ -233,7 +229,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                                 {/* Right Side: Bracket + Divisor + Quotient */}
                                 <div className="flex flex-col">
                                     {/* Top part: Bracket L-shape + Divisor */}
-                                    <div className="border-l-4 border-b-4 border-black pl-2 pb-2 mb-2">
+                                    <div className="border-l-4 border-b-4 border-black dark:border-white pl-2 pb-2 mb-2">
                                         <InputBox value={act4_v_divisor} onChange={v => { setAct4_v_divisor(v); setAct4Status('idle'); }} className="w-16 h-16 text-3xl border-none focus:ring-0 bg-transparent" />
                                     </div>
 
@@ -245,10 +241,10 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                             </div>
 
                             {/* Vertical Separator */}
-                            <div className="hidden md:block w-px bg-gray-300 self-stretch"></div>
+                            <div className="hidden md:block w-px bg-gray-300 dark:bg-gray-600 self-stretch"></div>
 
                             {/* Multiplication Checks */}
-                            <div className="flex flex-col gap-4">
+                            <div className="flex flex-col gap-4 text-gray-800 dark:text-white">
                                 {act4_m_rows.map((row, i) => (
                                     <div key={i} className="flex items-center gap-2">
                                         <InputBox value={row.a} onChange={v => {
@@ -267,24 +263,22 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                             </div>
                         </div>
 
-                        <div className="flex justify-end gap-4 mt-2">
-                            <div className="grid grid-cols-[auto_auto] gap-4 items-center bg-gray-50 px-4 py-2 rounded-xl">
-                                <CheckButton onClick={checkAct4} />
-                                <div className="min-w-[100px] text-center">
-                                    <Feedback status={act4Status} />
-                                </div>
+                        <div className="flex justify-start gap-4 mt-2">
+                            <CheckButton onClick={checkAct4} />
+                            <div className="min-w-[100px] text-center">
+                                <Feedback status={act4Status} />
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* --- ACTIVITY 5 --- */}
-                <div className="flex bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex-col gap-6">
+                <div className="flex bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex-col gap-6">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-purple-700 text-white font-black text-xl flex items-center justify-center rounded-lg">5</div>
                         <div className="flex items-center gap-2">
                             <PlayButton onClick={() => { }} />
-                            <p className="font-bold text-gray-800">Encuentra la división falsa (F). ¿Cuál está incorrecta?</p>
+                            <p className="font-bold text-gray-800 dark:text-gray-200">Encuentra la división falsa (F). ¿Cuál está incorrecta?</p>
                         </div>
                     </div>
 
@@ -296,8 +290,8 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                         ].map((item) => (
                             <div key={item.idx} className="flex items-center gap-4">
                                 <div className="w-4 h-4 bg-purple-600 rounded-sm"></div>
-                                <span className="text-3xl font-bold text-gray-800 font-mono tracking-wide w-48">{item.text}</span>
-                                <span className="text-2xl text-gray-400">→</span>
+                                <span className="text-3xl font-bold text-gray-800 dark:text-gray-200 font-mono tracking-wide w-48">{item.text}</span>
+                                <span className="text-2xl text-gray-400 dark:text-gray-500">→</span>
                                 <InputBox
                                     value={act5_inputs[item.idx]}
                                     onChange={v => {
@@ -312,7 +306,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                             </div>
                         ))}
 
-                        <div className="flex justify-end items-center gap-4 mt-2 flex-wrap">
+                        <div className="flex justify-start items-center gap-4 mt-2 flex-wrap">
                             <CheckButton onClick={checkAct5} />
                             <Feedback status={act5Status} />
                         </div>
@@ -358,7 +352,7 @@ const SelectButton = ({ label, selected, onClick }: { label: string, selected: b
     <button
         onClick={onClick}
         className={`w-12 h-12 font-bold text-2xl rounded-lg shadow-sm transition-all border-2
-            ${selected ? 'bg-purple-600 text-white border-purple-600 scale-110 ring-2 ring-purple-200' : 'bg-white border-gray-200 text-gray-500 hover:border-purple-300 hover:text-purple-600'}
+            ${selected ? 'bg-purple-600 text-white border-purple-600 scale-110 ring-2 ring-purple-200 dark:ring-purple-900' : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-300 hover:border-purple-300 dark:hover:border-purple-500 hover:text-purple-600'}
         `}
     >
         {label}
@@ -369,7 +363,7 @@ const InputBox = ({ value, onChange, className = "w-16 h-12", maxLength }: { val
     <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`border-2 border-gray-300 bg-gray-50 text-center font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white transition-all ${className}`}
+        className={`border-2 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-black dark:text-white text-center font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white dark:focus:bg-gray-800 transition-all ${className}`}
         maxLength={maxLength}
     />
 );

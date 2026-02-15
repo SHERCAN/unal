@@ -20,12 +20,12 @@ export const divisionConfig: TopicConfig = {
     description: 'Aprende sobre división',
     // Páginas de la lección (sección "LECCIÓN")
     pages: [
-        { component: CoverPage, id: 'cover', title: 'Portada' },
-        { component: IntroPage, id: 'intro', title: 'Introducción' },
-        { component: IndexPage, id: 'index', title: 'Índice' },
-        { component: GuidePage, id: 'guide', title: 'Guía' },
-        { component: PresentationPage, id: 'presentation', title: 'Presentación' },
-        { component: ExplanationPage, id: 'explanation', title: 'Explicación' },
+        // { component: CoverPage, id: 'cover', title: 'Portada' },
+        // { component: IntroPage, id: 'intro', title: 'Introducción' },
+        // { component: IndexPage, id: 'index', title: 'Índice' },
+        // { component: GuidePage, id: 'guide', title: 'Guía' },
+        // { component: PresentationPage, id: 'presentation', title: 'Presentación' },
+        // { component: ExplanationPage, id: 'explanation', title: 'Explicación' },
         { component: DistributionExercisePage, id: 'division-distribution-exercise', title: 'Ejercicio de Distribución' },
         { component: ConceptPage, id: 'concept', title: 'Concepto' },
         { component: ConceptPage2, id: 'concept-2', title: 'Concepto 2' },

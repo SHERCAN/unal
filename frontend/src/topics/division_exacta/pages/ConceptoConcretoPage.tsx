@@ -152,285 +152,289 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
             <div className="w-full space-y-6">
 
                 {/* ============ C - CONCRETO ============ */}
-                <div className="relative border-2 rounded-xl p-5" style={{ borderColor: '#80e8bb' }}>
-                    <div className="absolute -top-4 left-4 px-3 py-1 rounded font-black text-xl text-white" style={{ backgroundColor: '#80e8bb' }}>
+                <div className="relative ml-2 flex items-start">
+                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#80e8bb' }}>
                         C
                     </div>
+                    <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-white" style={{ borderColor: '#80e8bb' }}>
 
-                    <div className="mt-4">
-                        {/* Frame 158: two-column layout
-                            LEFT (~45%):  play button (top), coach + medal box (bottom, side by side)
-                            RIGHT (~55%): 3 rows [drop zone | team image], ¿LISTO? at bottom
-                        */}
-                        <div style={{ display: 'flex', gap: '16px', minHeight: '480px' }}>
+                        <div className="mt-4">
+                            {/* Frame 158: two-column layout
+                                LEFT (~45%):  play button (top), coach + medal box (bottom, side by side)
+                                RIGHT (~55%): 3 rows [drop zone | team image], ¿LISTO? at bottom
+                            */}
+                            <div style={{ display: 'flex', gap: '16px', minHeight: '480px' }}>
 
-                            {/* ===== LEFT COLUMN ===== */}
-                            <div style={{ width: '45%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                {/* Play button — top left */}
-                                <div>
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            currentTrackingRef.current = VIDEO_TRACKING.C_INTRO;
-                                            setVideoModal({ isOpen: true, title: 'División Exacta - Concreto', videoId: undefined });
-                                        }}
-                                        className={`w-16 h-16 flex items-center justify-center text-white rounded-full transition-all ${isVideoWatched(VIDEO_TRACKING.C_INTRO)
+                                {/* ===== LEFT COLUMN ===== */}
+                                <div style={{ width: '45%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                    {/* Play button — top left */}
+                                    <div>
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                currentTrackingRef.current = VIDEO_TRACKING.C_INTRO;
+                                                setVideoModal({ isOpen: true, title: 'División Exacta - Concreto', videoId: undefined });
+                                            }}
+                                            className={`w-16 h-16 flex items-center justify-center text-white rounded-full transition-all ${isVideoWatched(VIDEO_TRACKING.C_INTRO)
                                                 ? 'bg-green-600 hover:bg-green-700'
                                                 : 'bg-purple-600 hover:bg-purple-700'
-                                            }`}
-                                    >
-                                        <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                                    </button>
+                                                }`}
+                                        >
+                                            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                                        </button>
+                                    </div>
+
+                                    {/* Coach + Medal box — bottom left, side by side */}
+                                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px' }}>
+                                        {/* Coach */}
+                                        <img
+                                            src="/entrenador.png"
+                                            alt="Entrenador"
+                                            style={{ width: '160px', height: 'auto' }}
+                                            draggable={false}
+                                        />
+                                        {/* Medal box with medals inside */}
+                                        <div
+                                            onDragOver={handleDragOver}
+                                            onDrop={handleMedalDropOnBox}
+                                            style={{ position: 'relative', width: '160px', flexShrink: 0 }}
+                                        >
+                                            <img src="/cajamedalla.png" alt="Caja de medallas" style={{ width: '100%', height: 'auto' }} draggable={false} />
+                                            {/* Medals overlaid inside the box */}
+                                            <div style={{
+                                                position: 'absolute', inset: 0,
+                                                display: 'flex', flexWrap: 'wrap',
+                                                alignItems: 'flex-end', justifyContent: 'center',
+                                                gap: '2px', padding: '30px 8px 10px 8px'
+                                            }}>
+                                                {getMedalsInBox().map(medal => (
+                                                    <img
+                                                        key={medal.id}
+                                                        src="/medalla.png"
+                                                        alt="Medalla"
+                                                        draggable
+                                                        onDragStart={(e) => handleMedalDragStart(e, medal.id)}
+                                                        style={{ width: '22px', height: '22px', cursor: 'grab' }}
+                                                        className="hover:scale-125 transition-transform select-none"
+                                                    />
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                {/* Coach + Medal box — bottom left, side by side */}
-                                <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px' }}>
-                                    {/* Coach */}
-                                    <img
-                                        src="/entrenador.png"
-                                        alt="Entrenador"
-                                        style={{ width: '160px', height: 'auto' }}
-                                        draggable={false}
-                                    />
-                                    {/* Medal box with medals inside */}
-                                    <div
-                                        onDragOver={handleDragOver}
-                                        onDrop={handleMedalDropOnBox}
-                                        style={{ position: 'relative', width: '160px', flexShrink: 0 }}
-                                    >
-                                        <img src="/cajamedalla.png" alt="Caja de medallas" style={{ width: '100%', height: 'auto' }} draggable={false} />
-                                        {/* Medals overlaid inside the box */}
-                                        <div style={{
-                                            position: 'absolute', inset: 0,
-                                            display: 'flex', flexWrap: 'wrap',
-                                            alignItems: 'flex-end', justifyContent: 'center',
-                                            gap: '2px', padding: '30px 8px 10px 8px'
-                                        }}>
-                                            {getMedalsInBox().map(medal => (
-                                                <img
-                                                    key={medal.id}
-                                                    src="/medalla.png"
-                                                    alt="Medalla"
-                                                    draggable
-                                                    onDragStart={(e) => handleMedalDragStart(e, medal.id)}
-                                                    style={{ width: '22px', height: '22px', cursor: 'grab' }}
-                                                    className="hover:scale-125 transition-transform select-none"
-                                                />
-                                            ))}
-                                        </div>
+                                {/* ===== RIGHT COLUMN ===== */}
+                                <div style={{ width: '55%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '12px' }}>
+
+                                    {/* Row 1: Drop zone 1 + Team 1 (Atletismo) */}
+                                    {(() => {
+                                        const teamMedals = getMedalsInTeam(1);
+                                        return (
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                <div
+                                                    onDragOver={handleDragOver}
+                                                    onDrop={(e) => handleMedalDropOnTeam(e, 1)}
+                                                    style={{
+                                                        width: '45%', minHeight: '70px', border: '2px solid', borderRadius: '8px', padding: '6px', display: 'flex', flexWrap: 'wrap', gap: '3px', alignItems: 'center', justifyContent: 'center',
+                                                        borderColor: medalResult === 'correct' && teamMedals.length === 6 ? '#4ade80' : medalResult === 'incorrect' ? '#f87171' : '#d1d5db',
+                                                        backgroundColor: medalResult === 'correct' && teamMedals.length === 6 ? '#f0fdf4' : medalResult === 'incorrect' ? '#fef2f2' : '#fff'
+                                                    }}
+                                                >
+                                                    {teamMedals.length > 0 ? teamMedals.map(medal => (
+                                                        <img key={medal.id} src="/medalla.png" alt="Medalla" draggable
+                                                            onDragStart={(e) => handleMedalDragStart(e, medal.id)}
+                                                            style={{ width: '24px', height: '24px', cursor: 'grab' }}
+                                                            className="hover:scale-110 transition-transform select-none" />
+                                                    )) : <p className="text-xs text-gray-400 italic">Arrastra aquí</p>}
+                                                </div>
+                                                <img src="/medalla1.png" alt="Atletismo"
+                                                    style={{ width: '55%', height: 'auto', maxHeight: '120px', objectFit: 'contain' }} draggable={false} />
+                                            </div>
+                                        );
+                                    })()}
+
+                                    {/* Row 2: Drop zone 2 + Team 2 (Baloncesto) */}
+                                    {(() => {
+                                        const teamMedals = getMedalsInTeam(2);
+                                        return (
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                <div
+                                                    onDragOver={handleDragOver}
+                                                    onDrop={(e) => handleMedalDropOnTeam(e, 2)}
+                                                    style={{
+                                                        width: '45%', minHeight: '70px', border: '2px solid', borderRadius: '8px', padding: '6px', display: 'flex', flexWrap: 'wrap', gap: '3px', alignItems: 'center', justifyContent: 'center',
+                                                        borderColor: medalResult === 'correct' && teamMedals.length === 6 ? '#4ade80' : medalResult === 'incorrect' ? '#f87171' : '#d1d5db',
+                                                        backgroundColor: medalResult === 'correct' && teamMedals.length === 6 ? '#f0fdf4' : medalResult === 'incorrect' ? '#fef2f2' : '#fff'
+                                                    }}
+                                                >
+                                                    {teamMedals.length > 0 ? teamMedals.map(medal => (
+                                                        <img key={medal.id} src="/medalla.png" alt="Medalla" draggable
+                                                            onDragStart={(e) => handleMedalDragStart(e, medal.id)}
+                                                            style={{ width: '24px', height: '24px', cursor: 'grab' }}
+                                                            className="hover:scale-110 transition-transform select-none" />
+                                                    )) : <p className="text-xs text-gray-400 italic">Arrastra aquí</p>}
+                                                </div>
+                                                <img src="/medalla2.png" alt="Baloncesto"
+                                                    style={{ width: '55%', height: 'auto', maxHeight: '120px', objectFit: 'contain' }} draggable={false} />
+                                            </div>
+                                        );
+                                    })()}
+
+                                    {/* Row 3: Drop zone 3 + Team 3 (Tenis) */}
+                                    {(() => {
+                                        const teamMedals = getMedalsInTeam(3);
+                                        return (
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                <div
+                                                    onDragOver={handleDragOver}
+                                                    onDrop={(e) => handleMedalDropOnTeam(e, 3)}
+                                                    style={{
+                                                        width: '45%', minHeight: '70px', border: '2px solid', borderRadius: '8px', padding: '6px', display: 'flex', flexWrap: 'wrap', gap: '3px', alignItems: 'center', justifyContent: 'center',
+                                                        borderColor: medalResult === 'correct' && teamMedals.length === 6 ? '#4ade80' : medalResult === 'incorrect' ? '#f87171' : '#d1d5db',
+                                                        backgroundColor: medalResult === 'correct' && teamMedals.length === 6 ? '#f0fdf4' : medalResult === 'incorrect' ? '#fef2f2' : '#fff'
+                                                    }}
+                                                >
+                                                    {teamMedals.length > 0 ? teamMedals.map(medal => (
+                                                        <img key={medal.id} src="/medalla.png" alt="Medalla" draggable
+                                                            onDragStart={(e) => handleMedalDragStart(e, medal.id)}
+                                                            style={{ width: '24px', height: '24px', cursor: 'grab' }}
+                                                            className="hover:scale-110 transition-transform select-none" />
+                                                    )) : <p className="text-xs text-gray-400 italic">Arrastra aquí</p>}
+                                                </div>
+                                                <img src="/medalla3.png" alt="Tenis"
+                                                    style={{ width: '55%', height: 'auto', maxHeight: '120px', objectFit: 'contain' }} draggable={false} />
+                                            </div>
+                                        );
+                                    })()}
+
+                                    {/* ¿LISTO? button — bottom of right column */}
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+                                        <button onClick={handleMedalReset}
+                                            className="px-3 py-1.5 text-xs font-medium text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+                                            🔄 Reiniciar
+                                        </button>
+                                        <button onClick={handleMedalListo}
+                                            className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-black rounded text-sm tracking-wide">
+                                            ¿LISTO?
+                                        </button>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* ===== RIGHT COLUMN ===== */}
-                            <div style={{ width: '55%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '12px' }}>
-
-                                {/* Row 1: Drop zone 1 + Team 1 (Atletismo) */}
-                                {(() => {
-                                    const teamMedals = getMedalsInTeam(1);
-                                    return (
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                            <div
-                                                onDragOver={handleDragOver}
-                                                onDrop={(e) => handleMedalDropOnTeam(e, 1)}
-                                                style={{
-                                                    width: '45%', minHeight: '70px', border: '2px solid', borderRadius: '8px', padding: '6px', display: 'flex', flexWrap: 'wrap', gap: '3px', alignItems: 'center', justifyContent: 'center',
-                                                    borderColor: medalResult === 'correct' && teamMedals.length === 6 ? '#4ade80' : medalResult === 'incorrect' ? '#f87171' : '#d1d5db',
-                                                    backgroundColor: medalResult === 'correct' && teamMedals.length === 6 ? '#f0fdf4' : medalResult === 'incorrect' ? '#fef2f2' : '#fff'
-                                                }}
-                                            >
-                                                {teamMedals.length > 0 ? teamMedals.map(medal => (
-                                                    <img key={medal.id} src="/medalla.png" alt="Medalla" draggable
-                                                        onDragStart={(e) => handleMedalDragStart(e, medal.id)}
-                                                        style={{ width: '24px', height: '24px', cursor: 'grab' }}
-                                                        className="hover:scale-110 transition-transform select-none" />
-                                                )) : <p className="text-xs text-gray-400 italic">Arrastra aquí</p>}
-                                            </div>
-                                            <img src="/medalla1.png" alt="Atletismo"
-                                                style={{ width: '55%', height: 'auto', maxHeight: '120px', objectFit: 'contain' }} draggable={false} />
-                                        </div>
-                                    );
-                                })()}
-
-                                {/* Row 2: Drop zone 2 + Team 2 (Baloncesto) */}
-                                {(() => {
-                                    const teamMedals = getMedalsInTeam(2);
-                                    return (
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                            <div
-                                                onDragOver={handleDragOver}
-                                                onDrop={(e) => handleMedalDropOnTeam(e, 2)}
-                                                style={{
-                                                    width: '45%', minHeight: '70px', border: '2px solid', borderRadius: '8px', padding: '6px', display: 'flex', flexWrap: 'wrap', gap: '3px', alignItems: 'center', justifyContent: 'center',
-                                                    borderColor: medalResult === 'correct' && teamMedals.length === 6 ? '#4ade80' : medalResult === 'incorrect' ? '#f87171' : '#d1d5db',
-                                                    backgroundColor: medalResult === 'correct' && teamMedals.length === 6 ? '#f0fdf4' : medalResult === 'incorrect' ? '#fef2f2' : '#fff'
-                                                }}
-                                            >
-                                                {teamMedals.length > 0 ? teamMedals.map(medal => (
-                                                    <img key={medal.id} src="/medalla.png" alt="Medalla" draggable
-                                                        onDragStart={(e) => handleMedalDragStart(e, medal.id)}
-                                                        style={{ width: '24px', height: '24px', cursor: 'grab' }}
-                                                        className="hover:scale-110 transition-transform select-none" />
-                                                )) : <p className="text-xs text-gray-400 italic">Arrastra aquí</p>}
-                                            </div>
-                                            <img src="/medalla2.png" alt="Baloncesto"
-                                                style={{ width: '55%', height: 'auto', maxHeight: '120px', objectFit: 'contain' }} draggable={false} />
-                                        </div>
-                                    );
-                                })()}
-
-                                {/* Row 3: Drop zone 3 + Team 3 (Tenis) */}
-                                {(() => {
-                                    const teamMedals = getMedalsInTeam(3);
-                                    return (
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                            <div
-                                                onDragOver={handleDragOver}
-                                                onDrop={(e) => handleMedalDropOnTeam(e, 3)}
-                                                style={{
-                                                    width: '45%', minHeight: '70px', border: '2px solid', borderRadius: '8px', padding: '6px', display: 'flex', flexWrap: 'wrap', gap: '3px', alignItems: 'center', justifyContent: 'center',
-                                                    borderColor: medalResult === 'correct' && teamMedals.length === 6 ? '#4ade80' : medalResult === 'incorrect' ? '#f87171' : '#d1d5db',
-                                                    backgroundColor: medalResult === 'correct' && teamMedals.length === 6 ? '#f0fdf4' : medalResult === 'incorrect' ? '#fef2f2' : '#fff'
-                                                }}
-                                            >
-                                                {teamMedals.length > 0 ? teamMedals.map(medal => (
-                                                    <img key={medal.id} src="/medalla.png" alt="Medalla" draggable
-                                                        onDragStart={(e) => handleMedalDragStart(e, medal.id)}
-                                                        style={{ width: '24px', height: '24px', cursor: 'grab' }}
-                                                        className="hover:scale-110 transition-transform select-none" />
-                                                )) : <p className="text-xs text-gray-400 italic">Arrastra aquí</p>}
-                                            </div>
-                                            <img src="/medalla3.png" alt="Tenis"
-                                                style={{ width: '55%', height: 'auto', maxHeight: '120px', objectFit: 'contain' }} draggable={false} />
-                                        </div>
-                                    );
-                                })()}
-
-                                {/* ¿LISTO? button — bottom of right column */}
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
-                                    <button onClick={handleMedalReset}
-                                        className="px-3 py-1.5 text-xs font-medium text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-                                        🔄 Reiniciar
-                                    </button>
-                                    <button onClick={handleMedalListo}
-                                        className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-black rounded text-sm tracking-wide">
-                                        ¿LISTO?
-                                    </button>
-                                </div>
-                            </div>
+                            {medalResult === 'correct' && (
+                                <p className="text-center text-green-600 font-bold mt-3">✅ ¡Correcto! Cada equipo tiene 6 medallas. 18 ÷ 3 = 6</p>
+                            )}
+                            {medalResult === 'incorrect' && (
+                                <p className="text-center text-red-500 font-bold text-sm mt-3">❌ Cada equipo debe tener la misma cantidad de medallas y no debe sobrar ninguna.</p>
+                            )}
                         </div>
-
-                        {medalResult === 'correct' && (
-                            <p className="text-center text-green-600 font-bold mt-3">✅ ¡Correcto! Cada equipo tiene 6 medallas. 18 ÷ 3 = 6</p>
-                        )}
-                        {medalResult === 'incorrect' && (
-                            <p className="text-center text-red-500 font-bold text-sm mt-3">❌ Cada equipo debe tener la misma cantidad de medallas y no debe sobrar ninguna.</p>
-                        )}
                     </div>
                 </div>
 
                 {/* ============ P - PROCESUAL ============ */}
-                <div className="relative border-2 rounded-xl p-4" style={{ borderColor: '#8ec2e8' }}>
-                    <div className="absolute -top-4 left-4 px-3 py-1 rounded font-black text-xl text-white" style={{ backgroundColor: '#8ec2e8' }}>
+                <div className="relative ml-2 flex items-start">
+                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#8ec2e8' }}>
                         P
                     </div>
+                    <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-4 bg-white" style={{ borderColor: '#8ec2e8' }}>
 
-                    <div className="mt-4">
-                        <div className="flex items-start gap-2 mb-4">
-                            <div className="flex-1">
-                                <p className="text-base text-gray-800 dark:text-gray-200">
-                                    Arrastra los <span className="text-2xl font-bold text-yellow-500">{totalCircles}</span> circulos y repártelos en 3 partes iguales. Verifica que no sobre ninguno.
-                                </p>
-                            </div>
-                            <button
-                                type="button"
-                                onMouseEnter={() => {
-                                    currentTrackingRef.current = VIDEO_TRACKING.P_INTRO;
-                                    setVideoModal({ isOpen: true, title: 'División Exacta - Procesual', videoId: undefined });
-                                }}
-                                className={`w-10 h-10 flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(VIDEO_TRACKING.P_INTRO)
-                                    ? 'bg-green-600 hover:bg-green-700'
-                                    : 'bg-purple-600 hover:bg-purple-700'
-                                    }`}
-                            >
-                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                            </button>
-                        </div>
-
-                        <div className="flex flex-col md:flex-row gap-6">
-                            {/* Circle pool */}
-                            <div className="flex flex-col items-center">
-                                <div
-                                    onDragOver={handleDragOver}
-                                    onDrop={handleCircleDropOnPool}
-                                    className="w-64 min-h-[140px] border-2 border-gray-400 dark:border-gray-600 rounded-lg p-3 bg-white dark:bg-gray-800/50"
+                        <div className="mt-4">
+                            <div className="flex items-start gap-2 mb-4">
+                                <div className="flex-1">
+                                    <p className="text-base text-gray-800 dark:text-gray-200">
+                                        Arrastra los <span className="text-2xl font-bold text-yellow-500">{totalCircles}</span> circulos y repártelos en 3 partes iguales. Verifica que no sobre ninguno.
+                                    </p>
+                                </div>
+                                <button
+                                    type="button"
+                                    onMouseEnter={() => {
+                                        currentTrackingRef.current = VIDEO_TRACKING.P_INTRO;
+                                        setVideoModal({ isOpen: true, title: 'División Exacta - Procesual', videoId: undefined });
+                                    }}
+                                    className={`w-10 h-10 flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(VIDEO_TRACKING.P_INTRO)
+                                        ? 'bg-green-600 hover:bg-green-700'
+                                        : 'bg-purple-600 hover:bg-purple-700'
+                                        }`}
                                 >
-                                    <div className="grid grid-cols-6 gap-1 justify-items-center">
-                                        {getCirclesInPool().map(circle => (
-                                            <div
-                                                key={circle.id}
-                                                draggable
-                                                onDragStart={(e) => handleCircleDragStart(e, circle.id)}
-                                                className="w-8 h-8 rounded-full bg-yellow-400 border-2 border-yellow-500 cursor-grab active:cursor-grabbing hover:scale-110 transition-transform select-none shadow-sm"
-                                            />
-                                        ))}
-                                    </div>
-                                    {getCirclesInPool().length === 0 && (
-                                        <p className="text-center text-xs text-gray-400 italic mt-2">Arrastra aquí para devolver</p>
-                                    )}
-                                </div>
-                                <p className="text-4xl font-bold text-yellow-500 mt-2">{getCirclesInPool().length}</p>
-
-                                <div className="flex items-center gap-3 mt-3">
-                                    <button onClick={handleCircleReset}
-                                        className="px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                        🔄 Reiniciar
-                                    </button>
-                                    <button onClick={handleCircleListo}
-                                        className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-black rounded text-sm tracking-wide">
-                                        ¿LISTO?
-                                    </button>
-                                </div>
+                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                                </button>
                             </div>
 
-                            {/* 3 group boxes */}
-                            <div className="flex flex-col gap-4 flex-1">
-                                {[1, 2, 3].map(groupId => {
-                                    const groupCircles = getCirclesInGroup(groupId);
-                                    return (
-                                        <div key={groupId} className="flex items-center gap-3">
-                                            <div
-                                                onDragOver={handleDragOver}
-                                                onDrop={(e) => handleCircleDropOnGroup(e, groupId)}
-                                                className={`flex-1 min-h-[60px] border-2 rounded-lg p-2 flex flex-wrap gap-1 items-center justify-center ${circleResult === 'correct' && groupCircles.length === 6
-                                                    ? 'border-green-400 bg-green-50 dark:bg-green-900/10'
-                                                    : 'border-purple-300 dark:border-purple-700 bg-white dark:bg-gray-800/50'
-                                                    }`}
-                                            >
-                                                {groupCircles.length > 0 ? (
-                                                    groupCircles.map(circle => (
-                                                        <div key={circle.id} draggable onDragStart={(e) => handleCircleDragStart(e, circle.id)}
-                                                            className="w-7 h-7 rounded-full bg-yellow-400 border-2 border-yellow-500 cursor-grab active:cursor-grabbing hover:scale-110 transition-transform select-none shadow-sm" />
-                                                    ))
-                                                ) : (
-                                                    <p className="text-xs text-gray-400 italic">Arrastra aquí</p>
-                                                )}
-                                            </div>
-                                            <div className="w-10 h-10 border-2 border-purple-400 dark:border-purple-600 rounded flex items-center justify-center font-bold text-lg text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-800">
-                                                {groupCircles.length}
-                                            </div>
+                            <div className="flex flex-col md:flex-row gap-6">
+                                {/* Circle pool */}
+                                <div className="flex flex-col items-center">
+                                    <div
+                                        onDragOver={handleDragOver}
+                                        onDrop={handleCircleDropOnPool}
+                                        className="w-64 min-h-[140px] border-2 border-gray-400 dark:border-gray-600 rounded-lg p-3 bg-white dark:bg-gray-800/50"
+                                    >
+                                        <div className="grid grid-cols-6 gap-1 justify-items-center">
+                                            {getCirclesInPool().map(circle => (
+                                                <div
+                                                    key={circle.id}
+                                                    draggable
+                                                    onDragStart={(e) => handleCircleDragStart(e, circle.id)}
+                                                    className="w-8 h-8 rounded-full bg-yellow-400 border-2 border-yellow-500 cursor-grab active:cursor-grabbing hover:scale-110 transition-transform select-none shadow-sm"
+                                                />
+                                            ))}
                                         </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
+                                        {getCirclesInPool().length === 0 && (
+                                            <p className="text-center text-xs text-gray-400 italic mt-2">Arrastra aquí para devolver</p>
+                                        )}
+                                    </div>
+                                    <p className="text-4xl font-bold text-yellow-500 mt-2">{getCirclesInPool().length}</p>
 
-                        {circleResult === 'correct' && (
-                            <p className="text-center text-green-600 font-bold mt-3">✅ ¡Correcto! 18 ÷ 3 = 6. Cada grupo tiene 6 circulos.</p>
-                        )}
-                        {circleResult === 'incorrect' && (
-                            <p className="text-center text-red-500 font-bold text-sm mt-3">❌ Los 3 grupos deben tener la misma cantidad y no debe sobrar ninguno.</p>
-                        )}
+                                    <div className="flex items-center gap-3 mt-3">
+                                        <button onClick={handleCircleReset}
+                                            className="px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                            🔄 Reiniciar
+                                        </button>
+                                        <button onClick={handleCircleListo}
+                                            className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-black rounded text-sm tracking-wide">
+                                            ¿LISTO?
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* 3 group boxes */}
+                                <div className="flex flex-col gap-4 flex-1">
+                                    {[1, 2, 3].map(groupId => {
+                                        const groupCircles = getCirclesInGroup(groupId);
+                                        return (
+                                            <div key={groupId} className="flex items-center gap-3">
+                                                <div
+                                                    onDragOver={handleDragOver}
+                                                    onDrop={(e) => handleCircleDropOnGroup(e, groupId)}
+                                                    className={`flex-1 min-h-[60px] border-2 rounded-lg p-2 flex flex-wrap gap-1 items-center justify-center ${circleResult === 'correct' && groupCircles.length === 6
+                                                        ? 'border-green-400 bg-green-50 dark:bg-green-900/10'
+                                                        : 'border-purple-300 dark:border-purple-700 bg-white dark:bg-gray-800/50'
+                                                        }`}
+                                                >
+                                                    {groupCircles.length > 0 ? (
+                                                        groupCircles.map(circle => (
+                                                            <div key={circle.id} draggable onDragStart={(e) => handleCircleDragStart(e, circle.id)}
+                                                                className="w-7 h-7 rounded-full bg-yellow-400 border-2 border-yellow-500 cursor-grab active:cursor-grabbing hover:scale-110 transition-transform select-none shadow-sm" />
+                                                        ))
+                                                    ) : (
+                                                        <p className="text-xs text-gray-400 italic">Arrastra aquí</p>
+                                                    )}
+                                                </div>
+                                                <div className="w-10 h-10 border-2 border-purple-400 dark:border-purple-600 rounded flex items-center justify-center font-bold text-lg text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-800">
+                                                    {groupCircles.length}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {circleResult === 'correct' && (
+                                <p className="text-center text-green-600 font-bold mt-3">✅ ¡Correcto! 18 ÷ 3 = 6. Cada grupo tiene 6 circulos.</p>
+                            )}
+                            {circleResult === 'incorrect' && (
+                                <p className="text-center text-red-500 font-bold text-sm mt-3">❌ Los 3 grupos deben tener la misma cantidad y no debe sobrar ninguna.</p>
+                            )}
+                        </div>
                     </div>
                 </div>
 

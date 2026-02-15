@@ -5,6 +5,12 @@ import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import pelotas7Img from '../pelotas7.png';
+import pelotas8Img from '../pelotas8.png';
+import pelotas9Img from '../pelotas9.png';
+import equipo1Img from '../equipo1.png';
+import equipo2Img from '../equipo2.png';
+import equipo3Img from '../equipo3.png';
 
 interface ExercisesPageProps {
     zoom?: number;
@@ -38,7 +44,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
         // A: 56 pelotas, 7 bolsas.
         // B: 48 jugadores, 4 equipos.
         // Let's implement visual component first then logic.
-        if (act1_a_selected === 1 && act1_b_selected === 2) {
+        if (act1_a_selected === 0 && act1_b_selected === 2) {
             setAct1Status('correct');
         } else {
             setAct1Status('incorrect');
@@ -141,7 +147,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                     <div className="w-12 h-12 bg-purple-700 text-white font-black text-2xl flex items-center justify-center rounded shrink-0">1</div>
                     <div className="flex flex-col gap-4 w-full">
                         <div className="flex items-center justify-between">
-                            <span className="font-bold text-gray-800">Seleccione el reparto correcto</span>
+                            <span className="font-bold text-gray-800 dark:text-gray-200">Seleccione el reparto correcto</span>
                         </div>
 
                         {/* 1A: Balls */}
@@ -149,44 +155,42 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                             <PlayButton onClick={() => { }} />
                             <div className="flex flex-col gap-2 w-full">
                                 <p className="font-medium">El total de 56 pelotas de fútbol se reparte entre 7 bolsas de malla.</p>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    {[0, 1, 2].map(i => (
-                                        <div
-                                            key={i}
-                                            onClick={() => {
-                                                setAct1_a_selected(i);
-                                                setAct1Status('idle'); // Reset checking on change
-                                            }}
-                                            className={`border-2 rounded-xl p-4 cursor-pointer transition-all h-32 flex items-center justify-center bg-white relative overflow-hidden shadow-sm
-                                                ${act1_a_selected === i ? 'border-purple-600 ring-2 ring-purple-100 bg-purple-50' : 'border-gray-200 hover:border-purple-300 hover:shadow-md'}
-                                            `}
-                                        >
-                                            {/* Visual representation */}
-                                            {/* Correct Option (Middle): 7 bags */}
-                                            {i === 1 ? (
-                                                <div className="flex flex-wrap justify-center gap-2 content-center h-full w-full">
-                                                    {[...Array(7)].map((_, j) => (
-                                                        <div key={j} className="relative w-8 h-8 text-3xl leading-none">🎒</div>
-                                                    ))}
+                                <div className="flex items-center gap-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+                                        {[0, 1, 2].map(i => (
+                                            <div
+                                                key={i}
+                                                onClick={() => {
+                                                    setAct1_a_selected(i);
+                                                    setAct1Status('idle'); // Reset checking on change
+                                                }}
+                                                className={`border-2 rounded-xl p-1 cursor-pointer transition-all aspect-square flex items-center justify-center bg-white dark:bg-gray-800 relative overflow-hidden shadow-sm
+                                                    ${act1_a_selected === i ? 'border-purple-600 ring-2 ring-purple-100 dark:ring-purple-900 bg-purple-50 dark:bg-purple-900/20' : 'border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-500 hover:shadow-md'}
+                                                `}
+                                            >
+                                                {/* Visual representation */}
+                                                <div className="flex justify-center items-center w-full h-full">
+                                                    <img
+                                                        src={i === 0 ? pelotas7Img.src : (i === 1 ? pelotas8Img.src : pelotas9Img.src)}
+                                                        alt={`Bolsas de pelotas opción ${i + 1}`}
+                                                        className="w-full h-full object-contain"
+                                                    />
                                                 </div>
-                                            ) : (
-                                                <div className="flex flex-wrap justify-center gap-2 content-center h-full w-full">
-                                                    {/* Incorrect options: 6 bags or 8 bags */}
-                                                    {[...Array(i === 0 ? 6 : 8)].map((_, j) => (
-                                                        <div key={j} className="relative w-8 h-8 text-3xl leading-none">🎒</div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                            {act1Status !== 'idle' && act1_a_selected === i && (
-                                                <div className={`absolute top-2 right-2 rounded-full p-1 shadow-sm ${i === 1 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-500'}`}>
-                                                    {i === 1 ?
-                                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg> :
-                                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
-                                                    }
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))}
+                                                {act1Status !== 'idle' && act1_a_selected === i && (
+                                                    <div className={`absolute top-2 right-2 rounded-full p-1 shadow-sm ${i === 0 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-500'}`}>
+                                                        {i === 0 ?
+                                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg> :
+                                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
+                                                        }
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="self-center flex flex-col items-center gap-2">
+                                        <CheckButton onClick={checkAct1} />
+                                        <Feedback status={act1Status} />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -196,61 +200,47 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                             <PlayButton onClick={() => { }} />
                             <div className="flex flex-col gap-2 w-full">
                                 <p className="font-medium">Hay 48 jugadores de baloncesto que se dividen en 4 equipos.</p>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    {[0, 1, 2].map(i => (
-                                        <div
-                                            key={i}
-                                            onClick={() => {
-                                                setAct1_b_selected(i);
-                                                setAct1Status('idle');
-                                            }}
-                                            className={`border-2 rounded-xl p-4 cursor-pointer transition-all h-32 flex items-center justify-center bg-white relative overflow-hidden shadow-sm
-                                                ${act1_b_selected === i ? 'border-purple-600 ring-2 ring-purple-100 bg-purple-50' : 'border-gray-200 hover:border-purple-300 hover:shadow-md'}
-                                            `}
-                                        >
-                                            {/* Correct Option (Right): 4 groups of players */}
-                                            {i === 2 ? (
-                                                <div className="grid grid-cols-2 gap-3 w-full h-full p-1">
-                                                    {[...Array(4)].map((_, j) => (
-                                                        <div key={j} className="bg-orange-50 border border-orange-200 rounded flex items-center justify-center relative shadow-sm overflow-hidden">
-                                                            <div className="flex flex-wrap justify-center items-center gap-0.5 w-full h-full">
-                                                                {/* 12 players per team */}
-                                                                {[...Array(12)].map((_, k) => <div key={k} className="text-xs leading-none">⛹🏽</div>)}
-                                                            </div>
-                                                        </div>
-                                                    ))}
+                                <div className="flex items-center gap-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+                                        {[0, 1, 2].map(i => (
+                                            <div
+                                                key={i}
+                                                onClick={() => {
+                                                    setAct1_b_selected(i);
+                                                    setAct1Status('idle');
+                                                }}
+                                                className={`border-2 rounded-xl p-0 cursor-pointer transition-all aspect-square flex items-center justify-center bg-white dark:bg-gray-800 relative overflow-hidden shadow-sm
+                                                    ${act1_b_selected === i ? 'border-purple-600 ring-2 ring-purple-100 dark:ring-purple-900 bg-purple-50 dark:bg-purple-900/20' : 'border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-500 hover:shadow-md'}
+                                                `}
+                                            >
+                                                {/* Visual representation using images */}
+                                                <div className="flex justify-center items-center w-full h-full">
+                                                    <img
+                                                        src={i === 0 ? equipo1Img.src : (i === 1 ? equipo2Img.src : equipo3Img.src)}
+                                                        alt={`Opción de equipos ${i + 1}`}
+                                                        className="w-full h-full object-contain"
+                                                    />
                                                 </div>
-                                            ) : (
-                                                <div className="grid grid-cols-2 gap-3 w-full h-full p-1">
-                                                    {/* Incorrect: 3 groups or 5 groups */}
-                                                    {[...Array(i === 0 ? 3 : 5)].map((_, j) => (
-                                                        <div key={j} className="bg-orange-50 border border-orange-200 rounded flex items-center justify-center relative shadow-sm overflow-hidden">
-                                                            <div className="flex flex-wrap justify-center items-center gap-0.5 w-full h-full">
-                                                                {/* Incorrect number of players to fill visual - 10 players */}
-                                                                {[...Array(10)].map((_, k) => <div key={k} className="text-xs leading-none">⛹🏽</div>)}
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                            {act1Status !== 'idle' && act1_b_selected === i && (
-                                                <div className={`absolute top-2 right-2 rounded-full p-1 shadow-sm ${i === 2 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-500'}`}>
-                                                    {i === 2 ?
-                                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg> :
-                                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
-                                                    }
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))}
+                                                {act1Status !== 'idle' && act1_b_selected === i && (
+                                                    <div className={`absolute top-2 right-2 rounded-full p-1 shadow-sm ${i === 2 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-500'}`}>
+                                                        {i === 2 ?
+                                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg> :
+                                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
+                                                        }
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="self-center flex flex-col items-center gap-2">
+                                        <CheckButton onClick={checkAct1} />
+                                        <Feedback status={act1Status} />
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-4 mt-2 justify-end">
-                            <Feedback status={act1Status} />
-                            <CheckButton onClick={checkAct1} />
-                        </div>
+
                     </div>
                 </div>
 
@@ -261,7 +251,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <PlayButton onClick={() => { }} />
-                                <span className="font-bold text-gray-800">Relaciona cada división con su multiplicación correspondiente</span>
+                                <span className="font-bold text-gray-800 dark:text-gray-200">Relaciona cada división con su multiplicación correspondiente</span>
                             </div>
                         </div>
 
@@ -301,11 +291,11 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                             handleLeftClick(i);
                                         }}
                                         className={`flex items-center justify-between cursor-pointer p-4 rounded-xl transition-all shadow-sm border h-16
-                                            ${selectedLeft === i ? 'bg-purple-100 border-purple-500 ring-2 ring-purple-300 scale-105' : 'bg-white border-gray-200 hover:border-purple-300 hover:shadow-md'}
+                                            ${selectedLeft === i ? 'bg-purple-100 dark:bg-purple-900/40 border-purple-500 dark:border-purple-500 ring-2 ring-purple-300 dark:ring-purple-700 scale-105' : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-500 hover:shadow-md'}
                                         `}
                                     >
-                                        <span className="font-bold text-xl text-gray-800">{text}</span>
-                                        <div className={`w-4 h-4 rounded-full border-2 ${connections.some(c => c.from === i) ? 'bg-purple-600 border-purple-600' : 'bg-white border-purple-300'}`}></div>
+                                        <span className="font-bold text-xl text-gray-800 dark:text-gray-200">{text}</span>
+                                        <div className={`w-4 h-4 rounded-full border-2 ${connections.some(c => c.from === i) ? 'bg-purple-600 border-purple-600' : 'bg-white dark:bg-gray-700 border-purple-300 dark:border-purple-500'}`}></div>
                                     </div>
                                 ))}
                             </div>
@@ -319,10 +309,10 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                             setAct2Status('idle');
                                             handleRightClick(i);
                                         }}
-                                        className={`flex items-center justify-between cursor-pointer p-4 rounded-xl transition-all shadow-sm border h-16 bg-white border-gray-200 hover:border-purple-300 hover:shadow-md`}
+                                        className={`flex items-center justify-between cursor-pointer p-4 rounded-xl transition-all shadow-sm border h-16 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-500 hover:shadow-md`}
                                     >
-                                        <div className={`w-4 h-4 rounded-full border-2 ${connections.some(c => c.to === i) ? 'bg-purple-600 border-purple-600' : 'bg-white border-purple-300'}`}></div>
-                                        <span className="font-bold text-xl text-gray-800">{text}</span>
+                                        <div className={`w-4 h-4 rounded-full border-2 ${connections.some(c => c.to === i) ? 'bg-purple-600 border-purple-600' : 'bg-white dark:bg-gray-700 border-purple-300 dark:border-purple-500'}`}></div>
+                                        <span className="font-bold text-xl text-gray-800 dark:text-gray-200">{text}</span>
                                     </div>
                                 ))}
                             </div>
@@ -342,7 +332,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <PlayButton onClick={() => { }} />
-                                <span className="font-bold text-gray-800">Halle el cociente de las siguientes divisiones:</span>
+                                <span className="font-bold text-gray-800 dark:text-gray-200">Halle el cociente de las siguientes divisiones:</span>
                             </div>
                         </div>
 
@@ -350,8 +340,8 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                             <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-6 w-full">
                                 {['20 ÷ 4 =', '36 ÷ 9 =', '30 ÷ 5 =', '18 ÷ 2 =', '60 ÷ 10 =', '60 ÷ 15 =', '80 ÷ 8 =', '100 ÷ 20 =', '36 ÷ 12 =', '125 ÷ 25 ='].map((text, i) => (
                                     <div key={i} className="flex items-center gap-3">
-                                        <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                                        <span className="font-bold text-2xl text-gray-700 w-28">{text}</span>
+                                        <div className="w-2 h-2 bg-purple-400 rounded-full shrink-0"></div>
+                                        <span className="font-bold text-2xl text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[120px]">{text}</span>
                                         <input
                                             value={act3Inputs[i]}
                                             onChange={(e) => {
@@ -360,8 +350,8 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                                 setAct3Inputs(newInputs);
                                                 setAct3Status('idle'); // Clear status on edit
                                             }}
-                                            className={`w-20 h-12 border-2 bg-white text-center font-bold text-2xl rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all
-                                                ${act3Status === 'correct' ? 'border-green-400 bg-green-50' : (act3Status === 'incorrect' ? 'border-red-300 bg-red-50' : 'border-gray-300 focus:border-purple-500')}
+                                            className={`w-20 h-12 border-2 bg-white dark:bg-gray-800 text-center font-bold text-2xl dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all
+                                                ${act3Status === 'correct' ? 'border-green-400 bg-green-50 dark:bg-green-900/20' : (act3Status === 'incorrect' ? 'border-red-300 bg-red-50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-600 focus:border-purple-500')}
                                             `}
                                             inputMode="numeric"
                                         />
@@ -397,12 +387,12 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                     <div className="flex flex-col gap-4 w-full">
                         <div className="flex items-center gap-2">
                             <PlayButton onClick={() => { }} />
-                            <span className="font-bold text-gray-800">Observa la situación y responde V o F</span>
+                            <span className="font-bold text-gray-800 dark:text-gray-200">Observa la situación y responde V o F</span>
                         </div>
 
-                        <div className="flex items-center flex-wrap gap-4 ml-8 bg-gray-50 p-6 rounded-2xl border-2 border-gray-100 shadow-sm">
+                        <div className="flex items-center flex-wrap gap-4 ml-8 bg-gray-50 dark:bg-gray-800 p-6 rounded-2xl border-2 border-gray-100 dark:border-gray-700 shadow-sm">
                             <PlayButton onClick={() => { }} />
-                            <p className="font-medium text-lg text-gray-800">
+                            <p className="font-medium text-lg text-gray-800 dark:text-gray-200">
                                 Una diseñadora de moda tiene 20 pantalones y los reparte en 5 cajas.
                                 En cada caja <strong>hay 5 pantalones</strong>
                             </p>
@@ -413,7 +403,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                         setAct4Check('idle');
                                     }}
                                     className={`w-12 h-12 font-bold text-2xl rounded-xl shadow-sm transition-all border-2
-                                        ${act4Selected === 'V' ? 'bg-purple-600 text-white border-purple-600 scale-110 ring-2 ring-purple-200' : 'bg-white border-gray-200 text-gray-500 hover:border-purple-300 hover:text-purple-600'}
+                                        ${act4Selected === 'V' ? 'bg-purple-600 text-white border-purple-600 scale-110 ring-2 ring-purple-200 dark:ring-purple-900' : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-300 hover:border-purple-300 dark:hover:border-purple-500 hover:text-purple-600'}
                                     `}
                                 >
                                     V
@@ -424,7 +414,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                         setAct4Check('idle');
                                     }}
                                     className={`w-12 h-12 font-bold text-2xl rounded-xl shadow-sm transition-all border-2
-                                        ${act4Selected === 'F' ? 'bg-purple-600 text-white border-purple-600 scale-110 ring-2 ring-purple-200' : 'bg-white border-gray-200 text-gray-500 hover:border-purple-300 hover:text-purple-600'}
+                                        ${act4Selected === 'F' ? 'bg-purple-600 text-white border-purple-600 scale-110 ring-2 ring-purple-200 dark:ring-purple-900' : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-300 hover:border-purple-300 dark:hover:border-purple-500 hover:text-purple-600'}
                                     `}
                                 >
                                     F
