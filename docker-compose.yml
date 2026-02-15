@@ -14,6 +14,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - unal-network
   # Servicios del proyecto de aprendizaje de matemáticas
   math-learning-backend:
     build:
@@ -28,6 +30,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    networks:
+      - unal-network
 
   # Servicio frontend del proyecto de aprendizaje de matemáticas
   math-learning-frontend:
@@ -40,6 +44,11 @@ services:
       - 3000
     depends_on:
       - math-learning-backend
+    networks:
+      - unal-network
 
 volumes:
   postgres_data:
+networks:
+  unal-network:
+    driver: bridge
