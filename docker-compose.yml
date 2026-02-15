@@ -16,6 +16,7 @@ services:
       retries: 5
   # Servicios del proyecto de aprendizaje de matemáticas
   math-learning-backend:
+    container_name: math-learning-backend
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -31,6 +32,7 @@ services:
 
   # Servicio frontend del proyecto de aprendizaje de matemáticas
   math-learning-frontend:
+    container_name: math-learning-frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
