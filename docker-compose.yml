@@ -30,8 +30,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    networks:
-      - proxy-network
 
   # Servicio frontend del proyecto de aprendizaje de matemáticas
   math-learning-frontend:
@@ -44,11 +42,6 @@ services:
       - 3000
     depends_on:
       - math-learning-backend
-    networks:
-      - proxy-network
 
 volumes:
   postgres_data:
-networks:
-  proxy-network:
-    driver: bridge
