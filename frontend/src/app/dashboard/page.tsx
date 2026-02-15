@@ -8,11 +8,23 @@ import axios from 'axios';
 import { TOPICS_DATA } from '@/lib/topicsList';
 import { divisionConfig } from '@/topics/division/config';
 import { divisionDemoConfig } from '@/topics/division_demo/config';
+import { divisionExactaConfig } from '@/topics/division_exacta/config';
+import { divisionInexactaConfig } from '@/topics/division_inexacta/config';
+import { numerosPrimosConfig } from '@/topics/numeros_primos/config';
+import { fraccionesConfig } from '@/topics/fracciones/config';
+import { fraccionesEquivalentesConfig } from '@/topics/fracciones_equivalentes/config';
+import { comparacionFraccionesConfig } from '@/topics/comparacion_fracciones/config';
 import { TopicConfig } from '@/types/topic';
 
 const TOPIC_CONFIGS: Record<string, TopicConfig> = {
   'division': divisionConfig,
   'division-demo': divisionDemoConfig,
+  'division-exacta': divisionExactaConfig,
+  'division-inexacta': divisionInexactaConfig,
+  'numeros-primos': numerosPrimosConfig,
+  'fracciones': fraccionesConfig,
+  'fracciones-equivalentes': fraccionesEquivalentesConfig,
+  'comparacion-fracciones': comparacionFraccionesConfig,
 };
 import { TopicDropdown } from '@/components/dashboard/TopicDropdown';
 import { InfiniteBook } from '@/components/dashboard/InfiniteBook';
