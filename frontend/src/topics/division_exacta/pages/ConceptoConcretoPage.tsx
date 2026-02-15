@@ -153,10 +153,10 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
                 {/* ============ C - CONCRETO ============ */}
                 <div className="relative ml-2 flex items-start">
-                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#80e8bb' }}>
+                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#80e8bb] dark:bg-green-900" style={{ borderColor: '#80e8bb' }}>
                         C
                     </div>
-                    <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-white" style={{ borderColor: '#80e8bb' }}>
+                    <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-white dark:bg-gray-800 border-[#80e8bb] dark:border-green-900">
 
                         <div className="mt-4">
                             {/* Frame 158: two-column layout
@@ -175,12 +175,12 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                                 currentTrackingRef.current = VIDEO_TRACKING.C_INTRO;
                                                 setVideoModal({ isOpen: true, title: 'División Exacta - Concreto', videoId: undefined });
                                             }}
-                                            className={`w-16 h-16 flex items-center justify-center text-white rounded-full transition-all ${isVideoWatched(VIDEO_TRACKING.C_INTRO)
+                                            className={`w-10 h-10 flex items-center justify-center text-white rounded-full transition-all ${isVideoWatched(VIDEO_TRACKING.C_INTRO)
                                                 ? 'bg-green-600 hover:bg-green-700'
                                                 : 'bg-purple-600 hover:bg-purple-700'
                                                 }`}
                                         >
-                                            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                                         </button>
                                     </div>
 
@@ -205,7 +205,9 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                                 position: 'absolute', inset: 0,
                                                 display: 'flex', flexWrap: 'wrap',
                                                 alignItems: 'flex-end', justifyContent: 'center',
-                                                gap: '2px', padding: '30px 8px 10px 8px'
+                                                alignContent: 'flex-end',
+                                                padding: '50px 35px 40px 35px',
+                                                overflow: 'hidden'
                                             }}>
                                                 {getMedalsInBox().map(medal => (
                                                     <img
@@ -214,7 +216,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                                         alt="Medalla"
                                                         draggable
                                                         onDragStart={(e) => handleMedalDragStart(e, medal.id)}
-                                                        style={{ width: '22px', height: '22px', cursor: 'grab' }}
+                                                        style={{ width: '22px', height: '22px', cursor: 'grab', margin: '-5px' }}
                                                         className="hover:scale-125 transition-transform select-none"
                                                     />
                                                 ))}
@@ -235,17 +237,16 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                                     onDragOver={handleDragOver}
                                                     onDrop={(e) => handleMedalDropOnTeam(e, 1)}
                                                     style={{
-                                                        width: '45%', minHeight: '70px', border: '2px solid', borderRadius: '8px', padding: '6px', display: 'flex', flexWrap: 'wrap', gap: '3px', alignItems: 'center', justifyContent: 'center',
-                                                        borderColor: medalResult === 'correct' && teamMedals.length === 6 ? '#4ade80' : medalResult === 'incorrect' ? '#f87171' : '#d1d5db',
-                                                        backgroundColor: medalResult === 'correct' && teamMedals.length === 6 ? '#f0fdf4' : medalResult === 'incorrect' ? '#fef2f2' : '#fff'
+                                                        width: '45%', minHeight: '70px', border: '2px solid', borderRadius: '8px', padding: '6px', display: 'flex', flexWrap: 'wrap', gap: '3px', alignItems: 'center', justifyContent: 'center'
                                                     }}
+                                                    className={`transition-colors ${medalResult === 'correct' && teamMedals.length === 6 ? 'border-green-400 bg-green-50 dark:bg-green-900/20' : medalResult === 'incorrect' ? 'border-red-400 bg-red-50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800'}`}
                                                 >
                                                     {teamMedals.length > 0 ? teamMedals.map(medal => (
                                                         <img key={medal.id} src="/medalla.png" alt="Medalla" draggable
                                                             onDragStart={(e) => handleMedalDragStart(e, medal.id)}
                                                             style={{ width: '24px', height: '24px', cursor: 'grab' }}
                                                             className="hover:scale-110 transition-transform select-none" />
-                                                    )) : <p className="text-xs text-gray-400 italic">Arrastra aquí</p>}
+                                                    )) : <p className="text-xs text-gray-400 dark:text-gray-500 italic">Arrastra aquí</p>}
                                                 </div>
                                                 <img src="/medalla1.png" alt="Atletismo"
                                                     style={{ width: '55%', height: 'auto', maxHeight: '120px', objectFit: 'contain' }} draggable={false} />
@@ -262,17 +263,16 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                                     onDragOver={handleDragOver}
                                                     onDrop={(e) => handleMedalDropOnTeam(e, 2)}
                                                     style={{
-                                                        width: '45%', minHeight: '70px', border: '2px solid', borderRadius: '8px', padding: '6px', display: 'flex', flexWrap: 'wrap', gap: '3px', alignItems: 'center', justifyContent: 'center',
-                                                        borderColor: medalResult === 'correct' && teamMedals.length === 6 ? '#4ade80' : medalResult === 'incorrect' ? '#f87171' : '#d1d5db',
-                                                        backgroundColor: medalResult === 'correct' && teamMedals.length === 6 ? '#f0fdf4' : medalResult === 'incorrect' ? '#fef2f2' : '#fff'
+                                                        width: '45%', minHeight: '70px', border: '2px solid', borderRadius: '8px', padding: '6px', display: 'flex', flexWrap: 'wrap', gap: '3px', alignItems: 'center', justifyContent: 'center'
                                                     }}
+                                                    className={`transition-colors ${medalResult === 'correct' && teamMedals.length === 6 ? 'border-green-400 bg-green-50 dark:bg-green-900/20' : medalResult === 'incorrect' ? 'border-red-400 bg-red-50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800'}`}
                                                 >
                                                     {teamMedals.length > 0 ? teamMedals.map(medal => (
                                                         <img key={medal.id} src="/medalla.png" alt="Medalla" draggable
                                                             onDragStart={(e) => handleMedalDragStart(e, medal.id)}
                                                             style={{ width: '24px', height: '24px', cursor: 'grab' }}
                                                             className="hover:scale-110 transition-transform select-none" />
-                                                    )) : <p className="text-xs text-gray-400 italic">Arrastra aquí</p>}
+                                                    )) : <p className="text-xs text-gray-400 dark:text-gray-500 italic">Arrastra aquí</p>}
                                                 </div>
                                                 <img src="/medalla2.png" alt="Baloncesto"
                                                     style={{ width: '55%', height: 'auto', maxHeight: '120px', objectFit: 'contain' }} draggable={false} />
@@ -289,17 +289,16 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                                     onDragOver={handleDragOver}
                                                     onDrop={(e) => handleMedalDropOnTeam(e, 3)}
                                                     style={{
-                                                        width: '45%', minHeight: '70px', border: '2px solid', borderRadius: '8px', padding: '6px', display: 'flex', flexWrap: 'wrap', gap: '3px', alignItems: 'center', justifyContent: 'center',
-                                                        borderColor: medalResult === 'correct' && teamMedals.length === 6 ? '#4ade80' : medalResult === 'incorrect' ? '#f87171' : '#d1d5db',
-                                                        backgroundColor: medalResult === 'correct' && teamMedals.length === 6 ? '#f0fdf4' : medalResult === 'incorrect' ? '#fef2f2' : '#fff'
+                                                        width: '45%', minHeight: '70px', border: '2px solid', borderRadius: '8px', padding: '6px', display: 'flex', flexWrap: 'wrap', gap: '3px', alignItems: 'center', justifyContent: 'center'
                                                     }}
+                                                    className={`transition-colors ${medalResult === 'correct' && teamMedals.length === 6 ? 'border-green-400 bg-green-50 dark:bg-green-900/20' : medalResult === 'incorrect' ? 'border-red-400 bg-red-50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800'}`}
                                                 >
                                                     {teamMedals.length > 0 ? teamMedals.map(medal => (
                                                         <img key={medal.id} src="/medalla.png" alt="Medalla" draggable
                                                             onDragStart={(e) => handleMedalDragStart(e, medal.id)}
                                                             style={{ width: '24px', height: '24px', cursor: 'grab' }}
                                                             className="hover:scale-110 transition-transform select-none" />
-                                                    )) : <p className="text-xs text-gray-400 italic">Arrastra aquí</p>}
+                                                    )) : <p className="text-xs text-gray-400 dark:text-gray-500 italic">Arrastra aquí</p>}
                                                 </div>
                                                 <img src="/medalla3.png" alt="Tenis"
                                                     style={{ width: '55%', height: 'auto', maxHeight: '120px', objectFit: 'contain' }} draggable={false} />
@@ -309,10 +308,6 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
                                     {/* ¿LISTO? button — bottom of right column */}
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
-                                        <button onClick={handleMedalReset}
-                                            className="px-3 py-1.5 text-xs font-medium text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-                                            🔄 Reiniciar
-                                        </button>
                                         <button onClick={handleMedalListo}
                                             className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-black rounded text-sm tracking-wide">
                                             ¿LISTO?
@@ -322,10 +317,10 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                             </div>
 
                             {medalResult === 'correct' && (
-                                <p className="text-center text-green-600 font-bold mt-3">✅ ¡Correcto! Cada equipo tiene 6 medallas. 18 ÷ 3 = 6</p>
+                                <p className="text-center text-green-600 dark:text-green-400 font-bold mt-3">✅ ¡Correcto! Cada equipo tiene 6 medallas. 18 ÷ 3 = 6</p>
                             )}
                             {medalResult === 'incorrect' && (
-                                <p className="text-center text-red-500 font-bold text-sm mt-3">❌ Cada equipo debe tener la misma cantidad de medallas y no debe sobrar ninguna.</p>
+                                <p className="text-center text-red-500 dark:text-red-400 font-bold text-sm mt-3">❌ Cada equipo debe tener la misma cantidad de medallas y no debe sobrar ninguna.</p>
                             )}
                         </div>
                     </div>
@@ -333,10 +328,10 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
                 {/* ============ P - PROCESUAL ============ */}
                 <div className="relative ml-2 flex items-start">
-                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#8ec2e8' }}>
+                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#8ec2e8] dark:bg-blue-900" style={{ borderColor: '#8ec2e8' }}>
                         P
                     </div>
-                    <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-4 bg-white" style={{ borderColor: '#8ec2e8' }}>
+                    <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-4 bg-white dark:bg-gray-800 border-[#8ec2e8] dark:border-blue-900">
 
                         <div className="mt-4">
                             <div className="flex items-start gap-2 mb-4">
@@ -379,16 +374,12 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                             ))}
                                         </div>
                                         {getCirclesInPool().length === 0 && (
-                                            <p className="text-center text-xs text-gray-400 italic mt-2">Arrastra aquí para devolver</p>
+                                            <p className="text-center text-xs text-gray-400 dark:text-gray-500 italic mt-2">Arrastra aquí para devolver</p>
                                         )}
                                     </div>
                                     <p className="text-4xl font-bold text-yellow-500 mt-2">{getCirclesInPool().length}</p>
 
                                     <div className="flex items-center gap-3 mt-3">
-                                        <button onClick={handleCircleReset}
-                                            className="px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                            🔄 Reiniciar
-                                        </button>
                                         <button onClick={handleCircleListo}
                                             className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-black rounded text-sm tracking-wide">
                                             ¿LISTO?
@@ -416,7 +407,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                                                 className="w-7 h-7 rounded-full bg-yellow-400 border-2 border-yellow-500 cursor-grab active:cursor-grabbing hover:scale-110 transition-transform select-none shadow-sm" />
                                                         ))
                                                     ) : (
-                                                        <p className="text-xs text-gray-400 italic">Arrastra aquí</p>
+                                                        <p className="text-xs text-gray-400 dark:text-gray-500 italic">Arrastra aquí</p>
                                                     )}
                                                 </div>
                                                 <div className="w-10 h-10 border-2 border-purple-400 dark:border-purple-600 rounded flex items-center justify-center font-bold text-lg text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-800">
@@ -429,10 +420,10 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                             </div>
 
                             {circleResult === 'correct' && (
-                                <p className="text-center text-green-600 font-bold mt-3">✅ ¡Correcto! 18 ÷ 3 = 6. Cada grupo tiene 6 circulos.</p>
+                                <p className="text-center text-green-600 dark:text-green-400 font-bold mt-3">✅ ¡Correcto! 18 ÷ 3 = 6. Cada grupo tiene 6 circulos.</p>
                             )}
                             {circleResult === 'incorrect' && (
-                                <p className="text-center text-red-500 font-bold text-sm mt-3">❌ Los 3 grupos deben tener la misma cantidad y no debe sobrar ninguna.</p>
+                                <p className="text-center text-red-500 dark:text-red-400 font-bold text-sm mt-3">❌ Los 3 grupos deben tener la misma cantidad y no debe sobrar ninguna.</p>
                             )}
                         </div>
                     </div>

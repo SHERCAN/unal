@@ -443,8 +443,8 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
 
                 {/* --- STAGE P: PICTORIAL --- */}
                 <div className="relative ml-2 flex items-start mb-8">
-                    <div className="bg-blue-300 text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center">P</div>
-                    <div className="flex-1 relative border-2 border-blue-300 p-4 rounded-r-lg -ml-0.5 rounded-tl-none">
+                    <div className="bg-blue-300 dark:bg-blue-900 text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center">P</div>
+                    <div className="flex-1 relative border-2 border-blue-300 dark:border-blue-900 p-4 rounded-r-lg -ml-0.5 rounded-tl-none">
 
                         <div className="flex items-center gap-2 mb-4">
                             <p className="font-medium text-gray-700 dark:text-gray-300" style={{ fontSize: 'clamp(0.75rem, 1.9vmin, 1rem)' }}>
@@ -472,7 +472,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                         </div>
 
                         <div
-                            className="border border-gray-300 rounded-lg p-4 bg-white mb-6 min-h-[100px]"
+                            className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-800 mb-6 min-h-[100px]"
                             onDragOver={handleDragOver}
                             onDrop={handlePDropOnPSource}
                         >
@@ -522,7 +522,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                 return (
                                     <div key={i} className="flex flex-col items-center gap-2">
                                         <div
-                                            className="w-full h-24 border-2 border-green-200 rounded-lg flex items-center justify-center bg-gray-50"
+                                            className="w-full h-24 border-2 border-green-200 dark:border-green-800 rounded-lg flex items-center justify-center bg-gray-50 dark:bg-gray-700"
                                             onDragOver={handleDragOver}
                                             onDrop={() => handlePDropOnPBox(i)}
                                         >
@@ -541,7 +541,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                         </div>
                                         <input
                                             type="number"
-                                            className="w-12 h-8 border border-gray-300 text-center rounded-md bg-gray-100 text-gray-600"
+                                            className="w-12 h-8 border border-gray-300 dark:border-gray-600 text-center rounded-md bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-200"
                                             value={orangesInThisBox.length}
                                             readOnly
                                         />
@@ -557,7 +557,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                 </p>
                                 <input
                                     type="number"
-                                    className="w-16 h-10 border border-gray-300 text-center rounded-md focus:ring-2 focus:ring-purple-500 text-lg font-bold text-gray-900"
+                                    className="w-16 h-10 border border-gray-300 dark:border-gray-600 text-center rounded-md focus:ring-2 focus:ring-purple-500 text-lg font-bold text-gray-900 dark:text-white bg-white dark:bg-gray-800"
                                     value={finalAnswer}
                                     onChange={(e) => setFinalAnswer(e.target.value)}
                                 />

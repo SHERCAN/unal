@@ -89,7 +89,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                 <h1 className="text-2xl font-black text-purple-700 dark:text-purple-400 mb-6 uppercase tracking-wide">Ejercicios</h1>
 
                 {/* Activity 1: Calculate divisions */}
-                <div className="mb-8">
+                <div className="mb-8 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div className="flex items-center gap-2 mb-4">
                         <PlayBtn trackingId={VIDEO_TRACKING.EJ_1} title="Calcular divisiones" />
                         <span className="w-4 h-4 bg-purple-700 rounded-sm inline-block flex-shrink-0"></span>
@@ -111,7 +111,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                     onChange={(e) => setCalcAnswers(prev => ({ ...prev, [i]: e.target.value }))}
                                     className={`w-20 px-2 py-1 border-2 rounded text-center font-bold text-lg ${calcResults[i] === true ? 'border-green-500 bg-green-50 dark:bg-green-900/20' :
                                         calcResults[i] === false ? 'border-red-500 bg-red-50 dark:bg-red-900/20' :
-                                            'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800'
+                                            'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
                                         } text-gray-900 dark:text-white`}
                                 />
                                 <button onClick={() => handleCalcListo(i)}
@@ -126,7 +126,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                 </div>
 
                 {/* Activity 2: Determine if exact */}
-                <div>
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div className="flex items-center gap-2 mb-4">
                         <PlayBtn trackingId={VIDEO_TRACKING.EJ_2} title="Determinar si es exacta" />
                         <span className="w-4 h-4 bg-purple-700 rounded-sm inline-block flex-shrink-0"></span>

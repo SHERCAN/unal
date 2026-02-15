@@ -56,38 +56,49 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
         dividend: number; divisor: number; quotient: number; subtract: number; remainder: number;
         multTable: { mult: number; result: number }[];
     }) => (
-        <div className="flex gap-6 justify-center items-start my-4">
-            <div className="text-center">
-                <div className="flex items-end gap-0">
-                    <div className="text-right">
-                        <p className="text-2xl font-bold text-gray-900 dark:text-white">{dividend}</p>
-                        <p className="text-2xl font-bold">
-                            <span className="text-gray-500">−</span>{' '}
-                            <span className="text-red-600">{subtract}</span>
-                        </p>
-                        <hr className="border-gray-800 dark:border-gray-300 border-t-2" />
-                        <p className={`text-2xl font-bold ${remainder === 0 ? 'text-green-600' : 'text-red-600'}`}>
+        <div className="flex flex-col md:flex-row gap-12 items-start justify-center my-6">
+            {/* Vertical Algorithm */}
+            <div className="flex gap-4 font-mono text-xl items-start">
+                <div className="flex flex-col items-end gap-1">
+                    <div className="h-12 flex items-center justify-center text-3xl font-bold text-gray-900 dark:text-white px-2">
+                        {dividend}
+                    </div>
+                    <div className="relative h-12 flex items-center justify-center text-3xl font-bold text-red-600 px-2">
+                        <span className="absolute -left-6 top-1 text-2xl text-gray-400 font-bold select-none">-</span>
+                        {subtract}
+                    </div>
+                    <div className="w-14 h-1 bg-gray-800 dark:bg-gray-300 rounded-full"></div>
+                    <div className="flex items-center justify-end gap-2 mt-1">
+                        <div className={`flex items-center gap-1 ${remainder === 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            <span className="text-xl font-bold">{remainder === 0 ? 'No hay resto' : 'Hay resto'}</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
+                        </div>
+                        <div className={`h-12 flex items-center justify-center text-3xl font-bold px-2 ${remainder === 0 ? 'text-green-600' : 'text-red-600'}`}>
                             {String(remainder).padStart(2, '0')}
-                        </p>
-                    </div>
-                    <div className="border-l-2 border-b-2 border-gray-800 dark:border-gray-300 px-3 pb-1 ml-1">
-                        <p className="text-2xl font-bold text-gray-900 dark:text-white">{divisor}</p>
-                    </div>
-                    <div className="text-left ml-2">
-                        <p className="text-2xl font-bold text-gray-900 dark:text-white">{quotient}</p>
+                        </div>
                     </div>
                 </div>
-                {remainder === 0 ? (
-                    <p className="text-sm text-green-600 font-bold mt-1">No hay resto</p>
-                ) : (
-                    <p className="text-sm text-red-600 font-bold mt-1">← Hay resto</p>
-                )}
+
+                <div className="flex flex-col">
+                    <div className="border-l-4 border-b-4 border-gray-800 dark:border-gray-300 pl-4 pb-2 mb-2 h-14 flex items-center">
+                        <span className="text-3xl font-bold text-gray-900 dark:text-white">{divisor}</span>
+                    </div>
+                    <div className="pl-4 h-12 flex items-center">
+                        <span className="text-3xl font-bold text-gray-900 dark:text-white">{quotient}</span>
+                    </div>
+                </div>
             </div>
-            <div className="text-left">
+
+            {/* Vertical Separator */}
+            <div className="hidden md:block w-px bg-gray-300 dark:bg-gray-600 self-stretch"></div>
+
+            {/* Multiplication Table */}
+            <div className="text-left flex flex-col justify-center">
                 {multTable.map((row, i) => (
-                    <p key={i} className={`text-sm font-bold ${row.result === subtract ? 'text-red-600' : 'text-gray-700 dark:text-gray-300'}`}>
-                        <span className="text-gray-900 dark:text-white">{divisor}</span>{' '}
-                        {row.mult} = {row.result}
+                    <p key={i} className={`text-sm font-bold my-1 ${row.result === subtract ? 'text-red-600 scale-110 ml-2' : 'text-gray-700 dark:text-gray-300'}`}>
+                        <span className="text-gray-900 dark:text-white">{divisor}</span> x {row.mult} = {row.result}
                     </p>
                 ))}
             </div>
@@ -98,10 +109,10 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'División Exacta' }} pageId="div-exacta-concepto-procesual">
             <div className="w-full">
                 <div className="relative ml-2 flex items-start">
-                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#be90de' }}>
+                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de] dark:bg-purple-900" style={{ borderColor: '#be90de' }}>
                         A
                     </div>
-                    <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-white" style={{ borderColor: '#be90de' }}>
+                    <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-white dark:bg-gray-800 border-[#be90de] dark:border-purple-900">
 
                         <div className="mt-4 space-y-6">
                             {/* Intro text */}
@@ -113,7 +124,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                                 </p>
                                 <PlayBtn trackingId={VIDEO_TRACKING.A_NOTA} title="Nota sobre SOBRE y RESTO" />
 
-                                <div className="mt-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3 border-l-4 border-purple-500">
+                                <div className="mt-2 bg-gray-50 dark:bg-gray-700 rounded-lg p-3 border-l-4 border-purple-500">
                                     <p className="text-sm text-gray-700 dark:text-gray-300">
                                         <span className="font-bold">NOTA:</span> SOBRE es lo mismo que RESTO.<br />
                                         RESTO se usa en matemáticas, y SOBRA se usa en español.
