@@ -5,13 +5,28 @@ import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
+/**
+ * Frame 166 — EJERCICIOS – División Inexacta
+ * Activity 1: Determinar si divisiones son exactas o inexactas (dropdown + ¿LISTO?)
+ *   60÷10, 72÷12, 81÷7, 109÷3
+ * Activity 2: Resuelve (input + ¿Hay resto? + ¿Cuál? + dropdown tipo + ¿LISTO?)
+ *   28÷2 = 14, 57÷14 = 4 r 1
+ * Activity 3: Resuelve problemas matemáticos (word problems + answer + ¿Hay resto? + ¿Cuál? + ¿LISTO?)
+ *   53÷6, 24÷6, 39÷13, 113÷10
+ */
+
 interface Props { zoom?: number; }
 
 export function EjerciciosPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched, submitExercise } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        INTRO: 'division-inexacta-ej-intro',
+        EJ_1: 'div-inexacta-ej-1',
+        EJ_3: 'div-inexacta-ej-3',
+        EJ_3_1: 'div-inexacta-ej-3-1',
+        EJ_3_2: 'div-inexacta-ej-3-2',
+        EJ_3_3: 'div-inexacta-ej-3-3',
+        EJ_3_4: 'div-inexacta-ej-3-4',
     };
 
     const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
@@ -26,241 +41,318 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         }
     };
 
-    const openVideo = (trackingId: string, title: string) => {
-        currentTrackingRef.current = trackingId;
-        setVideoModal({ isOpen: true, title, videoId: undefined });
-    };
-
-    const PlayBtn = ({ trackingId, title, size = 'sm' }: { trackingId: string; title: string; size?: 'sm' | 'md' }) => {
+    const PlayBtn = ({ trackingId, title }: { trackingId: string; title: string }) => {
         const watched = isVideoWatched(trackingId);
-        const sz = size === 'sm' ? 'w-6 h-6' : 'w-8 h-8';
-        const iconSz = size === 'sm' ? 'w-3 h-3' : 'w-4 h-4';
         return (
-            <button type="button" onClick={() => openVideo(trackingId, title)}
-                className={`${sz} flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
-                <svg className={iconSz} fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+            <button type="button" onClick={() => {
+                currentTrackingRef.current = trackingId;
+                setVideoModal({ isOpen: true, title, videoId: undefined });
+            }} className={`w-8 h-8 flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
             </button>
         );
     };
 
-    // ===== ACTIVITY 1: Match division with result =====
-    const matchPairs = [
-        { division: '17 ÷ 3', answer: '5 r 2' },
-        { division: '19 ÷ 4', answer: '4 r 3' },
-        { division: '23 ÷ 5', answer: '4 r 3' },
-        { division: '14 ÷ 3', answer: '4 r 2' },
+    // ===== ACTIVITY 1: Determinar exacta o inexacta =====
+    const act1Items = [
+        { dividend: 60, divisor: 10, correct: 'exacta' },   // 60/10=6 r0
+        { dividend: 72, divisor: 12, correct: 'exacta' },   // 72/12=6 r0
+        { dividend: 81, divisor: 7, correct: 'inexacta' },   // 81/7=11 r4
+        { dividend: 109, divisor: 3, correct: 'inexacta' },  // 109/3=36 r1
     ];
+    const [act1Answers, setAct1Answers] = useState<Record<number, string>>({});
+    const [act1Results, setAct1Results] = useState<Record<number, boolean | null>>({});
 
-    const [matchAnswers, setMatchAnswers] = useState<Record<number, string>>({});
-    const [matchResult, setMatchResult] = useState<'correct' | 'incorrect' | null>(null);
-
-    const matchOptions = ['5 r 2', '4 r 3', '4 r 3', '4 r 2', '3 r 1', '5 r 0'];
-
-    const handleCheckMatch = async () => {
-        const allCorrect = matchPairs.every((pair, i) => matchAnswers[i] === pair.answer);
-        setMatchResult(allCorrect ? 'correct' : 'incorrect');
-        await submitExercise('div-inexacta-match', allCorrect);
+    const handleAct1Listo = (index: number) => {
+        const userAnswer = act1Answers[index] || '';
+        const correct = userAnswer === act1Items[index].correct;
+        setAct1Results(prev => ({ ...prev, [index]: correct }));
+        submitExercise(`div-inexacta-act1-${index}`, correct);
     };
 
-    // ===== ACTIVITY 2: Complete the table =====
-    const tableRows = [
-        { dividendo: 17, divisor: 3, cociente: 5, residuo: 2 },
-        { dividendo: 25, divisor: 7, cociente: 3, residuo: 4 },
-        { dividendo: 29, divisor: 6, cociente: 4, residuo: 5 },
+    // ===== ACTIVITY 2: Resuelve =====
+    const act2Items = [
+        { dividend: 28, divisor: 2, quotient: 14, hasRemainder: false, remainder: 0, type: 'exacta' },
+        { dividend: 57, divisor: 14, quotient: 4, hasRemainder: true, remainder: 1, type: 'inexacta' },
     ];
+    const [act2, setAct2] = useState<Record<string, string>>({});
+    const [act2Results, setAct2Results] = useState<Record<number, boolean | null>>({});
 
-    const [tableAnswers, setTableAnswers] = useState<Record<string, string>>({});
-    const [tableResult, setTableResult] = useState<'correct' | 'incorrect' | null>(null);
+    const handleAct2Listo = (index: number) => {
+        const item = act2Items[index];
+        const userQuotient = parseInt(act2[`${index}-q`] || '');
+        const userHasRemainder = act2[`${index}-hasR`] || '';
+        const userRemainder = parseInt(act2[`${index}-r`] || '0');
+        const userType = act2[`${index}-type`] || '';
 
-    const handleCheckTable = async () => {
-        const allCorrect = tableRows.every((row, i) => {
-            return parseInt(tableAnswers[`${i}-c`]) === row.cociente &&
-                parseInt(tableAnswers[`${i}-r`]) === row.residuo;
-        });
-        setTableResult(allCorrect ? 'correct' : 'incorrect');
-        await submitExercise('div-inexacta-table', allCorrect);
+        let correct = userQuotient === item.quotient && userType === item.type;
+        if (item.hasRemainder) {
+            correct = correct && userHasRemainder === 'si' && userRemainder === item.remainder;
+        } else {
+            correct = correct && userHasRemainder === 'no';
+        }
+        setAct2Results(prev => ({ ...prev, [index]: correct }));
+        submitExercise(`div-inexacta-act2-${index}`, correct);
     };
 
-    // ===== ACTIVITY 3: Fill in the division =====
-    const [fillCociente, setFillCociente] = useState('');
-    const [fillResiduo, setFillResiduo] = useState('');
-    const [fillResult, setFillResult] = useState<'correct' | 'incorrect' | null>(null);
+    // ===== ACTIVITY 3: Word problems =====
+    const act3Items = [
+        {
+            text: 'Un granjero tiene 53 huevos y los coloca en cada uno paquetes de 6 huevos.',
+            question: '¿Cuántos paquetes completas se llenan?',
+            answer: 8, hasRemainder: true, remainder: 5, remainderUnit: 'huevos',
+            trackingId: VIDEO_TRACKING.EJ_3_1,
+        },
+        {
+            text: 'Hay 24 cuadernos que se reparten en 6 mochilas.',
+            question: '¿Cuántos cuadernos hay en cada mochila?',
+            answer: 4, hasRemainder: false, remainder: 0, remainderUnit: '',
+            trackingId: VIDEO_TRACKING.EJ_3_2,
+        },
+        {
+            text: 'En un salón hay 39 sillas organizadas en 13 filas.',
+            question: '¿Cuántos sillas hay en cada fila?',
+            answer: 3, hasRemainder: false, remainder: 0, remainderUnit: '',
+            trackingId: VIDEO_TRACKING.EJ_3_3,
+        },
+        {
+            text: 'Hay 113 dulces para repartir en 10 bolsas.',
+            question: '¿Cuántos dulces recibe cada bolsa?',
+            answer: 11, hasRemainder: true, remainder: 3, remainderUnit: 'dulces',
+            trackingId: VIDEO_TRACKING.EJ_3_4,
+        },
+    ];
+    const [act3, setAct3] = useState<Record<string, string>>({});
+    const [act3Results, setAct3Results] = useState<Record<number, boolean | null>>({});
 
-    const handleCheckFill = async () => {
-        // 22 ÷ 5 = 4 r 2
-        const isCorrect = parseInt(fillCociente) === 4 && parseInt(fillResiduo) === 2;
-        setFillResult(isCorrect ? 'correct' : 'incorrect');
-        await submitExercise('div-inexacta-fill', isCorrect);
+    const handleAct3Listo = (index: number) => {
+        const item = act3Items[index];
+        const userAnswer = parseInt(act3[`${index}-a`] || '');
+        const userHasRemainder = act3[`${index}-hasR`] || '';
+        const userRemainder = parseInt(act3[`${index}-r`] || '0');
+
+        let correct = userAnswer === item.answer;
+        if (item.hasRemainder) {
+            correct = correct && userHasRemainder === 'si' && userRemainder === item.remainder;
+        } else {
+            correct = correct && userHasRemainder === 'no';
+        }
+        setAct3Results(prev => ({ ...prev, [index]: correct }));
+        submitExercise(`div-inexacta-act3-${index}`, correct);
     };
+
+    const inputClass = (result: boolean | null) =>
+        `w-16 h-9 text-center font-bold rounded border-2 text-sm outline-none transition-colors ${result === true ? 'border-green-500 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300' :
+            result === false ? 'border-red-500 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300' :
+                'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100'
+        }`;
+
+    const selectClass = (result: boolean | null) =>
+        `border-2 rounded px-2 py-1 text-sm font-medium outline-none transition-colors ${result === true ? 'border-green-500 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300' :
+            result === false ? 'border-red-500 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300' :
+                'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+        }`;
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'División Inexacta' }} pageId="division-inexacta-ejercicios">
-            <div className="flex items-center gap-2 mb-6">
-                <PlayBtn trackingId={VIDEO_TRACKING.INTRO} title="Ejercicios de División Inexacta" size="md" />
-                <h2 className="text-2xl font-bold text-cyan-700 dark:text-cyan-300">EJERCICIOS</h2>
-            </div>
+            <div className="w-full">
+                <h1 className="text-2xl font-black text-purple-700 dark:text-purple-400 mb-6 uppercase tracking-wide">Ejercicios</h1>
 
-            <div className="space-y-6">
-                {/* ACTIVITY 1: Matching */}
-                <div className={`rounded-xl border-2 p-5 ${matchResult === 'correct' ? 'border-green-400 bg-green-50 dark:bg-green-900/10' :
-                    matchResult === 'incorrect' ? 'border-red-400 bg-red-50 dark:bg-red-900/10' :
-                        'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50'
-                    }`}>
-                    <div className="flex items-center gap-2 mb-3">
-                        <span className="bg-cyan-600 text-white text-sm font-bold px-3 py-1 rounded-full">1</span>
-                        <p className="font-bold text-gray-800 dark:text-gray-200 text-sm">Relaciona cada división con su resultado</p>
+                {/* ===== ACTIVITY 1 ===== */}
+                <div className="mb-6 bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center gap-2 mb-4">
+                        <PlayBtn trackingId={VIDEO_TRACKING.EJ_1} title="Ejercicio 1" />
+                        <span className="bg-purple-700 text-white text-sm font-bold w-8 h-8 rounded flex items-center justify-center flex-shrink-0">1</span>
+                        <p className="text-sm font-bold text-gray-800 dark:text-gray-200">
+                            Determinar si las siguientes divisiones son exactas u inexactas.
+                        </p>
                     </div>
 
-                    <div className="space-y-2">
-                        {matchPairs.map((pair, i) => (
-                            <div key={i} className="flex items-center gap-3">
-                                <span className="bg-gray-100 dark:bg-gray-700 px-3 py-1.5 rounded font-bold text-sm min-w-[90px] text-center text-gray-800 dark:text-gray-200">
-                                    {pair.division}
-                                </span>
-                                <span className="text-gray-400">→</span>
+                    <div className="space-y-3">
+                        {act1Items.map((item, i) => (
+                            <div key={i} className="flex flex-wrap items-center gap-3">
+                                <span className="w-3 h-3 bg-gray-800 dark:bg-gray-200 rounded-sm inline-block flex-shrink-0"></span>
+                                <p className="text-base font-bold text-gray-900 dark:text-white min-w-[100px]">
+                                    {item.dividend} ÷ {item.divisor}
+                                </p>
                                 <select
-                                    value={matchAnswers[i] || ''}
-                                    onChange={(e) => { setMatchAnswers(prev => ({ ...prev, [i]: e.target.value })); setMatchResult(null); }}
-                                    className="border-2 rounded px-2 py-1 text-sm font-bold border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
-                                    disabled={matchResult === 'correct'}
+                                    value={act1Answers[i] || ''}
+                                    onChange={(e) => setAct1Answers(prev => ({ ...prev, [i]: e.target.value }))}
+                                    className={selectClass(act1Results[i] ?? null)}
+                                    disabled={act1Results[i] === true}
                                 >
                                     <option value="">Selecciona</option>
-                                    {matchOptions.map((opt, j) => (
-                                        <option key={j} value={opt}>{opt}</option>
-                                    ))}
+                                    <option value="exacta">es exacta</option>
+                                    <option value="inexacta">es inexacta</option>
                                 </select>
+                                <button onClick={() => handleAct1Listo(i)}
+                                    className="px-4 py-1 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded"
+                                    disabled={act1Results[i] === true}>
+                                    ¿LISTO?
+                                </button>
+                                {act1Results[i] === true && <span className="text-green-600 font-bold">✅</span>}
+                                {act1Results[i] === false && <span className="text-red-500 font-bold">❌</span>}
                             </div>
                         ))}
                     </div>
-
-                    <div className="flex items-center gap-3 justify-center mt-3">
-                        {matchResult !== 'correct' && (
-                            <button onClick={handleCheckMatch}
-                                className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg text-sm">
-                                ¿LISTO?
-                            </button>
-                        )}
-                    </div>
-                    {matchResult === 'correct' && <p className="text-center text-green-600 font-bold text-sm mt-2">✅ ¡Correcto!</p>}
-                    {matchResult === 'incorrect' && <p className="text-center text-red-500 font-bold text-sm mt-2">❌ Revisa tus respuestas.</p>}
                 </div>
 
-                {/* ACTIVITY 2: Complete table */}
-                <div className={`rounded-xl border-2 p-5 ${tableResult === 'correct' ? 'border-green-400 bg-green-50 dark:bg-green-900/10' :
-                    tableResult === 'incorrect' ? 'border-red-400 bg-red-50 dark:bg-red-900/10' :
-                        'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50'
-                    }`}>
-                    <div className="flex items-center gap-2 mb-3">
-                        <span className="bg-cyan-600 text-white text-sm font-bold px-3 py-1 rounded-full">2</span>
-                        <p className="font-bold text-gray-800 dark:text-gray-200 text-sm">Completa la tabla</p>
+                {/* ===== ACTIVITY 2 ===== */}
+                <div className="mb-6 bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center gap-2 mb-4">
+                        <span className="bg-purple-700 text-white text-sm font-bold w-8 h-8 rounded flex items-center justify-center flex-shrink-0">2</span>
+                        <p className="text-sm font-bold text-gray-800 dark:text-gray-200">Resuelve.</p>
                     </div>
 
-                    <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
-                        <table className="w-full text-sm">
-                            <thead>
-                                <tr className="bg-cyan-100 dark:bg-cyan-900/30">
-                                    <th className="py-2 px-2 text-center font-bold text-cyan-700 dark:text-cyan-300 border-b border-gray-200 dark:border-gray-700">Dividendo</th>
-                                    <th className="py-2 px-2 text-center font-bold text-cyan-700 dark:text-cyan-300 border-b border-gray-200 dark:border-gray-700">Divisor</th>
-                                    <th className="py-2 px-2 text-center font-bold text-cyan-700 dark:text-cyan-300 border-b border-gray-200 dark:border-gray-700">Cociente</th>
-                                    <th className="py-2 px-2 text-center font-bold text-cyan-700 dark:text-cyan-300 border-b border-gray-200 dark:border-gray-700">Residuo</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {tableRows.map((row, i) => (
-                                    <tr key={i} className={i % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-800/50'}>
-                                        <td className="py-2 px-2 text-center font-bold text-red-600">{row.dividendo}</td>
-                                        <td className="py-2 px-2 text-center font-bold text-blue-600">{row.divisor}</td>
-                                        <td className="py-2 px-2 text-center">
-                                            <input
-                                                type="number"
-                                                value={tableAnswers[`${i}-c`] || ''}
-                                                onChange={(e) => { setTableAnswers(prev => ({ ...prev, [`${i}-c`]: e.target.value })); setTableResult(null); }}
-                                                className="w-12 h-8 text-center font-bold rounded border-2 border-green-400 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm"
-                                                placeholder="?"
-                                                disabled={tableResult === 'correct'}
-                                            />
-                                        </td>
-                                        <td className="py-2 px-2 text-center">
-                                            <input
-                                                type="number"
-                                                value={tableAnswers[`${i}-r`] || ''}
-                                                onChange={(e) => { setTableAnswers(prev => ({ ...prev, [`${i}-r`]: e.target.value })); setTableResult(null); }}
-                                                className="w-12 h-8 text-center font-bold rounded border-2 border-orange-400 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm"
-                                                placeholder="?"
-                                                disabled={tableResult === 'correct'}
-                                            />
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <div className="space-y-6">
+                        {act2Items.map((item, i) => (
+                            <div key={i} className="space-y-2 bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
+                                {/* Division line */}
+                                <div className="flex flex-wrap items-center gap-3">
+                                    <span className="w-3 h-3 bg-gray-800 dark:bg-gray-200 rounded-sm inline-block flex-shrink-0"></span>
+                                    <p className="text-base font-bold text-gray-900 dark:text-white">
+                                        {item.dividend} ÷ {item.divisor} =
+                                    </p>
+                                    <input
+                                        type="number"
+                                        value={act2[`${i}-q`] || ''}
+                                        onChange={(e) => setAct2(prev => ({ ...prev, [`${i}-q`]: e.target.value }))}
+                                        className={inputClass(act2Results[i] ?? null)}
+                                        disabled={act2Results[i] === true}
+                                    />
+                                </div>
 
-                    <div className="flex items-center gap-3 justify-center mt-3">
-                        {tableResult !== 'correct' && (
-                            <button onClick={handleCheckTable}
-                                className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg text-sm">
-                                ¿LISTO?
-                            </button>
-                        )}
+                                {/* ¿Hay resto? */}
+                                <div className="flex flex-wrap items-center gap-3 ml-6">
+                                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">¿Hay resto?</span>
+                                    <select
+                                        value={act2[`${i}-hasR`] || ''}
+                                        onChange={(e) => setAct2(prev => ({ ...prev, [`${i}-hasR`]: e.target.value }))}
+                                        className={selectClass(act2Results[i] ?? null)}
+                                        disabled={act2Results[i] === true}
+                                    >
+                                        <option value="">...</option>
+                                        <option value="si">Sí</option>
+                                        <option value="no">No</option>
+                                    </select>
+
+                                    {/* Show ¿Cuál? only if user answered "si" */}
+                                    {act2[`${i}-hasR`] === 'si' && (
+                                        <>
+                                            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">¿Cuál?</span>
+                                            <input
+                                                type="number"
+                                                value={act2[`${i}-r`] || ''}
+                                                onChange={(e) => setAct2(prev => ({ ...prev, [`${i}-r`]: e.target.value }))}
+                                                className={inputClass(act2Results[i] ?? null)}
+                                                style={{ width: '48px' }}
+                                                disabled={act2Results[i] === true}
+                                            />
+                                        </>
+                                    )}
+                                </div>
+
+                                {/* Esta división es... */}
+                                <div className="flex flex-wrap items-center gap-3 ml-6">
+                                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Esta división es</span>
+                                    <select
+                                        value={act2[`${i}-type`] || ''}
+                                        onChange={(e) => setAct2(prev => ({ ...prev, [`${i}-type`]: e.target.value }))}
+                                        className={selectClass(act2Results[i] ?? null)}
+                                        disabled={act2Results[i] === true}
+                                    >
+                                        <option value="">Selecciona</option>
+                                        <option value="exacta">es exacta</option>
+                                        <option value="inexacta">es inexacta</option>
+                                    </select>
+                                    <button onClick={() => handleAct2Listo(i)}
+                                        className="px-4 py-1 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded"
+                                        disabled={act2Results[i] === true}>
+                                        ¿LISTO?
+                                    </button>
+                                    {act2Results[i] === true && <span className="text-green-600 font-bold">✅</span>}
+                                    {act2Results[i] === false && <span className="text-red-500 font-bold">❌</span>}
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                    {tableResult === 'correct' && <p className="text-center text-green-600 font-bold text-sm mt-2">✅ ¡Correcto!</p>}
-                    {tableResult === 'incorrect' && <p className="text-center text-red-500 font-bold text-sm mt-2">❌ Revisa tus respuestas.</p>}
                 </div>
 
-                {/* ACTIVITY 3: Fill in the division */}
-                <div className={`rounded-xl border-2 p-5 ${fillResult === 'correct' ? 'border-green-400 bg-green-50 dark:bg-green-900/10' :
-                    fillResult === 'incorrect' ? 'border-red-400 bg-red-50 dark:bg-red-900/10' :
-                        'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50'
-                    }`}>
-                    <div className="flex items-center gap-2 mb-3">
-                        <span className="bg-cyan-600 text-white text-sm font-bold px-3 py-1 rounded-full">3</span>
-                        <p className="font-bold text-gray-800 dark:text-gray-200 text-sm">Completa la división</p>
-                    </div>
-
-                    <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
-                        <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                            Un profesor tiene <span className="font-bold text-red-600">22</span> libros y los reparte en{' '}
-                            <span className="font-bold text-blue-600">5</span> estantes iguales.
+                {/* ===== ACTIVITY 3 ===== */}
+                <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center gap-2 mb-4">
+                        <span className="bg-purple-700 text-white text-sm font-bold w-8 h-8 rounded flex items-center justify-center flex-shrink-0">3</span>
+                        <p className="text-sm font-bold text-gray-800 dark:text-gray-200">
+                            Resuelve problemas matemáticos. Debe escribir en la hoja para procedimiento.
                         </p>
-
-                        <div className="flex items-center justify-center gap-3">
-                            <span className="text-3xl font-bold text-red-600">22</span>
-                            <span className="text-2xl text-gray-400">÷</span>
-                            <span className="text-3xl font-bold text-blue-600">5</span>
-                            <span className="text-2xl text-gray-400">=</span>
-                            <input
-                                type="number"
-                                value={fillCociente}
-                                onChange={(e) => { setFillCociente(e.target.value); setFillResult(null); }}
-                                className="w-14 h-10 text-center text-xl font-bold rounded border-2 border-green-400 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
-                                placeholder="?"
-                                disabled={fillResult === 'correct'}
-                            />
-                        </div>
-                        <div className="flex items-center justify-center gap-2 mt-2">
-                            <span className="text-sm text-gray-600 dark:text-gray-400 font-semibold">Residuo:</span>
-                            <input
-                                type="number"
-                                value={fillResiduo}
-                                onChange={(e) => { setFillResiduo(e.target.value); setFillResult(null); }}
-                                className="w-14 h-8 text-center font-bold rounded border-2 border-orange-400 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm"
-                                placeholder="?"
-                                disabled={fillResult === 'correct'}
-                            />
-                        </div>
                     </div>
 
-                    <div className="flex items-center gap-3 justify-center mt-3">
-                        {fillResult !== 'correct' && (
-                            <button onClick={handleCheckFill}
-                                className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg text-sm">
-                                ¿LISTO?
-                            </button>
-                        )}
+                    <div className="space-y-6">
+                        {act3Items.map((item, i) => (
+                            <div key={i} className="space-y-2 bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
+                                {/* Problem text */}
+                                <div className="flex items-start gap-2">
+                                    <PlayBtn trackingId={item.trackingId} title={`Problema ${i + 1}`} />
+                                    <span className="w-3 h-3 bg-gray-800 dark:bg-gray-200 rounded-sm inline-block flex-shrink-0 mt-1.5"></span>
+                                    <div>
+                                        <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">{item.text}</p>
+                                        <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">{item.question}</p>
+                                    </div>
+                                </div>
+
+                                {/* Answer input */}
+                                <div className="flex justify-center my-2">
+                                    <input
+                                        type="number"
+                                        value={act3[`${i}-a`] || ''}
+                                        onChange={(e) => setAct3(prev => ({ ...prev, [`${i}-a`]: e.target.value }))}
+                                        className={inputClass(act3Results[i] ?? null)}
+                                        disabled={act3Results[i] === true}
+                                    />
+                                </div>
+
+                                {/* ¿Hay resto? + ¿Cuál? + ¿LISTO? */}
+                                <div className="flex flex-wrap items-center gap-3 ml-6">
+                                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">¿Hay resto?</span>
+                                    <select
+                                        value={act3[`${i}-hasR`] || ''}
+                                        onChange={(e) => setAct3(prev => ({ ...prev, [`${i}-hasR`]: e.target.value }))}
+                                        className={selectClass(act3Results[i] ?? null)}
+                                        disabled={act3Results[i] === true}
+                                    >
+                                        <option value="">...</option>
+                                        <option value="si">Sí</option>
+                                        <option value="no">No</option>
+                                    </select>
+
+                                    {act3[`${i}-hasR`] === 'si' && (
+                                        <>
+                                            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">¿Cuál?</span>
+                                            <input
+                                                type="number"
+                                                value={act3[`${i}-r`] || ''}
+                                                onChange={(e) => setAct3(prev => ({ ...prev, [`${i}-r`]: e.target.value }))}
+                                                className={inputClass(act3Results[i] ?? null)}
+                                                style={{ width: '48px' }}
+                                                disabled={act3Results[i] === true}
+                                            />
+                                            {item.remainderUnit && (
+                                                <span className="text-sm text-gray-600 dark:text-gray-400">{item.remainderUnit}</span>
+                                            )}
+                                        </>
+                                    )}
+
+                                    <button onClick={() => handleAct3Listo(i)}
+                                        className="px-4 py-1 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded"
+                                        disabled={act3Results[i] === true}>
+                                        ¿LISTO?
+                                    </button>
+                                    {act3Results[i] === true && <span className="text-green-600 font-bold">✅</span>}
+                                    {act3Results[i] === false && <span className="text-red-500 font-bold">❌</span>}
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                    {fillResult === 'correct' && <p className="text-center text-green-600 font-bold text-sm mt-2">✅ ¡Correcto! 22 ÷ 5 = 4, residuo 2</p>}
-                    {fillResult === 'incorrect' && <p className="text-center text-red-500 font-bold text-sm mt-2">❌ Intenta de nuevo.</p>}
                 </div>
             </div>
 
