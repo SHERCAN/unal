@@ -5,6 +5,12 @@ import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
+/**
+ * Frame 169 — Números Primos: Ejercicios
+ * Connection exercise: numbers 2, 6, 11, 14, 15, 17
+ * Each number connects to either "primos" or "compuestos"
+ */
+
 interface Props { zoom?: number; }
 
 export function EjerciciosPage({ zoom = 1 }: Props) {
@@ -31,188 +37,139 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         setVideoModal({ isOpen: true, title, videoId: undefined });
     };
 
-    const PlayBtn = ({ trackingId, title, size = 'sm' }: { trackingId: string; title: string; size?: 'sm' | 'md' }) => {
+    const PlayBtn = ({ trackingId, title }: { trackingId: string; title: string }) => {
         const watched = isVideoWatched(trackingId);
-        const sz = size === 'sm' ? 'w-6 h-6' : 'w-8 h-8';
-        const iconSz = size === 'sm' ? 'w-3 h-3' : 'w-4 h-4';
         return (
             <button type="button" onClick={() => openVideo(trackingId, title)}
-                className={`${sz} flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
-                <svg className={iconSz} fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                className={`w-8 h-8 flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
             </button>
         );
     };
 
-    // Drag and drop: classify numbers as primo or compuesto
+    // Numbers from Frame 169
     const allNumbers = [
-        { num: 3, type: 'primo' },
+        { num: 2, type: 'primo' },
         { num: 6, type: 'compuesto' },
-        { num: 7, type: 'primo' },
-        { num: 10, type: 'compuesto' },
-        { num: 13, type: 'primo' },
+        { num: 11, type: 'primo' },
         { num: 14, type: 'compuesto' },
+        { num: 15, type: 'compuesto' },
         { num: 17, type: 'primo' },
-        { num: 18, type: 'compuesto' },
-        { num: 19, type: 'primo' },
-        { num: 20, type: 'compuesto' },
     ];
 
-    const [primoZone, setPrimoZone] = useState<number[]>([]);
-    const [compuestoZone, setCompuestoZone] = useState<number[]>([]);
-    const [available, setAvailable] = useState<number[]>(allNumbers.map(n => n.num));
-    const [draggedNum, setDraggedNum] = useState<number | null>(null);
+    const [connections, setConnections] = useState<Record<number, string>>({});
     const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
 
-    const handleDragStart = (num: number) => setDraggedNum(num);
-
-    const removeFromAll = (num: number) => {
-        setAvailable(prev => prev.filter(n => n !== num));
-        setPrimoZone(prev => prev.filter(n => n !== num));
-        setCompuestoZone(prev => prev.filter(n => n !== num));
-    };
-
-    const handleDropPrimo = () => {
-        if (draggedNum === null) return;
-        removeFromAll(draggedNum);
-        setPrimoZone(prev => [...prev, draggedNum]);
-        setDraggedNum(null);
-        setResult(null);
-    };
-
-    const handleDropCompuesto = () => {
-        if (draggedNum === null) return;
-        removeFromAll(draggedNum);
-        setCompuestoZone(prev => [...prev, draggedNum]);
-        setDraggedNum(null);
-        setResult(null);
-    };
-
-    const handleDropBack = () => {
-        if (draggedNum === null) return;
-        setPrimoZone(prev => prev.filter(n => n !== draggedNum));
-        setCompuestoZone(prev => prev.filter(n => n !== draggedNum));
-        if (!available.includes(draggedNum)) {
-            setAvailable(prev => [...prev, draggedNum].sort((a, b) => a - b));
-        }
-        setDraggedNum(null);
+    const handleConnect = (num: number, target: string) => {
+        if (result === 'correct') return;
+        setConnections(prev => ({ ...prev, [num]: target }));
         setResult(null);
     };
 
     const handleCheck = async () => {
-        const primosCorrect = primoZone.every(n => allNumbers.find(a => a.num === n)?.type === 'primo');
-        const compuestosCorrect = compuestoZone.every(n => allNumbers.find(a => a.num === n)?.type === 'compuesto');
-        const allPlaced = available.length === 0;
-
-        const isCorrect = primosCorrect && compuestosCorrect && allPlaced;
+        const allCorrect = allNumbers.every(n => connections[n.num] === n.type);
+        const allAnswered = allNumbers.every(n => connections[n.num]);
+        const isCorrect = allCorrect && allAnswered;
         setResult(isCorrect ? 'correct' : 'incorrect');
         await submitExercise('numeros-primos-classify', isCorrect);
     };
 
     const handleReset = () => {
-        setPrimoZone([]);
-        setCompuestoZone([]);
-        setAvailable(allNumbers.map(n => n.num));
+        setConnections({});
         setResult(null);
     };
 
-    const NumberChip = ({ num }: { num: number }) => (
-        <div
-            draggable
-            onDragStart={() => handleDragStart(num)}
-            className="w-10 h-10 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center font-bold text-gray-800 dark:text-gray-200 cursor-grab active:cursor-grabbing select-none hover:shadow-md transition-shadow"
-        >
-            {num}
-        </div>
-    );
-
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Números Primos' }} pageId="numeros-primos-ejercicios">
+            {/* Title */}
+            <h2 className="text-2xl font-extrabold text-purple-700 dark:text-purple-400 mb-6 tracking-wide">EJERCICIOS</h2>
+
+            {/* Exercise 1 header */}
             <div className="flex items-center gap-2 mb-6">
-                <PlayBtn trackingId={VIDEO_TRACKING.INTRO} title="Ejercicios de Números Primos" size="md" />
-                <h2 className="text-2xl font-bold text-green-700 dark:text-green-300">EJERCICIOS</h2>
+                <PlayBtn trackingId={VIDEO_TRACKING.INTRO} title="Ejercicios de Números Primos" />
+                <span className="bg-purple-600 text-white font-extrabold text-xl px-3 py-1 rounded">1</span>
+                <p className="text-gray-800 dark:text-gray-200">
+                    Los números dados relacionan correctamente con primos y compuestos.
+                </p>
             </div>
 
-            <div className={`rounded-xl border-2 p-5 ${result === 'correct' ? 'border-green-400 bg-green-50 dark:bg-green-900/10' :
-                result === 'incorrect' ? 'border-red-400 bg-red-50 dark:bg-red-900/10' :
-                    'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50'
-                }`}>
-                <p className="font-bold text-gray-800 dark:text-gray-200 mb-2">
-                    Arrastra cada número a la categoría correcta:
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-4 italic">
-                    Número primo = solo divisible por 1 y sí mismo. Número compuesto = tiene más de 2 divisores.
-                </p>
-
-                {/* Available numbers */}
-                <div
-                    className="bg-gray-50 dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-3 min-h-[50px] flex flex-wrap gap-2 justify-center mb-4"
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={handleDropBack}
-                >
-                    {available.length > 0 ? (
-                        available.map(num => <NumberChip key={num} num={num} />)
-                    ) : (
-                        <p className="text-gray-400 text-sm">Todos los números clasificados</p>
-                    )}
+            {/* Connection exercise */}
+            <div className="flex items-start justify-center gap-12">
+                {/* Left: Numbers column */}
+                <div className="flex flex-col items-center gap-4">
+                    {allNumbers.map(({ num }) => (
+                        <div key={num} className="flex items-center gap-2">
+                            <span className="font-bold text-lg text-gray-800 dark:text-gray-200 w-8 text-right">{num}</span>
+                            <button
+                                onClick={() => {
+                                    // Toggle: if already set, cycle or allow re-pick
+                                    if (connections[num] === 'primo') {
+                                        handleConnect(num, 'compuesto');
+                                    } else if (connections[num] === 'compuesto') {
+                                        handleConnect(num, '');
+                                    } else {
+                                        handleConnect(num, 'primo');
+                                    }
+                                }}
+                                className={`w-6 h-6 rounded-sm transition-all ${result === 'correct' && connections[num]
+                                        ? connections[num] === allNumbers.find(n => n.num === num)?.type
+                                            ? 'bg-green-500'
+                                            : 'bg-red-500'
+                                        : result === 'incorrect' && connections[num]
+                                            ? connections[num] === allNumbers.find(n => n.num === num)?.type
+                                                ? 'bg-green-500'
+                                                : 'bg-red-500'
+                                            : connections[num] === 'primo'
+                                                ? 'bg-green-500'
+                                                : connections[num] === 'compuesto'
+                                                    ? 'bg-orange-500'
+                                                    : 'bg-purple-600 dark:bg-purple-500'
+                                    }`}
+                                disabled={result === 'correct'}
+                                title={`Conectar ${num} (click para cambiar)`}
+                            />
+                        </div>
+                    ))}
                 </div>
 
-                {/* Drop zones */}
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                    {/* Primo zone */}
-                    <div
-                        className={`rounded-xl p-3 min-h-[120px] border-2 ${result === 'correct' ? 'border-green-400 bg-green-50 dark:bg-green-900/20' :
-                            'border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/10'
-                            }`}
-                        onDragOver={(e) => e.preventDefault()}
-                        onDrop={handleDropPrimo}
-                    >
-                        <p className="text-center font-bold text-green-700 dark:text-green-300 mb-2 text-sm">🟢 PRIMO</p>
-                        <div className="flex flex-wrap gap-2 justify-center">
-                            {primoZone.map(num => <NumberChip key={num} num={num} />)}
-                        </div>
+                {/* Right: Categories */}
+                <div className="flex flex-col justify-center gap-6 pt-8">
+                    <div className="flex items-center gap-2">
+                        <div className="w-5 h-5 bg-green-500 rounded-sm" />
+                        <span className="text-gray-800 dark:text-gray-200 font-medium">primos</span>
                     </div>
-
-                    {/* Compuesto zone */}
-                    <div
-                        className={`rounded-xl p-3 min-h-[120px] border-2 ${result === 'correct' ? 'border-orange-400 bg-orange-50 dark:bg-orange-900/20' :
-                            'border-orange-300 dark:border-orange-700 bg-orange-50 dark:bg-orange-900/10'
-                            }`}
-                        onDragOver={(e) => e.preventDefault()}
-                        onDrop={handleDropCompuesto}
-                    >
-                        <p className="text-center font-bold text-orange-600 dark:text-orange-300 mb-2 text-sm">🟠 COMPUESTO</p>
-                        <div className="flex flex-wrap gap-2 justify-center">
-                            {compuestoZone.map(num => <NumberChip key={num} num={num} />)}
-                        </div>
+                    <div className="flex items-center gap-2">
+                        <div className="w-5 h-5 bg-orange-500 rounded-sm" />
+                        <span className="text-gray-800 dark:text-gray-200 font-medium">compuestos</span>
                     </div>
                 </div>
+            </div>
 
-                {/* ¿LISTO? */}
-                <div className="flex items-center gap-3 justify-center">
-                    {result !== 'correct' && (
-                        <button onClick={handleCheck}
-                            className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg text-sm">
-                            ¿LISTO?
-                        </button>
-                    )}
-                    {result === 'incorrect' && (
-                        <button onClick={handleReset}
-                            className="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-lg text-sm">
-                            Reiniciar
-                        </button>
-                    )}
-                </div>
-                {result === 'correct' && (
-                    <p className="text-center text-green-600 font-bold text-sm mt-2">
-                        ✅ ¡Excelente! Clasificaste correctamente todos los números.
-                    </p>
+            {/* Check / Status */}
+            <div className="flex items-center gap-3 justify-center mt-8">
+                {result !== 'correct' && (
+                    <button onClick={handleCheck}
+                        className="px-5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded text-sm">
+                        ¿LISTO?
+                    </button>
                 )}
                 {result === 'incorrect' && (
-                    <p className="text-center text-red-500 font-bold text-sm mt-2">
-                        ❌ Algunos números están en la categoría incorrecta. Verifica e intenta de nuevo.
-                    </p>
+                    <button onClick={handleReset}
+                        className="px-4 py-1.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded text-sm">
+                        Reiniciar
+                    </button>
                 )}
             </div>
+            {result === 'correct' && (
+                <p className="text-center text-green-600 dark:text-green-400 font-bold text-sm mt-3">
+                    ✅ ¡Excelente! Clasificaste correctamente todos los números.
+                </p>
+            )}
+            {result === 'incorrect' && (
+                <p className="text-center text-red-500 font-bold text-sm mt-3">
+                    ❌ Algunos números están mal clasificados. Verifica e intenta de nuevo.
+                </p>
+            )}
 
             <VideoModal
                 isOpen={videoModal.isOpen}

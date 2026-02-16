@@ -5,14 +5,30 @@ import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
+/**
+ * Frame 168 — Números Primos: Concepto Abstracto
+ * A section:
+ *   1. Division proofs: 7÷1=7 and 7÷7=1
+ *   2. Group visualizations: 1 GRUPO and 7 GRUPOS
+ *   3. BONO EXPLICADO
+ *   4. ¿Qué es un número primo? definition + examples
+ *   5. ¿Qué es un número compuesto? definition + example
+ *   6. PRÁCTICA: classify 3, 4, 12, 13
+ */
+
 interface Props { zoom?: number; }
 
 export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        A_DEFINITION: 'numeros-primos-a-definition',
-        A_EXAMPLES: 'numeros-primos-a-examples',
+        A_DIVISION: 'numeros-primos-a-division',
+        A_BONO: 'numeros-primos-a-bono',
+        A_PRIMO_DEF: 'numeros-primos-a-primo-def',
+        A_EJ_7: 'numeros-primos-a-ej-7',
+        A_EJ_8: 'numeros-primos-a-ej-8',
+        A_COMPUESTO_DEF: 'numeros-primos-a-compuesto-def',
+        A_COMPUESTO_EJ: 'numeros-primos-a-compuesto-ej',
     };
 
     const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
@@ -32,26 +48,27 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
         setVideoModal({ isOpen: true, title, videoId: undefined });
     };
 
-    const PlayBtn = ({ trackingId, title, size = 'md' }: { trackingId: string; title: string; size?: 'sm' | 'md' }) => {
+    const PlayBtn = ({ trackingId, title }: { trackingId: string; title: string }) => {
         const watched = isVideoWatched(trackingId);
-        const sz = size === 'sm' ? 'w-6 h-6' : 'w-8 h-8';
-        const iconSz = size === 'sm' ? 'w-3 h-3' : 'w-4 h-4';
         return (
             <button type="button" onClick={() => openVideo(trackingId, title)}
-                className={`${sz} flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
-                <svg className={iconSz} fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                className={`w-8 h-8 flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
             </button>
         );
     };
 
-    // Practice dropdowns
+    /* ---- small green square helper ---- */
+    const GreenSquare = () => (
+        <div className="w-7 h-7 bg-[#c5e384] border border-[#9ab85c] dark:bg-green-600 dark:border-green-500" />
+    );
+
+    // Practice dropdowns - numbers from Frame 168
     const numbers = [
-        { num: 2, answer: 'primo' },
+        { num: 3, answer: 'primo' },
         { num: 4, answer: 'compuesto' },
-        { num: 5, answer: 'primo' },
-        { num: 8, answer: 'compuesto' },
-        { num: 11, answer: 'primo' },
-        { num: 15, answer: 'compuesto' },
+        { num: 12, answer: 'compuesto' },
+        { num: 13, answer: 'primo' },
     ];
 
     const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -71,99 +88,182 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Números Primos' }} pageId="numeros-primos-concepto-abstracto">
             {/* A - ABSTRACTO Section */}
             <div className="relative ml-2 flex items-start">
-                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#be90de' }}>
+                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de] dark:bg-purple-700">
                     A
                 </div>
-                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white" style={{ borderColor: '#be90de' }}>
+                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-white dark:bg-gray-800 border-[#be90de] dark:border-purple-700">
 
-                    <div className="mt-4 space-y-6">
-                        {/* Definition */}
-                        <div className="flex items-center gap-2">
-                            <PlayBtn trackingId={VIDEO_TRACKING.A_DEFINITION} title="¿Qué es un número primo?" />
-                            <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-                                Definición
-                            </p>
+                    <div className="mt-2 space-y-6">
+
+                        {/* 1. Division proofs text + play */}
+                        <div>
+                            <div className="flex items-start gap-2">
+                                <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
+                                    El número <span className="font-bold">7</span> tiene solo dos divisores <span className="font-bold text-lg">1</span> y <span className="font-bold text-lg">7</span>, pero no hay más divisores para que siempre forman partes iguales
+                                </p>
+                                <PlayBtn trackingId={VIDEO_TRACKING.A_DIVISION} title="Divisores del 7" />
+                            </div>
                         </div>
 
-                        <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-xl border-2 border-green-300 dark:border-green-700 p-4">
-                            <h3 className="font-bold text-green-700 dark:text-green-300 mb-2">Número Primo</h3>
-                            <p className="text-gray-800 dark:text-gray-200 text-sm leading-relaxed">
-                                Un número <span className="font-bold text-green-600">primo</span> es aquel que solo tiene exactamente{' '}
-                                <span className="font-bold">dos divisores</span>: el <span className="font-bold">1</span> y{' '}
-                                <span className="font-bold">él mismo</span>.
-                            </p>
-                        </div>
-
-                        <div className="bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-xl border-2 border-orange-300 dark:border-orange-700 p-4">
-                            <h3 className="font-bold text-orange-600 dark:text-orange-300 mb-2">Número Compuesto</h3>
-                            <p className="text-gray-800 dark:text-gray-200 text-sm leading-relaxed">
-                                Un número <span className="font-bold text-orange-600">compuesto</span> es aquel que tiene{' '}
-                                <span className="font-bold">más de dos divisores</span>.
-                            </p>
-                        </div>
-
-                        {/* Examples with play */}
-                        <div className="flex items-center gap-2">
-                            <PlayBtn trackingId={VIDEO_TRACKING.A_EXAMPLES} title="Ejemplos" size="sm" />
-                            <p className="font-semibold text-gray-800 dark:text-gray-100 text-sm">Ejemplos</p>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-3">
-                            {/* Primos */}
-                            <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3 border border-green-200 dark:border-green-800">
-                                <p className="font-bold text-green-700 dark:text-green-300 text-sm mb-2">Primos</p>
-                                <div className="flex flex-wrap gap-2">
-                                    {[2, 3, 5, 7, 11, 13].map(n => (
-                                        <span key={n} className="bg-green-200 dark:bg-green-800 px-2 py-0.5 rounded text-sm font-bold text-green-800 dark:text-green-200">
-                                            {n}
-                                        </span>
-                                    ))}
+                        {/* 2. Two long-division layouts side by side */}
+                        <div className="flex justify-center items-start gap-12">
+                            {/* 7 ÷ 1 = 7 */}
+                            <div className="flex items-start">
+                                <div className="flex flex-col items-end mr-1">
+                                    <span className="font-bold text-2xl text-gray-800 dark:text-gray-200">7</span>
+                                    <span className="font-bold text-2xl text-gray-800 dark:text-gray-200">– 7</span>
+                                    <div className="w-full border-t-2 border-gray-800 dark:border-gray-300 mt-0.5" />
+                                    <span className="font-bold text-2xl text-gray-800 dark:text-gray-200">0</span>
+                                </div>
+                                <div className="flex flex-col items-start border-l-2 border-gray-800 dark:border-gray-300 pl-2">
+                                    <span className="font-bold text-2xl text-gray-800 dark:text-gray-200">1</span>
+                                    <div className="border-t-2 border-gray-800 dark:border-gray-300 w-8 mt-0.5" />
+                                    <span className="font-bold text-2xl text-gray-800 dark:text-gray-200">7</span>
                                 </div>
                             </div>
-                            {/* Compuestos */}
-                            <div className="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-3 border border-orange-200 dark:border-orange-800">
-                                <p className="font-bold text-orange-600 dark:text-orange-300 text-sm mb-2">Compuestos</p>
-                                <div className="flex flex-wrap gap-2">
-                                    {[4, 6, 8, 9, 10, 12].map(n => (
-                                        <span key={n} className="bg-orange-200 dark:bg-orange-800 px-2 py-0.5 rounded text-sm font-bold text-orange-800 dark:text-orange-200">
-                                            {n}
-                                        </span>
-                                    ))}
+
+                            {/* 7 ÷ 7 = 1 */}
+                            <div className="flex items-start">
+                                <div className="flex flex-col items-end mr-1">
+                                    <span className="font-bold text-2xl text-gray-800 dark:text-gray-200">7</span>
+                                    <span className="font-bold text-2xl text-gray-800 dark:text-gray-200">– 7</span>
+                                    <div className="w-full border-t-2 border-gray-800 dark:border-gray-300 mt-0.5" />
+                                    <span className="font-bold text-2xl text-gray-800 dark:text-gray-200">0</span>
+                                </div>
+                                <div className="flex flex-col items-start border-l-2 border-gray-800 dark:border-gray-300 pl-2">
+                                    <span className="font-bold text-2xl text-purple-600 dark:text-purple-400">7</span>
+                                    <div className="border-t-2 border-gray-800 dark:border-gray-300 w-8 mt-0.5" />
+                                    <span className="font-bold text-2xl text-gray-800 dark:text-gray-200">7</span>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Note about 1 */}
-                        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-300 dark:border-yellow-700 rounded-lg p-3">
-                            <p className="text-sm text-gray-800 dark:text-gray-200">
-                                <span className="font-bold">⚠️ Nota:</span> El número <span className="font-bold">1</span> no es primo ni compuesto.
+                        {/* 3. Group visualizations: 1 GRUPO and 7 GRUPOS */}
+                        <div className="flex justify-center items-end gap-12">
+                            {/* 1 GRUPO */}
+                            <div className="flex flex-col items-center gap-1">
+                                <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-grid grid-cols-2 gap-0.5">
+                                    <GreenSquare /><GreenSquare />
+                                    <GreenSquare /><GreenSquare />
+                                    <GreenSquare /><GreenSquare />
+                                    <GreenSquare />
+                                </div>
+                                <div className="w-4 h-4 bg-green-500 rounded text-white flex items-center justify-center text-[10px] font-bold">✓</div>
+                                <span className="text-sm font-bold text-gray-700 dark:text-gray-300">1 GRUPO</span>
+                            </div>
+
+                            {/* 7 GRUPOS */}
+                            <div className="flex flex-col items-center gap-1">
+                                <div className="flex gap-0.5">
+                                    {[1, 2, 3, 4].map(k => (
+                                        <div key={k} className="border-2 border-gray-300 dark:border-gray-500 p-0.5 inline-flex">
+                                            <GreenSquare />
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="flex gap-0.5">
+                                    {[5, 6, 7].map(k => (
+                                        <div key={k} className="border-2 border-gray-300 dark:border-gray-500 p-0.5 inline-flex">
+                                            <GreenSquare />
+                                        </div>
+                                    ))}
+                                    <div className="w-4 h-4 bg-green-500 rounded text-white flex items-center justify-center text-[10px] font-bold self-center">✓</div>
+                                </div>
+                                <span className="text-sm font-bold text-gray-700 dark:text-gray-300">7 GRUPOS</span>
+                            </div>
+                        </div>
+
+                        {/* 4. BONO EXPLICADO */}
+                        <div className="flex items-center justify-center gap-2">
+                            <PlayBtn trackingId={VIDEO_TRACKING.A_BONO} title="Bono Explicado" />
+                            <span className="font-extrabold text-gray-800 dark:text-gray-200 tracking-wide">BONO EXPLICADO</span>
+                        </div>
+
+                        {/* 5. ¿Qué es un número primo? */}
+                        <div>
+                            <div className="flex items-center gap-2 mb-2">
+                                <PlayBtn trackingId={VIDEO_TRACKING.A_PRIMO_DEF} title="¿Qué es un número primo?" />
+                                <span className="bg-purple-600 text-white font-bold px-3 py-1 rounded text-sm">¿Qué es un número primo?</span>
+                            </div>
+                            <p className="text-gray-800 dark:text-gray-200 leading-relaxed ml-10">
+                                Un <span className="font-bold text-green-600 dark:text-green-400">número primo</span> es un número natural mayor que 1 que tiene solo dos
+                                divisores: <span className="font-bold text-lg">1</span> y <span className="font-bold text-lg">sí mismo</span>.
                             </p>
                         </div>
 
-                        {/* PRÁCTICA */}
-                        <div className="bg-white dark:bg-gray-800 rounded-xl border-2 border-purple-300 dark:border-purple-700 p-4">
-                            <h4 className="bg-purple-600 text-white font-bold px-3 py-1 rounded inline-block text-sm mb-4">PRÁCTICA</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Clasifica cada número como primo o compuesto:</p>
+                        {/* 6. Ejemplo */}
+                        <div className="ml-10">
+                            <span className="bg-purple-600 text-white font-bold px-3 py-1 rounded text-sm mb-3 inline-block">Ejemplo:</span>
+                            <div className="space-y-2 mt-2">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-3 h-3 bg-gray-800 dark:bg-gray-300 rounded-sm flex-shrink-0" />
+                                    <p className="text-gray-800 dark:text-gray-200">
+                                        El número 7 es <span className="font-bold text-green-600 dark:text-green-400">primo</span> porque solo tiene dos divisores <span className="font-bold">1</span> y <span className="font-bold">7</span>.
+                                    </p>
+                                    <PlayBtn trackingId={VIDEO_TRACKING.A_EJ_7} title="Ejemplo: 7 es primo" />
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-3 h-3 bg-gray-800 dark:bg-gray-300 rounded-sm flex-shrink-0" />
+                                    <p className="text-gray-800 dark:text-gray-200">
+                                        El número 11 es <span className="font-bold text-green-600 dark:text-green-400">primo</span> porque solo tiene dos divisores <span className="font-bold">1</span> y <span className="font-bold">11</span>.
+                                    </p>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-3 h-3 bg-gray-800 dark:bg-gray-300 rounded-sm flex-shrink-0" />
+                                    <p className="text-gray-800 dark:text-gray-200">
+                                        El número 8 NO es <span className="font-bold text-green-600 dark:text-green-400">primo</span> porque tiene cuatro divisores <span className="font-bold">1, 2, 4</span> y <span className="font-bold">8</span>.
+                                    </p>
+                                    <PlayBtn trackingId={VIDEO_TRACKING.A_EJ_8} title="Ejemplo: 8 no es primo" />
+                                </div>
+                            </div>
+                        </div>
 
-                            <div className="grid grid-cols-2 gap-3">
+                        {/* 7. ¿Qué es un número compuesto? */}
+                        <div>
+                            <div className="flex items-center gap-2 mb-2">
+                                <PlayBtn trackingId={VIDEO_TRACKING.A_COMPUESTO_DEF} title="¿Qué es un número compuesto?" />
+                                <span className="bg-purple-600 text-white font-bold px-3 py-1 rounded text-sm">¿Qué es un número compuesto?</span>
+                            </div>
+                            <p className="text-gray-800 dark:text-gray-200 leading-relaxed ml-10">
+                                Un número natural es un <span className="font-bold text-orange-600 dark:text-orange-400">número compuesto</span> cuando no es primo.
+                            </p>
+                        </div>
+
+                        {/* 8. Ejemplo compuesto */}
+                        <div className="ml-10 flex items-start gap-3">
+                            <span className="bg-purple-600 text-white font-bold px-3 py-1 rounded text-sm flex-shrink-0">Ejemplo:</span>
+                            <div className="flex items-center gap-2">
+                                <p className="text-gray-800 dark:text-gray-200">
+                                    El número 8 es <span className="font-bold text-orange-600 dark:text-orange-400">compuesto</span> porque tiene cuatro divisores 1, 2, 4 y 8.
+                                </p>
+                                <PlayBtn trackingId={VIDEO_TRACKING.A_COMPUESTO_EJ} title="Ejemplo: 8 es compuesto" />
+                            </div>
+                        </div>
+
+                        {/* 9. PRÁCTICA */}
+                        <div>
+                            <span className="bg-purple-600 text-white font-bold px-3 py-1 rounded text-sm inline-block mb-4">PRÁCTICA</span>
+
+                            <div className="grid grid-cols-2 gap-x-6 gap-y-3">
                                 {numbers.map(({ num }) => (
                                     <div key={num} className="flex items-center gap-2">
-                                        <span className="bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded font-bold text-lg min-w-[40px] text-center text-gray-800 dark:text-gray-200">
-                                            {num}
+                                        <div className="w-3 h-3 bg-gray-800 dark:bg-gray-300 rounded-sm flex-shrink-0" />
+                                        <span className="text-gray-800 dark:text-gray-200">
+                                            El número {num} es
                                         </span>
                                         <select
                                             value={answers[num] || ''}
                                             onChange={(e) => { setAnswers(prev => ({ ...prev, [num]: e.target.value })); setListoResult(null); }}
-                                            className={`border-2 rounded px-2 py-1 text-xs font-bold flex-1 ${listoResult === 'correct' ? 'border-green-500 bg-green-50' :
-                                                listoResult === 'incorrect' && answers[num] !== numbers.find(n => n.num === num)?.answer
-                                                    ? 'border-red-500 bg-red-50' :
-                                                    'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
+                                            className={`border-2 rounded px-2 py-1 text-sm font-semibold min-w-[120px] ${listoResult === 'correct' ? 'border-green-500 bg-green-50 dark:bg-green-900/30' :
+                                                    listoResult === 'incorrect' && answers[num] !== numbers.find(n => n.num === num)?.answer
+                                                        ? 'border-red-500 bg-red-50 dark:bg-red-900/30' :
+                                                        'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
                                                 } text-gray-800 dark:text-gray-200`}
                                             disabled={listoResult === 'correct'}
                                         >
                                             <option value="">...</option>
-                                            <option value="primo">Primo</option>
-                                            <option value="compuesto">Compuesto</option>
+                                            <option value="primo">primo</option>
+                                            <option value="compuesto">compuesto</option>
                                         </select>
                                     </div>
                                 ))}
@@ -172,19 +272,19 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                             <div className="flex items-center gap-3 justify-center mt-4">
                                 {listoResult !== 'correct' && (
                                     <button onClick={handleListo}
-                                        className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg text-sm">
+                                        className="px-5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded text-sm">
                                         ¿LISTO?
                                     </button>
                                 )}
                                 {listoResult === 'incorrect' && (
                                     <button onClick={handleReset}
-                                        className="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-lg text-sm">
+                                        className="px-4 py-1.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded text-sm">
                                         Reiniciar
                                     </button>
                                 )}
                             </div>
-                            {listoResult === 'correct' && <p className="text-center text-green-600 font-bold text-sm mt-2">✅ ¡Correcto!</p>}
-                            {listoResult === 'incorrect' && <p className="text-center text-red-500 font-bold text-sm mt-2">❌ Revisa tus respuestas. Recuerda: primo = solo 2 divisores (1 y él mismo).</p>}
+                            {listoResult === 'correct' && <p className="text-center text-green-600 dark:text-green-400 font-bold text-sm mt-2">✅ ¡Correcto!</p>}
+                            {listoResult === 'incorrect' && <p className="text-center text-red-500 font-bold text-sm mt-2">❌ Revisa tus respuestas.</p>}
                         </div>
                     </div>
                 </div>

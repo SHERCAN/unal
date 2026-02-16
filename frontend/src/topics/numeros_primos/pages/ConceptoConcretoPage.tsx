@@ -1,28 +1,32 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 /**
- * Frame 167 — Números Primos
- * C section: 7 tennis players, 7 balls, grouping logic
- *   - Images: tenista1.png ... tenista7.png
- *   - Bag: bolsapelotas.png
- *   - Logic: 7 is prime (only groups of 1 or 7)
- * P section: 9 squares, grouping logic
- *   - Logic: 9 is composite (groups of 1, 3, 9)
+ * Números Primos: Concepto Concreto y Procesual
+ * C section: Interactive drag-and-drop tennis ball distribution (Frame 208)
+ * P section: 7 squares, grouping attempts (fail 2,3,4 groups; success 1 or 7 groups)
  */
 
 interface Props { zoom?: number; }
+
+interface Ball {
+    id: number;
+    location: 'bag' | number; // 'bag' or tenista index (0-based)
+}
 
 export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        C_TENNIS: 'numeros-primos-c-tennis',
-        P_SQUARE: 'numeros-primos-p-square',
+        C_INTRO: 'numeros-primos-c-intro',
+        P_INTRO: 'numeros-primos-p-intro',
+        P_FAIL: 'numeros-primos-p-fail',
+        P_SUCCESS: 'numeros-primos-p-success',
+        P_CONCLUSION: 'numeros-primos-p-conclusion',
     };
 
     const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
@@ -42,104 +46,354 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         setVideoModal({ isOpen: true, title, videoId: undefined });
     };
 
-    const PlayBtn = ({ trackingId, title, size = 'md' }: { trackingId: string; title: string; size?: 'sm' | 'md' }) => {
+    const PlayBtn = ({ trackingId, title }: { trackingId: string; title: string }) => {
         const watched = isVideoWatched(trackingId);
-        const sz = size === 'sm' ? 'w-10 h-10' : 'w-16 h-16'; // Larger play buttons as per frames
-        const iconSz = size === 'sm' ? 'w-5 h-5' : 'w-8 h-8';
         return (
             <button type="button" onClick={() => openVideo(trackingId, title)}
-                className={`${sz} flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
-                <svg className={iconSz} fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                className={`w-10 h-10 flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
             </button>
         );
     };
 
-    // Interactive classification
-    const [selectedGroups7, setSelectedGroups7] = useState('');
-    const [selectedGroups9, setSelectedGroups9] = useState('');
-    const [listoResult, setListoResult] = useState<'correct' | 'incorrect' | null>(null);
+    /* ---- small green square helper (P section) ---- */
+    const GreenSquare = () => (
+        <div className="w-8 h-8 bg-[#c5e384] border border-[#9ab85c] dark:bg-green-600 dark:border-green-500" />
+    );
 
-    const handleListo = () => {
-        if (selectedGroups7 === 'primo' && selectedGroups9 === 'compuesto') {
-            setListoResult('correct');
-        } else {
-            setListoResult('incorrect');
+    // ========================
+    // C SECTION STATE
+    // ========================
+    const TOTAL_BALLS = 7;
+    const MAX_TENISTAS = 7;
+
+    const [balls, setBalls] = useState<Ball[]>(
+        Array.from({ length: TOTAL_BALLS }, (_, i) => ({ id: i, location: 'bag' as const }))
+    );
+    const [tenistaCount, setTenistaCount] = useState(1);
+    const [phase1Complete, setPhase1Complete] = useState(false);
+    const [draggedBallId, setDraggedBallId] = useState<number | null>(null);
+    const [showCelebration, setShowCelebration] = useState(false);
+
+    // Balls in bag
+    const ballsInBag = balls.filter(b => b.location === 'bag');
+    // Balls for a specific tenista (0-based index)
+    const getBallsForTenista = useCallback((tIdx: number) => {
+        return balls.filter(b => b.location === tIdx);
+    }, [balls]);
+
+    // Check if all balls are with tenista 0 (phase 1 completion)
+    const allBallsInTenista0 = balls.every(b => b.location === 0);
+
+    // Check equality: every tenista must have the same count, all balls placed
+    const tenistaIndices = Array.from({ length: tenistaCount }, (_, i) => i);
+    const ballCounts = tenistaIndices.map(i => getBallsForTenista(i).length);
+    const placedBalls = balls.filter(b => b.location !== 'bag').length;
+    const allPlaced = placedBalls === TOTAL_BALLS;
+    const nonZeroCounts = ballCounts.filter(c => c > 0);
+    const areEqual = allPlaced && nonZeroCounts.length > 0 && nonZeroCounts.every(c => c === nonZeroCounts[0]) && nonZeroCounts.length === tenistaCount;
+
+    // --- Phase 1 check ---
+    React.useEffect(() => {
+        if (!phase1Complete && allBallsInTenista0) {
+            setShowCelebration(true);
+            setTimeout(() => {
+                setPhase1Complete(true);
+                setShowCelebration(false);
+            }, 2000);
         }
+    }, [allBallsInTenista0, phase1Complete]);
+
+    // ========================
+    // DRAG & DROP HANDLERS
+    // ========================
+    const handleDragStart = (e: React.DragEvent, ballId: number) => {
+        setDraggedBallId(ballId);
+        e.dataTransfer.effectAllowed = 'move';
+        const el = e.currentTarget as HTMLElement;
+        e.dataTransfer.setDragImage(el, 16, 16);
+    };
+
+    const handleDragOver = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+    };
+
+    const handleDropOnTenista = (e: React.DragEvent, tIdx: number) => {
+        e.preventDefault();
+        if (draggedBallId === null) return;
+        setBalls(prev => prev.map(b => b.id === draggedBallId ? { ...b, location: tIdx } : b));
+        setDraggedBallId(null);
+    };
+
+    const handleDropOnBag = (e: React.DragEvent) => {
+        e.preventDefault();
+        if (draggedBallId === null) return;
+        setBalls(prev => prev.map(b => b.id === draggedBallId ? { ...b, location: 'bag' as const } : b));
+        setDraggedBallId(null);
+    };
+
+    // Touch support (click-to-select, click-to-place)
+    const [touchBallId, setTouchBallId] = useState<number | null>(null);
+
+    const handleTouchSelectBall = (ballId: number) => {
+        setTouchBallId(prev => prev === ballId ? null : ballId);
+    };
+
+    const handleTouchDropTarget = (target: 'bag' | number) => {
+        if (touchBallId === null) return;
+        setBalls(prev => prev.map(b => b.id === touchBallId ? { ...b, location: target } : b));
+        setTouchBallId(null);
+    };
+
+    const addTenista = () => {
+        if (tenistaCount < MAX_TENISTAS) {
+            setTenistaCount(prev => prev + 1);
+        }
+    };
+
+    // Render a draggable tennis ball inline (not as component to avoid re-mount killing drag state)
+    const renderBall = (ball: Ball, size: 'sm' | 'md' = 'md') => {
+        const isSelected = touchBallId === ball.id;
+        const sizeClass = size === 'sm' ? 'w-9 h-9' : 'w-10 h-10';
+        return (
+            <img
+                key={ball.id}
+                src="/numeros_primos/pelotatenis.png"
+                alt={`Pelota ${ball.id + 1}`}
+                draggable
+                onDragStart={(e) => handleDragStart(e, ball.id)}
+                onClick={(e) => { e.stopPropagation(); handleTouchSelectBall(ball.id); }}
+                className={`${sizeClass} object-contain cursor-grab active:cursor-grabbing hover:scale-125 transition-transform select-none relative z-20 ${isSelected ? 'ring-3 ring-purple-500 rounded-full scale-125' : ''}`}
+                style={{ touchAction: 'none' }}
+            />
+        );
     };
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Números Primos' }} pageId="numeros-primos-concepto-concreto">
+            <style>{`
+                @keyframes celebrate {
+                    0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+                    25% { transform: scale(1.2) rotate(5deg); }
+                    50% { transform: scale(1.1) rotate(-5deg); }
+                    75% { transform: scale(1.15) rotate(3deg); }
+                }
+                @keyframes confetti {
+                    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+                    100% { transform: translateY(100px) rotate(720deg); opacity: 0; }
+                }
+                .celebrate-animation { animation: celebrate 0.6s ease-in-out; }
+                .confetti-particle {
+                    position: absolute;
+                    width: 10px; height: 10px;
+                    animation: confetti 1.5s ease-out forwards;
+                }
+            `}</style>
+
             {/* ============ C - CONCRETO ============ */}
             <div className="relative ml-2 flex items-start mb-8">
-                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#4ade80' }}>
+                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#4ade80] dark:bg-green-700">
                     C
                 </div>
-                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-white" style={{ borderColor: '#4ade80' }}>
+                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-white dark:bg-gray-800 border-[#4ade80] dark:border-green-700">
 
-                    <div className="mt-4 flex flex-col gap-6">
-                        {/* Top: Plan button + 7 Tennis Players + Bag */}
-                        <div className="flex items-start justify-between relative">
-                            <div className="absolute top-0 left-0">
-                                <PlayBtn trackingId={VIDEO_TRACKING.C_TENNIS} title="Números Primos - Concepto Concreto" />
-                            </div>
+                    {/* Play button top-left */}
+                    <div className="mb-4">
+                        <PlayBtn trackingId={VIDEO_TRACKING.C_INTRO} title="Números Primos - Concepto Concreto" />
+                    </div>
 
-                            {/* 7 Tennis Players Row */}
-                            <div className="flex-1 flex flex-col items-center pt-2">
-                                <div className="flex justify-center items-end gap-2 mb-4">
-                                    {[1, 2, 3, 4, 5, 6, 7].map(i => (
-                                        <div key={i} className="flex flex-col items-center gap-2">
-                                            <img
-                                                src={`/numeros_primos/tenista${i}.png`}
-                                                alt={`Tenista ${i}`}
-                                                className="h-32 w-auto object-contain"
-                                                draggable={false}
-                                            />
-                                            <div className="w-10 h-10 border-2 border-gray-400 rounded flex items-center justify-center bg-white">
-                                                <span className="text-2xl">🎾</span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
+                    {/* === TOP ROW: Tenistas + "+" button + ¿IGUALES? === */}
+                    <div className="flex items-start gap-3 mb-6">
 
-                                {/* Grouping Visualization Box */}
-                                <div className="flex items-center gap-8 w-full max-w-2xl border-2 border-gray-300 rounded-xl p-4 bg-white relative">
-                                    {/* Grouping examples */}
-                                    <div className="flex items-center gap-4">
-                                        <div className="flex flex-col items-center">
-                                            <div className="w-6 h-6 bg-green-500 rounded text-white flex items-center justify-center font-bold mb-1">✓</div>
-                                            <img src="/numeros_primos/tenista1.png" className="h-12 w-auto object-contain" alt="1" />
-                                            <div className="grid grid-cols-2 gap-0.5 mt-1">
-                                                {[1, 2, 3, 4, 5, 6, 7].map(j => <div key={j} className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>)}
-                                            </div>
-                                        </div>
-                                        <div className="h-16 w-px bg-gray-300"></div>
-                                        {/* More grouping representations could go here */}
-                                        <div className="flex gap-2">
-                                            {[1, 2, 3, 4, 5, 6, 7].map(j => (
-                                                <div key={j} className="flex flex-col items-center">
-                                                    <div className="w-4 h-4 bg-green-100 border border-green-500 rounded-full flex items-center justify-center text-[10px] text-green-700 font-bold mb-1">
-                                                        {j}
-                                                    </div>
-                                                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        {/* Tenistas with drop boxes */}
+                        {tenistaIndices.map(tIdx => {
+                            const tBalls = getBallsForTenista(tIdx);
+                            return (
+                                <div key={tIdx} className="flex flex-col items-center" style={{ minWidth: '80px' }}>
+                                    {/* Tenista image */}
+                                    <img
+                                        src={`/numeros_primos/tenista${tIdx + 1}.png`}
+                                        alt={`Tenista ${tIdx + 1}`}
+                                        className="h-28 w-auto object-contain mb-1"
+                                        draggable={false}
+                                    />
+
+                                    {/* Drop box below tenista — fixed size, balls positioned absolutely */}
+                                    <div
+                                        onDragOver={handleDragOver}
+                                        onDrop={(e) => handleDropOnTenista(e, tIdx)}
+                                        onClick={() => { if (touchBallId !== null) handleTouchDropTarget(tIdx); }}
+                                        className={`relative w-20 h-[80px] border-2 rounded overflow-hidden transition-colors ${touchBallId !== null
+                                            ? 'border-purple-400 bg-purple-50 dark:bg-purple-900/20'
+                                            : 'border-gray-800 dark:border-gray-400 bg-white dark:bg-gray-700'
+                                            }`}
+                                    >
+                                        {tBalls.map((ball, idx) => {
+                                            const dropPositions = [
+                                                { top: '8%', left: '10%', rotate: '-8deg' },
+                                                { top: '5%', left: '50%', rotate: '12deg' },
+                                                { top: '40%', left: '8%', rotate: '5deg' },
+                                                { top: '38%', left: '48%', rotate: '-15deg' },
+                                                { top: '22%', left: '30%', rotate: '10deg' },
+                                                { top: '55%', left: '25%', rotate: '-5deg' },
+                                                { top: '52%', left: '55%', rotate: '18deg' },
+                                            ];
+                                            const pos = dropPositions[idx % dropPositions.length];
+                                            return (
+                                                <div
+                                                    key={ball.id}
+                                                    className="absolute"
+                                                    style={{ top: pos.top, left: pos.left, transform: `rotate(${pos.rotate})` }}
+                                                >
+                                                    {renderBall(ball, 'sm')}
                                                 </div>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <div className="absolute right-[-80px] bottom-[-10px]">
-                                        <img src="/numeros_primos/bolsapelotas.png" alt="Bolsa" className="w-24 h-auto object-contain transform rotate-[-10deg]" />
+                                            );
+                                        })}
                                     </div>
                                 </div>
+                            );
+                        })}
+
+                        {/* "+" button + ¿IGUALES? column */}
+                        <div className="flex flex-col items-center gap-3 pt-28">
+                            {/* Purple square "+" button */}
+                            {tenistaCount < MAX_TENISTAS && (
+                                <button
+                                    onClick={addTenista}
+                                    className="w-10 h-10 bg-purple-600 hover:bg-purple-700 text-white rounded flex items-center justify-center text-2xl font-bold shadow-md transition-all hover:scale-110"
+                                    title="Agregar tenista"
+                                >
+                                    +
+                                </button>
+                            )}
+
+                            {/* ¿IGUALES? badge */}
+                            <div className="bg-green-600 dark:bg-green-700 text-white font-bold px-3 py-1.5 rounded text-sm whitespace-nowrap">
+                                ¿IGUALES?
                             </div>
 
-                            <div className="w-32">
-                                {/* Spacer for right alignment if needed */}
-                                <div className="bg-green-600 text-white font-bold p-2 text-center rounded text-sm">
-                                    ¿IGUALES?
+                            {/* Equality indicator */}
+                            {tenistaCount > 1 && allPlaced && (
+                                areEqual ? (
+                                    <div className="flex flex-col items-center gap-1">
+                                        <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                                            <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        <span className="text-green-600 dark:text-green-400 font-bold text-xs text-center leading-tight">
+                                            SÍ SON<br />IGUALES
+                                        </span>
+                                    </div>
+                                ) : (
+                                    <img
+                                        src="/numeros_primos/nosoniguales.png"
+                                        alt="No son iguales"
+                                        className="w-24 h-auto object-contain"
+                                        draggable={false}
+                                    />
+                                )
+                            )}
+                        </div>
+                    </div>
+
+                    {/* === CELEBRATION (Phase 1) === */}
+                    {showCelebration && (
+                        <div className="relative flex items-center justify-center gap-2 py-3">
+                            <span className="text-green-600 font-black text-2xl celebrate-animation">
+                                ✓ CORRECTO
+                            </span>
+                            {[...Array(8)].map((_, i) => (
+                                <div
+                                    key={i}
+                                    className="confetti-particle"
+                                    style={{
+                                        backgroundColor: ['#10b981', '#f59e0b', '#8b5cf6', '#ec4899'][i % 4],
+                                        left: `${30 + i * 15}px`,
+                                        animationDelay: `${i * 0.1}s`
+                                    }}
+                                />
+                            ))}
+                            <div className="w-8 h-8 bg-green-500 rounded text-white flex items-center justify-center font-bold text-lg">
+                                ✓
+                            </div>
+                        </div>
+                    )}
+
+
+
+                    {/* === BOTTOM: Grouping visualization area + Bag === */}
+                    <div className="flex items-end gap-4">
+                        {/* Large grouping outline box */}
+                        <div className="flex-1 min-h-[120px] border-2 border-gray-800 dark:border-gray-400 rounded p-3 flex flex-col">
+                            {/* Tenista1 OK image after phase 1 */}
+                            {phase1Complete && (
+                                <img
+                                    src="/numeros_primos/tenista1ok.png"
+                                    alt="Tenista 1 completo"
+                                    className="h-full max-h-[110px] w-auto object-contain"
+                                    draggable={false}
+                                />
+                            )}
+                            {/* Show grouping visualization when tenistas > 1 and all placed */}
+                            {tenistaCount > 1 && allPlaced && (
+                                <div className="flex items-center gap-2 flex-wrap">
+                                    {tenistaIndices.map(tIdx => {
+                                        const count = getBallsForTenista(tIdx).length;
+                                        return (
+                                            <div key={tIdx} className="border border-gray-400 dark:border-gray-500 p-1.5 flex gap-1 flex-wrap" style={{ minWidth: '30px', minHeight: '30px' }}>
+                                                {Array.from({ length: count }, (_, k) => (
+                                                    <img key={k} src="/numeros_primos/pelotatenis.png" alt="" className="w-6 h-6 object-contain" />
+                                                ))}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
-                                <div className="flex justify-center mt-2">
-                                    <div className="w-8 h-8 bg-green-500 rounded text-white flex items-center justify-center font-bold text-xl">✓</div>
-                                </div>
+                            )}
+                        </div>
+
+                        {/* Bag of balls (bottom-right) */}
+                        <div
+                            className="flex-shrink-0 flex flex-col items-center"
+                            onDragOver={handleDragOver}
+                            onDrop={handleDropOnBag}
+                            onClick={() => { if (touchBallId !== null) handleTouchDropTarget('bag'); }}
+                        >
+                            <div className="relative">
+                                <img
+                                    src="/numeros_primos/bolsapelotas.png"
+                                    alt="Bolsa de pelotas"
+                                    className="w-28 h-auto object-contain pointer-events-none"
+                                    draggable={false}
+                                />
+                                {/* Balls scattered inside the bag */}
+                                {ballsInBag.length > 0 && (
+                                    <div className="absolute inset-0 overflow-hidden z-10" style={{ top: '25%' }}>
+                                        {ballsInBag.map(ball => {
+                                            // Pre-computed random-looking positions per ball id (deterministic)
+                                            const positions = [
+                                                { top: '15%', left: '22%', rotate: '-12deg' },
+                                                { top: '35%', left: '50%', rotate: '18deg' },
+                                                { top: '10%', left: '45%', rotate: '-5deg' },
+                                                { top: '45%', left: '20%', rotate: '10deg' },
+                                                { top: '25%', left: '35%', rotate: '-20deg' },
+                                                { top: '50%', left: '42%', rotate: '7deg' },
+                                                { top: '30%', left: '12%', rotate: '15deg' },
+                                            ];
+                                            const pos = positions[ball.id % positions.length];
+                                            return (
+                                                <div
+                                                    key={ball.id}
+                                                    className="absolute"
+                                                    style={{ top: pos.top, left: pos.left, transform: `rotate(${pos.rotate})` }}
+                                                >
+                                                    {renderBall(ball, 'sm')}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -148,78 +402,129 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
             {/* ============ P - PROCESUAL ============ */}
             <div className="relative ml-2 flex items-start">
-                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#60a5fa' }}>
+                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#60a5fa] dark:bg-blue-700">
                     P
                 </div>
-                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white" style={{ borderColor: '#60a5fa' }}>
+                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white dark:bg-gray-800 border-[#60a5fa] dark:border-blue-700">
 
-                    <div className="mt-4 space-y-6">
-                        <p className="font-semibold text-gray-800 dark:text-gray-100 text-lg">
-                            Representa los repartos con 7 cuadrados. Intenta agruparlos en 2 grupos, 3 grupos o 4 grupos iguales.
-                        </p>
+                    <div className="mt-2 space-y-6">
+                        {/* Intro text + play */}
+                        <div>
+                            <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
+                                Representa los repartos con <span className="font-bold">7</span> cuadrados. Intenta agruparlos en <span className="font-bold">2 grupos, 3 grupos o 4 grupos</span> iguales.
+                            </p>
+                            <div className="mt-2">
+                                <PlayBtn trackingId={VIDEO_TRACKING.P_INTRO} title="Concepto Procesual" />
+                            </div>
+                        </div>
 
-                        <div className="flex items-start gap-4">
-                            <PlayBtn trackingId={VIDEO_TRACKING.P_SQUARE} title="Números Primos - Concepto Procesual" />
+                        {/* Failure: No se forman 2, 3 y 4 grupos iguales */}
+                        <div>
+                            <div className="flex items-center gap-2 mb-3">
+                                <p className="font-semibold text-gray-800 dark:text-gray-200">
+                                    No se forman 2, 3 y 4 grupos iguales.
+                                </p>
+                                <PlayBtn trackingId={VIDEO_TRACKING.P_FAIL} title="Grupos que no funcionan" />
+                            </div>
 
-                            <div className="flex-1 space-y-6">
-                                {/* Failure cases */}
-                                <div className="flex items-center gap-2">
-                                    <span className="font-semibold text-gray-800 dark:text-gray-200">No se forman 2, 3 y 4 grupos iguales.</span>
-                                    <button className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white"><svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg></button>
-                                </div>
-
-                                <div className="flex justify-around items-center">
-                                    {/* 2 groups fail */}
-                                    <div className="flex gap-2">
-                                        <div className="grid grid-cols-2 gap-1 w-12 h-12 border-2 border-gray-400 p-1">
-                                            <div className="bg-green-300 w-full h-full"></div><div className="bg-green-300 w-full h-full"></div>
-                                            <div className="bg-green-300 w-full h-full"></div>
+                            <div className="flex flex-wrap justify-around items-start gap-4">
+                                {/* 2 groups attempt */}
+                                <div className="flex flex-col items-center gap-2">
+                                    <div className="flex gap-3">
+                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex gap-1 flex-wrap w-[76px]">
+                                            <GreenSquare /><GreenSquare /><GreenSquare />
                                         </div>
-                                        <div className="w-6 h-6 bg-red-500 rounded-full text-white flex items-center justify-center font-bold">!</div>
-                                    </div>
-                                    {/* 3 groups fail */}
-                                    <div className="flex gap-2">
-                                        <div className="grid grid-cols-2 gap-1 w-12 h-12 border-2 border-gray-400 p-1">
-                                            <div className="bg-green-300 w-full h-full"></div><div className="bg-green-300 w-full h-full"></div>
-                                            <div className="bg-green-300 w-full h-full"></div>
+                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex gap-1 flex-wrap w-[76px]">
+                                            <GreenSquare /><GreenSquare /><GreenSquare />
                                         </div>
-                                        <div className="w-6 h-6 bg-red-500 rounded-full text-white flex items-center justify-center font-bold">!</div>
                                     </div>
-                                    {/* 4 groups fail */}
-                                    <div className="flex gap-2">
-                                        <div className="grid grid-cols-2 gap-1 w-12 h-12 border-2 border-gray-400 p-1">
-                                            <div className="bg-green-300 w-full h-full"></div><div className="bg-green-300 w-full h-full"></div>
+                                    <div className="flex items-center gap-2">
+                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex">
+                                            <GreenSquare />
                                         </div>
-                                        <div className="w-6 h-6 bg-red-500 rounded-full text-white flex items-center justify-center font-bold">!</div>
+                                        <div className="w-6 h-6 bg-red-500 rounded-full text-white flex items-center justify-center font-bold text-sm">!</div>
                                     </div>
                                 </div>
 
-                                {/* Success cases */}
-                                <div className="flex items-center gap-2 mt-4">
-                                    <span className="font-semibold text-gray-800 dark:text-gray-200">Se pueden formar solo uno grupo o siete grupos iguales.</span>
-                                    <button className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white"><svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg></button>
-                                </div>
-
-                                <div className="flex justify-around items-center">
-                                    {/* 1 group of 7 */}
-                                    <div className="border-2 border-gray-800 p-1 flex gap-1">
-                                        {[1, 2, 3, 4, 5, 6, 7].map(k => <div key={k} className="w-6 h-6 bg-green-400 border border-green-600"></div>)}
-                                    </div>
-                                    <span className="text-lg font-bold">ó</span>
-                                    {/* 7 groups of 1 */}
+                                {/* 3 groups attempt */}
+                                <div className="flex flex-col items-center gap-2">
                                     <div className="flex gap-2">
-                                        <div className="w-8 h-8 border-2 border-gray-600 flex items-center justify-center"><div className="w-4 h-4 bg-green-400"></div></div>
-                                        <div className="w-8 h-8 border-2 border-gray-600 flex items-center justify-center"><div className="w-4 h-4 bg-green-400"></div></div>
-                                        <div className="w-8 h-8 border-2 border-gray-600 flex items-center justify-center"><div className="w-4 h-4 bg-green-400"></div></div>
+                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex gap-1">
+                                            <GreenSquare /><GreenSquare />
+                                        </div>
+                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex gap-1">
+                                            <GreenSquare /><GreenSquare />
+                                        </div>
+                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex gap-1">
+                                            <GreenSquare /><GreenSquare />
+                                        </div>
                                     </div>
-                                    <div className="w-6 h-6 bg-green-500 rounded-full text-white flex items-center justify-center font-bold">✓</div>
+                                    <div className="flex items-center gap-2">
+                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex">
+                                            <GreenSquare />
+                                        </div>
+                                        <div className="w-6 h-6 bg-red-500 rounded-full text-white flex items-center justify-center font-bold text-sm">!</div>
+                                    </div>
                                 </div>
 
-                                <div className="flex items-center gap-2 mt-4">
-                                    <span className="font-semibold text-gray-800 dark:text-gray-200">Se observa que el número 7 se puede dividir en 1 ó en sí mismo 7 partes iguales.</span>
-                                    <button className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white"><svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg></button>
+                                {/* 4 groups attempt */}
+                                <div className="flex flex-col items-center gap-2">
+                                    <div className="flex gap-2 flex-wrap justify-center">
+                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex"><GreenSquare /></div>
+                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex"><GreenSquare /></div>
+                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex"><GreenSquare /></div>
+                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex"><GreenSquare /></div>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <div className="flex gap-1">
+                                            <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex"><GreenSquare /></div>
+                                            <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex"><GreenSquare /></div>
+                                            <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex"><GreenSquare /></div>
+                                        </div>
+                                        <div className="w-6 h-6 bg-red-500 rounded-full text-white flex items-center justify-center font-bold text-sm">!</div>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+
+                        {/* Success: 1 group or 7 groups */}
+                        <div>
+                            <div className="flex items-center gap-2 mb-3">
+                                <p className="font-semibold text-gray-800 dark:text-gray-200">
+                                    Se pueden formar solo uno grupo o siete grupos iguales.
+                                </p>
+                                <PlayBtn trackingId={VIDEO_TRACKING.P_SUCCESS} title="Grupos que sí funcionan" />
+                            </div>
+
+                            <div className="flex items-center justify-center gap-6">
+                                {/* 1 group of 7 */}
+                                <div className="flex flex-col items-center gap-2">
+                                    <div className="border-2 border-gray-800 dark:border-gray-300 p-1.5 inline-flex gap-1 flex-wrap" style={{ maxWidth: '200px' }}>
+                                        {[1, 2, 3, 4, 5, 6, 7].map(k => <GreenSquare key={k} />)}
+                                    </div>
+                                </div>
+
+                                <span className="text-xl font-bold text-gray-600 dark:text-gray-400">ó</span>
+
+                                {/* 7 groups of 1 */}
+                                <div className="flex flex-col items-center gap-2">
+                                    <div className="flex gap-1.5 flex-wrap justify-center">
+                                        {[1, 2, 3, 4, 5, 6, 7].map(k => (
+                                            <div key={k} className="border-2 border-gray-800 dark:border-gray-300 p-1 inline-flex">
+                                                <GreenSquare />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Conclusion text */}
+                        <div className="flex items-center gap-2">
+                            <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
+                                Se observa que el número <span className="font-bold">7</span> se puede dividir en <span className="font-bold">1</span> ó en sí mismo <span className="font-bold">7</span> partes iguales.
+                            </p>
+                            <PlayBtn trackingId={VIDEO_TRACKING.P_CONCLUSION} title="Conclusión" />
                         </div>
                     </div>
                 </div>
