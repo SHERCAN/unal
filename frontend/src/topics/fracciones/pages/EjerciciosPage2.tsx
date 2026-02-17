@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
@@ -8,9 +8,13 @@ import { useVideoProgress } from '@/hooks/useVideoProgress';
 interface Props { zoom?: number; }
 
 export function EjerciciosPage2({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched, submitExercise } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
-    const VIDEO_TRACKING = { INTRO: 'fracciones-ej2-intro' };
+    const VIDEO_TRACKING = {
+        EX2_PENCILS: 'fracciones-ex2-pencils',
+        EX2_NOTEBOOKS: 'fracciones-ex2-notebooks',
+        EX2_LIBRARY: 'fracciones-ex2-library',
+    };
 
     const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
         isOpen: false, title: '', videoId: undefined
@@ -29,127 +33,203 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
         setVideoModal({ isOpen: true, title, videoId: undefined });
     };
 
-    const PlayBtn = ({ trackingId, title, size = 'sm' }: { trackingId: string; title: string; size?: 'sm' | 'md' }) => {
-        const watched = isVideoWatched(trackingId);
-        const sz = size === 'sm' ? 'w-6 h-6' : 'w-8 h-8';
-        const iconSz = size === 'sm' ? 'w-3 h-3' : 'w-4 h-4';
-        return (
-            <button type="button" onClick={() => openVideo(trackingId, title)}
-                className={`${sz} flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
-                <svg className={iconSz} fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-            </button>
-        );
-    };
+    const PlayBtn = ({ trackingId, title }: { trackingId: string; title: string }) => (
+        <button type="button" onClick={() => openVideo(trackingId, title)}
+            className="w-8 h-8 flex items-center justify-center text-white rounded-full bg-purple-600 hover:bg-purple-700 shadow-md flex-shrink-0">
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+        </button>
+    );
 
-    // ACTIVITY: Word problems with inputs
-    const problems = [
-        {
-            text: 'En un salón hay 30 estudiantes. 12 son niñas. ¿Qué fracción del salón son niñas?',
-            numerator: 12, denominator: 30,
-        },
-        {
-            text: 'Un pastel se divide en 8 partes. Laura se come 5 partes. ¿Qué fracción comió?',
-            numerator: 5, denominator: 8,
-        },
-        {
-            text: 'De 7 días de la semana, 2 son de descanso. ¿Qué fracción de la semana es de descanso?',
-            numerator: 2, denominator: 7,
-        },
-    ];
+    // --- State for Problems ---
+    const [pencilFrac, setPencilFrac] = useState({ n: '', d: '' });
+    const [pencilResult, setPencilResult] = useState<'correct' | 'incorrect' | null>(null);
 
-    const [answers, setAnswers] = useState<Record<string, string>>({});
-    const [results, setResults] = useState<Record<number, 'correct' | 'incorrect' | null>>({
-        0: null, 1: null, 2: null,
-    });
+    const [notebookFrac, setNotebookFrac] = useState({ n: '', d: '' });
+    const [notebookResult, setNotebookResult] = useState<'correct' | 'incorrect' | null>(null);
 
-    const handleCheck = async (index: number) => {
-        const problem = problems[index];
-        const isCorrect = parseInt(answers[`${index}-n`]) === problem.numerator &&
-            parseInt(answers[`${index}-d`]) === problem.denominator;
-        setResults(prev => ({ ...prev, [index]: isCorrect ? 'correct' : 'incorrect' }));
-        await submitExercise(`fracciones-word-${index}`, isCorrect);
-    };
-
-    const handleResetProblem = (index: number) => {
-        setAnswers(prev => {
-            const next = { ...prev };
-            delete next[`${index}-n`];
-            delete next[`${index}-d`];
-            return next;
-        });
-        setResults(prev => ({ ...prev, [index]: null }));
-    };
+    const [libraryAns, setLibraryAns] = useState('');
+    const [libraryResult, setLibraryResult] = useState<'correct' | 'incorrect' | null>(null);
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones' }} pageId="fracciones-ejercicios-2">
-            <div className="flex items-center gap-2 mb-6">
-                <PlayBtn trackingId={VIDEO_TRACKING.INTRO} title="Problemas de Fracciones" size="md" />
-                <h2 className="text-2xl font-bold text-purple-700 dark:text-purple-300">PROBLEMAS</h2>
-            </div>
-
-            <div className="space-y-5">
-                {problems.map((problem, i) => (
-                    <div key={i} className={`rounded-xl border-2 p-5 ${results[i] === 'correct' ? 'border-green-400 bg-green-50 dark:bg-green-900/10' :
-                        results[i] === 'incorrect' ? 'border-red-400 bg-red-50 dark:bg-red-900/10' :
-                            'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50'
-                        }`}>
-                        <div className="flex items-center gap-2 mb-3">
-                            <span className="bg-purple-600 text-white text-sm font-bold px-3 py-1 rounded-full">
-                                {i + 1}
-                            </span>
-                        </div>
-
-                        <p className="text-sm text-gray-800 dark:text-gray-200 mb-3">{problem.text}</p>
-
-                        <div className="flex items-center gap-3 justify-center">
-                            <span className="text-sm text-gray-600 dark:text-gray-400 font-semibold">Fracción:</span>
-                            <div className="flex flex-col items-center">
-                                <input
-                                    type="number"
-                                    value={answers[`${i}-n`] || ''}
-                                    onChange={(e) => { setAnswers(prev => ({ ...prev, [`${i}-n`]: e.target.value })); setResults(prev => ({ ...prev, [i]: null })); }}
-                                    className="w-14 h-8 text-center font-bold text-blue-600 rounded border-2 border-blue-400 bg-white dark:bg-gray-700 text-sm"
-                                    placeholder="?"
-                                    disabled={results[i] === 'correct'}
-                                />
-                                <div className="w-14 border-t-2 border-gray-800 dark:border-gray-300 my-1"></div>
-                                <input
-                                    type="number"
-                                    value={answers[`${i}-d`] || ''}
-                                    onChange={(e) => { setAnswers(prev => ({ ...prev, [`${i}-d`]: e.target.value })); setResults(prev => ({ ...prev, [i]: null })); }}
-                                    className="w-14 h-8 text-center font-bold text-red-600 rounded border-2 border-red-400 bg-white dark:bg-gray-700 text-sm"
-                                    placeholder="?"
-                                    disabled={results[i] === 'correct'}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="flex items-center justify-center gap-3 mt-3">
-                            {results[i] !== 'correct' && (
-                                <button onClick={() => handleCheck(i)}
-                                    className="px-5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg text-sm">
-                                    ¿LISTO?
-                                </button>
-                            )}
-                            {results[i] === 'incorrect' && (
-                                <button onClick={() => handleResetProblem(i)}
-                                    className="px-4 py-1.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-lg text-sm">
-                                    Reiniciar
-                                </button>
-                            )}
-                        </div>
-                        {results[i] === 'correct' && (
-                            <p className="text-center text-green-600 font-bold text-sm mt-2">
-                                ✅ ¡Correcto! {problem.numerator}/{problem.denominator}
-                            </p>
-                        )}
-                        {results[i] === 'incorrect' && (
-                            <p className="text-center text-red-500 font-bold text-sm mt-2">
-                                ❌ Revisa: ¿cuántas partes seleccionadas? ¿cuántas totales?
-                            </p>
-                        )}
+            <div className="w-full p-4">
+                <div className="relative ml-2 flex items-start">
+                    {/* Header "A" */}
+                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de]" style={{ borderColor: '#be90de' }}>
+                        A
                     </div>
-                ))}
+
+                    <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-8 bg-white border-[#be90de] min-h-[900px]">
+                        <div className="max-w-4xl mx-auto space-y-16">
+
+                            <div className="flex items-center gap-4 border-b pb-4">
+                                <span className="bg-purple-900 text-white px-6 py-2 rounded-lg font-black text-xl tracking-widest uppercase">PROBLEMAS</span>
+                            </div>
+
+                            {/* PROBLEM 1: Pencils */}
+                            <div className="space-y-6">
+                                <div className="flex items-start gap-3">
+                                    <PlayBtn trackingId={VIDEO_TRACKING.EX2_PENCILS} title="Problema: Lápices" />
+                                    <div className="space-y-4 flex-1">
+                                        <p className="text-lg text-gray-800">
+                                            1. En un estuche hay <span className="font-bold">7</span> lápices. <span className="text-red-600 font-bold">5</span> son rojos y el resto negros. ¿Qué fracción de los lápices son rojos?
+                                        </p>
+
+                                        {/* Visual Pencils */}
+                                        <div className="flex justify-center gap-2 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                                            {/* 5 Red, 2 Black */}
+                                            {[...Array(5).fill('red'), ...Array(2).fill('black')].map((color, i) => (
+                                                <div key={i} className="flex flex-col items-center">
+                                                    {/* Pencil SVG */}
+                                                    <svg width="20" height="100" viewBox="0 0 20 100">
+                                                        <path d="M0,20 L20,20 L20,90 L0,90 Z" fill={color === 'red' ? '#ef4444' : '#1f2937'} stroke="black" />
+                                                        <path d="M0,20 L10,0 L20,20 Z" fill="#fcd34d" stroke="black" /> {/* Wood tip */}
+                                                        <path d="M7,7 L13,7 L10,0 Z" fill="black" /> {/* Lead */}
+                                                        <rect x="0" y="90" width="20" height="10" fill="#fbbf24" stroke="black" /> {/* Eraser holder */}
+                                                        <path d="M0,95 Q10,105 20,95" fill="pink" stroke="black" /> {/* Eraser */}
+                                                    </svg>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        <div className="flex items-center gap-4 bg-purple-50 p-4 rounded-lg w-fit">
+                                            <span className="font-bold text-purple-800">Respuesta:</span>
+                                            <div className="flex flex-col items-center">
+                                                <input
+                                                    type="number"
+                                                    className="w-12 h-10 text-center border-2 border-purple-300 rounded focus:border-purple-600 font-bold"
+                                                    value={pencilFrac.n}
+                                                    onChange={e => { setPencilFrac({ ...pencilFrac, n: e.target.value }); setPencilResult(null); }}
+                                                />
+                                                <div className="w-12 h-0.5 bg-black my-1"></div>
+                                                <input
+                                                    type="number"
+                                                    className="w-12 h-10 text-center border-2 border-purple-300 rounded focus:border-purple-600 font-bold"
+                                                    value={pencilFrac.d}
+                                                    onChange={e => { setPencilFrac({ ...pencilFrac, d: e.target.value }); setPencilResult(null); }}
+                                                />
+                                            </div>
+                                            <button
+                                                onClick={() => {
+                                                    if (pencilFrac.n === '5' && pencilFrac.d === '7') setPencilResult('correct');
+                                                    else setPencilResult('incorrect');
+                                                }}
+                                                className="bg-purple-600 text-white px-4 py-2 rounded font-bold text-sm shadow hover:bg-purple-700 ml-4">
+                                                ¿LISTO?
+                                            </button>
+                                            {pencilResult === 'correct' && <span className="text-green-600 font-bold text-xl">✓</span>}
+                                            {pencilResult === 'incorrect' && <span className="text-red-500 font-bold text-sm">Intenta de nuevo</span>}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* PROBLEM 2: Notebooks */}
+                            <div className="space-y-6 pt-8 border-t">
+                                <div className="flex items-start gap-3">
+                                    <PlayBtn trackingId={VIDEO_TRACKING.EX2_NOTEBOOKS} title="Problema: Cuadernos" />
+                                    <div className="space-y-4 flex-1">
+                                        <p className="text-lg text-gray-800">
+                                            2. Sonia tiene <span className="font-bold">8</span> cuadernos. <span className="text-blue-600 font-bold">3</span> son azules y el resto negros. ¿Qué fracción de los cuadernos son negros?
+                                        </p>
+
+                                        {/* Visual Notebooks */}
+                                        <div className="flex justify-center gap-3 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                                            {/* 3 Blue, 5 Black */}
+                                            {[...Array(3).fill('blue'), ...Array(5).fill('black')].map((color, i) => (
+                                                <div key={i} className={`w-12 h-16 rounded-r border-l-4 border-gray-400 shadow-sm relative ${color === 'blue' ? 'bg-blue-500' : 'bg-gray-800'}`}>
+                                                    {/* Spiral binding */}
+                                                    <div className="absolute left-0 top-1 w-1 h-1 bg-white rounded-full"></div>
+                                                    <div className="absolute left-0 top-4 w-1 h-1 bg-white rounded-full"></div>
+                                                    <div className="absolute left-0 top-7 w-1 h-1 bg-white rounded-full"></div>
+                                                    <div className="absolute left-0 top-10 w-1 h-1 bg-white rounded-full"></div>
+                                                    <div className="absolute left-0 top-13 w-1 h-1 bg-white rounded-full"></div>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        <div className="flex items-center gap-4 bg-purple-50 p-4 rounded-lg w-fit">
+                                            <span className="font-bold text-purple-800">Respuesta (Negros):</span>
+                                            <div className="flex flex-col items-center">
+                                                <input
+                                                    type="number"
+                                                    className="w-12 h-10 text-center border-2 border-purple-300 rounded focus:border-purple-600 font-bold"
+                                                    value={notebookFrac.n}
+                                                    onChange={e => { setNotebookFrac({ ...notebookFrac, n: e.target.value }); setNotebookResult(null); }}
+                                                />
+                                                <div className="w-12 h-0.5 bg-black my-1"></div>
+                                                <input
+                                                    type="number"
+                                                    className="w-12 h-10 text-center border-2 border-purple-300 rounded focus:border-purple-600 font-bold"
+                                                    value={notebookFrac.d}
+                                                    onChange={e => { setNotebookFrac({ ...notebookFrac, d: e.target.value }); setNotebookResult(null); }}
+                                                />
+                                            </div>
+                                            <button
+                                                onClick={() => {
+                                                    if (notebookFrac.n === '5' && notebookFrac.d === '8') setNotebookResult('correct');
+                                                    else setNotebookResult('incorrect');
+                                                }}
+                                                className="bg-purple-600 text-white px-4 py-2 rounded font-bold text-sm shadow hover:bg-purple-700 ml-4">
+                                                ¿LISTO?
+                                            </button>
+                                            {notebookResult === 'correct' && <span className="text-green-600 font-bold text-xl">✓</span>}
+                                            {notebookResult === 'incorrect' && <span className="text-red-500 font-bold text-sm">Revisa cuántos negros hay</span>}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* PROBLEM 3: Library */}
+                            <div className="space-y-6 pt-8 border-t">
+                                <div className="flex items-start gap-3">
+                                    <PlayBtn trackingId={VIDEO_TRACKING.EX2_LIBRARY} title="Problema: Biblioteca" />
+                                    <div className="space-y-4 flex-1">
+                                        <p className="text-lg text-gray-800">
+                                            3. En una biblioteca hay <span className="font-bold text-purple-700">36</span> libros. Si <span className="font-bold">1/6</span> son de cuentos, ¿cuántos libros de cuentos hay?
+                                        </p>
+
+                                        <div className="bg-white p-6 rounded-xl border-2 border-dashed border-purple-200">
+                                            <p className="font-bold text-gray-600 mb-4">Planteamiento:</p>
+                                            <div className="text-3xl font-bold flex items-center justify-center gap-4 text-gray-700">
+                                                <span>36</span>
+                                                <span>÷</span>
+                                                <span className="text-purple-600">6</span>
+                                                <span>=</span>
+                                                <div className="relative">
+                                                    <input
+                                                        type="number"
+                                                        className={`w-20 h-16 text-center border-4 rounded-xl text-4xl ${libraryResult === 'correct' ? 'border-green-500 text-green-600' : 'border-purple-300'}`}
+                                                        value={libraryAns}
+                                                        onChange={e => { setLibraryAns(e.target.value); setLibraryResult(null); }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex justify-center">
+                                            <button
+                                                onClick={() => {
+                                                    if (libraryAns === '6') setLibraryResult('correct');
+                                                    else setLibraryResult('incorrect');
+                                                }}
+                                                className="bg-purple-600 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-purple-700 transform hover:scale-105 transition-all">
+                                                COMPROBAR RESPUESTA
+                                            </button>
+                                        </div>
+
+                                        {libraryResult === 'correct' && (
+                                            <div className="bg-green-100 p-4 rounded-lg text-center border border-green-300 animate-bounce">
+                                                <p className="text-green-800 font-bold text-xl">¡Excelente! Hay 6 libros de cuentos.</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <VideoModal

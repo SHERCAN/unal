@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import Image from 'next/image';
+import cuadriculaImg from '../cuadricula.png';
 
 interface Props { zoom?: number; }
 
@@ -11,8 +13,11 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        A_DEFINITION: 'fracciones-a1-definition',
-        A_NOTATION: 'fracciones-a1-notation',
+        A_INTRO: 'fracciones-a-intro',
+        A_DEF: 'fracciones-a-def',
+        A_PARTS: 'fracciones-a-parts',
+        A_ERROR: 'fracciones-a-error',
+        A_EXAMPLE: 'fracciones-a-example',
     };
 
     const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
@@ -32,145 +37,188 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
         setVideoModal({ isOpen: true, title, videoId: undefined });
     };
 
-    const PlayBtn = ({ trackingId, title, size = 'md' }: { trackingId: string; title: string; size?: 'sm' | 'md' }) => {
+    const PlayBtn = ({ trackingId, title, size = 'sm', className = '' }: { trackingId: string; title: string; size?: 'sm' | 'md'; className?: string }) => {
         const watched = isVideoWatched(trackingId);
         const sz = size === 'sm' ? 'w-6 h-6' : 'w-8 h-8';
         const iconSz = size === 'sm' ? 'w-3 h-3' : 'w-4 h-4';
         return (
             <button type="button" onClick={() => openVideo(trackingId, title)}
-                className={`${sz} flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
+                className={`${sz} flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'} ${className}`}>
                 <svg className={iconSz} fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
             </button>
         );
     };
 
-    // Practice dropdowns
-    const [answerNumerador, setAnswerNumerador] = useState('');
-    const [answerDenominador, setAnswerDenominador] = useState('');
-    const [listoResult, setListoResult] = useState<'correct' | 'incorrect' | null>(null);
-
-    const handleListo = () => {
-        if (answerNumerador === 'partes_seleccionadas' && answerDenominador === 'partes_totales') {
-            setListoResult('correct');
-        } else {
-            setListoResult('incorrect');
-        }
-    };
-
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones' }} pageId="fracciones-concepto-abstracto-1">
-            {/* A - ABSTRACTO Section */}
-            <div className="relative ml-2 flex items-start">
-                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#be90de' }}>
-                    A
-                </div>
-                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white" style={{ borderColor: '#be90de' }}>
+            <div className="w-full p-4">
+                <div className="relative ml-2 flex items-start">
+                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de]" style={{ borderColor: '#be90de' }}>
+                        A
+                    </div>
+                    <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white border-[#be90de]">
 
-                    <div className="mt-4 space-y-6">
-                        {/* Definition */}
-                        <div className="flex items-center gap-2">
-                            <PlayBtn trackingId={VIDEO_TRACKING.A_DEFINITION} title="¿Qué es una fracción?" />
-                            <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">¿Qué es una fracción?</p>
-                        </div>
+                        <div className="space-y-6 pb-8">
 
-                        <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl border-2 border-purple-300 dark:border-purple-700 p-4">
-                            <p className="text-gray-800 dark:text-gray-200 text-sm leading-relaxed">
-                                Una <span className="font-bold text-purple-600">fracción</span> es una forma de representar{' '}
-                                <span className="font-bold">partes de un todo</span>. Indica cuántas partes se toman de un total
-                                que ha sido dividido en partes iguales.
-                            </p>
-                        </div>
+                            {/* 1. Connection to previous activity */}
+                            <div className="space-y-6">
+                                <div className="flex items-start gap-4">
+                                    <p className="text-gray-800 text-lg leading-relaxed font-medium">
+                                        De acuerdo con la actividad anterior, la pizza se corta en <span className="font-bold text-purple-600 text-xl">8</span> porciones. Los tres
+                                        clientes comen 3 porciones. Se quedan <span className="font-bold text-orange-500 text-xl">5</span> porciones. Su fracción se expresa como
+                                    </p>
+                                </div>
 
-                        {/* Notation */}
-                        <div className="flex items-center gap-2">
-                            <PlayBtn trackingId={VIDEO_TRACKING.A_NOTATION} title="Notación de la fracción" size="sm" />
-                            <p className="font-semibold text-gray-800 dark:text-gray-100 text-sm">Notación</p>
-                        </div>
+                                <div className="flex items-center gap-4">
+                                    <PlayBtn trackingId={VIDEO_TRACKING.A_INTRO} title="Introducción a la fracción" />
+                                    <p className="font-bold text-gray-700">La <span className="text-red-500">fracción</span> se representa cómo</p>
+                                </div>
 
-                        <div className="flex justify-center">
-                            <div className="bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-700 p-6 shadow-md">
-                                <div className="flex items-center gap-6">
-                                    {/* Fraction visual */}
-                                    <div className="text-center">
-                                        <div className="border-r-2 border-gray-300 dark:border-gray-600 pr-6">
-                                            <p className="text-5xl font-bold text-blue-600">a</p>
-                                            <div className="w-16 border-t-3 border-gray-800 dark:border-gray-300 my-2"></div>
-                                            <p className="text-5xl font-bold text-red-600">b</p>
+                                {/* 5/8 Visualization */}
+                                <div className="flex flex-col items-center justify-center gap-2 py-4">
+                                    <div className="flex items-center gap-6 w-full max-w-xl">
+                                        {/* Numbers Column */}
+                                        <div className="flex flex-col items-center">
+                                            <span className="text-6xl font-bold text-orange-400">5</span>
+                                            <div className="w-24 h-1 bg-black my-2 rounded-full"></div>
+                                            <span className="text-6xl font-bold text-purple-600">8</span>
                                         </div>
-                                    </div>
-                                    {/* Labels */}
-                                    <div className="space-y-6 text-sm">
-                                        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg px-3 py-2 border-l-4 border-blue-500">
-                                            <p className="font-bold text-blue-600">a = Numerador</p>
-                                            <p className="text-gray-600 dark:text-gray-400 text-xs">Partes seleccionadas</p>
-                                        </div>
-                                        <div className="bg-red-50 dark:bg-red-900/20 rounded-lg px-3 py-2 border-l-4 border-red-500">
-                                            <p className="font-bold text-red-600">b = Denominador</p>
-                                            <p className="text-gray-600 dark:text-gray-400 text-xs">Partes totales (≠ 0)</p>
+
+                                        {/* Arrows and Labels Column */}
+                                        <div className="flex flex-col justify-between h-40 flex-1">
+                                            <div className="flex items-center gap-3">
+                                                <div className="h-0.5 bg-orange-400 w-24 relative">
+                                                    <div className="absolute right-0 -top-1.5 w-3 h-3 border-t-2 border-r-2 border-orange-400 transform rotate-45"></div>
+                                                </div>
+                                                <span className="text-orange-500 font-bold text-lg uppercase tracking-wide">Quedan Porciones</span>
+                                            </div>
+                                            <div className="flex items-center gap-3 mt-auto">
+                                                <div className="h-0.5 bg-purple-600 w-24 relative">
+                                                    <div className="absolute right-0 -top-1.5 w-3 h-3 border-t-2 border-r-2 border-purple-600 transform rotate-45"></div>
+                                                </div>
+                                                <span className="text-purple-600 font-bold text-lg uppercase tracking-wide leading-tight">Total de Porciones<br />Iguales de Pizza</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Examples */}
-                        <div className="grid grid-cols-3 gap-3">
-                            {[
-                                { num: 1, den: 2, name: 'Un medio', color: 'bg-green-100 dark:bg-green-900/20 border-green-300' },
-                                { num: 3, den: 4, name: 'Tres cuartos', color: 'bg-blue-100 dark:bg-blue-900/20 border-blue-300' },
-                                { num: 2, den: 5, name: 'Dos quintos', color: 'bg-orange-100 dark:bg-orange-900/20 border-orange-300' },
-                            ].map((f, i) => (
-                                <div key={i} className={`rounded-lg p-3 border ${f.color} text-center`}>
-                                    <div className="text-2xl font-bold text-gray-800 dark:text-gray-200">
-                                        <span className="text-blue-600">{f.num}</span>
-                                        <span className="text-gray-400">/</span>
-                                        <span className="text-red-600">{f.den}</span>
+                            {/* 2. Definition */}
+                            <div className="space-y-6">
+                                <div className="flex items-center gap-4">
+                                    <PlayBtn trackingId={VIDEO_TRACKING.A_DEF} title="¿Qué es una fracción?" />
+                                    <span className="bg-red-500 text-white px-4 py-1 font-bold text-lg shadow-sm transform -skew-x-12">
+                                        <span className="transform skew-x-12 inline-block">¿Qué es una fracción?</span>
+                                    </span>
+                                </div>
+
+                                <div className="pl-14 space-y-8">
+                                    <p className="text-xl text-gray-800">
+                                        Un <span className="text-red-500 font-bold">fracción</span> representa una o varias partes iguales de un todo.
+                                    </p>
+
+                                    <div className="flex items-center gap-8">
+                                        <p className="text-xl text-gray-800">Se escribe de la forma:</p>
+                                        <div className="flex flex-col items-center px-6">
+                                            <span className="text-6xl font-bold text-blue-700">a</span>
+                                            <div className="w-20 h-1.5 bg-black my-1 rounded-full"></div>
+                                            <span className="text-6xl font-bold text-purple-700">b</span>
+                                        </div>
                                     </div>
-                                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{f.name}</p>
-                                </div>
-                            ))}
-                        </div>
 
-                        {/* PRÁCTICA */}
-                        <div className="bg-white dark:bg-gray-800 rounded-xl border-2 border-purple-300 dark:border-purple-700 p-4">
-                            <h4 className="bg-purple-600 text-white font-bold px-3 py-1 rounded inline-block text-sm mb-4">PRÁCTICA</h4>
-
-                            <div className="space-y-3">
-                                <div className="flex items-center gap-2 flex-wrap">
-                                    <span className="text-gray-800 dark:text-gray-200 text-sm">■ El numerador indica las</span>
-                                    <select value={answerNumerador} onChange={(e) => { setAnswerNumerador(e.target.value); setListoResult(null); }}
-                                        className={`border-2 rounded px-2 py-1 text-sm font-bold min-w-[160px] ${listoResult === 'correct' ? 'border-green-500 bg-green-50' :
-                                            listoResult === 'incorrect' && answerNumerador !== 'partes_seleccionadas' ? 'border-red-500 bg-red-50' :
-                                                'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
-                                            } text-gray-800 dark:text-gray-200`}>
-                                        <option value="">Selecciona</option>
-                                        <option value="partes_seleccionadas">Partes seleccionadas</option>
-                                        <option value="partes_totales">Partes totales</option>
-                                    </select>
+                                    <p className="text-lg text-gray-800 leading-relaxed max-w-3xl">
+                                        donde <span className="font-bold text-blue-700 text-2xl">a</span> y <span className="font-bold text-purple-700 text-2xl">b</span> son números naturales, <span className="font-bold text-purple-700 text-2xl">b</span> es siempre diferente de cero <span className="font-bold text-purple-700 text-2xl">b ≠ 0</span>.
+                                    </p>
                                 </div>
-
-                                <div className="flex items-center gap-2 flex-wrap">
-                                    <span className="text-gray-800 dark:text-gray-200 text-sm">■ El denominador indica las</span>
-                                    <select value={answerDenominador} onChange={(e) => { setAnswerDenominador(e.target.value); setListoResult(null); }}
-                                        className={`border-2 rounded px-2 py-1 text-sm font-bold min-w-[160px] ${listoResult === 'correct' ? 'border-green-500 bg-green-50' :
-                                            listoResult === 'incorrect' && answerDenominador !== 'partes_totales' ? 'border-red-500 bg-red-50' :
-                                                'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
-                                            } text-gray-800 dark:text-gray-200`}>
-                                        <option value="">Selecciona</option>
-                                        <option value="partes_seleccionadas">Partes seleccionadas</option>
-                                        <option value="partes_totales">Partes totales</option>
-                                    </select>
-                                </div>
-
-                                <div className="flex items-center gap-3 justify-center mt-2">
-                                    <button onClick={handleListo}
-                                        className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg text-sm">
-                                        ¿LISTO?
-                                    </button>
-                                </div>
-                                {listoResult === 'correct' && <p className="text-center text-green-600 font-bold text-sm">✅ ¡Correcto!</p>}
-                                {listoResult === 'incorrect' && <p className="text-center text-red-500 font-bold text-sm">❌ Revisa: numerador = partes seleccionadas, denominador = partes totales.</p>}
                             </div>
+
+                            {/* 3. Parts of a Fraction */}
+                            <div className="flex flex-col items-center space-y-6">
+                                <h3 className="text-xl font-bold text-black uppercase tracking-widest border-b-2 border-gray-200 pb-2">Partes de la Fracción</h3>
+
+                                <div className="flex items-center gap-12 w-full max-w-lg">
+                                    <div className="flex flex-col items-center gap-4">
+                                        <span className="text-6xl font-bold text-blue-700">a</span>
+                                        <div className="h-1 bg-black w-24"></div>
+                                        <span className="text-6xl font-bold text-purple-700">b</span>
+                                    </div>
+
+                                    <div className="flex flex-col justify-between h-48 py-4 flex-1">
+                                        <div className="flex items-center gap-4">
+                                            <div className="h-0.5 bg-blue-600 w-24 relative">
+                                                <div className="absolute right-0 -top-1.5 w-3 h-3 border-t-2 border-r-2 border-blue-600 transform rotate-45"></div>
+                                            </div>
+                                            <span className="text-blue-700 font-black text-2xl">Numerador</span>
+                                        </div>
+                                        <div className="flex items-center gap-4">
+                                            <div className="h-0.5 bg-purple-600 w-24 relative">
+                                                <div className="absolute right-0 -top-1.5 w-3 h-3 border-t-2 border-r-2 border-purple-600 transform rotate-45"></div>
+                                            </div>
+                                            <span className="text-purple-700 font-black text-2xl">Denominador</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="w-full pl-6 space-y-4 max-w-4xl">
+                                    <p className="text-lg font-bold text-gray-800 mb-2">¿Qué significa?</p>
+
+                                    <div className="flex items-start gap-3">
+                                        <div className="w-4 h-4 bg-blue-600 mt-1.5 flex-shrink-0"></div>
+                                        <p className="text-lg text-gray-800">
+                                            <span className="font-bold text-blue-700">Numerador:</span> representa un número de partes que se toman.
+                                            <PlayBtn trackingId={VIDEO_TRACKING.A_PARTS} title="Numerador" size="sm" className="inline-flex ml-3 align-middle" />
+                                        </p>
+                                    </div>
+
+                                    <div className="flex items-start gap-3">
+                                        <div className="w-4 h-4 bg-purple-600 mt-1.5 flex-shrink-0"></div>
+                                        <div className="flex-1">
+                                            <p className="text-lg text-gray-800">
+                                                <span className="font-bold text-purple-700">Denominador:</span> representa en cuántas partes iguales se divide el todo.
+                                                <PlayBtn trackingId={VIDEO_TRACKING.A_PARTS} title="Denominador" size="sm" className="inline-flex ml-3 align-middle" />
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <p className="text-lg text-red-500 font-medium italic pt-2">
+                                        <span className="font-bold">NOTA:</span> El denominador siempre es un número distinto de cero.
+                                        <PlayBtn trackingId={VIDEO_TRACKING.A_ERROR} title="Nota importante" size="sm" className="inline-flex ml-3 align-middle" />
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* 4. Example 4/6 */}
+                            <div className="flex flex-col items-center gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100 shadow-sm mt-4">
+                                {/* Top Row: Text and Fraction in one line */}
+                                <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 w-full">
+                                    <div className="flex items-center gap-2">
+                                        <PlayBtn trackingId={VIDEO_TRACKING.A_EXAMPLE} title="Ejemplo 4/6" size="md" />
+                                        <span className="bg-green-600 text-white px-3 py-1 font-bold rounded shadow-sm text-base">
+                                            Ejemplo:
+                                        </span>
+                                    </div>
+
+                                    <div className="flex items-center gap-2 text-lg text-gray-800 font-medium whitespace-nowrap">
+                                        <span>La fracción</span>
+                                        <div className="inline-flex flex-col items-center mx-1 align-middle">
+                                            <span className="text-xl font-bold leading-none">4</span>
+                                            <div className="w-6 h-0.5 bg-black my-0.5"></div>
+                                            <span className="text-xl font-bold leading-none">6</span>
+                                        </div>
+                                        <span>se representa como:</span>
+                                    </div>
+                                </div>
+
+                                {/* Bottom Row: Image */}
+                                <div className="relative mt-2">
+                                    <Image
+                                        src={cuadriculaImg}
+                                        alt="Representación gráfica 4/6"
+                                        className="h-32 w-auto object-contain"
+                                    />
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
