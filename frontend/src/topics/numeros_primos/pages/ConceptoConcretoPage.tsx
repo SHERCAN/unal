@@ -153,9 +153,11 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     };
 
     // Render a draggable tennis ball inline (not as component to avoid re-mount killing drag state)
-    const renderBall = (ball: Ball, size: 'sm' | 'md' = 'md') => {
+    const renderBall = (ball: Ball, size: 'xs' | 'sm' | 'md' = 'md') => {
         const isSelected = touchBallId === ball.id;
-        const sizeClass = size === 'sm' ? 'w-9 h-9' : 'w-10 h-10';
+        let sizeClass = 'w-10 h-10';
+        if (size === 'sm') sizeClass = 'w-9 h-9';
+        if (size === 'xs') sizeClass = 'w-6 h-6';
         return (
             <img
                 key={ball.id}
@@ -207,15 +209,16 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                     <div className="flex items-start gap-3 mb-6">
 
                         {/* Tenistas with drop boxes */}
+                        {/* Tenistas with drop boxes */}
                         {tenistaIndices.map(tIdx => {
                             const tBalls = getBallsForTenista(tIdx);
                             return (
-                                <div key={tIdx} className="flex flex-col items-center" style={{ minWidth: '80px' }}>
+                                <div key={tIdx} className="flex flex-col items-center" style={{ minWidth: '64px' }}>
                                     {/* Tenista image */}
                                     <img
                                         src={`/numeros_primos/tenista${tIdx + 1}.png`}
                                         alt={`Tenista ${tIdx + 1}`}
-                                        className="h-28 w-auto object-contain mb-1"
+                                        className="h-20 w-auto object-contain mb-1"
                                         draggable={false}
                                     />
 
@@ -224,7 +227,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                         onDragOver={handleDragOver}
                                         onDrop={(e) => handleDropOnTenista(e, tIdx)}
                                         onClick={() => { if (touchBallId !== null) handleTouchDropTarget(tIdx); }}
-                                        className={`relative w-20 h-[80px] border-2 rounded overflow-hidden transition-colors ${touchBallId !== null
+                                        className={`relative w-16 h-16 border-2 rounded overflow-hidden transition-colors ${touchBallId !== null
                                             ? 'border-purple-400 bg-purple-50 dark:bg-purple-900/20'
                                             : 'border-gray-800 dark:border-gray-400 bg-white dark:bg-gray-700'
                                             }`}
@@ -246,7 +249,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                                     className="absolute"
                                                     style={{ top: pos.top, left: pos.left, transform: `rotate(${pos.rotate})` }}
                                                 >
-                                                    {renderBall(ball, 'sm')}
+                                                    {renderBall(ball, 'xs')}
                                                 </div>
                                             );
                                         })}
@@ -256,7 +259,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                         })}
 
                         {/* "+" button + ¿IGUALES? column */}
-                        <div className="flex flex-col items-center gap-3 pt-28">
+                        <div className="flex flex-col items-center gap-3">
                             {/* Purple square "+" button */}
                             {tenistaCount < MAX_TENISTAS && (
                                 <button
@@ -326,31 +329,33 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                     {/* === BOTTOM: Grouping visualization area + Bag === */}
                     <div className="flex items-end gap-4">
                         {/* Large grouping outline box */}
-                        <div className="flex-1 min-h-[120px] border-2 border-gray-800 dark:border-gray-400 rounded p-3 flex flex-col">
-                            {/* Tenista1 OK image after phase 1 */}
-                            {phase1Complete && (
-                                <img
-                                    src="/numeros_primos/tenista1ok.png"
-                                    alt="Tenista 1 completo"
-                                    className="h-full max-h-[110px] w-auto object-contain"
-                                    draggable={false}
-                                />
-                            )}
-                            {/* Show grouping visualization when tenistas > 1 and all placed */}
-                            {tenistaCount > 1 && allPlaced && (
-                                <div className="flex items-center gap-2 flex-wrap">
-                                    {tenistaIndices.map(tIdx => {
-                                        const count = getBallsForTenista(tIdx).length;
-                                        return (
-                                            <div key={tIdx} className="border border-gray-400 dark:border-gray-500 p-1.5 flex gap-1 flex-wrap" style={{ minWidth: '30px', minHeight: '30px' }}>
-                                                {Array.from({ length: count }, (_, k) => (
-                                                    <img key={k} src="/numeros_primos/pelotatenis.png" alt="" className="w-6 h-6 object-contain" />
-                                                ))}
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            )}
+                        <div className="flex-1 min-h-[120px] border-2 border-gray-800 dark:border-gray-400 rounded p-3 flex items-center">
+                            {/* Left Side: Tenista1 OK - Fixed width to keep divider stable */}
+                            <div className="w-32 flex-none h-full flex items-center justify-center mr-2">
+                                {phase1Complete && (
+                                    <img
+                                        src="/numeros_primos/tenista1ok.png"
+                                        alt="Tenista 1 completo"
+                                        className="h-full max-h-[110px] w-auto object-contain"
+                                        draggable={false}
+                                    />
+                                )}
+                            </div>
+
+                            {/* Vertical Divider */}
+                            <div className="w-[2px] h-[100px] bg-gray-300 dark:bg-gray-600 flex-none"></div>
+
+                            {/* Right Side: Result (Frame 210) - Only when EQUAL */}
+                            <div className="flex-1 flex justify-center h-full pl-2">
+                                {tenistaCount > 1 && allPlaced && areEqual && (
+                                    <img
+                                        src="/numeros_primos/frame210.png"
+                                        alt="Resultado reparto igual"
+                                        className="h-full max-h-[110px] w-auto object-contain"
+                                        draggable={false}
+                                    />
+                                )}
+                            </div>
                         </div>
 
                         {/* Bag of balls (bottom-right) */}
@@ -427,63 +432,13 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                 <PlayBtn trackingId={VIDEO_TRACKING.P_FAIL} title="Grupos que no funcionan" />
                             </div>
 
-                            <div className="flex flex-wrap justify-around items-start gap-4">
-                                {/* 2 groups attempt */}
-                                <div className="flex flex-col items-center gap-2">
-                                    <div className="flex gap-3">
-                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex gap-1 flex-wrap w-[76px]">
-                                            <GreenSquare /><GreenSquare /><GreenSquare />
-                                        </div>
-                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex gap-1 flex-wrap w-[76px]">
-                                            <GreenSquare /><GreenSquare /><GreenSquare />
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex">
-                                            <GreenSquare />
-                                        </div>
-                                        <div className="w-6 h-6 bg-red-500 rounded-full text-white flex items-center justify-center font-bold text-sm">!</div>
-                                    </div>
-                                </div>
-
-                                {/* 3 groups attempt */}
-                                <div className="flex flex-col items-center gap-2">
-                                    <div className="flex gap-2">
-                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex gap-1">
-                                            <GreenSquare /><GreenSquare />
-                                        </div>
-                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex gap-1">
-                                            <GreenSquare /><GreenSquare />
-                                        </div>
-                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex gap-1">
-                                            <GreenSquare /><GreenSquare />
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex">
-                                            <GreenSquare />
-                                        </div>
-                                        <div className="w-6 h-6 bg-red-500 rounded-full text-white flex items-center justify-center font-bold text-sm">!</div>
-                                    </div>
-                                </div>
-
-                                {/* 4 groups attempt */}
-                                <div className="flex flex-col items-center gap-2">
-                                    <div className="flex gap-2 flex-wrap justify-center">
-                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex"><GreenSquare /></div>
-                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex"><GreenSquare /></div>
-                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex"><GreenSquare /></div>
-                                        <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex"><GreenSquare /></div>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <div className="flex gap-1">
-                                            <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex"><GreenSquare /></div>
-                                            <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex"><GreenSquare /></div>
-                                            <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-flex"><GreenSquare /></div>
-                                        </div>
-                                        <div className="w-6 h-6 bg-red-500 rounded-full text-white flex items-center justify-center font-bold text-sm">!</div>
-                                    </div>
-                                </div>
+                            <div className="flex justify-center">
+                                <img
+                                    src="/numeros_primos/frame211.png"
+                                    alt="Grupos que no funcionan"
+                                    className="h-60 object-contain"
+                                    draggable={false}
+                                />
                             </div>
                         </div>
 
@@ -496,26 +451,13 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                 <PlayBtn trackingId={VIDEO_TRACKING.P_SUCCESS} title="Grupos que sí funcionan" />
                             </div>
 
-                            <div className="flex items-center justify-center gap-6">
-                                {/* 1 group of 7 */}
-                                <div className="flex flex-col items-center gap-2">
-                                    <div className="border-2 border-gray-800 dark:border-gray-300 p-1.5 inline-flex gap-1 flex-wrap" style={{ maxWidth: '200px' }}>
-                                        {[1, 2, 3, 4, 5, 6, 7].map(k => <GreenSquare key={k} />)}
-                                    </div>
-                                </div>
-
-                                <span className="text-xl font-bold text-gray-600 dark:text-gray-400">ó</span>
-
-                                {/* 7 groups of 1 */}
-                                <div className="flex flex-col items-center gap-2">
-                                    <div className="flex gap-1.5 flex-wrap justify-center">
-                                        {[1, 2, 3, 4, 5, 6, 7].map(k => (
-                                            <div key={k} className="border-2 border-gray-800 dark:border-gray-300 p-1 inline-flex">
-                                                <GreenSquare />
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
+                            <div className="flex justify-center">
+                                <img
+                                    src="/numeros_primos/frame212.png"
+                                    alt="Grupos que sí funcionan"
+                                    className="h-60 object-contain"
+                                    draggable={false}
+                                />
                             </div>
                         </div>
 

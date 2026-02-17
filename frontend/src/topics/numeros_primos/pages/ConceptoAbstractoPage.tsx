@@ -106,71 +106,14 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                         </div>
 
                         {/* 2. Two long-division layouts side by side */}
-                        <div className="flex justify-center items-start gap-12">
-                            {/* 7 ÷ 1 = 7 */}
-                            <div className="flex items-start">
-                                <div className="flex flex-col items-end mr-1">
-                                    <span className="font-bold text-2xl text-gray-800 dark:text-gray-200">7</span>
-                                    <span className="font-bold text-2xl text-gray-800 dark:text-gray-200">– 7</span>
-                                    <div className="w-full border-t-2 border-gray-800 dark:border-gray-300 mt-0.5" />
-                                    <span className="font-bold text-2xl text-gray-800 dark:text-gray-200">0</span>
-                                </div>
-                                <div className="flex flex-col items-start border-l-2 border-gray-800 dark:border-gray-300 pl-2">
-                                    <span className="font-bold text-2xl text-gray-800 dark:text-gray-200">1</span>
-                                    <div className="border-t-2 border-gray-800 dark:border-gray-300 w-8 mt-0.5" />
-                                    <span className="font-bold text-2xl text-gray-800 dark:text-gray-200">7</span>
-                                </div>
-                            </div>
-
-                            {/* 7 ÷ 7 = 1 */}
-                            <div className="flex items-start">
-                                <div className="flex flex-col items-end mr-1">
-                                    <span className="font-bold text-2xl text-gray-800 dark:text-gray-200">7</span>
-                                    <span className="font-bold text-2xl text-gray-800 dark:text-gray-200">– 7</span>
-                                    <div className="w-full border-t-2 border-gray-800 dark:border-gray-300 mt-0.5" />
-                                    <span className="font-bold text-2xl text-gray-800 dark:text-gray-200">0</span>
-                                </div>
-                                <div className="flex flex-col items-start border-l-2 border-gray-800 dark:border-gray-300 pl-2">
-                                    <span className="font-bold text-2xl text-purple-600 dark:text-purple-400">7</span>
-                                    <div className="border-t-2 border-gray-800 dark:border-gray-300 w-8 mt-0.5" />
-                                    <span className="font-bold text-2xl text-gray-800 dark:text-gray-200">7</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* 3. Group visualizations: 1 GRUPO and 7 GRUPOS */}
-                        <div className="flex justify-center items-end gap-12">
-                            {/* 1 GRUPO */}
-                            <div className="flex flex-col items-center gap-1">
-                                <div className="border-2 border-gray-300 dark:border-gray-500 p-1 inline-grid grid-cols-2 gap-0.5">
-                                    <GreenSquare /><GreenSquare />
-                                    <GreenSquare /><GreenSquare />
-                                    <GreenSquare /><GreenSquare />
-                                    <GreenSquare />
-                                </div>
-                                <div className="w-4 h-4 bg-green-500 rounded text-white flex items-center justify-center text-[10px] font-bold">✓</div>
-                                <span className="text-sm font-bold text-gray-700 dark:text-gray-300">1 GRUPO</span>
-                            </div>
-
-                            {/* 7 GRUPOS */}
-                            <div className="flex flex-col items-center gap-1">
-                                <div className="flex gap-0.5">
-                                    {[1, 2, 3, 4].map(k => (
-                                        <div key={k} className="border-2 border-gray-300 dark:border-gray-500 p-0.5 inline-flex">
-                                            <GreenSquare />
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="flex gap-0.5">
-                                    {[5, 6, 7].map(k => (
-                                        <div key={k} className="border-2 border-gray-300 dark:border-gray-500 p-0.5 inline-flex">
-                                            <GreenSquare />
-                                        </div>
-                                    ))}
-                                    <div className="w-4 h-4 bg-green-500 rounded text-white flex items-center justify-center text-[10px] font-bold self-center">✓</div>
-                                </div>
-                                <span className="text-sm font-bold text-gray-700 dark:text-gray-300">7 GRUPOS</span>
-                            </div>
+                        {/* 2. Long division and group visualization */}
+                        <div className="flex justify-center">
+                            <img
+                                src="/numeros_primos/frame213.png"
+                                alt="División y grupos"
+                                className="h-80 object-contain"
+                                draggable={false}
+                            />
                         </div>
 
                         {/* 4. BONO EXPLICADO */}
@@ -255,9 +198,9 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                             value={answers[num] || ''}
                                             onChange={(e) => { setAnswers(prev => ({ ...prev, [num]: e.target.value })); setListoResult(null); }}
                                             className={`border-2 rounded px-2 py-1 text-sm font-semibold min-w-[120px] ${listoResult === 'correct' ? 'border-green-500 bg-green-50 dark:bg-green-900/30' :
-                                                    listoResult === 'incorrect' && answers[num] !== numbers.find(n => n.num === num)?.answer
-                                                        ? 'border-red-500 bg-red-50 dark:bg-red-900/30' :
-                                                        'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
+                                                listoResult === 'incorrect' && answers[num] !== numbers.find(n => n.num === num)?.answer
+                                                    ? 'border-red-500 bg-red-50 dark:bg-red-900/30' :
+                                                    'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
                                                 } text-gray-800 dark:text-gray-200`}
                                             disabled={listoResult === 'correct'}
                                         >
