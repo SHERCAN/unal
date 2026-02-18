@@ -4,6 +4,11 @@ import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import Image from 'next/image';
+
+// Assets
+import vueltasImg from '../vueltas.png';
+import image75Img from '../image 75.png';
 
 interface Props { zoom?: number; }
 
@@ -11,7 +16,26 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        P_LAPS: 'frac-equiv-p-laps',
+        BONO_EXPLICADO: 'frac-equiv-bono-explicado',
+        LAPS_QUESTION: 'frac-equiv-laps-question',
+        DESAFIO_VIDEO: 'frac-equiv-desafio-video',
+    };
+
+    // --- State for Exercises ---
+    const [lapsAns, setLapsAns] = useState('');
+    const [lapsResult, setLapsResult] = useState<'correct' | 'incorrect' | null>(null);
+
+    const [desafioAns, setDesafioAns] = useState('');
+    const [desafioResult, setDesafioResult] = useState<'correct' | 'incorrect' | null>(null);
+
+    const handleLapsCheck = () => {
+        if (lapsAns === '4') setLapsResult('correct');
+        else setLapsResult('incorrect');
+    };
+
+    const handleDesafioCheck = () => {
+        if (desafioAns === '8') setDesafioResult('correct');
+        else setDesafioResult('incorrect');
     };
 
     const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
@@ -52,84 +76,96 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                 </div>
                 <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white" style={{ borderColor: '#60a5fa' }}>
 
-                    <div className="mt-4 space-y-5">
-                        <div className="flex items-center gap-2">
-                            <PlayBtn trackingId={VIDEO_TRACKING.P_LAPS} title="Fracciones Equivalentes - Proceso" />
-                            <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-                                ¿Cómo sabemos si dos fracciones son equivalentes?
-                            </p>
-                        </div>
+                    <div className="mt-4 space-y-12 text-gray-800">
 
-                        {/* Method: Multiply/Divide both parts */}
-                        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl border-2 border-blue-300 dark:border-blue-700 p-4">
-                            <h3 className="font-bold text-blue-700 dark:text-blue-300 mb-3">Método: Multiplicar o dividir ambos</h3>
-
-                            <div className="flex items-center justify-center gap-4 flex-wrap">
-                                {/* 1/2 × 2 = 2/4 */}
-                                <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 text-center">
-                                    <div className="text-xl font-bold">
-                                        <span className="text-blue-600">1</span>/<span className="text-red-600">2</span>
-                                    </div>
-                                    <div className="text-xs text-gray-500 my-1">×2 ↕</div>
-                                    <div className="text-xl font-bold">
-                                        <span className="text-blue-600">2</span>/<span className="text-red-600">4</span>
-                                    </div>
-                                </div>
-
-                                <span className="text-2xl text-gray-400">=</span>
-
-                                {/* 2/4 × 2 = 4/8 */}
-                                <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 text-center">
-                                    <div className="text-xl font-bold">
-                                        <span className="text-blue-600">2</span>/<span className="text-red-600">4</span>
-                                    </div>
-                                    <div className="text-xs text-gray-500 my-1">×2 ↕</div>
-                                    <div className="text-xl font-bold">
-                                        <span className="text-blue-600">4</span>/<span className="text-red-600">8</span>
-                                    </div>
-                                </div>
+                        {/* Section 1: Laps */}
+                        <div className="flex flex-col items-center gap-6">
+                            <div className="w-full flex justify-center">
+                                <Image src={vueltasImg} alt="Vueltas" className="h-120 w-auto object-contain" />
                             </div>
 
-                            <p className="text-sm text-gray-700 dark:text-gray-300 mt-3 text-center">
-                                Si multiplicas (o divides) <span className="font-bold">numerador y denominador por el mismo número</span>,
-                                obtienes una fracción equivalente.
-                            </p>
-                        </div>
-
-                        {/* Cross multiplication method */}
-                        <div className="bg-purple-50 dark:bg-purple-900/20 rounded-xl border-2 border-purple-300 dark:border-purple-700 p-4">
-                            <h3 className="font-bold text-purple-700 dark:text-purple-300 mb-3">Productos Cruzados</h3>
-
-                            <div className="flex items-center justify-center gap-4 mb-3">
-                                <div className="text-center">
-                                    <div className="text-2xl font-bold">
-                                        <span className="text-blue-600">1</span>/<span className="text-red-600">2</span>
-                                    </div>
-                                </div>
-                                <span className="text-lg text-gray-400">=</span>
-                                <div className="text-center">
-                                    <div className="text-2xl font-bold">
-                                        <span className="text-blue-600">2</span>/<span className="text-red-600">4</span>
-                                    </div>
-                                </div>
+                            <div className="flex items-center gap-3">
+                                <PlayBtn trackingId={VIDEO_TRACKING.BONO_EXPLICADO} title="Bono Explicado" />
+                                <span className="font-extrabold text-purple-600 text-xl tracking-wider uppercase">BONO EXPLICADO</span>
                             </div>
 
-                            <div className="bg-white dark:bg-gray-800 rounded-lg p-3 text-center">
-                                <p className="text-sm text-gray-700 dark:text-gray-300">
-                                    <span className="font-bold text-blue-600">1</span> × <span className="font-bold text-red-600">4</span> = <span className="font-bold">4</span>
-                                    {' '}<span className="text-gray-400">y</span>{' '}
-                                    <span className="font-bold text-red-600">2</span> × <span className="font-bold text-blue-600">2</span> = <span className="font-bold">4</span>
+                            <div className="flex flex-col items-start gap-4 text-left max-w-2xl w-full">
+                                <p className="text-xl leading-relaxed">
+                                    Para las tres vueltas, Luis corre 2 vueltas y Camila corre 1 vuelta, entre los dos completan la pista.
+                                    Para seis vueltas: ¿Cuántas vueltas corre Luis?
+                                    <span className="inline-block ml-2 align-middle">
+                                        <PlayBtn trackingId={VIDEO_TRACKING.LAPS_QUESTION} title="Pregunta Vueltas" size="sm" />
+                                    </span>
                                 </p>
-                                <p className="text-sm font-bold text-green-600 mt-1">4 = 4 → ¡Son equivalentes! ✅</p>
+
+                                <div className="relative w-full flex justify-center items-center py-4">
+                                    <div className="flex flex-col items-center">
+                                        <input
+                                            type="number"
+                                            className="w-20 h-10 text-center border-none rounded-lg font-bold text-2xl shadow-sm"
+                                            style={{ backgroundColor: '#d9d9d9' }}
+                                            value={lapsAns}
+                                            onChange={e => { setLapsAns(e.target.value); setLapsResult(null); }}
+                                        />
+                                    </div>
+
+                                    <div className="absolute right-0 flex items-center gap-4">
+                                        <button
+                                            onClick={handleLapsCheck}
+                                            className="bg-purple-600 text-white px-8 py-2 rounded-lg font-bold hover:bg-purple-700 transition-all shadow-md active:scale-95 text-sm">
+                                            LISTO
+                                        </button>
+                                        {lapsResult === 'correct' && <span className="text-green-600 font-bold text-3xl animate-bounce">✓</span>}
+                                        {lapsResult === 'incorrect' && <span className="text-red-500 font-bold text-sm">Intenta de nuevo</span>}
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-300 dark:border-yellow-700 rounded-lg p-3">
-                            <p className="text-sm text-gray-800 dark:text-gray-200">
-                                <span className="font-bold">📝 Regla:</span> Dos fracciones son equivalentes si sus{' '}
-                                <span className="font-bold text-purple-600">productos cruzados</span> son iguales.
+                        {/* Section 2: Figures */}
+                        <div className="space-y-8 pt-8 border-t-2 border-dashed border-gray-100">
+                            <p className="text-xl text-center leading-relaxed">
+                                Observamos dos figuras iguales en tamaño y forma.
+                                Ambas representan el mismo todo (cantidad), pero están divididas en diferente número de partes.
                             </p>
+
+                            <div className="flex justify-center">
+                                <Image src={image75Img} alt="Figuras Fracciones" className="h-40 w-auto object-contain" />
+                            </div>
+
+                            <div className="flex flex-col items-center gap-6 text-center max-w-3xl mx-auto">
+                                <p className="text-xl leading-relaxed">
+                                    <span className="font-black text-red-600">DESAFIO:</span> Ahora el todo se divide en 12 partes. ¿Cuántas partes debe correr Luis?
+                                    <span className="inline-block ml-2 align-middle">
+                                        <PlayBtn trackingId={VIDEO_TRACKING.DESAFIO_VIDEO} title="Desafío Video" size="sm" />
+                                    </span>
+                                </p>
+
+                                <div className="relative w-full flex justify-center items-center py-4">
+                                    <div className="flex items-center gap-4">
+                                        <input
+                                            type="number"
+                                            className="w-20 h-10 text-center border-none rounded-lg font-bold text-2xl shadow-sm"
+                                            style={{ backgroundColor: '#d9d9d9' }}
+                                            value={desafioAns}
+                                            onChange={e => { setDesafioAns(e.target.value); setDesafioResult(null); }}
+                                        />
+                                        <span className="text-xl font-bold">vueltas</span>
+                                    </div>
+
+                                    <div className="absolute right-0 flex items-center gap-4">
+                                        <button
+                                            onClick={handleDesafioCheck}
+                                            className="bg-purple-600 text-white px-8 py-2 rounded-lg font-bold hover:bg-purple-700 transition-all shadow-md active:scale-95 text-sm">
+                                            LISTO
+                                        </button>
+                                        {desafioResult === 'correct' && <span className="text-green-600 font-bold text-3xl animate-bounce">✓</span>}
+                                        {desafioResult === 'incorrect' && <span className="text-red-500 font-bold text-sm">Intenta de nuevo</span>}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
