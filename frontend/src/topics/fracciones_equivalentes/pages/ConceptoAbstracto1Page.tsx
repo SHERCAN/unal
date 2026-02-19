@@ -4,6 +4,12 @@ import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import Image from 'next/image';
+import { MdOutlineStickyNote2 } from 'react-icons/md';
+
+// Assets from comparison topic
+import fraccionesEquivalentesImg from '../../comparacion_fracciones/fraccionesEquivalentes.png';
+import equivalente30Img from '../../comparacion_fracciones/equivalente30.png';
 
 interface Props { zoom?: number; }
 
@@ -11,7 +17,13 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        A1_CROSS: 'frac-equiv-a1-cross',
+        A_INTRO: 'frac-equiv-a-intro',
+        A_NOTATION: 'frac-equiv-a-notation',
+        A_EQUIV_DEF: 'frac-equiv-a-equiv-def',
+        A_DEF_CONCEPT: 'frac-equiv-a-def-concept',
+        A_EXAMPLE: 'frac-equiv-a-example',
+        A_HOW_TO: 'frac-equiv-a-how-to',
+        A_CROSS: 'frac-equiv-a-cross',
     };
 
     const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
@@ -43,102 +55,251 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
         );
     };
 
-    // Practice: cross products
-    const exercises = [
-        { a: 2, b: 3, c: 4, d: 6, equivalent: true },  // 2×6=12, 3×4=12
-        { a: 1, b: 4, c: 3, d: 8, equivalent: false },  // 1×8=8, 4×3=12
-        { a: 3, b: 5, c: 6, d: 10, equivalent: true },  // 3×10=30, 5×6=30
-    ];
+    const Fraction = ({ num, den, color = 'text-green-600', size = 'text-2xl' }: any) => (
+        <div className={`inline-flex flex-col items-center align-middle ${size} font-bold px-1`}>
+            <span className={color}>{num}</span>
+            <div className={`w-full h-0.5 ${color === 'text-green-600' ? 'bg-green-600' : 'bg-gray-800'} my-0.5`} />
+            <span className={color}>{den}</span>
+        </div>
+    );
 
-    const [answers, setAnswers] = useState<Record<number, string>>({});
-    const [listoResult, setListoResult] = useState<'correct' | 'incorrect' | null>(null);
+    // Practice state
+    const [row1, setRow1] = useState({ i1: '', i2: '', i3: '', i4: '', r1: '', r2: '' });
+    const [row2, setRow2] = useState({ i1: '', i2: '', i3: '', i4: '', r1: '', r2: '' });
+    const [row1Result, setRow1Result] = useState<boolean | null>(null);
+    const [row2Result, setRow2Result] = useState<boolean | null>(null);
 
-    const handleListo = () => {
-        const allCorrect = exercises.every((ex, i) => {
-            const expected = ex.equivalent ? 'si' : 'no';
-            return answers[i] === expected;
-        });
-        setListoResult(allCorrect ? 'correct' : 'incorrect');
+    const checkRow1 = () => {
+        const correct = row1.i1 === '3' && row1.i2 === '20' && row1.i3 === '5' && row1.i4 === '12' && row1.r1 === '60' && row1.r2 === '60';
+        setRow1Result(correct);
     };
+
+    const checkRow2 = () => {
+        const correct = row2.i1 === '6' && row2.i2 === '20' && row2.i3 === '10' && row2.i4 === '12' && row2.r1 === '120' && row2.r2 === '120';
+        setRow2Result(correct);
+    };
+
+    const CheckButton = ({ onClick }: { onClick: () => void }) => (
+        <button
+            onClick={onClick}
+            className="bg-purple-700 hover:bg-purple-800 text-white font-bold py-2 px-8 rounded-lg shadow-md transform active:scale-95 transition-all text-sm uppercase tracking-wide whitespace-nowrap"
+        >
+            ¿LISTO?
+        </button>
+    );
+
+    const PracticeInput = ({ value, onChange, placeholder = "?" }: any) => (
+        <input
+            type="text"
+            className="w-14 h-14 text-center rounded-lg text-2xl font-black outline-none border-none shadow-sm"
+            style={{ backgroundColor: '#d9d9d9' }}
+            value={value}
+            placeholder={placeholder}
+            onChange={onChange}
+        />
+    );
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones Equivalentes' }} pageId="frac-equiv-concepto-abstracto-1">
-            {/* A - ABSTRACTO Section */}
-            <div className="relative ml-2 flex items-start">
-                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#be90de' }}>
-                    A
-                </div>
-                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white" style={{ borderColor: '#be90de' }}>
+            <div className="flex flex-col items-center">
+                {/* Main Title */}
+                <h1 className="text-3xl font-black text-purple-800 mb-8 text-center italic tracking-tight uppercase">FRACCIONES EQUIVALENTES</h1>
 
-                    <div className="mt-4 space-y-5">
-                        <div className="flex items-center gap-2">
-                            <PlayBtn trackingId={VIDEO_TRACKING.A1_CROSS} title="Productos Cruzados" />
-                            <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-                                Productos Cruzados — Práctica
+                <div className="relative ml-2 flex items-start">
+                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de]" style={{ borderColor: '#be90de' }}>
+                        A
+                    </div>
+                    <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white border-[#be90de]">
+
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-3">
+                                <p className="text-lg text-gray-800 font-semibold leading-snug">
+                                    Según las actividades anteriores, el color verde es el mismo tamaño. Cambian los números como partes, pero no cambia la cantidad.
+                                </p>
+                                <PlayBtn trackingId={VIDEO_TRACKING.A_INTRO} title="Introducción" />
+                            </div>
+
+                            <div className="flex items-center gap-3">
+                                <p className="text-lg text-gray-800 font-semibold leading-snug">
+                                    Así, en notación matemática, representan la misma cantidad:
+                                </p>
+                                <PlayBtn trackingId={VIDEO_TRACKING.A_NOTATION} title="Notación Matemática" />
+                            </div>
+
+                            <div className="flex justify-center py-4">
+                                <Image src={fraccionesEquivalentesImg} alt="Fracciones Equivalentes" className="h-32 w-auto object-contain" />
+                            </div>
+
+                            <div className="flex items-center gap-3">
+                                <p className="text-xl text-gray-800 font-semibold">
+                                    Estas fracciones se llaman <span style={{ color: '#e95352' }} className="font-bold">fracciones equivalentes</span>.
+                                </p>
+                                <PlayBtn trackingId={VIDEO_TRACKING.A_EQUIV_DEF} title="Definición" />
+                            </div>
+
+                            <div className="flex items-center gap-4 mt-8">
+                                <PlayBtn trackingId={VIDEO_TRACKING.A_DEF_CONCEPT} title="Concepto" />
+                                <div className="text-white font-bold px-6 py-2 rounded-lg text-xl shadow-sm" style={{ backgroundColor: '#e95352' }}>
+                                    ¿Qué son fracciones equivalentes?
+                                </div>
+                            </div>
+
+                            <p className="text-xl text-gray-800 font-semibold pl-12">
+                                Dos o más de fracciones son <span style={{ color: '#e95352' }} className="font-black">equivalentes</span> cuando representan la misma cantidad.
                             </p>
-                        </div>
 
-                        <div className="bg-purple-50 dark:bg-purple-900/20 rounded-xl border border-purple-300 dark:border-purple-700 p-3">
-                            <p className="text-sm text-gray-800 dark:text-gray-200">
-                                <span className="font-bold">Regla:</span> a/b = c/d si{' '}
-                                <span className="font-bold text-purple-600">a × d = b × c</span>
-                            </p>
-                        </div>
+                            <div className="space-y-6 pt-4">
+                                <div className="flex items-center gap-4">
+                                    <PlayBtn trackingId={VIDEO_TRACKING.A_EXAMPLE} title="Ejemplo" />
+                                    <div className="bg-green-600 text-white font-bold px-4 py-1 rounded inline-block text-lg italic shadow-sm">
+                                        Ejemplo:
+                                    </div>
+                                    <p className="text-2xl text-gray-800 font-bold">
+                                        <Fraction num="3" den="5" size="text-2xl" color="text-gray-800" /> ,
+                                        <Fraction num="6" den="10" size="text-2xl" color="text-gray-800" /> y
+                                        <Fraction num="3" den="5" size="text-2xl" color="text-gray-800" /> son fracciones equivalentes.
+                                    </p>
+                                </div>
 
-                        <div className="space-y-4">
-                            {exercises.map((ex, i) => (
-                                <div key={i} className={`rounded-xl border-2 p-4 ${listoResult === 'correct' ? 'border-green-300 bg-green-50 dark:bg-green-900/10' :
-                                    listoResult === 'incorrect' && answers[i] !== (ex.equivalent ? 'si' : 'no')
-                                        ? 'border-red-300 bg-red-50 dark:bg-red-900/10' :
-                                        'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50'
-                                    }`}>
-                                    <div className="flex items-center gap-4 flex-wrap">
-                                        {/* Fraction pair */}
-                                        <div className="flex items-center gap-2">
-                                            <div className="text-center">
-                                                <span className="text-xl font-bold text-blue-600">{ex.a}</span>
-                                                <span className="text-lg text-gray-400">/</span>
-                                                <span className="text-xl font-bold text-red-600">{ex.b}</span>
-                                            </div>
-                                            <span className="text-gray-400 text-lg">y</span>
-                                            <div className="text-center">
-                                                <span className="text-xl font-bold text-blue-600">{ex.c}</span>
-                                                <span className="text-lg text-gray-400">/</span>
-                                                <span className="text-xl font-bold text-red-600">{ex.d}</span>
-                                            </div>
-                                        </div>
-
-                                        {/* Cross products */}
-                                        <div className="text-xs text-gray-500 dark:text-gray-400">
-                                            <p>{ex.a}×{ex.d}={ex.a * ex.d}</p>
-                                            <p>{ex.b}×{ex.c}={ex.b * ex.c}</p>
-                                        </div>
-
-                                        <select
-                                            value={answers[i] || ''}
-                                            onChange={(e) => { setAnswers(prev => ({ ...prev, [i]: e.target.value })); setListoResult(null); }}
-                                            className="border-2 rounded px-2 py-1 text-sm font-bold border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
-                                            disabled={listoResult === 'correct'}
-                                        >
-                                            <option value="">¿Equivalentes?</option>
-                                            <option value="si">Sí ✓</option>
-                                            <option value="no">No ✗</option>
-                                        </select>
+                                <div className="flex items-center justify-center gap-8 pl-12">
+                                    <div className="flex items-center gap-3 text-4xl font-bold">
+                                        <Fraction num="3" den="5" color="text-gray-800" size="text-4xl" />
+                                        <span>=</span>
+                                        <Fraction num="6" den="10" color="text-gray-800" size="text-4xl" />
+                                        <span>=</span>
+                                        <Fraction num="12" den="20" color="text-gray-800" size="text-4xl" />
+                                    </div>
+                                    <div className="bg-purple-600 p-2 rounded-lg shadow-md flex items-center justify-center">
+                                        <MdOutlineStickyNote2 className="text-white text-3xl" />
                                     </div>
                                 </div>
-                            ))}
-                        </div>
+                            </div>
 
-                        <div className="flex items-center gap-3 justify-center">
-                            {listoResult !== 'correct' && (
-                                <button onClick={handleListo}
-                                    className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg text-sm">
-                                    ¿LISTO?
-                                </button>
-                            )}
+                            <div className="space-y-6 pt-8 border-t-2 border-dashed border-gray-100">
+                                <div className="flex items-center gap-4 justify-center">
+                                    <p className="text-xl text-gray-800 font-black">
+                                        ¿Cómo sabemos que <Fraction num="3" den="5" size="text-2xl" color="text-gray-800" /> y <Fraction num="6" den="10" size="text-2xl" color="text-gray-800" /> son equivalentes?
+                                    </p>
+                                    <PlayBtn trackingId={VIDEO_TRACKING.A_HOW_TO} title="Cómo saber" />
+                                </div>
+
+                                <div className="flex items-center gap-4 justify-center">
+                                    <div className="text-black font-black text-sm uppercase tracking-wider">USAR PRODUCTOS CRUZADOS:</div>
+                                    <PlayBtn trackingId={VIDEO_TRACKING.A_CROSS} title="Productos Cruzados" />
+                                </div>
+
+                                <div className="flex justify-center py-8">
+                                    <Image src={equivalente30Img} alt="Productos Cruzados" className="w-[400px] object-contain" />
+                                </div>
+                            </div>
+
+                            {/* PRÁCTICA */}
+                            <div className="space-y-12 mt-12 pb-8">
+                                <div className="bg-[#800000] text-white font-bold px-6 py-1.5 rounded-sm w-fit text-lg shadow-md tracking-wider">
+                                    PRÁCTICA
+                                </div>
+
+                                {/* Row 1 - Exercise 1 */}
+                                <div className="flex items-start gap-6">
+                                    {/* Fixed width container for left side to align arrows */}
+                                    <div className="flex items-center gap-4 min-w-[340px]">
+                                        <div className="w-4 h-4 bg-[#800000] flex-shrink-0" />
+                                        <div className="flex items-center gap-4 justify-center flex-1">
+                                            <Fraction num="3" den="5" color="text-gray-800" size="text-5xl" />
+                                            <span className="text-5xl font-black text-gray-300">=</span>
+                                            <Fraction num="12" den="20" color="text-gray-800" size="text-5xl" />
+                                        </div>
+                                        <span className="text-4xl text-gray-300 w-12 text-center">→</span>
+                                    </div>
+
+                                    {/* Right Side - Inputs Part */}
+                                    <div className="flex flex-col items-center">
+                                        <div className="grid grid-cols-[56px_40px_56px_48px_56px_40px_56px] items-center gap-y-4">
+                                            {/* Line 1: input x input = input x input */}
+                                            <PracticeInput value={row1.i1} onChange={(e: any) => { setRow1({ ...row1, i1: e.target.value }); setRow1Result(null); }} />
+                                            <span className="text-3xl font-black text-gray-700 text-center">×</span>
+                                            <PracticeInput value={row1.i2} onChange={(e: any) => { setRow1({ ...row1, i2: e.target.value }); setRow1Result(null); }} />
+
+                                            <span className="text-3xl font-black text-gray-400 text-center">=</span>
+
+                                            <PracticeInput value={row1.i3} onChange={(e: any) => { setRow1({ ...row1, i3: e.target.value }); setRow1Result(null); }} />
+                                            <span className="text-3xl font-black text-gray-700 text-center">×</span>
+                                            <PracticeInput value={row1.i4} onChange={(e: any) => { setRow1({ ...row1, i4: e.target.value }); setRow1Result(null); }} />
+
+                                            {/* Line 2: result = result */}
+                                            <div /> {/* col 1 */}
+                                            <div /> {/* col 2 */}
+                                            <PracticeInput value={row1.r1} onChange={(e: any) => { setRow1({ ...row1, r1: e.target.value }); setRow1Result(null); }} />
+                                            <span className="text-3xl font-black text-gray-500 text-center">=</span>
+                                            <PracticeInput value={row1.r2} onChange={(e: any) => { setRow1({ ...row1, r2: e.target.value }); setRow1Result(null); }} />
+                                            <div /> {/* col 6 */}
+                                            <div /> {/* col 7 */}
+
+                                            {/* Line 3: Button Row */}
+                                            <div className="col-start-4 flex justify-center mt-2 relative">
+                                                <div className="absolute top-0 left-1/2 -translate-x-1/2 flex items-center gap-4">
+                                                    <CheckButton onClick={checkRow1} />
+                                                    <div className="w-24 flex-shrink-0">
+                                                        {row1Result === true && <span className="text-green-600 text-3xl font-bold">✓</span>}
+                                                        {row1Result === false && <span className="text-red-500 text-xs font-bold leading-tight">Intenta de<br />nuevo</span>}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Row 2 - Exercise 2 */}
+                                <div className="flex items-start gap-6">
+                                    {/* Fixed width container for left side to align arrows */}
+                                    <div className="flex items-center gap-4 min-w-[340px]">
+                                        <div className="w-4 h-4 bg-[#800000] flex-shrink-0" />
+                                        <div className="flex items-center gap-4 justify-center flex-1">
+                                            <Fraction num="6" den="10" color="text-gray-800" size="text-5xl" />
+                                            <span className="text-5xl font-black text-gray-300">=</span>
+                                            <Fraction num="12" den="20" color="text-gray-800" size="text-5xl" />
+                                        </div>
+                                        <span className="text-4xl text-gray-300 w-12 text-center">→</span>
+                                    </div>
+
+                                    {/* Right Side - Inputs Part */}
+                                    <div className="flex flex-col items-center">
+                                        <div className="grid grid-cols-[56px_40px_56px_48px_56px_40px_56px] items-center gap-y-4">
+                                            {/* Line 1: input x input = input x input */}
+                                            <PracticeInput value={row2.i1} onChange={(e: any) => { setRow2({ ...row2, i1: e.target.value }); setRow2Result(null); }} />
+                                            <span className="text-3xl font-black text-gray-700 text-center">×</span>
+                                            <PracticeInput value={row2.i2} onChange={(e: any) => { setRow2({ ...row2, i2: e.target.value }); setRow2Result(null); }} />
+
+                                            <span className="text-3xl font-black text-gray-400 text-center">=</span>
+
+                                            <PracticeInput value={row2.i3} onChange={(e: any) => { setRow2({ ...row2, i3: e.target.value }); setRow2Result(null); }} />
+                                            <span className="text-3xl font-black text-gray-700 text-center">×</span>
+                                            <PracticeInput value={row2.i4} onChange={(e: any) => { setRow2({ ...row2, i4: e.target.value }); setRow2Result(null); }} />
+
+                                            {/* Line 2: result = result */}
+                                            <div />
+                                            <div />
+                                            <PracticeInput value={row2.r1} onChange={(e: any) => { setRow2({ ...row2, r1: e.target.value }); setRow2Result(null); }} />
+                                            <span className="text-3xl font-black text-gray-500 text-center">=</span>
+                                            <PracticeInput value={row2.r2} onChange={(e: any) => { setRow2({ ...row2, r2: e.target.value }); setRow2Result(null); }} />
+                                            <div />
+                                            <div />
+
+                                            {/* Line 3: Button Row */}
+                                            <div className="col-start-4 flex justify-center mt-2 relative">
+                                                <div className="absolute top-0 left-1/2 -translate-x-1/2 flex items-center gap-4">
+                                                    <CheckButton onClick={checkRow2} />
+                                                    <div className="w-24 flex-shrink-0">
+                                                        {row2Result === true && <span className="text-green-600 text-3xl font-bold">✓</span>}
+                                                        {row2Result === false && <span className="text-red-500 text-xs font-bold leading-tight">Intenta de<br />nuevo</span>}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        {listoResult === 'correct' && <p className="text-center text-green-600 font-bold">✅ ¡Correcto!</p>}
-                        {listoResult === 'incorrect' && <p className="text-center text-red-500 font-bold text-sm">❌ Compara los productos cruzados e intenta de nuevo.</p>}
                     </div>
                 </div>
             </div>
