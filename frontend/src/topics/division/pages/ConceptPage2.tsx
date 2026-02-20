@@ -124,20 +124,20 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
         }
     };
 
-    const openVideo = (title: string, trackingId: string) => {
+    const openVideo = (title: string, trackingId: string, videoId: string) => {
         currentTrackingIdRef.current = trackingId;
         setVideoModal({
             isOpen: true,
             title,
-            videoId: VIDEO_IDS.MODULE_DIVISION, // Using general division video for now
+            videoId, // Allow dynamically passing videoId string 
             trackingId
         });
     };
 
-    const PlayButton = ({ trackingId, title }: { trackingId: string, title: string }) => (
+    const PlayButton = ({ trackingId, title, videoId }: { trackingId: string, title: string, videoId: string }) => (
         <button
             type="button"
-            onMouseEnter={() => openVideo(title, trackingId)}
+            onMouseEnter={() => openVideo(title, trackingId, videoId)}
             className={`p-1 text-white rounded-full transition-all flex-shrink-0 inline-flex items-center justify-center ml-2 ${isVideoWatched(trackingId)
                 ? 'bg-green-600 hover:bg-green-700'
                 : 'bg-purple-600 hover:bg-purple-700'
@@ -210,7 +210,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                                         <span className="font-bold">B</span> <span className="mx-1">→</span> <span className="italic font-bold">el número de grupos (el divisor).</span> Es entre cuántos vamos a repartir o en cuántas partes iguales queremos dividir el total.
                                     </p>
                                 </div>
-                                <PlayButton trackingId={VIDEO_TRACKING_IDS.DIVISOR} title="El Divisor" />
+                                <PlayButton trackingId={VIDEO_TRACKING_IDS.DIVISOR} title="El Divisor" videoId="/pag1/vv-1" />
                             </div>
 
                             {/* B Examples */}
@@ -250,7 +250,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                                         <span className="font-bold">C</span> <span className="mx-1">→</span> <span className="italic font-bold">cuánto recibe cada grupo (el cociente).</span> Es el resultado de la división. Cuánto corresponde a cada parte.
                                     </p>
                                 </div>
-                                <PlayButton trackingId={VIDEO_TRACKING_IDS.QUOTIENT} title="El Cociente" />
+                                <PlayButton trackingId={VIDEO_TRACKING_IDS.QUOTIENT} title="El Cociente" videoId="/pag1/vv-2" />
                             </div>
 
                             {/* C Example */}
@@ -270,7 +270,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                         {/* FINAL EXAMPLE */}
                         <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
                             <div className="flex items-center gap-2 mb-2">
-                                <PlayButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE} title="Ejemplo Final" />
+                                <PlayButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE} title="Ejemplo Final" videoId="/pag1/vv-3" />
                                 <div className="bg-green-600 text-white px-3 py-1 rounded-md font-bold text-sm">Example:</div>
                                 <p className="font-bold text-gray-800 dark:text-white">Tenemos 28 galletas y queremos repartirlas en 4 cajas.</p>
                             </div>
@@ -292,7 +292,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                         <div className="flex flex-col items-center mt-2">
                             <div className="flex items-center gap-2 mb-2">
                                 <h4 className="font-black uppercase text-gray-900 dark:text-white">PARTES DE LA DIVISIÓN</h4>
-                                <PlayButton trackingId={VIDEO_TRACKING_IDS.PARTS} title="Partes de la división" />
+                                <PlayButton trackingId={VIDEO_TRACKING_IDS.PARTS} title="Partes de la división" videoId="/pag1/vv-4" />
                             </div>
 
                             <div className="flex items-center gap-8 text-xl font-bold">

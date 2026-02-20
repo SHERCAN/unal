@@ -77,7 +77,7 @@ export default function VideoModal({
               autoPlay
               muted={false}
               className="w-full h-full object-cover"
-              src={`api/videos/${videoId}.mp4`}
+              src={`https://unalapi.solindtec.net${videoId.startsWith('/') ? '' : '/'}${videoId}.mp4`}
               controlsList={!canSkip ? "nodownload noplaybackrate" : "nodownload"}
               crossOrigin="anonymous"
               onTimeUpdate={handleTimeUpdate}

@@ -37,10 +37,16 @@ COPY --from=builder /app/prisma ./prisma
 # Copiar node_modules desde builder para incluir prisma CLI y binarios necesarios
 COPY --from=builder /app/node_modules ./node_modules
 
+# Copiar carpeta de scripts para la creacion del admin
+COPY --from=builder /app/scripts ./scripts
+
 # Copiar package.json para comandos de inicio si es necesario
 COPY --from=builder /app/package.json ./package.json
 
+# Copiar tsconfig.json para usar ts-node
+COPY --from=builder /app/tsconfig.json ./tsconfig.json
+
 EXPOSE 4000
 
-# Ejecutar migraciones y luego arrancar la app. Mantengo migraciones dentro del contenedor.
-CMD ["sh", "-c", "pnpm prisma migrate deploy && pnpm run start"]
+# Ejecutar migraciones, crear el administrador y luego arrancar la app.
+CMD ["sh", "-c", "pnpm prisma migrate deploy && pnpm exec ts-node scripts/createAdmin.ts && pnpm run start"]
