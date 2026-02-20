@@ -1,8 +1,8 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 /**
@@ -23,29 +23,12 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         EJ_2: 'div-exacta-ej-2',
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
-        isOpen: false, title: '', videoId: undefined
-    });
-    const currentTrackingRef = useRef<string | undefined>(undefined);
+    /* videoModal list removed */
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        if (currentTrackingRef.current) {
-            markVideoWatched(currentTrackingRef.current);
-            currentTrackingRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
-    const PlayBtn = ({ trackingId, title }: { trackingId: string; title: string }) => {
-        const watched = isVideoWatched(trackingId);
-        return (
-            <button type="button" onClick={() => {
-                currentTrackingRef.current = trackingId;
-                setVideoModal({ isOpen: true, title, videoId: undefined });
-            }} className={`w-8 h-8 flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-            </button>
-        );
-    };
+    /* PlayButton definition removed */
 
     // Activity 1: Calculate divisions
     const calcItems = [
@@ -91,7 +74,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                 {/* Activity 1: Calculate divisions */}
                 <div className="mb-8 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div className="flex items-center gap-2 mb-4">
-                        <PlayBtn trackingId={VIDEO_TRACKING.EJ_1} title="Calcular divisiones" />
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.EJ_1} title="Calcular divisiones" />
                         <span className="w-4 h-4 bg-purple-700 rounded-sm inline-block flex-shrink-0"></span>
                         <p className="text-sm text-gray-800 dark:text-gray-200">
                             Calcule las siguientes divisiones exactas usando el algoritmo de división.
@@ -128,7 +111,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                 {/* Activity 2: Determine if exact */}
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div className="flex items-center gap-2 mb-4">
-                        <PlayBtn trackingId={VIDEO_TRACKING.EJ_2} title="Determinar si es exacta" />
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.EJ_2} title="Determinar si es exacta" />
                         <span className="w-4 h-4 bg-purple-700 rounded-sm inline-block flex-shrink-0"></span>
                         <p className="text-sm text-gray-800 dark:text-gray-200">
                             Determinar si las siguientes divisiones son exactas o no.
@@ -166,13 +149,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                 </div>
             </div>
 
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                onClose={() => setVideoModal(prev => ({ ...prev, isOpen: false }))}
-                videoId={videoModal.videoId}
-                title={videoModal.title}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

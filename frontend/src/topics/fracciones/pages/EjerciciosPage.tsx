@@ -1,8 +1,8 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useRef, useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import Image from 'next/image';
 
@@ -26,29 +26,14 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         EX3_DEFS: 'fracciones-ex3-defs',
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
-        isOpen: false, title: '', videoId: undefined
-    });
-    const currentTrackingRef = useRef<string | undefined>(undefined);
+    /* videoModal list removed */
+    /* ref removed */
 
-    const openVideo = (trackingId: string, title: string) => {
-        currentTrackingRef.current = trackingId;
-        setVideoModal({ isOpen: true, title, videoId: undefined });
-    };
+    /* openVideo removed */
 
-    const PlayBtn = ({ trackingId, title, className = '' }: { trackingId: string; title: string; className?: string }) => (
-        <button type="button" onClick={() => openVideo(trackingId, title)}
-            className={`w-10 h-10 flex items-center justify-center text-white rounded-full bg-purple-600 hover:bg-purple-700 shadow-md flex-shrink-0 transition-transform hover:scale-105 active:scale-95 ${className}`}>
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-        </button>
-    );
+    /* PlayButton definition removed */
 
-    const handleVideoComplete = () => {
-        if (currentTrackingRef.current) {
-            markVideoWatched(currentTrackingRef.current);
-            currentTrackingRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
     // --- State for Exercise 1 (Table) ---
     // User needs to fill Num and Den columns.
@@ -231,7 +216,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
                                 <div className="py-4 space-y-8">
                                     <div className="flex items-center gap-4 flex-wrap">
-                                        <PlayBtn trackingId={VIDEO_TRACKING.EX3_DEFS} title="Definición: Denominador" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.EX3_DEFS} title="Definición: Denominador" />
                                         <div className="w-4 h-4 bg-purple-600 shrink-0"></div>
                                         <span className="text-lg text-gray-800">El</span>
                                         <select
@@ -246,7 +231,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                     </div>
 
                                     <div className="flex items-center gap-4 flex-wrap">
-                                        <PlayBtn trackingId={VIDEO_TRACKING.EX3_DEFS} title="Definición: Numerador" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.EX3_DEFS} title="Definición: Numerador" />
                                         <div className="w-4 h-4 bg-purple-600 shrink-0"></div>
                                         <span className="text-lg text-gray-800">El</span>
                                         <select

@@ -1,8 +1,8 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useRef, useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 interface Props { zoom?: number; }
@@ -15,34 +15,14 @@ export function EjemplosPage({ zoom = 1 }: Props) {
         EX_CROSS: 'frac-equiv-ex-cross',
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
-        isOpen: false, title: '', videoId: undefined
-    });
-    const currentTrackingRef = useRef<string | undefined>(undefined);
+    /* videoModal list removed */
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        if (currentTrackingRef.current) {
-            markVideoWatched(currentTrackingRef.current);
-            currentTrackingRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
-    const openVideo = (trackingId: string, title: string) => {
-        currentTrackingRef.current = trackingId;
-        setVideoModal({ isOpen: true, title, videoId: undefined });
-    };
+    /* openVideo removed */
 
-    const PlayBtn = ({ trackingId, title, size = 'sm' }: { trackingId: string; title: string; size?: 'sm' | 'md' }) => {
-        const watched = isVideoWatched(trackingId);
-        const sz = size === 'sm' ? 'w-6 h-6' : 'w-8 h-8';
-        const iconSz = size === 'sm' ? 'w-3 h-3' : 'w-4 h-4';
-        return (
-            <button type="button" onClick={() => openVideo(trackingId, title)}
-                className={`${sz} flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
-                <svg className={iconSz} fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-            </button>
-        );
-    };
+    /* PlayButton definition removed */
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones Equivalentes' }} pageId="frac-equiv-ejemplos">
@@ -52,7 +32,7 @@ export function EjemplosPage({ zoom = 1 }: Props) {
                 {/* Example 1: Pizza equivalence */}
                 <div className="rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50 p-5">
                     <div className="flex items-center gap-2 mb-3">
-                        <PlayBtn trackingId={VIDEO_TRACKING.EX_PIZZA} title="Ejemplo: Pizza" />
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.EX_PIZZA} title="Ejemplo: Pizza" />
                         <span className="bg-purple-600 text-white text-sm font-bold px-3 py-1 rounded-full">1</span>
                         <p className="font-bold text-gray-800 dark:text-gray-200">Pizzas Equivalentes</p>
                     </div>
@@ -95,7 +75,7 @@ export function EjemplosPage({ zoom = 1 }: Props) {
                 {/* Example 2: Cross products */}
                 <div className="rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50 p-5">
                     <div className="flex items-center gap-2 mb-3">
-                        <PlayBtn trackingId={VIDEO_TRACKING.EX_CROSS} title="Ejemplo: Productos Cruzados" />
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.EX_CROSS} title="Ejemplo: Productos Cruzados" />
                         <span className="bg-purple-600 text-white text-sm font-bold px-3 py-1 rounded-full">2</span>
                         <p className="font-bold text-gray-800 dark:text-gray-200">Verificar con Productos Cruzados</p>
                     </div>
@@ -133,13 +113,7 @@ export function EjemplosPage({ zoom = 1 }: Props) {
                 </div>
             </div>
 
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                onClose={() => setVideoModal(prev => ({ ...prev, isOpen: false }))}
-                videoId={videoModal.videoId}
-                title={videoModal.title}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

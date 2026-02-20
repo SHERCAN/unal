@@ -1,8 +1,8 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useRef, useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import Image from 'next/image';
 
@@ -21,29 +21,14 @@ export function EjemplosPage({ zoom = 1 }: Props) {
         EX_BONUS: 'fracciones-ex-bonus',
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
-        isOpen: false, title: '', videoId: undefined
-    });
-    const currentTrackingRef = useRef<string | undefined>(undefined);
+    /* videoModal list removed */
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        if (currentTrackingRef.current) {
-            markVideoWatched(currentTrackingRef.current);
-            currentTrackingRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
-    const openVideo = (trackingId: string, title: string) => {
-        currentTrackingRef.current = trackingId;
-        setVideoModal({ isOpen: true, title, videoId: undefined });
-    };
+    /* openVideo removed */
 
-    const PlayBtn = ({ trackingId, title, className = '' }: { trackingId: string; title: string; className?: string }) => (
-        <button type="button" onClick={() => openVideo(trackingId, title)}
-            className={`w-10 h-10 flex items-center justify-center text-white rounded-full bg-purple-600 hover:bg-purple-700 shadow-md flex-shrink-0 transition-transform hover:scale-105 active:scale-95 ${className}`}>
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-        </button>
-    );
+    /* PlayButton definition removed */
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones' }} pageId="fracciones-ejemplos">
@@ -61,7 +46,7 @@ export function EjemplosPage({ zoom = 1 }: Props) {
                             {/* EXAMPLE 1: Balls */}
                             <div className="space-y-6">
                                 <div className="flex items-center gap-4">
-                                    <PlayBtn trackingId={VIDEO_TRACKING.EX_BALLS} title="Ejemplo: Pelotas" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.EX_BALLS} title="Ejemplo: Pelotas" />
                                     <span className="bg-green-600 text-white px-4 py-1.5 font-bold text-lg rounded shadow-sm">Ejemplo:</span>
                                 </div>
 
@@ -114,7 +99,7 @@ export function EjemplosPage({ zoom = 1 }: Props) {
                             {/* EXAMPLE 2: Books */}
                             <div className="space-y-8 pt-12 border-t border-gray-100">
                                 <div className="flex items-center gap-4">
-                                    <PlayBtn trackingId={VIDEO_TRACKING.EX_BOOKS} title="Ejemplo: Libros" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.EX_BOOKS} title="Ejemplo: Libros" />
                                     <span className="bg-green-600 text-white px-4 py-1.5 font-bold text-lg rounded shadow-sm">Ejemplo:</span>
                                 </div>
 
@@ -168,7 +153,7 @@ export function EjemplosPage({ zoom = 1 }: Props) {
 
                                 <div className="flex justify-center pt-12 border-t border-gray-50">
                                     <div className="flex items-center gap-4">
-                                        <PlayBtn trackingId={VIDEO_TRACKING.EX_BONUS} title="Bono Explicado" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.EX_BONUS} title="Bono Explicado" />
                                         <span className="text-purple-700 font-bold text-xl uppercase tracking-wide">BONO EXPLICADO</span>
                                     </div>
                                 </div>
@@ -179,13 +164,7 @@ export function EjemplosPage({ zoom = 1 }: Props) {
                 </div>
             </div>
 
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                onClose={() => setVideoModal(prev => ({ ...prev, isOpen: false }))}
-                videoId={videoModal.videoId}
-                title={videoModal.title}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

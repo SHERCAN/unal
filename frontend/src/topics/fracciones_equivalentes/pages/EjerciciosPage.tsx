@@ -1,8 +1,8 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useState, useRef, useCallback } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 interface Props { zoom?: number; }
@@ -12,34 +12,14 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
     const VIDEO_TRACKING = { INTRO: 'frac-equiv-ej-intro' };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
-        isOpen: false, title: '', videoId: undefined
-    });
-    const currentTrackingRef = useRef<string | undefined>(undefined);
+    /* videoModal list removed */
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        if (currentTrackingRef.current) {
-            markVideoWatched(currentTrackingRef.current);
-            currentTrackingRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
-    const openVideo = (trackingId: string, title: string) => {
-        currentTrackingRef.current = trackingId;
-        setVideoModal({ isOpen: true, title, videoId: undefined });
-    };
+    /* openVideo removed */
 
-    const PlayBtn = ({ trackingId, title, size = 'sm' }: { trackingId: string; title: string; size?: 'sm' | 'md' }) => {
-        const watched = isVideoWatched(trackingId);
-        const sz = size === 'sm' ? 'w-6 h-6' : 'w-8 h-8';
-        const iconSz = size === 'sm' ? 'w-3 h-3' : 'w-4 h-4';
-        return (
-            <button type="button" onClick={() => openVideo(trackingId, title)}
-                className={`${sz} flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
-                <svg className={iconSz} fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-            </button>
-        );
-    };
+    /* PlayButton definition removed */
 
     // ACTIVITY 1: Amplification - fill missing values
     const ampExercises = [
@@ -94,7 +74,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones Equivalentes' }} pageId="frac-equiv-ejercicios">
             <div className="flex items-center gap-2 mb-6">
-                <PlayBtn trackingId={VIDEO_TRACKING.INTRO} title="Ejercicios" size="md" />
+                <PlayVideoButton trackingId={VIDEO_TRACKING.INTRO} title="Ejercicios" size="md" />
                 <h2 className="text-2xl font-bold text-purple-700 dark:text-purple-300">EJERCICIOS</h2>
             </div>
 
@@ -224,13 +204,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                 </div>
             </div>
 
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                onClose={() => setVideoModal(prev => ({ ...prev, isOpen: false }))}
-                videoId={videoModal.videoId}
-                title={videoModal.title}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

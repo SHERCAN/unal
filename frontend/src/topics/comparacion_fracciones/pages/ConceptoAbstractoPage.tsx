@@ -1,8 +1,8 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 interface Props { zoom?: number; }
@@ -14,34 +14,14 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
         A_NOTATION: 'comp-frac-a-notation',
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
-        isOpen: false, title: '', videoId: undefined
-    });
-    const currentTrackingRef = useRef<string | undefined>(undefined);
+    /* videoModal list removed */
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        if (currentTrackingRef.current) {
-            markVideoWatched(currentTrackingRef.current);
-            currentTrackingRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
-    const openVideo = (trackingId: string, title: string) => {
-        currentTrackingRef.current = trackingId;
-        setVideoModal({ isOpen: true, title, videoId: undefined });
-    };
+    /* openVideo removed */
 
-    const PlayBtn = ({ trackingId, title, size = 'md' }: { trackingId: string; title: string; size?: 'sm' | 'md' }) => {
-        const watched = isVideoWatched(trackingId);
-        const sz = size === 'sm' ? 'w-6 h-6' : 'w-8 h-8';
-        const iconSz = size === 'sm' ? 'w-3 h-3' : 'w-4 h-4';
-        return (
-            <button type="button" onClick={() => openVideo(trackingId, title)}
-                className={`${sz} flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
-                <svg className={iconSz} fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-            </button>
-        );
-    };
+    /* PlayButton definition removed */
 
     // Practice: compare fractions with cross products
     const exercises = [
@@ -69,7 +49,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
 
                     <div className="mt-4 space-y-5">
                         <div className="flex items-center gap-2">
-                            <PlayBtn trackingId={VIDEO_TRACKING.A_NOTATION} title="Comparación Matemática" />
+                            <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOTATION} title="Comparación Matemática" />
                             <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">
                                 Compara con Productos Cruzados
                             </p>
@@ -149,13 +129,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                 </div>
             </div>
 
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                onClose={() => setVideoModal(prev => ({ ...prev, isOpen: false }))}
-                videoId={videoModal.videoId}
-                title={videoModal.title}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

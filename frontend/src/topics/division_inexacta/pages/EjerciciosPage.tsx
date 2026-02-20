@@ -1,8 +1,8 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 /**
@@ -29,29 +29,12 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         EJ_3_4: 'div-inexacta-ej-3-4',
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
-        isOpen: false, title: '', videoId: undefined
-    });
-    const currentTrackingRef = useRef<string | undefined>(undefined);
+    /* videoModal list removed */
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        if (currentTrackingRef.current) {
-            markVideoWatched(currentTrackingRef.current);
-            currentTrackingRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
-    const PlayBtn = ({ trackingId, title }: { trackingId: string; title: string }) => {
-        const watched = isVideoWatched(trackingId);
-        return (
-            <button type="button" onClick={() => {
-                currentTrackingRef.current = trackingId;
-                setVideoModal({ isOpen: true, title, videoId: undefined });
-            }} className={`w-8 h-8 flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-            </button>
-        );
-    };
+    /* PlayButton definition removed */
 
     // ===== ACTIVITY 1: Determinar exacta o inexacta =====
     const act1Items = [
@@ -161,7 +144,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                 {/* ===== ACTIVITY 1 ===== */}
                 <div className="mb-6 bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div className="flex items-center gap-2 mb-4">
-                        <PlayBtn trackingId={VIDEO_TRACKING.EJ_1} title="Ejercicio 1" />
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.EJ_1} title="Ejercicio 1" />
                         <span className="bg-purple-700 text-white text-sm font-bold w-8 h-8 rounded flex items-center justify-center flex-shrink-0">1</span>
                         <p className="text-sm font-bold text-gray-800 dark:text-gray-200">
                             Determinar si las siguientes divisiones son exactas u inexactas.
@@ -292,7 +275,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                             <div key={i} className="space-y-2 bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
                                 {/* Problem text */}
                                 <div className="flex items-start gap-2">
-                                    <PlayBtn trackingId={item.trackingId} title={`Problema ${i + 1}`} />
+                                    <PlayVideoButton trackingId={item.trackingId} title={`Problema ${i + 1}`} />
                                     <span className="w-3 h-3 bg-gray-800 dark:bg-gray-200 rounded-sm inline-block flex-shrink-0 mt-1.5"></span>
                                     <div>
                                         <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">{item.text}</p>
@@ -356,13 +339,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                 </div>
             </div>
 
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                onClose={() => setVideoModal(prev => ({ ...prev, isOpen: false }))}
-                videoId={videoModal.videoId}
-                title={videoModal.title}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

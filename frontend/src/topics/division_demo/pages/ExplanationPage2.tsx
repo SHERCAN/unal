@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 interface DivisionExplanationPage2Props {
@@ -16,24 +15,12 @@ export function ExplanationPage2({ zoom = 1 }: DivisionExplanationPage2Props) {
     // Define tracking ID for this page's video
     const VIDEO_TRACKING_ID = 'division-explanation2-notation';
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string; trackingId?: string }>({
-        isOpen: false,
-        title: '',
-        videoId: undefined,
-        trackingId: undefined
-    });
+    /* videoModal list removed */
 
     // Use a ref to store the current tracking ID so it persists even after modal closes
-    const currentTrackingIdRef = React.useRef<string | undefined>(undefined);
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        // Use the ref value instead of state, as state may have been reset when modal closed
-        const idToMark = currentTrackingIdRef.current;
-        if (idToMark) {
-            markVideoWatched(idToMark);
-            currentTrackingIdRef.current = undefined; // Clear after marking
-        }
-    };
+    /* handleVideoComplete removed */
 
     return (
         <BookPageContainer
@@ -159,14 +146,7 @@ export function ExplanationPage2({ zoom = 1 }: DivisionExplanationPage2Props) {
             {/* End of A - ABSTRACTO Box */}
 
             {/* Video Modal */}
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                title={videoModal.title}
-                videoId={videoModal.videoId}
-                onClose={() => setVideoModal({ isOpen: false, title: '', videoId: undefined, trackingId: undefined })}
-                canSkip={videoModal.videoId ? isVideoWatched(videoModal.trackingId || videoModal.videoId) : false}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

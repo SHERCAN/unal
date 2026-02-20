@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 interface DivisionExercisesPageProps {
@@ -19,23 +18,12 @@ export function ExercisesPage({ zoom = 1 }: DivisionExercisesPageProps) {
         ACTIVITY_3: 'division-exercises-activity3'
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string; trackingId?: string }>({
-        isOpen: false,
-        title: '',
-        videoId: undefined,
-        trackingId: undefined
-    });
+    /* videoModal list removed */
 
     // Use a ref to store the current tracking ID so it persists even after modal closes
-    const currentTrackingIdRef = React.useRef<string | undefined>(undefined);
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        const idToMark = currentTrackingIdRef.current;
-        if (idToMark) {
-            markVideoWatched(idToMark);
-            currentTrackingIdRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
     // Activity 1 State
     const [act1Selected, setAct1Selected] = useState<number | null>(null);
@@ -619,14 +607,7 @@ export function ExercisesPage({ zoom = 1 }: DivisionExercisesPageProps) {
             </div>
 
             {/* Video Modal */}
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                title={videoModal.title}
-                videoId={videoModal.videoId}
-                onClose={() => setVideoModal({ isOpen: false, title: '', videoId: undefined, trackingId: undefined })}
-                canSkip={videoModal.videoId ? isVideoWatched(videoModal.trackingId || videoModal.videoId) : false}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

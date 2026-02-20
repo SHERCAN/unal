@@ -1,8 +1,8 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 interface Props { zoom?: number; }
@@ -62,34 +62,14 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         P_EXPLAIN: 'fracciones-p-explain',
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
-        isOpen: false, title: '', videoId: undefined
-    });
-    const currentTrackingRef = useRef<string | undefined>(undefined);
+    /* videoModal list removed */
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        if (currentTrackingRef.current) {
-            markVideoWatched(currentTrackingRef.current);
-            currentTrackingRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
-    const openVideo = (trackingId: string, title: string) => {
-        currentTrackingRef.current = trackingId;
-        setVideoModal({ isOpen: true, title, videoId: undefined });
-    };
+    /* openVideo removed */
 
-    const PlayBtn = ({ trackingId, title, size = 'md' }: { trackingId: string; title: string; size?: 'sm' | 'md' }) => {
-        const watched = isVideoWatched(trackingId);
-        const sz = size === 'sm' ? 'w-10 h-10' : 'w-14 h-14';
-        const iconSz = size === 'sm' ? 'w-5 h-5' : 'w-7 h-7';
-        return (
-            <button type="button" onClick={() => openVideo(trackingId, title)}
-                className={`${sz} flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'} shadow-lg transform hover:scale-105`}>
-                <svg className={iconSz} fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-            </button>
-        );
-    };
+    /* PlayButton definition removed */
 
     /* ═══════════════════════ SECTION C STATE ═══════════════════════ */
     const [sliceLocations, setSliceLocations] = useState<Record<number, number>>({
@@ -234,7 +214,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
                     {/* Play button */}
                     <div className="absolute top-3 left-3 z-20">
-                        <PlayBtn trackingId={VIDEO_TRACKING.C_PIZZA} title="Fracciones - Concepto Concreto" />
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.C_PIZZA} title="Fracciones - Concepto Concreto" />
                     </div>
 
                     {/* ── ROW 1: 3 MESAS ── */}
@@ -365,7 +345,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                 utilizando únicamente tres cortes. Luego, retira 3 de esas porciones.
                             </p>
                         </div>
-                        <PlayBtn trackingId={VIDEO_TRACKING.P_EXPLAIN} title="Fracciones - Proceso" size="sm" />
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.P_EXPLAIN} title="Fracciones - Proceso" size="sm" />
                     </div>
 
                     {/* Labels */}
@@ -488,13 +468,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                 </div>
             </div>
 
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                onClose={() => setVideoModal(prev => ({ ...prev, isOpen: false }))}
-                videoId={videoModal.videoId}
-                title={videoModal.title}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

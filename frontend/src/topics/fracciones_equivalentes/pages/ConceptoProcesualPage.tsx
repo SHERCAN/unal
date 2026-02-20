@@ -1,8 +1,8 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import Image from 'next/image';
 
@@ -38,34 +38,14 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
         else setDesafioResult('incorrect');
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
-        isOpen: false, title: '', videoId: undefined
-    });
-    const currentTrackingRef = useRef<string | undefined>(undefined);
+    /* videoModal list removed */
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        if (currentTrackingRef.current) {
-            markVideoWatched(currentTrackingRef.current);
-            currentTrackingRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
-    const openVideo = (trackingId: string, title: string) => {
-        currentTrackingRef.current = trackingId;
-        setVideoModal({ isOpen: true, title, videoId: undefined });
-    };
+    /* openVideo removed */
 
-    const PlayBtn = ({ trackingId, title, size = 'md' }: { trackingId: string; title: string; size?: 'sm' | 'md' }) => {
-        const watched = isVideoWatched(trackingId);
-        const sz = size === 'sm' ? 'w-6 h-6' : 'w-8 h-8';
-        const iconSz = size === 'sm' ? 'w-3 h-3' : 'w-4 h-4';
-        return (
-            <button type="button" onClick={() => openVideo(trackingId, title)}
-                className={`${sz} flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
-                <svg className={iconSz} fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-            </button>
-        );
-    };
+    /* PlayButton definition removed */
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones Equivalentes' }} pageId="frac-equiv-concepto-procesual">
@@ -85,7 +65,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                             </div>
 
                             <div className="flex items-center gap-3">
-                                <PlayBtn trackingId={VIDEO_TRACKING.BONO_EXPLICADO} title="Bono Explicado" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.BONO_EXPLICADO} title="Bono Explicado" />
                                 <span className="font-extrabold text-purple-600 text-xl tracking-wider uppercase">BONO EXPLICADO</span>
                             </div>
 
@@ -94,7 +74,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                                     Para las tres vueltas, Luis corre 2 vueltas y Camila corre 1 vuelta, entre los dos completan la pista.
                                     Para seis vueltas: ¿Cuántas vueltas corre Luis?
                                     <span className="inline-block ml-2 align-middle">
-                                        <PlayBtn trackingId={VIDEO_TRACKING.LAPS_QUESTION} title="Pregunta Vueltas" size="sm" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.LAPS_QUESTION} title="Pregunta Vueltas" size="sm" />
                                     </span>
                                 </p>
 
@@ -137,7 +117,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                                 <p className="text-xl leading-relaxed">
                                     <span className="font-black text-red-600">DESAFIO:</span> Ahora el todo se divide en 12 partes. ¿Cuántas partes debe correr Luis?
                                     <span className="inline-block ml-2 align-middle">
-                                        <PlayBtn trackingId={VIDEO_TRACKING.DESAFIO_VIDEO} title="Desafío Video" size="sm" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.DESAFIO_VIDEO} title="Desafío Video" size="sm" />
                                     </span>
                                 </p>
 
@@ -170,13 +150,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                 </div>
             </div>
 
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                onClose={() => setVideoModal(prev => ({ ...prev, isOpen: false }))}
-                videoId={videoModal.videoId}
-                title={videoModal.title}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

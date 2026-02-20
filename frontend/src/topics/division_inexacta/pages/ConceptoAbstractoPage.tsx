@@ -1,8 +1,8 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 /**
@@ -26,29 +26,14 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
         A_DEF: 'div-inexacta-a-def',
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
-        isOpen: false, title: '', videoId: undefined
-    });
-    const currentTrackingRef = useRef<string | undefined>(undefined);
+    /* videoModal list removed */
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        if (currentTrackingRef.current) {
-            markVideoWatched(currentTrackingRef.current);
-            currentTrackingRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
-    const openVideo = (trackingId: string, title: string) => {
-        currentTrackingRef.current = trackingId;
-        setVideoModal({ isOpen: true, title, videoId: undefined });
-    };
+    /* openVideo removed */
 
-    const PlayBtn = ({ trackingId, title }: { trackingId: string; title: string }) => (
-        <button type="button" onClick={() => openVideo(trackingId, title)}
-            className={`w-8 h-8 flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(trackingId) ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-        </button>
-    );
+    /* PlayButton definition removed */
 
     const DivisionAlgorithm = ({ dividend, divisor, quotient, subtract, remainder, multTable }: {
         dividend: number; divisor: number; quotient: number; subtract: number; remainder: number;
@@ -122,7 +107,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                         cada grupo recibe la misma cantidad, pero hay resto <span className="font-bold text-lg text-red-600">2</span> medallas; estas
                                         corresponden al resto de la división.
                                     </p>
-                                    <PlayBtn trackingId={VIDEO_TRACKING.A_INTRO} title="Introducción" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="Introducción" />
                                 </div>
                             </div>
 
@@ -130,7 +115,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                             <div>
                                 <div className="flex items-center gap-2 mb-3">
                                     <p className="text-base text-gray-800 dark:text-gray-200">Se escribe matemáticamente como:</p>
-                                    <PlayBtn trackingId={VIDEO_TRACKING.A_MATH} title="Notación Matemática" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_MATH} title="Notación Matemática" />
                                 </div>
 
                                 <div className="text-center my-4">
@@ -148,7 +133,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                             <div>
                                 <div className="flex items-center gap-2 mb-2">
                                     <p className="text-base text-gray-800 dark:text-gray-200">Señala &quot;<span className="text-red-500">resto 2</span>&quot; como:</p>
-                                    <PlayBtn trackingId={VIDEO_TRACKING.A_COMO} title="Señala resto 2" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMO} title="Señala resto 2" />
                                 </div>
 
                                 <DivisionAlgorithm
@@ -163,7 +148,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                             {/* Definition */}
                             <div>
                                 <div className="flex items-center gap-2 mb-1">
-                                    <PlayBtn trackingId={VIDEO_TRACKING.A_DEF} title="¿Qué es una división inexacta?" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_DEF} title="¿Qué es una división inexacta?" />
                                     <span className="bg-purple-600 text-white font-bold px-3 py-1 rounded text-sm">¿Qué es una división inexacta?</span>
                                 </div>
                                 <p className="text-base text-gray-800 dark:text-gray-200 mt-2">
@@ -259,13 +244,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                 </div>
             </div>
 
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                onClose={() => setVideoModal(prev => ({ ...prev, isOpen: false }))}
-                videoId={videoModal.videoId}
-                title={videoModal.title}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

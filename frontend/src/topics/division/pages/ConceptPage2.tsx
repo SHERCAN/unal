@@ -1,9 +1,9 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 interface DivisionConceptPage2Props {
@@ -107,48 +107,15 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
         PARTS: 'division-concept2-parts'
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string; trackingId?: string }>({
-        isOpen: false,
-        title: '',
-        videoId: undefined,
-        trackingId: undefined
-    });
+    /* videoModal list removed */
 
-    const currentTrackingIdRef = React.useRef<string | undefined>(undefined);
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        const idToMark = currentTrackingIdRef.current;
-        if (idToMark) {
-            markVideoWatched(idToMark);
-            currentTrackingIdRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
-    const openVideo = (title: string, trackingId: string, videoId: string) => {
-        currentTrackingIdRef.current = trackingId;
-        setVideoModal({
-            isOpen: true,
-            title,
-            videoId, // Allow dynamically passing videoId string 
-            trackingId
-        });
-    };
+    /* openVideo removed */
 
-    const PlayButton = ({ trackingId, title, videoId }: { trackingId: string, title: string, videoId: string }) => (
-        <button
-            type="button"
-            onMouseEnter={() => openVideo(title, trackingId, videoId)}
-            className={`p-1 text-white rounded-full transition-all flex-shrink-0 inline-flex items-center justify-center ml-2 ${isVideoWatched(trackingId)
-                ? 'bg-green-600 hover:bg-green-700'
-                : 'bg-purple-600 hover:bg-purple-700'
-                }`}
-            style={{ width: 'clamp(1.5rem, 4vmin, 2rem)', height: 'clamp(1.5rem, 4vmin, 2rem)' }}
-        >
-            <svg className="w-3 h-3 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-            </svg>
-        </button>
-    );
+    /* PlayButton definition removed */
 
     return (
         <BookPageContainer
@@ -210,7 +177,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                                         <span className="font-bold">B</span> <span className="mx-1">→</span> <span className="italic font-bold">el número de grupos (el divisor).</span> Es entre cuántos vamos a repartir o en cuántas partes iguales queremos dividir el total.
                                     </p>
                                 </div>
-                                <PlayButton trackingId={VIDEO_TRACKING_IDS.DIVISOR} title="El Divisor" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.DIVISOR} title="El Divisor" videoId="/pag1/vv-1" />
                             </div>
 
                             {/* B Examples */}
@@ -250,7 +217,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                                         <span className="font-bold">C</span> <span className="mx-1">→</span> <span className="italic font-bold">cuánto recibe cada grupo (el cociente).</span> Es el resultado de la división. Cuánto corresponde a cada parte.
                                     </p>
                                 </div>
-                                <PlayButton trackingId={VIDEO_TRACKING_IDS.QUOTIENT} title="El Cociente" videoId="/pag1/vv-2" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.QUOTIENT} title="El Cociente" videoId="/pag1/vv-2" />
                             </div>
 
                             {/* C Example */}
@@ -270,7 +237,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                         {/* FINAL EXAMPLE */}
                         <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
                             <div className="flex items-center gap-2 mb-2">
-                                <PlayButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE} title="Ejemplo Final" videoId="/pag1/vv-3" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE} title="Ejemplo Final" videoId="/pag1/vv-3" />
                                 <div className="bg-green-600 text-white px-3 py-1 rounded-md font-bold text-sm">Example:</div>
                                 <p className="font-bold text-gray-800 dark:text-white">Tenemos 28 galletas y queremos repartirlas en 4 cajas.</p>
                             </div>
@@ -292,7 +259,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                         <div className="flex flex-col items-center mt-2">
                             <div className="flex items-center gap-2 mb-2">
                                 <h4 className="font-black uppercase text-gray-900 dark:text-white">PARTES DE LA DIVISIÓN</h4>
-                                <PlayButton trackingId={VIDEO_TRACKING_IDS.PARTS} title="Partes de la división" videoId="/pag1/vv-4" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PARTS} title="Partes de la división" videoId="/pag1/vv-4" />
                             </div>
 
                             <div className="flex items-center gap-8 text-xl font-bold">
@@ -321,14 +288,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                 </div>
             </div>
 
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                title={videoModal.title}
-                videoId={videoModal.videoId}
-                onClose={() => setVideoModal({ isOpen: false, title: '', videoId: undefined, trackingId: undefined })}
-                canSkip={videoModal.videoId ? isVideoWatched(videoModal.trackingId || '') : false}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

@@ -1,8 +1,8 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 /**
@@ -28,29 +28,14 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
         A_EXAMPLE: 'div-exacta-a-example',
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
-        isOpen: false, title: '', videoId: undefined
-    });
-    const currentTrackingRef = useRef<string | undefined>(undefined);
+    /* videoModal list removed */
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        if (currentTrackingRef.current) {
-            markVideoWatched(currentTrackingRef.current);
-            currentTrackingRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
-    const openVideo = (trackingId: string, title: string) => {
-        currentTrackingRef.current = trackingId;
-        setVideoModal({ isOpen: true, title, videoId: undefined });
-    };
+    /* openVideo removed */
 
-    const PlayBtn = ({ trackingId, title }: { trackingId: string; title: string }) => (
-        <button type="button" onClick={() => openVideo(trackingId, title)}
-            className={`w-8 h-8 flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(trackingId) ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-        </button>
-    );
+    /* PlayButton definition removed */
 
     const DivisionAlgorithm = ({ dividend, divisor, quotient, subtract, remainder, multTable }: {
         dividend: number; divisor: number; quotient: number; subtract: number; remainder: number;
@@ -122,7 +107,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                                     en <span className="font-bold text-lg text-red-600">3</span> grupos de deportistas. Así, cada uno de 3 grupos tiene la misma
                                     cantidad de <span className="font-bold text-lg text-green-600">6</span> medallas. <span className="font-bold text-lg text-red-600">NO SOBRE</span> ninguna medalla.
                                 </p>
-                                <PlayBtn trackingId={VIDEO_TRACKING.A_NOTA} title="Nota sobre SOBRE y RESTO" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOTA} title="Nota sobre SOBRE y RESTO" />
 
                                 <div className="mt-2 bg-gray-50 dark:bg-gray-700 rounded-lg p-3 border-l-4 border-purple-500">
                                     <p className="text-sm text-gray-700 dark:text-gray-300">
@@ -136,7 +121,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                             <div>
                                 <div className="flex items-center gap-2 mb-2">
                                     <p className="text-base text-gray-800 dark:text-gray-200">Vemos la notación matemática:</p>
-                                    <PlayBtn trackingId={VIDEO_TRACKING.A_MATH} title="Notación Matemática" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_MATH} title="Notación Matemática" />
                                 </div>
 
                                 <div className="text-center my-3">
@@ -153,7 +138,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                                     <p className="text-sm text-gray-700 dark:text-gray-300">
                                         &quot;<span className="text-red-500">resto 0</span>&quot; significa que no hay resto. ¿Cómo sabemos esto?
                                     </p>
-                                    <PlayBtn trackingId={VIDEO_TRACKING.A_COMO} title="¿Cómo sabemos?" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMO} title="¿Cómo sabemos?" />
                                 </div>
 
                                 <DivisionAlgorithm
@@ -168,7 +153,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                             {/* Definition */}
                             <div>
                                 <div className="flex items-center gap-2 mb-1">
-                                    <PlayBtn trackingId={VIDEO_TRACKING.A_DEF} title="¿Qué es una división exacta?" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_DEF} title="¿Qué es una división exacta?" />
                                     <span className="bg-purple-600 text-white font-bold px-3 py-1 rounded text-sm">¿Qué es una división exacta?</span>
                                 </div>
                                 <p className="text-base text-gray-800 dark:text-gray-200 mt-2">
@@ -180,7 +165,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                             <div>
                                 <span className="bg-red-500 text-white font-bold px-3 py-1 rounded text-sm">Ejemplo:</span>
                                 <div className="flex items-center gap-2 mt-2">
-                                    <PlayBtn trackingId={VIDEO_TRACKING.A_EXAMPLE} title="Ejemplo 32÷4" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_EXAMPLE} title="Ejemplo 32÷4" />
                                     <span className="w-3 h-3 bg-gray-800 dark:bg-gray-200 rounded-sm inline-block"></span>
                                     <p className="text-sm text-gray-800 dark:text-gray-200">
                                         La división 32 ÷ 4 = 8 es <span className="text-green-600 font-bold">exacta</span> porque no tiene resto.
@@ -200,13 +185,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                 </div>
             </div>
 
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                onClose={() => setVideoModal(prev => ({ ...prev, isOpen: false }))}
-                videoId={videoModal.videoId}
-                title={videoModal.title}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

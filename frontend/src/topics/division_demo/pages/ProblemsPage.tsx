@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 interface DivisionProblemsPageProps {
@@ -37,19 +36,9 @@ export function ProblemsPage({ zoom = 1 }: DivisionProblemsPageProps) {
 
     const { isVideoWatched, markVideoWatched, completeStage, watchedVideos } = useVideoProgress();
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string; trackingId?: string }>({
-        isOpen: false,
-        title: '',
-        videoId: undefined,
-        trackingId: undefined
-    });
+    /* videoModal list removed */
 
-    const handleVideoComplete = () => {
-        if (videoModal.videoId) {
-            const idToMark = videoModal.trackingId || videoModal.videoId;
-            markVideoWatched(idToMark);
-        }
-    };
+    /* handleVideoComplete removed */
 
     // Problem 1 states
     const [problem1Dividend, setProblem1Dividend] = useState('');
@@ -412,14 +401,7 @@ export function ProblemsPage({ zoom = 1 }: DivisionProblemsPageProps) {
             </div>
             {/* End of A - ABSTRACTO Box */}
             {/* Video Modal */}
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                title={videoModal.title}
-                videoId={videoModal.videoId}
-                onClose={() => setVideoModal({ isOpen: false, title: '', videoId: undefined, trackingId: undefined })}
-                canSkip={videoModal.videoId ? isVideoWatched(videoModal.trackingId || videoModal.videoId) : false}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer >
     );
 }   

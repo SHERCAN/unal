@@ -1,9 +1,9 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 // Import assets
@@ -26,10 +26,8 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
         NOTA: 'fracciones-nota-irreg',
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
-        isOpen: false, title: '', videoId: undefined
-    });
-    const currentTrackingRef = useRef<string | undefined>(undefined);
+    /* videoModal list removed */
+    /* ref removed */
 
     const [inputs, setInputs] = useState({
         ex1_n: '', ex1_d: '',
@@ -42,24 +40,11 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
     // State for validation messages
     const [results, setResults] = useState<{ [key: string]: string | null }>({});
 
-    const handleVideoComplete = () => {
-        if (currentTrackingRef.current) {
-            markVideoWatched(currentTrackingRef.current);
-            currentTrackingRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
-    const openVideo = (trackingId: string, title: string) => {
-        currentTrackingRef.current = trackingId;
-        setVideoModal({ isOpen: true, title, videoId: undefined });
-    };
+    /* openVideo removed */
 
-    const PlayBtn = ({ trackingId, title }: { trackingId: string; title: string }) => (
-        <button type="button" onClick={() => openVideo(trackingId, title)}
-            className="w-8 h-8 flex items-center justify-center text-white rounded-full bg-purple-600 hover:bg-purple-700 shadow-md flex-shrink-0 transition-transform hover:scale-105 active:scale-95">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-        </button>
-    );
+    /* PlayButton definition removed */
 
     const validate = (id: string, correctN: string, correctD: string) => {
         const n = inputs[`${id}_n` as keyof typeof inputs];
@@ -197,7 +182,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                     no es correcta porque no es apropiada para la fracción.
                                 </span>
 
-                                <PlayBtn trackingId={VIDEO_TRACKING.NOTA} title="Error Fraccion" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="Error Fraccion" />
                             </div>
                         </div>
 
@@ -270,7 +255,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                     <p className="text-lg text-gray-800 font-medium">
                                         Como se muestra la siguiente figura, <span className="font-bold text-red-600">NO</span> es realmente una forma de fracción.
                                     </p>
-                                    <PlayBtn trackingId={VIDEO_TRACKING.NOTA} title="Nota Irregular" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="Nota Irregular" />
                                 </div>
 
                                 <div className="flex flex-col items-start gap-4 mt-4 w-full">
@@ -285,7 +270,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                         <p className="text-lg font-medium">
                                             ¿Por qué esta figura no es una forma de fracción? Esas partes son diferentes.
                                         </p>
-                                        <PlayBtn trackingId={VIDEO_TRACKING.NOTA} title="Video Explicación" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="Video Explicación" />
                                     </div>
                                 </div>
                             </div>
@@ -296,13 +281,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
             </div>
 
 
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                onClose={() => setVideoModal(prev => ({ ...prev, isOpen: false }))}
-                videoId={videoModal.videoId}
-                title={videoModal.title}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

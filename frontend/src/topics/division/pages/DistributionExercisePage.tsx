@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 interface Orange {
@@ -221,17 +220,10 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
     };
 
     // Video Modal
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string; trackingId?: string }>({
-        isOpen: false, title: '', videoId: undefined, trackingId: undefined
-    });
+    /* videoModal list removed */
     const currentTrackingIdRef = useRef<string>();
 
-    const handleVideoComplete = () => {
-        if (currentTrackingIdRef.current) {
-            markVideoWatched(currentTrackingIdRef.current);
-            currentTrackingIdRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
     return (
         <BookPageContainer
@@ -602,14 +594,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
             </div>
 
             {/* Video Modal */}
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                title={videoModal.title}
-                videoId={videoModal.videoId}
-                onClose={() => setVideoModal({ ...videoModal, isOpen: false })}
-                canSkip={true}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

@@ -1,9 +1,9 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 interface DivisionConceptPageProps {
@@ -24,48 +24,15 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
         DIVIDEND: 'division-concept-dividend',
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string; trackingId?: string }>({
-        isOpen: false,
-        title: '',
-        videoId: undefined,
-        trackingId: undefined
-    });
+    /* videoModal list removed */
 
-    const currentTrackingIdRef = React.useRef<string | undefined>(undefined);
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        const idToMark = currentTrackingIdRef.current;
-        if (idToMark) {
-            markVideoWatched(idToMark);
-            currentTrackingIdRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
-    const openVideo = (title: string, trackingId: string) => {
-        currentTrackingIdRef.current = trackingId;
-        setVideoModal({
-            isOpen: true,
-            title,
-            videoId: VIDEO_IDS.MODULE_DIVISION, // Using general division video for now
-            trackingId
-        });
-    };
+    /* openVideo removed */
 
-    const PlayButton = ({ trackingId, title }: { trackingId: string, title: string }) => (
-        <button
-            type="button"
-            onMouseEnter={() => openVideo(title, trackingId)}
-            className={`p-1 text-white rounded-full transition-all flex-shrink-0 inline-flex items-center justify-center ml-2 ${isVideoWatched(trackingId)
-                ? 'bg-green-600 hover:bg-green-700'
-                : 'bg-purple-600 hover:bg-purple-700'
-                }`}
-            style={{ width: 'clamp(1.5rem, 4vmin, 2rem)', height: 'clamp(1.5rem, 4vmin, 2rem)' }}
-        >
-            <svg className="w-3 h-3 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-            </svg>
-        </button>
-    );
+    /* PlayButton definition removed */
 
     return (
         <BookPageContainer
@@ -88,14 +55,14 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                             <p>
                                 El total de <span className="font-bold text-orange-500">24</span> naranjas se reparte en <span className="font-bold text-green-600">4</span> cajas. Entonces, cada caja tiene <span className="font-bold text-purple-600">6</span> naranjas.
                             </p>
-                            <PlayButton trackingId={VIDEO_TRACKING_IDS.INTRO} title="Introducción" />
+                            <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.INTRO} title="Introducción" />
                         </div>
 
                         {/* Writing Division */}
                         <div>
                             <div className="flex items-center gap-2 mb-4 text-gray-800 dark:text-gray-200 font-medium" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                 <p>Dividir <span className="font-bold text-orange-500">24</span> entre <span className="font-bold text-green-600">4</span>, se escribe así:</p>
-                                <PlayButton trackingId={VIDEO_TRACKING_IDS.NOTATION} title="Notación de división" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.NOTATION} title="Notación de división" />
                             </div>
 
                             {/* Visualization: Bracket & Multiplication Table */}
@@ -129,7 +96,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                         <div className="flex flex-col items-center gap-4">
                             <div className="flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium text-center" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                 <p>En la notación matemática, la división se representa así:</p>
-                                <PlayButton trackingId={VIDEO_TRACKING_IDS.MATH_NOTATION} title="Representación matemática" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.MATH_NOTATION} title="Representación matemática" />
                             </div>
                             <div className="flex items-center gap-4 text-gray-800 dark:text-gray-200 font-black" style={{ fontSize: 'clamp(2rem, 5vmin, 3rem)' }}>
                                 <span className="text-orange-500">24</span>
@@ -143,7 +110,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                         {/* Meaning of Numbers */}
                         <div className="space-y-3">
                             <div className="flex items-center gap-2">
-                                <PlayButton trackingId={VIDEO_TRACKING_IDS.MEANING} title="Significado de los números" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.MEANING} title="Significado de los números" />
                                 <p className="text-gray-800 dark:text-gray-200 font-medium" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                     El significado de los números dice que
                                 </p>
@@ -167,7 +134,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                         {/* Definition Box */}
                         <div className="space-y-4">
                             <div className="flex items-center gap-3">
-                                <PlayButton trackingId={VIDEO_TRACKING_IDS.DEFINITION} title="¿Qué es una división?" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.DEFINITION} title="¿Qué es una división?" />
                                 <div className="bg-red-500 text-white px-3 py-1 font-bold rounded-sm shadow-sm" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                     ¿Qué es una división?
                                 </div>
@@ -191,7 +158,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                         <div className="space-y-3 pb-4">
                             <div className="flex items-center gap-2 text-gray-800 dark:text-gray-200 font-bold" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                 <p>Pero, ¿qué son letras A, B y C?</p>
-                                <PlayButton trackingId={VIDEO_TRACKING_IDS.COMPONENTS} title="Componentes A, B, C" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.COMPONENTS} title="Componentes A, B, C" />
                             </div>
 
                             <p className="text-gray-800 dark:text-gray-200" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
@@ -205,7 +172,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                                         <p>
                                             <span className="font-bold">A</span> <span className="mx-1">→</span> <span className="italic font-bold">el total (dividendo).</span> Es la cantidad completa que queremos repartir o el número que vamos a dividir.
                                         </p>
-                                        <PlayButton trackingId={VIDEO_TRACKING_IDS.DIVIDEND} title="El Dividendo" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.DIVIDEND} title="El Dividendo" />
                                     </div>
                                 </div>
                             </div>
@@ -215,14 +182,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                 </div>
             </div>
 
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                title={videoModal.title}
-                videoId={videoModal.videoId}
-                onClose={() => setVideoModal({ isOpen: false, title: '', videoId: undefined, trackingId: undefined })}
-                canSkip={videoModal.videoId ? isVideoWatched(videoModal.trackingId || '') : false}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

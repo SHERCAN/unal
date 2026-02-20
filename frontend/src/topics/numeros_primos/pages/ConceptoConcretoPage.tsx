@@ -1,8 +1,8 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useState, useRef, useCallback } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 /**
@@ -29,32 +29,14 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         P_CONCLUSION: 'numeros-primos-p-conclusion',
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
-        isOpen: false, title: '', videoId: undefined
-    });
-    const currentTrackingRef = useRef<string | undefined>(undefined);
+    /* videoModal list removed */
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        if (currentTrackingRef.current) {
-            markVideoWatched(currentTrackingRef.current);
-            currentTrackingRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
-    const openVideo = (trackingId: string, title: string) => {
-        currentTrackingRef.current = trackingId;
-        setVideoModal({ isOpen: true, title, videoId: undefined });
-    };
+    /* openVideo removed */
 
-    const PlayBtn = ({ trackingId, title }: { trackingId: string; title: string }) => {
-        const watched = isVideoWatched(trackingId);
-        return (
-            <button type="button" onClick={() => openVideo(trackingId, title)}
-                className={`w-10 h-10 flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-            </button>
-        );
-    };
+    /* PlayButton definition removed */
 
     /* ---- small green square helper (P section) ---- */
     const GreenSquare = () => (
@@ -202,7 +184,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
                     {/* Play button top-left */}
                     <div className="mb-4">
-                        <PlayBtn trackingId={VIDEO_TRACKING.C_INTRO} title="Números Primos - Concepto Concreto" />
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.C_INTRO} title="Números Primos - Concepto Concreto" />
                     </div>
 
                     {/* === TOP ROW: Tenistas + "+" button + ¿IGUALES? === */}
@@ -419,7 +401,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                 Representa los repartos con <span className="font-bold">7</span> cuadrados. Intenta agruparlos en <span className="font-bold">2 grupos, 3 grupos o 4 grupos</span> iguales.
                             </p>
                             <div className="mt-2">
-                                <PlayBtn trackingId={VIDEO_TRACKING.P_INTRO} title="Concepto Procesual" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.P_INTRO} title="Concepto Procesual" />
                             </div>
                         </div>
 
@@ -429,7 +411,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                 <p className="font-semibold text-gray-800 dark:text-gray-200">
                                     No se forman 2, 3 y 4 grupos iguales.
                                 </p>
-                                <PlayBtn trackingId={VIDEO_TRACKING.P_FAIL} title="Grupos que no funcionan" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.P_FAIL} title="Grupos que no funcionan" />
                             </div>
 
                             <div className="flex justify-center">
@@ -448,7 +430,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                 <p className="font-semibold text-gray-800 dark:text-gray-200">
                                     Se pueden formar solo uno grupo o siete grupos iguales.
                                 </p>
-                                <PlayBtn trackingId={VIDEO_TRACKING.P_SUCCESS} title="Grupos que sí funcionan" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.P_SUCCESS} title="Grupos que sí funcionan" />
                             </div>
 
                             <div className="flex justify-center">
@@ -466,19 +448,13 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                             <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
                                 Se observa que el número <span className="font-bold">7</span> se puede dividir en <span className="font-bold">1</span> ó en sí mismo <span className="font-bold">7</span> partes iguales.
                             </p>
-                            <PlayBtn trackingId={VIDEO_TRACKING.P_CONCLUSION} title="Conclusión" />
+                            <PlayVideoButton trackingId={VIDEO_TRACKING.P_CONCLUSION} title="Conclusión" />
                         </div>
                     </div>
                 </div>
             </div>
 
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                onClose={() => setVideoModal(prev => ({ ...prev, isOpen: false }))}
-                videoId={videoModal.videoId}
-                title={videoModal.title}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

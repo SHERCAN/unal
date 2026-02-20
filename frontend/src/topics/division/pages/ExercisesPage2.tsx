@@ -1,9 +1,9 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
-import VideoModal from '@/components/VideoModal';
 
 interface ExercisesPage2Props {
     zoom?: number;
@@ -11,13 +11,9 @@ interface ExercisesPage2Props {
 
 export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
     const { markVideoWatched } = useVideoProgress();
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string; trackingId?: string }>({
-        isOpen: false, title: '', videoId: undefined, trackingId: undefined
-    });
+    /* videoModal list removed */
 
-    const handleVideoComplete = () => {
-        // Placeholder for video logic if needed
-    };
+    /* handleVideoComplete removed */
 
     // --- ACTIVITY 1: TRUE/FALSE ---
     // Q1: 40/10 = 4. True (V)
@@ -142,7 +138,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                 {/* --- ACTIVITY 1 --- */}
                 <div className="flex bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex-col gap-6">
                     <div className="flex items-start gap-4">
-                        <PlayButton onClick={() => { }} />
+                        <PlayVideoButton onClick={() => { }} />
                         <div className="flex-1">
                             <p className="font-medium text-lg leading-relaxed text-gray-800 dark:text-gray-200">
                                 Hay 40 caramelos para repartir en partes iguales entre 10 niños. <br />
@@ -156,7 +152,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                     </div>
 
                     <div className="flex items-start gap-4">
-                        <PlayButton onClick={() => { }} />
+                        <PlayVideoButton onClick={() => { }} />
                         <div className="flex-1">
                             <p className="font-medium text-lg leading-relaxed text-gray-800 dark:text-gray-200">
                                 En una competencia participan 88 atletas. Se reparten en 10 carriles de la pista. <br />
@@ -182,7 +178,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-purple-700 text-white font-black text-xl flex items-center justify-center rounded-lg">4</div>
                         <div className="flex items-center gap-2">
-                            <PlayButton onClick={() => { }} />
+                            <PlayVideoButton onClick={() => { }} />
                             <p className="font-bold text-gray-800 dark:text-gray-200">Resuelve una situación problemática:</p>
                         </div>
                     </div>
@@ -277,7 +273,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-purple-700 text-white font-black text-xl flex items-center justify-center rounded-lg">5</div>
                         <div className="flex items-center gap-2">
-                            <PlayButton onClick={() => { }} />
+                            <PlayVideoButton onClick={() => { }} />
                             <p className="font-bold text-gray-800 dark:text-gray-200">Encuentra la división falsa (F). ¿Cuál está incorrecta?</p>
                         </div>
                     </div>
@@ -316,14 +312,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
             </div>
 
             {/* Video Modal */}
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                title={videoModal.title}
-                videoId={videoModal.videoId}
-                onClose={() => setVideoModal({ ...videoModal, isOpen: false })}
-                canSkip={true}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

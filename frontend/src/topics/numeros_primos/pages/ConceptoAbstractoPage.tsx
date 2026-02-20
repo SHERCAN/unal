@@ -1,8 +1,8 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 /**
@@ -31,32 +31,14 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
         A_COMPUESTO_EJ: 'numeros-primos-a-compuesto-ej',
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
-        isOpen: false, title: '', videoId: undefined
-    });
-    const currentTrackingRef = useRef<string | undefined>(undefined);
+    /* videoModal list removed */
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        if (currentTrackingRef.current) {
-            markVideoWatched(currentTrackingRef.current);
-            currentTrackingRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
-    const openVideo = (trackingId: string, title: string) => {
-        currentTrackingRef.current = trackingId;
-        setVideoModal({ isOpen: true, title, videoId: undefined });
-    };
+    /* openVideo removed */
 
-    const PlayBtn = ({ trackingId, title }: { trackingId: string; title: string }) => {
-        const watched = isVideoWatched(trackingId);
-        return (
-            <button type="button" onClick={() => openVideo(trackingId, title)}
-                className={`w-8 h-8 flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-            </button>
-        );
-    };
+    /* PlayButton definition removed */
 
     /* ---- small green square helper ---- */
     const GreenSquare = () => (
@@ -101,7 +83,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                 <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
                                     El número <span className="font-bold">7</span> tiene solo dos divisores <span className="font-bold text-lg">1</span> y <span className="font-bold text-lg">7</span>, pero no hay más divisores para que siempre forman partes iguales
                                 </p>
-                                <PlayBtn trackingId={VIDEO_TRACKING.A_DIVISION} title="Divisores del 7" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_DIVISION} title="Divisores del 7" />
                             </div>
                         </div>
 
@@ -118,14 +100,14 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
 
                         {/* 4. BONO EXPLICADO */}
                         <div className="flex items-center justify-center gap-2">
-                            <PlayBtn trackingId={VIDEO_TRACKING.A_BONO} title="Bono Explicado" />
+                            <PlayVideoButton trackingId={VIDEO_TRACKING.A_BONO} title="Bono Explicado" />
                             <span className="font-extrabold text-gray-800 dark:text-gray-200 tracking-wide">BONO EXPLICADO</span>
                         </div>
 
                         {/* 5. ¿Qué es un número primo? */}
                         <div>
                             <div className="flex items-center gap-2 mb-2">
-                                <PlayBtn trackingId={VIDEO_TRACKING.A_PRIMO_DEF} title="¿Qué es un número primo?" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_PRIMO_DEF} title="¿Qué es un número primo?" />
                                 <span className="bg-purple-600 text-white font-bold px-3 py-1 rounded text-sm">¿Qué es un número primo?</span>
                             </div>
                             <p className="text-gray-800 dark:text-gray-200 leading-relaxed ml-10">
@@ -143,7 +125,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                     <p className="text-gray-800 dark:text-gray-200">
                                         El número 7 es <span className="font-bold text-green-600 dark:text-green-400">primo</span> porque solo tiene dos divisores <span className="font-bold">1</span> y <span className="font-bold">7</span>.
                                     </p>
-                                    <PlayBtn trackingId={VIDEO_TRACKING.A_EJ_7} title="Ejemplo: 7 es primo" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_EJ_7} title="Ejemplo: 7 es primo" />
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <div className="w-3 h-3 bg-gray-800 dark:bg-gray-300 rounded-sm flex-shrink-0" />
@@ -156,7 +138,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                     <p className="text-gray-800 dark:text-gray-200">
                                         El número 8 NO es <span className="font-bold text-green-600 dark:text-green-400">primo</span> porque tiene cuatro divisores <span className="font-bold">1, 2, 4</span> y <span className="font-bold">8</span>.
                                     </p>
-                                    <PlayBtn trackingId={VIDEO_TRACKING.A_EJ_8} title="Ejemplo: 8 no es primo" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_EJ_8} title="Ejemplo: 8 no es primo" />
                                 </div>
                             </div>
                         </div>
@@ -164,7 +146,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                         {/* 7. ¿Qué es un número compuesto? */}
                         <div>
                             <div className="flex items-center gap-2 mb-2">
-                                <PlayBtn trackingId={VIDEO_TRACKING.A_COMPUESTO_DEF} title="¿Qué es un número compuesto?" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMPUESTO_DEF} title="¿Qué es un número compuesto?" />
                                 <span className="bg-purple-600 text-white font-bold px-3 py-1 rounded text-sm">¿Qué es un número compuesto?</span>
                             </div>
                             <p className="text-gray-800 dark:text-gray-200 leading-relaxed ml-10">
@@ -179,7 +161,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                 <p className="text-gray-800 dark:text-gray-200">
                                     El número 8 es <span className="font-bold text-orange-600 dark:text-orange-400">compuesto</span> porque tiene cuatro divisores 1, 2, 4 y 8.
                                 </p>
-                                <PlayBtn trackingId={VIDEO_TRACKING.A_COMPUESTO_EJ} title="Ejemplo: 8 es compuesto" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMPUESTO_EJ} title="Ejemplo: 8 es compuesto" />
                             </div>
                         </div>
 
@@ -233,13 +215,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                 </div>
             </div>
 
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                onClose={() => setVideoModal(prev => ({ ...prev, isOpen: false }))}
-                videoId={videoModal.videoId}
-                title={videoModal.title}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

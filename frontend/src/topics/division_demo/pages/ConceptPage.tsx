@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 interface DivisionConceptPageProps {
@@ -23,23 +22,16 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
         EXAMPLE: 'division-concept-example'
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string; trackingId?: string }>({
-        isOpen: false,
-        title: '',
-        videoId: undefined,
-        trackingId: undefined
-    });
+    function setVideoModal(arg0: { isOpen: boolean; title: string; videoId: string; trackingId: string; }) {
+        throw new Error('Function not implemented.');
+    }
+
+    /* videoModal list removed */
 
     // Use a ref to store the current tracking ID so it persists even after modal closes
-    const currentTrackingIdRef = React.useRef<string | undefined>(undefined);
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        const idToMark = currentTrackingIdRef.current;
-        if (idToMark) {
-            markVideoWatched(idToMark);
-            currentTrackingIdRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
     return (
         <BookPageContainer
@@ -360,14 +352,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
             {/* End of A - ABSTRACTO Box */}
 
             {/* Video Modal */}
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                title={videoModal.title}
-                videoId={videoModal.videoId}
-                onClose={() => setVideoModal({ isOpen: false, title: '', videoId: undefined, trackingId: undefined })}
-                canSkip={videoModal.videoId ? isVideoWatched(videoModal.trackingId || videoModal.videoId) : false}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

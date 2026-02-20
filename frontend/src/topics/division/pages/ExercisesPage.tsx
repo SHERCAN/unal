@@ -1,9 +1,9 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useState, useRef, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 interface ExercisesPageProps {
@@ -12,17 +12,10 @@ interface ExercisesPageProps {
 
 export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string; trackingId?: string }>({
-        isOpen: false, title: '', videoId: undefined, trackingId: undefined
-    });
+    /* videoModal list removed */
     const currentTrackingIdRef = useRef<string>();
 
-    const handleVideoComplete = () => {
-        if (currentTrackingIdRef.current) {
-            markVideoWatched(currentTrackingIdRef.current);
-            currentTrackingIdRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
     // --- ACTIVITY 1: SELECTION ---
     // Problem A: 56 balls / 7 bags = 8 balls/bag
@@ -146,7 +139,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
 
                         {/* 1A: Balls */}
                         <div className="flex items-start gap-2">
-                            <PlayButton onClick={() => { }} />
+                            <PlayVideoButton onClick={() => { }} />
                             <div className="flex flex-col gap-2 w-full">
                                 <p className="font-medium">El total de 56 pelotas de fútbol se reparte entre 7 bolsas de malla.</p>
                                 <div className="flex items-center gap-4">
@@ -191,7 +184,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
 
                         {/* 1B: Players */}
                         <div className="flex items-start gap-2 mt-4">
-                            <PlayButton onClick={() => { }} />
+                            <PlayVideoButton onClick={() => { }} />
                             <div className="flex flex-col gap-2 w-full">
                                 <p className="font-medium">Hay 48 jugadores de baloncesto que se dividen en 4 equipos.</p>
                                 <div className="flex items-center gap-4">
@@ -244,7 +237,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                     <div className="flex flex-col gap-4 w-full">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                                <PlayButton onClick={() => { }} />
+                                <PlayVideoButton onClick={() => { }} />
                                 <span className="font-bold text-gray-800 dark:text-gray-200">Relaciona cada división con su multiplicación correspondiente</span>
                             </div>
                         </div>
@@ -325,7 +318,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                     <div className="flex flex-col gap-4 w-full">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                                <PlayButton onClick={() => { }} />
+                                <PlayVideoButton onClick={() => { }} />
                                 <span className="font-bold text-gray-800 dark:text-gray-200">Halle el cociente de las siguientes divisiones:</span>
                             </div>
                         </div>
@@ -380,12 +373,12 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                     <div className="w-12 h-12 bg-purple-700 text-white font-black text-2xl flex items-center justify-center rounded shrink-0">4</div>
                     <div className="flex flex-col gap-4 w-full">
                         <div className="flex items-center gap-2">
-                            <PlayButton onClick={() => { }} />
+                            <PlayVideoButton onClick={() => { }} />
                             <span className="font-bold text-gray-800 dark:text-gray-200">Observa la situación y responde V o F</span>
                         </div>
 
                         <div className="flex items-center flex-wrap gap-4 ml-8 bg-gray-50 dark:bg-gray-800 p-6 rounded-2xl border-2 border-gray-100 dark:border-gray-700 shadow-sm">
-                            <PlayButton onClick={() => { }} />
+                            <PlayVideoButton onClick={() => { }} />
                             <p className="font-medium text-lg text-gray-800 dark:text-gray-200">
                                 Una diseñadora de moda tiene 20 pantalones y los reparte en 5 cajas.
                                 En cada caja <strong>hay 5 pantalones</strong>
@@ -430,14 +423,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
             </div>
 
             {/* Video Modal */}
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                title={videoModal.title}
-                videoId={videoModal.videoId}
-                onClose={() => setVideoModal({ ...videoModal, isOpen: false })}
-                canSkip={true}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

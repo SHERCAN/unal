@@ -1,8 +1,8 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useRef, useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import Image from 'next/image';
 import cuadriculaImg from '../cuadricula.png';
@@ -20,34 +20,14 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
         A_EXAMPLE: 'fracciones-a-example',
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
-        isOpen: false, title: '', videoId: undefined
-    });
-    const currentTrackingRef = useRef<string | undefined>(undefined);
+    /* videoModal list removed */
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        if (currentTrackingRef.current) {
-            markVideoWatched(currentTrackingRef.current);
-            currentTrackingRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
-    const openVideo = (trackingId: string, title: string) => {
-        currentTrackingRef.current = trackingId;
-        setVideoModal({ isOpen: true, title, videoId: undefined });
-    };
+    /* openVideo removed */
 
-    const PlayBtn = ({ trackingId, title, size = 'sm', className = '' }: { trackingId: string; title: string; size?: 'sm' | 'md'; className?: string }) => {
-        const watched = isVideoWatched(trackingId);
-        const sz = size === 'sm' ? 'w-6 h-6' : 'w-8 h-8';
-        const iconSz = size === 'sm' ? 'w-3 h-3' : 'w-4 h-4';
-        return (
-            <button type="button" onClick={() => openVideo(trackingId, title)}
-                className={`${sz} flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'} ${className}`}>
-                <svg className={iconSz} fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-            </button>
-        );
-    };
+    /* PlayButton definition removed */
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones' }} pageId="fracciones-concepto-abstracto-1">
@@ -70,7 +50,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                 </div>
 
                                 <div className="flex items-center gap-4">
-                                    <PlayBtn trackingId={VIDEO_TRACKING.A_INTRO} title="Introducción a la fracción" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="Introducción a la fracción" />
                                     <p className="font-bold text-gray-700">La <span className="text-red-500">fracción</span> se representa cómo</p>
                                 </div>
 
@@ -106,7 +86,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                             {/* 2. Definition */}
                             <div className="space-y-6">
                                 <div className="flex items-center gap-4">
-                                    <PlayBtn trackingId={VIDEO_TRACKING.A_DEF} title="¿Qué es una fracción?" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_DEF} title="¿Qué es una fracción?" />
                                     <span className="bg-red-500 text-white px-4 py-1 font-bold text-lg shadow-sm transform -skew-x-12">
                                         <span className="transform skew-x-12 inline-block">¿Qué es una fracción?</span>
                                     </span>
@@ -166,7 +146,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                         <div className="w-4 h-4 bg-blue-600 mt-1.5 flex-shrink-0"></div>
                                         <p className="text-lg text-gray-800">
                                             <span className="font-bold text-blue-700">Numerador:</span> representa un número de partes que se toman.
-                                            <PlayBtn trackingId={VIDEO_TRACKING.A_PARTS} title="Numerador" size="sm" className="inline-flex ml-3 align-middle" />
+                                            <PlayVideoButton trackingId={VIDEO_TRACKING.A_PARTS} title="Numerador" size="sm" className="inline-flex ml-3 align-middle" />
                                         </p>
                                     </div>
 
@@ -175,14 +155,14 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                         <div className="flex-1">
                                             <p className="text-lg text-gray-800">
                                                 <span className="font-bold text-purple-700">Denominador:</span> representa en cuántas partes iguales se divide el todo.
-                                                <PlayBtn trackingId={VIDEO_TRACKING.A_PARTS} title="Denominador" size="sm" className="inline-flex ml-3 align-middle" />
+                                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_PARTS} title="Denominador" size="sm" className="inline-flex ml-3 align-middle" />
                                             </p>
                                         </div>
                                     </div>
 
                                     <p className="text-lg text-red-500 font-medium italic pt-2">
                                         <span className="font-bold">NOTA:</span> El denominador siempre es un número distinto de cero.
-                                        <PlayBtn trackingId={VIDEO_TRACKING.A_ERROR} title="Nota importante" size="sm" className="inline-flex ml-3 align-middle" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.A_ERROR} title="Nota importante" size="sm" className="inline-flex ml-3 align-middle" />
                                     </p>
                                 </div>
                             </div>
@@ -192,7 +172,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                 {/* Top Row: Text and Fraction in one line */}
                                 <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 w-full">
                                     <div className="flex items-center gap-2">
-                                        <PlayBtn trackingId={VIDEO_TRACKING.A_EXAMPLE} title="Ejemplo 4/6" size="md" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.A_EXAMPLE} title="Ejemplo 4/6" size="md" />
                                         <span className="bg-green-600 text-white px-3 py-1 font-bold rounded shadow-sm text-base">
                                             Ejemplo:
                                         </span>
@@ -224,13 +204,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                 </div>
             </div>
 
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                onClose={() => setVideoModal(prev => ({ ...prev, isOpen: false }))}
-                videoId={videoModal.videoId}
-                title={videoModal.title}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

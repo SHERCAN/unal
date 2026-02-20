@@ -1,9 +1,9 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 interface DivisionConceptPage3Props {
@@ -22,48 +22,15 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
         PROBLEM_2: 'division-concept3-problem-2'
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string; trackingId?: string }>({
-        isOpen: false,
-        title: '',
-        videoId: undefined,
-        trackingId: undefined
-    });
+    /* videoModal list removed */
 
-    const currentTrackingIdRef = React.useRef<string | undefined>(undefined);
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        const idToMark = currentTrackingIdRef.current;
-        if (idToMark) {
-            markVideoWatched(idToMark);
-            currentTrackingIdRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
-    const openVideo = (title: string, trackingId: string) => {
-        currentTrackingIdRef.current = trackingId;
-        setVideoModal({
-            isOpen: true,
-            title,
-            videoId: VIDEO_IDS.MODULE_DIVISION, // Placeholder
-            trackingId
-        });
-    };
+    /* openVideo removed */
 
-    const PlayButton = ({ trackingId, title }: { trackingId: string, title: string }) => (
-        <button
-            type="button"
-            onMouseEnter={() => openVideo(title, trackingId)}
-            className={`p-1 text-white rounded-full transition-all flex-shrink-0 inline-flex items-center justify-center ml-2 ${isVideoWatched(trackingId)
-                ? 'bg-green-600 hover:bg-green-700'
-                : 'bg-purple-600 hover:bg-purple-700'
-                }`}
-            style={{ width: 'clamp(1.5rem, 4vmin, 2rem)', height: 'clamp(1.5rem, 4vmin, 2rem)' }}
-        >
-            <svg className="w-3 h-3 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-            </svg>
-        </button>
-    );
+    /* PlayButton definition removed */
 
     // --- State Handler Factory ---
     const useInputState = (initialValue: string = '') => {
@@ -233,7 +200,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                     Para dividir 25 entre 5, buscamos cuántas veces el número 5 está contenido en 25.
                                     Como 5 × 5 = 25, el cociente es 5 y el resto es 0.
                                 </p>
-                                <PlayButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE_MAIN} title="Explicación del ejemplo" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE_MAIN} title="Explicación del ejemplo" />
                             </div>
                         </div>
 
@@ -245,7 +212,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         {/* --- EXERCISE 1 --- */}
                         <div className="flex flex-col gap-4 pl-2">
                             <div className="flex items-start gap-2">
-                                <PlayButton trackingId={VIDEO_TRACKING_IDS.PRACTICE_1} title="Ejercicio 1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PRACTICE_1} title="Ejercicio 1" />
                                 <p className="font-bold text-gray-800 dark:text-gray-200 text-sm md:text-base">
                                     El número 21 se reparte en 7 grupos iguales.
                                     <br />
@@ -387,7 +354,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         {/* --- PROBLEM 1 --- */}
                         <div className="flex flex-col gap-2 pl-2">
                             <div className="flex items-start gap-2">
-                                <PlayButton trackingId={VIDEO_TRACKING_IDS.PROBLEM_1} title="Problema 1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PROBLEM_1} title="Problema 1" />
                                 <div className="border border-pink-300 rounded px-2 text-pink-700 font-bold text-xs py-0.5 self-start whitespace-nowrap">PROBLEMA 1</div>
                                 <p className="font-medium text-gray-800 dark:text-gray-200 text-sm leading-tight">
                                     Ana y María quieren repartir 12 muñecas entre las dos.<br />
@@ -411,7 +378,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         {/* --- PROBLEM 2 --- */}
                         <div className="flex flex-col gap-2 pl-2 pb-4">
                             <div className="flex items-start gap-2">
-                                <PlayButton trackingId={VIDEO_TRACKING_IDS.PROBLEM_2} title="Problema 2" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PROBLEM_2} title="Problema 2" />
                                 <div className="border border-pink-300 rounded px-2 text-pink-700 font-bold text-xs py-0.5 self-start whitespace-nowrap">PROBLEMA 2</div>
                                 <p className="font-medium text-gray-800 dark:text-gray-200 text-sm leading-tight">
                                     En la bodega hay 64 cuadernos. Cada paquete trae 8 cuadernos.
@@ -436,14 +403,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                 </div>
             </div>
 
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                title={videoModal.title}
-                videoId={videoModal.videoId}
-                onClose={() => setVideoModal({ isOpen: false, title: '', videoId: undefined, trackingId: undefined })}
-                canSkip={videoModal.videoId ? isVideoWatched(videoModal.trackingId || '') : false}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

@@ -1,8 +1,8 @@
 'use client';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
-import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import Image from 'next/image';
 import { MdOutlineStickyNote2 } from 'react-icons/md';
@@ -26,34 +26,14 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
         A_CROSS: 'frac-equiv-a-cross',
     };
 
-    const [videoModal, setVideoModal] = useState<{ isOpen: boolean; title: string; videoId?: string }>({
-        isOpen: false, title: '', videoId: undefined
-    });
-    const currentTrackingRef = useRef<string | undefined>(undefined);
+    /* videoModal list removed */
+    /* ref removed */
 
-    const handleVideoComplete = () => {
-        if (currentTrackingRef.current) {
-            markVideoWatched(currentTrackingRef.current);
-            currentTrackingRef.current = undefined;
-        }
-    };
+    /* handleVideoComplete removed */
 
-    const openVideo = (trackingId: string, title: string) => {
-        currentTrackingRef.current = trackingId;
-        setVideoModal({ isOpen: true, title, videoId: undefined });
-    };
+    /* openVideo removed */
 
-    const PlayBtn = ({ trackingId, title, size = 'md' }: { trackingId: string; title: string; size?: 'sm' | 'md' }) => {
-        const watched = isVideoWatched(trackingId);
-        const sz = size === 'sm' ? 'w-6 h-6' : 'w-8 h-8';
-        const iconSz = size === 'sm' ? 'w-3 h-3' : 'w-4 h-4';
-        return (
-            <button type="button" onClick={() => openVideo(trackingId, title)}
-                className={`${sz} flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${watched ? 'bg-green-600 hover:bg-green-700' : 'bg-purple-600 hover:bg-purple-700'}`}>
-                <svg className={iconSz} fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-            </button>
-        );
-    };
+    /* PlayButton definition removed */
 
     const Fraction = ({ num, den, color = 'text-green-600', size = 'text-2xl' }: any) => (
         <div className={`inline-flex flex-col items-center align-middle ${size} font-bold px-1`}>
@@ -116,14 +96,14 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                 <p className="text-lg text-gray-800 font-semibold leading-snug">
                                     Según las actividades anteriores, el color verde es el mismo tamaño. Cambian los números como partes, pero no cambia la cantidad.
                                 </p>
-                                <PlayBtn trackingId={VIDEO_TRACKING.A_INTRO} title="Introducción" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="Introducción" />
                             </div>
 
                             <div className="flex items-center gap-3">
                                 <p className="text-lg text-gray-800 font-semibold leading-snug">
                                     Así, en notación matemática, representan la misma cantidad:
                                 </p>
-                                <PlayBtn trackingId={VIDEO_TRACKING.A_NOTATION} title="Notación Matemática" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOTATION} title="Notación Matemática" />
                             </div>
 
                             <div className="flex justify-center py-4">
@@ -134,11 +114,11 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                 <p className="text-xl text-gray-800 font-semibold">
                                     Estas fracciones se llaman <span style={{ color: '#e95352' }} className="font-bold">fracciones equivalentes</span>.
                                 </p>
-                                <PlayBtn trackingId={VIDEO_TRACKING.A_EQUIV_DEF} title="Definición" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_EQUIV_DEF} title="Definición" />
                             </div>
 
                             <div className="flex items-center gap-4 mt-8">
-                                <PlayBtn trackingId={VIDEO_TRACKING.A_DEF_CONCEPT} title="Concepto" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_DEF_CONCEPT} title="Concepto" />
                                 <div className="text-white font-bold px-6 py-2 rounded-lg text-xl shadow-sm" style={{ backgroundColor: '#e95352' }}>
                                     ¿Qué son fracciones equivalentes?
                                 </div>
@@ -150,7 +130,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
 
                             <div className="space-y-6 pt-4">
                                 <div className="flex items-center gap-4">
-                                    <PlayBtn trackingId={VIDEO_TRACKING.A_EXAMPLE} title="Ejemplo" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_EXAMPLE} title="Ejemplo" />
                                     <div className="bg-green-600 text-white font-bold px-4 py-1 rounded inline-block text-lg italic shadow-sm">
                                         Ejemplo:
                                     </div>
@@ -180,12 +160,12 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                     <p className="text-xl text-gray-800 font-black">
                                         ¿Cómo sabemos que <Fraction num="3" den="5" size="text-2xl" color="text-gray-800" /> y <Fraction num="6" den="10" size="text-2xl" color="text-gray-800" /> son equivalentes?
                                     </p>
-                                    <PlayBtn trackingId={VIDEO_TRACKING.A_HOW_TO} title="Cómo saber" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_HOW_TO} title="Cómo saber" />
                                 </div>
 
                                 <div className="flex items-center gap-4 justify-center">
                                     <div className="text-black font-black text-sm uppercase tracking-wider">USAR PRODUCTOS CRUZADOS:</div>
-                                    <PlayBtn trackingId={VIDEO_TRACKING.A_CROSS} title="Productos Cruzados" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_CROSS} title="Productos Cruzados" />
                                 </div>
 
                                 <div className="flex justify-center py-8">
@@ -304,13 +284,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                 </div>
             </div>
 
-            <VideoModal
-                isOpen={videoModal.isOpen}
-                onClose={() => setVideoModal(prev => ({ ...prev, isOpen: false }))}
-                videoId={videoModal.videoId}
-                title={videoModal.title}
-                onComplete={handleVideoComplete}
-            />
+            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }
