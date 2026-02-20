@@ -24,13 +24,17 @@ export default function LoginPage() {
       const response = await axios.post('/api/auth/login', formData);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
-      
+
       // Guardar avatar personalizado si existe
       if (response.data.user.photoUrl) {
         localStorage.setItem('userAvatar', response.data.user.photoUrl);
       }
-      
-      router.push('/dashboard');
+
+      if (response.data.user.role === 'ADMIN') {
+        router.push('/admin');
+      } else {
+        router.push('/dashboard');
+      }
     } catch (err: any) {
       setError(err.response?.data?.error || 'Error al iniciar sesión');
     } finally {
@@ -40,7 +44,7 @@ export default function LoginPage() {
 
   return (
     <main className="min-h-screen flex items-center justify-center p-4">
-      
+
       <div className="w-full max-w-md">
         <button
           onClick={() => router.push('/')}

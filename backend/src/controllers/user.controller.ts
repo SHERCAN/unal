@@ -37,6 +37,9 @@ export const getProfile = async (req: Request, res: Response) => {
 export const getRanking = async (req: Request, res: Response) => {
   try {
     const users = await prisma.user.findMany({
+      where: {
+        role: 'STUDENT',
+      },
       select: {
         id: true,
         nickname: true,

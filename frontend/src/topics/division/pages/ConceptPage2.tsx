@@ -5,13 +5,6 @@ import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
-import manzanaVerdeImg from '../manzanaverde.png';
-import dulceImg from '../dulce.png';
-import estrellaImg from '../estrella.png';
-import infantesImg from '../infantes.png';
-import cajasImg from '../cajas.png';
-import equiposImg from '../equipos.png';
-import infantesManzanasImg from '../infantesmanzanas.png';
 
 interface DivisionConceptPage2Props {
     zoom?: number;
@@ -184,7 +177,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                                 </div>
                                 <div className="grid grid-cols-4 gap-1 p-1 border border-green-200 dark:border-green-800 rounded-lg bg-white dark:bg-gray-800 w-[150px] h-[150px] justify-items-center">
                                     {[...Array(12)].map((_, i) => (
-                                        <img key={i} src={manzanaVerdeImg.src} alt="manzana" className="w-full h-full object-contain" />
+                                        <img key={i} src="/division/manzanaverde.png" alt="manzana" className="w-full h-full object-contain" />
                                     ))}
                                 </div>
                             </div>
@@ -193,7 +186,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                                 <div className="font-bold text-gray-700 mb-2">30 dulces</div>
                                 <div className="grid grid-cols-6 gap-0.5 p-1 border border-purple-200 dark:border-purple-800 rounded-lg bg-white dark:bg-gray-800 w-[150px] h-[150px] justify-items-center">
                                     {[...Array(30)].map((_, i) => (
-                                        <img key={i} src={dulceImg.src} alt="dulce" className="w-full h-full object-contain" />
+                                        <img key={i} src="/division/dulce.png" alt="dulce" className="w-full h-full object-contain" />
                                     ))}
                                 </div>
                             </div>
@@ -202,7 +195,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                                 <div className="font-bold text-gray-700 mb-2">100 estrellas</div>
                                 <div className="grid grid-cols-10 gap-px p-0.5 border border-orange-200 dark:border-orange-800 rounded-lg bg-white dark:bg-gray-800 w-[150px] h-[150px] justify-items-center">
                                     {[...Array(50)].map((_, i) => (
-                                        <img key={i} src={estrellaImg.src} alt="estrella" className="w-full h-full object-contain" />
+                                        <img key={i} src="/division/estrella.png" alt="estrella" className="w-full h-full object-contain" />
                                     ))}
                                 </div>
                             </div>
@@ -228,21 +221,21 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                                         Ejemplo: <span className="font-normal">Entre</span> 3 niños
                                     </div>
                                     <div className="flex justify-center p-1 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                                        <img src={infantesImg.src} alt="infantes" className="w-[150px] h-[150px] object-contain" />
+                                        <img src="/division/infantes.png" alt="infantes" className="w-[150px] h-[150px] object-contain" />
                                     </div>
                                 </div>
                                 {/* 6 cajas */}
                                 <div className="flex flex-col items-center">
                                     <div className="font-bold text-gray-700 mb-2">Entre 6 cajas</div>
                                     <div className="flex justify-center p-1 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                                        <img src={cajasImg.src} alt="cajas" className="w-[150px] h-[150px] object-contain" />
+                                        <img src="/division/cajas.png" alt="cajas" className="w-[150px] h-[150px] object-contain" />
                                     </div>
                                 </div>
                                 {/* 4 equipos */}
                                 <div className="flex flex-col items-center">
                                     <div className="font-bold text-gray-700 mb-2">Entre 4 equipos</div>
                                     <div className="flex justify-center p-1 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                                        <img src={equiposImg.src} alt="equipos" className="w-[150px] h-[150px] object-contain" />
+                                        <img src="/division/equipos.png" alt="equipos" className="w-[150px] h-[150px] object-contain" />
                                     </div>
                                 </div>
                             </div>
@@ -269,7 +262,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                                     Dividir 12 manzanas entre 3 niños. Cada niño recibe <span className="font-bold">4 manzanas</span>
                                 </p>
                                 <div className="flex justify-center bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
-                                    <img src={infantesManzanasImg.src} alt="infantes comiendo manzanas" className="w-[300px] h-[150px] object-contain" />
+                                    <img src="/division/infantesmanzanas.png" alt="infantes comiendo manzanas" className="w-[300px] h-[150px] object-contain" />
                                 </div>
                             </div>
                         </div>

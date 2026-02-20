@@ -5,12 +5,6 @@ import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import VideoModal from '@/components/VideoModal';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
-import pelotas7Img from '../pelotas7.png';
-import pelotas8Img from '../pelotas8.png';
-import pelotas9Img from '../pelotas9.png';
-import equipo1Img from '../equipo1.png';
-import equipo2Img from '../equipo2.png';
-import equipo3Img from '../equipo3.png';
 
 interface ExercisesPageProps {
     zoom?: number;
@@ -171,7 +165,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                                 {/* Visual representation */}
                                                 <div className="flex justify-center items-center w-full h-full">
                                                     <img
-                                                        src={i === 0 ? pelotas7Img.src : (i === 1 ? pelotas8Img.src : pelotas9Img.src)}
+                                                        src={i === 0 ? '/division/pelotas7.png' : (i === 1 ? '/division/pelotas8.png' : '/division/pelotas9.png')}
                                                         alt={`Bolsas de pelotas opción ${i + 1}`}
                                                         className="w-full h-full object-contain"
                                                     />
@@ -216,7 +210,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                                 {/* Visual representation using images */}
                                                 <div className="flex justify-center items-center w-full h-full">
                                                     <img
-                                                        src={i === 0 ? equipo1Img.src : (i === 1 ? equipo2Img.src : equipo3Img.src)}
+                                                        src={i === 0 ? '/division/equipo1.png' : (i === 1 ? '/division/equipo2.png' : '/division/equipo3.png')}
                                                         alt={`Opción de equipos ${i + 1}`}
                                                         className="w-full h-full object-contain"
                                                     />

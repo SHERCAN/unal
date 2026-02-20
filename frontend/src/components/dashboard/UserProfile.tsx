@@ -125,7 +125,7 @@ export function UserProfile({ user, ranking, onBack }: UserProfileProps) {
                         {/* Puntos */}
                         <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6">
                             <div className="grid grid-cols-2 gap-4 mb-6">
-                                {/* Puntos Flexibles */}
+                                {/* Puntaje */}
                                 <div className="text-center">
                                     <p className="text-sm font-bold text-[#7e22ce] mb-2">PUNTOS</p>
                                     <div className="flex items-center justify-center gap-3">
@@ -136,7 +136,7 @@ export function UserProfile({ user, ranking, onBack }: UserProfileProps) {
                                     </div>
                                 </div>
 
-                                {/* Puntos Definitivos */}
+                                {/* Puntaje definitivo */}
                                 <div className="text-center">
                                     <p className="text-sm font-bold text-[#ef4444] mb-2">RETO DEFINITIVO</p>
                                     <div className="flex items-center justify-center gap-3">

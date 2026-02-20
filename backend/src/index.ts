@@ -64,6 +64,8 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/ratings', ratingRoutes);
+import adminRoutes from './routes/admin.routes';
+app.use('/api/admin', adminRoutes);
 
 // Video streaming endpoint with improved error handling
 app.get('/api/videos/:filename', (req, res) => {

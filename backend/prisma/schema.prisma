@@ -18,6 +18,7 @@ model User {
   photoUrl  String?
   puntos    Int      @default(0)
   puntosDefinitivos Int @default(0)
+  role      String   @default("STUDENT") // New field: "STUDENT" or "ADMIN"
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

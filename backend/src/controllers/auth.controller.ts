@@ -28,7 +28,7 @@ export const register = async (req: Request, res: Response) => {
       },
     });
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: '7d' });
+    const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET!, { expiresIn: '7d' });
 
     res.status(201).json({
       token,
@@ -40,6 +40,7 @@ export const register = async (req: Request, res: Response) => {
         grado: user.grado,
         avatar: user.avatar,
         puntos: user.puntos,
+        role: user.role,
       },
     });
   } catch (error) {
@@ -62,7 +63,7 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: '7d' });
+    const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET!, { expiresIn: '7d' });
 
     res.json({
       token,
@@ -74,6 +75,7 @@ export const login = async (req: Request, res: Response) => {
         grado: user.grado,
         avatar: user.avatar,
         puntos: user.puntos,
+        role: user.role,
       },
     });
   } catch (error) {
