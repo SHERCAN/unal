@@ -152,7 +152,7 @@ export default function AdminDashboard() {
     const fetchUsers = async (token: string) => {
         try {
             console.log('Fetching users...');
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+            const apiUrl = process.env.API_URL || 'http://localhost:4000/api';
             const res = await fetch(`${apiUrl}/admin/data`, {
                 headers: {
                     Authorization: `Bearer ${token}`
