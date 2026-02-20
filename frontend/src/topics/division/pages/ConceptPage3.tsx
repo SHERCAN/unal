@@ -32,11 +32,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
 
     /* PlayButton definition removed */
 
-    // --- State Handler Factory ---
-    const useInputState = (initialValue: string = '') => {
-        const [value, setValue] = useState(initialValue);
-        return { value, onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setValue(e.target.value) };
-    };
+
 
     // --- Exercise 1 State (21 / 7) ---
     // Dividend: 21 (Single input)
@@ -417,7 +413,7 @@ const useInputState = (initialValue: string = '') => {
 };
 
 // Input Component
-const InputBox = ({ value, onChange, className = "w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 focus:outline-none text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" }: any) => (
+const InputBox = ({ value, onChange, className = "w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 focus:outline-none text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" }: { value: string; onChange: (e: any) => void; className?: string }) => (
     <input
         type="text"
         value={value}
