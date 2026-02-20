@@ -49,7 +49,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
 
                     <div className="mt-4 space-y-5">
                         <div className="flex items-center gap-2">
-                            <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOTATION} title="Comparación Matemática" />
+                            <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOTATION} title="Comparación Matemática" videoId="/pag1/vv-1" />
                             <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">
                                 Compara con Productos Cruzados
                             </p>

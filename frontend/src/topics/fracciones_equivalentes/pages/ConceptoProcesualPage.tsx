@@ -65,7 +65,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                             </div>
 
                             <div className="flex items-center gap-3">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.BONO_EXPLICADO} title="Bono Explicado" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.BONO_EXPLICADO} title="Bono Explicado" videoId="/pag1/vv-1" />
                                 <span className="font-extrabold text-purple-600 text-xl tracking-wider uppercase">BONO EXPLICADO</span>
                             </div>
 
@@ -74,7 +74,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                                     Para las tres vueltas, Luis corre 2 vueltas y Camila corre 1 vuelta, entre los dos completan la pista.
                                     Para seis vueltas: ¿Cuántas vueltas corre Luis?
                                     <span className="inline-block ml-2 align-middle">
-                                        <PlayVideoButton trackingId={VIDEO_TRACKING.LAPS_QUESTION} title="Pregunta Vueltas" size="sm" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.LAPS_QUESTION} title="Pregunta Vueltas" videoId="/pag1/vv-1" />
                                     </span>
                                 </p>
 
@@ -117,7 +117,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                                 <p className="text-xl leading-relaxed">
                                     <span className="font-black text-red-600">DESAFIO:</span> Ahora el todo se divide en 12 partes. ¿Cuántas partes debe correr Luis?
                                     <span className="inline-block ml-2 align-middle">
-                                        <PlayVideoButton trackingId={VIDEO_TRACKING.DESAFIO_VIDEO} title="Desafío Video" size="sm" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.DESAFIO_VIDEO} title="Desafío Video" videoId="/pag1/vv-1" />
                                     </span>
                                 </p>
 

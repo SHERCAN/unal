@@ -55,14 +55,14 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                             <p>
                                 El total de <span className="font-bold text-orange-500">24</span> naranjas se reparte en <span className="font-bold text-green-600">4</span> cajas. Entonces, cada caja tiene <span className="font-bold text-purple-600">6</span> naranjas.
                             </p>
-                            <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.INTRO} title="Introducción" />
+                            <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.INTRO} title="Introducción" videoId="/pag1/vv-1" />
                         </div>
 
                         {/* Writing Division */}
                         <div>
                             <div className="flex items-center gap-2 mb-4 text-gray-800 dark:text-gray-200 font-medium" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                 <p>Dividir <span className="font-bold text-orange-500">24</span> entre <span className="font-bold text-green-600">4</span>, se escribe así:</p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.NOTATION} title="Notación de división" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.NOTATION} title="Notación de división" videoId="/pag1/vv-1" />
                             </div>
 
                             {/* Visualization: Bracket & Multiplication Table */}
@@ -96,7 +96,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                         <div className="flex flex-col items-center gap-4">
                             <div className="flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium text-center" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                 <p>En la notación matemática, la división se representa así:</p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.MATH_NOTATION} title="Representación matemática" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.MATH_NOTATION} title="Representación matemática" videoId="/pag1/vv-1" />
                             </div>
                             <div className="flex items-center gap-4 text-gray-800 dark:text-gray-200 font-black" style={{ fontSize: 'clamp(2rem, 5vmin, 3rem)' }}>
                                 <span className="text-orange-500">24</span>
@@ -110,7 +110,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                         {/* Meaning of Numbers */}
                         <div className="space-y-3">
                             <div className="flex items-center gap-2">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.MEANING} title="Significado de los números" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.MEANING} title="Significado de los números" videoId="/pag1/vv-1" />
                                 <p className="text-gray-800 dark:text-gray-200 font-medium" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                     El significado de los números dice que
                                 </p>
@@ -134,7 +134,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                         {/* Definition Box */}
                         <div className="space-y-4">
                             <div className="flex items-center gap-3">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.DEFINITION} title="¿Qué es una división?" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.DEFINITION} title="¿Qué es una división?" videoId="/pag1/vv-1" />
                                 <div className="bg-red-500 text-white px-3 py-1 font-bold rounded-sm shadow-sm" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                     ¿Qué es una división?
                                 </div>
@@ -158,7 +158,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                         <div className="space-y-3 pb-4">
                             <div className="flex items-center gap-2 text-gray-800 dark:text-gray-200 font-bold" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                 <p>Pero, ¿qué son letras A, B y C?</p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.COMPONENTS} title="Componentes A, B, C" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.COMPONENTS} title="Componentes A, B, C" videoId="/pag1/vv-1" />
                             </div>
 
                             <p className="text-gray-800 dark:text-gray-200" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
@@ -172,7 +172,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                                         <p>
                                             <span className="font-bold">A</span> <span className="mx-1">→</span> <span className="italic font-bold">el total (dividendo).</span> Es la cantidad completa que queremos repartir o el número que vamos a dividir.
                                         </p>
-                                        <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.DIVIDEND} title="El Dividendo" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.DIVIDEND} title="El Dividendo" videoId="/pag1/vv-1" />
                                     </div>
                                 </div>
                             </div>

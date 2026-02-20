@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
@@ -155,19 +156,11 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                 <div style={{ width: '45%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                     {/* Play button — top left */}
                                     <div>
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                currentTrackingRef.current = VIDEO_TRACKING.C_INTRO;
-                                                setVideoModal({ isOpen: true, title: 'División Inexacta - Concreto', videoId: undefined });
-                                            }}
-                                            className={`w-10 h-10 flex items-center justify-center text-white rounded-full transition-all ${isVideoWatched(VIDEO_TRACKING.C_INTRO)
-                                                ? 'bg-green-600 hover:bg-green-700'
-                                                : 'bg-purple-600 hover:bg-purple-700'
-                                                }`}
-                                        >
-                                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                                        </button>
+                                        <PlayVideoButton
+                                            trackingId={VIDEO_TRACKING.C_INTRO}
+                                            title="División Inexacta - Concreto"
+                                            videoId="/pag1/vv-1"
+                                        />
                                     </div>
 
                                     {/* Coach + Medal box — bottom left, side by side */}
@@ -326,19 +319,11 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                         Arrastra los <span className="text-2xl font-bold text-yellow-500">{totalCircles}</span> circulos y repártelos en 3 partes iguales. Verifica cuántos sobran.
                                     </p>
                                 </div>
-                                <button
-                                    type="button"
-                                    onMouseEnter={() => {
-                                        currentTrackingRef.current = VIDEO_TRACKING.P_INTRO;
-                                        setVideoModal({ isOpen: true, title: 'División Inexacta - Procesual', videoId: undefined });
-                                    }}
-                                    className={`w-10 h-10 flex items-center justify-center text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(VIDEO_TRACKING.P_INTRO)
-                                        ? 'bg-green-600 hover:bg-green-700'
-                                        : 'bg-purple-600 hover:bg-purple-700'
-                                        }`}
-                                >
-                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                                </button>
+                                <PlayVideoButton
+                                    trackingId={VIDEO_TRACKING.P_INTRO}
+                                    title="División Inexacta - Procesual"
+                                    videoId="/pag1/vv-1"
+                                />
                             </div>
 
                             <div className="flex flex-col md:flex-row gap-6">

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
@@ -251,25 +252,13 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                         {/* Scene 1: Intro */}
                         <div className="flex flex-col md:flex-row items-center justify-around mb-8 px-4 gap-8 min-h-[300px]">
                             {/* Video Trigger */}
-                            <button
-                                type="button"
-                                onMouseEnter={() => {
-                                    currentTrackingIdRef.current = VIDEO_TRACKING_IDS.C_INTRO;
-                                    setVideoModal({ isOpen: true, title: 'Introducción', videoId: VIDEO_IDS.MODULE_DIVISION, trackingId: VIDEO_TRACKING_IDS.C_INTRO });
-                                }}
-                                className={`absolute top-4 left-4 p-1 text-white rounded-full transition-all flex-shrink-0 z-20 ${isVideoWatched(VIDEO_TRACKING_IDS.C_INTRO)
-                                    ? 'bg-green-600 hover:bg-green-700'
-                                    : 'bg-purple-600 hover:bg-purple-700'
-                                    }`}
-                            >
-                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    {isVideoWatched(VIDEO_TRACKING_IDS.C_INTRO) ? (
-                                        <path d="M8 5v14l11-7z" />
-                                    ) : (
-                                        <path d="M8 5v14l11-7z" />
-                                    )}
-                                </svg>
-                            </button>
+                            <div className="absolute top-4 left-4 z-20">
+                                <PlayVideoButton
+                                    trackingId={VIDEO_TRACKING_IDS.C_INTRO}
+                                    title="Introducción"
+                                    videoId="/pag1/vv-1"
+                                />
+                            </div>
                             {/* Basket / Girl Area */}
                             <div
                                 className="relative flex items-end"
@@ -332,25 +321,11 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                         <div className="relative">
                             {/* Video Trigger 2 */}
                             <div className="absolute top-0 left-0 z-10">
-                                <button
-                                    type="button"
-                                    onMouseEnter={() => {
-                                        currentTrackingIdRef.current = VIDEO_TRACKING_IDS.C_DISTRIBUTION;
-                                        setVideoModal({ isOpen: true, title: 'Distribución', videoId: VIDEO_IDS.MODULE_DIVISION, trackingId: VIDEO_TRACKING_IDS.C_DISTRIBUTION });
-                                    }}
-                                    className={`p-1 text-white rounded-full transition-all flex-shrink-0 shadow-md ${isVideoWatched(VIDEO_TRACKING_IDS.C_DISTRIBUTION)
-                                        ? 'bg-green-600 hover:bg-green-700'
-                                        : 'bg-purple-600 hover:bg-purple-700'
-                                        }`}
-                                >
-                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                        {isVideoWatched(VIDEO_TRACKING_IDS.C_DISTRIBUTION) ? (
-                                            <path d="M8 5v14l11-7z" />
-                                        ) : (
-                                            <path d="M8 5v14l11-7z" />
-                                        )}
-                                    </svg>
-                                </button>
+                                <PlayVideoButton
+                                    trackingId={VIDEO_TRACKING_IDS.C_DISTRIBUTION}
+                                    title="Distribución"
+                                    videoId="/pag1/vv-1"
+                                />
                             </div>
 
                             <div className="flex flex-col items-center py-4">
@@ -442,25 +417,11 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                             <p className="font-medium text-gray-700 dark:text-gray-300" style={{ fontSize: 'clamp(0.75rem, 1.9vmin, 1rem)' }}>
                                 Hay 24 naranjas en cuadro
                             </p>
-                            <button
-                                type="button"
-                                onMouseEnter={() => {
-                                    currentTrackingIdRef.current = VIDEO_TRACKING_IDS.P_INTRO;
-                                    setVideoModal({ isOpen: true, title: 'Introducción Pictórica', videoId: VIDEO_IDS.MODULE_DIVISION, trackingId: VIDEO_TRACKING_IDS.P_INTRO });
-                                }}
-                                className={`p-1 text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(VIDEO_TRACKING_IDS.P_INTRO)
-                                    ? 'bg-green-600 hover:bg-green-700'
-                                    : 'bg-purple-600 hover:bg-purple-700'
-                                    }`}
-                            >
-                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                    {isVideoWatched(VIDEO_TRACKING_IDS.P_INTRO) ? (
-                                        <path d="M8 5v14l11-7z" />
-                                    ) : (
-                                        <path d="M8 5v14l11-7z" />
-                                    )}
-                                </svg>
-                            </button>
+                            <PlayVideoButton
+                                trackingId={VIDEO_TRACKING_IDS.P_INTRO}
+                                title="Introducción Pictórica"
+                                videoId="/pag1/vv-1"
+                            />
                         </div>
 
                         <div
@@ -486,25 +447,11 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                             <p className="font-medium text-gray-700 dark:text-gray-300" style={{ fontSize: 'clamp(0.75rem, 1.9vmin, 1rem)' }}>
                                 Se reparte en 4 partes iguales
                             </p>
-                            <button
-                                type="button"
-                                onMouseEnter={() => {
-                                    currentTrackingIdRef.current = VIDEO_TRACKING_IDS.P_DISTRIBUTION;
-                                    setVideoModal({ isOpen: true, title: 'Distribución Pictórica', videoId: VIDEO_IDS.MODULE_DIVISION, trackingId: VIDEO_TRACKING_IDS.P_DISTRIBUTION });
-                                }}
-                                className={`p-1 text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(VIDEO_TRACKING_IDS.P_DISTRIBUTION)
-                                    ? 'bg-green-600 hover:bg-green-700'
-                                    : 'bg-purple-600 hover:bg-purple-700'
-                                    }`}
-                            >
-                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                    {isVideoWatched(VIDEO_TRACKING_IDS.P_DISTRIBUTION) ? (
-                                        <path d="M8 5v14l11-7z" />
-                                    ) : (
-                                        <path d="M8 5v14l11-7z" />
-                                    )}
-                                </svg>
-                            </button>
+                            <PlayVideoButton
+                                trackingId={VIDEO_TRACKING_IDS.P_DISTRIBUTION}
+                                title="Distribución Pictórica"
+                                videoId="/pag1/vv-1"
+                            />
                         </div>
 
                         {/* Boxes Grid */}

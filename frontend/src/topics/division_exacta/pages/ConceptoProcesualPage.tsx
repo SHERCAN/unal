@@ -107,7 +107,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                                     en <span className="font-bold text-lg text-red-600">3</span> grupos de deportistas. Así, cada uno de 3 grupos tiene la misma
                                     cantidad de <span className="font-bold text-lg text-green-600">6</span> medallas. <span className="font-bold text-lg text-red-600">NO SOBRE</span> ninguna medalla.
                                 </p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOTA} title="Nota sobre SOBRE y RESTO" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOTA} title="Nota sobre SOBRE y RESTO" videoId="/pag1/vv-1" />
 
                                 <div className="mt-2 bg-gray-50 dark:bg-gray-700 rounded-lg p-3 border-l-4 border-purple-500">
                                     <p className="text-sm text-gray-700 dark:text-gray-300">
@@ -121,7 +121,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                             <div>
                                 <div className="flex items-center gap-2 mb-2">
                                     <p className="text-base text-gray-800 dark:text-gray-200">Vemos la notación matemática:</p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_MATH} title="Notación Matemática" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_MATH} title="Notación Matemática" videoId="/pag1/vv-1" />
                                 </div>
 
                                 <div className="text-center my-3">
@@ -138,7 +138,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                                     <p className="text-sm text-gray-700 dark:text-gray-300">
                                         &quot;<span className="text-red-500">resto 0</span>&quot; significa que no hay resto. ¿Cómo sabemos esto?
                                     </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMO} title="¿Cómo sabemos?" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMO} title="¿Cómo sabemos?" videoId="/pag1/vv-1" />
                                 </div>
 
                                 <DivisionAlgorithm
@@ -153,7 +153,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                             {/* Definition */}
                             <div>
                                 <div className="flex items-center gap-2 mb-1">
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_DEF} title="¿Qué es una división exacta?" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_DEF} title="¿Qué es una división exacta?" videoId="/pag1/vv-1" />
                                     <span className="bg-purple-600 text-white font-bold px-3 py-1 rounded text-sm">¿Qué es una división exacta?</span>
                                 </div>
                                 <p className="text-base text-gray-800 dark:text-gray-200 mt-2">
@@ -165,7 +165,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                             <div>
                                 <span className="bg-red-500 text-white font-bold px-3 py-1 rounded text-sm">Ejemplo:</span>
                                 <div className="flex items-center gap-2 mt-2">
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_EXAMPLE} title="Ejemplo 32÷4" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_EXAMPLE} title="Ejemplo 32÷4" videoId="/pag1/vv-1" />
                                     <span className="w-3 h-3 bg-gray-800 dark:bg-gray-200 rounded-sm inline-block"></span>
                                     <p className="text-sm text-gray-800 dark:text-gray-200">
                                         La división 32 ÷ 4 = 8 es <span className="text-green-600 font-bold">exacta</span> porque no tiene resto.

@@ -49,7 +49,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                     <div className="mt-8 flex flex-col items-center min-h-[600px]">
                         {/* Video in the center at the top */}
                         <div className="mb-12">
-                            <PlayVideoButton trackingId={VIDEO_TRACKING.C_TRACK} title="Fracciones Equivalentes - Concepto Concreto" />
+                            <PlayVideoButton trackingId={VIDEO_TRACKING.C_TRACK} title="Fracciones Equivalentes - Concepto Concreto" videoId="/pag1/vv-1" />
                         </div>
 
                         {/* Images aligned to the sides and bottom */}

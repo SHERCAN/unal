@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
@@ -16,10 +17,7 @@ export function ExplanationPage2({ zoom = 1 }: DivisionExplanationPage2Props) {
     const VIDEO_TRACKING_ID = 'division-explanation2-notation';
 
     /* videoModal list removed */
-
-    // Use a ref to store the current tracking ID so it persists even after modal closes
     /* ref removed */
-
     /* handleVideoComplete removed */
 
     return (
@@ -73,30 +71,11 @@ export function ExplanationPage2({ zoom = 1 }: DivisionExplanationPage2Props) {
                                     <h3 className="font-semibold text-gray-900 dark:text-white text-center" style={{ fontSize: 'clamp(1rem, 2.2vmin, 1.25rem)' }}>
                                         Notación Matemática
                                     </h3>
-                                    <button
-                                        type="button"
-                                        onMouseEnter={() => {
-                                            currentTrackingIdRef.current = VIDEO_TRACKING_ID;
-                                            setVideoModal({
-                                                isOpen: true,
-                                                title: 'Notación Matemática',
-                                                videoId: VIDEO_IDS.MODULE_DIVISION,
-                                                trackingId: VIDEO_TRACKING_ID
-                                            });
-                                        }}
-                                        className={`p-1 text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(VIDEO_TRACKING_ID)
-                                            ? 'bg-green-600 hover:bg-green-700'
-                                            : 'bg-purple-600 hover:bg-purple-700'
-                                            }`}
-                                    >
-                                        <svg className="w-3 h-3 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 24 24">
-                                            {isVideoWatched(VIDEO_TRACKING_ID) ? (
-                                                <path d="M8 5v14l11-7z" />
-                                            ) : (
-                                                <path d="M8 5v14l11-7z" />
-                                            )}
-                                        </svg>
-                                    </button>
+                                    <PlayVideoButton
+                                        trackingId={VIDEO_TRACKING_ID}
+                                        title="Notación Matemática"
+                                        videoId="/pag1/vv-1"
+                                    />
                                 </div>
 
                                 <div className="font-bold flex items-center" style={{ fontSize: 'clamp(2rem, 5vmin, 4rem)', gap: 'clamp(0.5rem, 2vmin, 1rem)' }}>

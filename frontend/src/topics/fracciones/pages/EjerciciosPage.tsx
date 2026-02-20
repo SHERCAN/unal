@@ -216,7 +216,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
                                 <div className="py-4 space-y-8">
                                     <div className="flex items-center gap-4 flex-wrap">
-                                        <PlayVideoButton trackingId={VIDEO_TRACKING.EX3_DEFS} title="Definición: Denominador" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.EX3_DEFS} title="Definición: Denominador" videoId="/pag1/vv-1" />
                                         <div className="w-4 h-4 bg-purple-600 shrink-0"></div>
                                         <span className="text-lg text-gray-800">El</span>
                                         <select
@@ -231,7 +231,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                     </div>
 
                                     <div className="flex items-center gap-4 flex-wrap">
-                                        <PlayVideoButton trackingId={VIDEO_TRACKING.EX3_DEFS} title="Definición: Numerador" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.EX3_DEFS} title="Definición: Numerador" videoId="/pag1/vv-1" />
                                         <div className="w-4 h-4 bg-purple-600 shrink-0"></div>
                                         <span className="text-lg text-gray-800">El</span>
                                         <select

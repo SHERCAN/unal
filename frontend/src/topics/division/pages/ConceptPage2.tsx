@@ -217,7 +217,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                                         <span className="font-bold">C</span> <span className="mx-1">→</span> <span className="italic font-bold">cuánto recibe cada grupo (el cociente).</span> Es el resultado de la división. Cuánto corresponde a cada parte.
                                     </p>
                                 </div>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.QUOTIENT} title="El Cociente" videoId="/pag1/vv-2" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.QUOTIENT} title="El Cociente" videoId="/pag1/vv-1" />
                             </div>
 
                             {/* C Example */}
@@ -237,7 +237,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                         {/* FINAL EXAMPLE */}
                         <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
                             <div className="flex items-center gap-2 mb-2">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE} title="Ejemplo Final" videoId="/pag1/vv-3" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE} title="Ejemplo Final" videoId="/pag1/vv-1" />
                                 <div className="bg-green-600 text-white px-3 py-1 rounded-md font-bold text-sm">Example:</div>
                                 <p className="font-bold text-gray-800 dark:text-white">Tenemos 28 galletas y queremos repartirlas en 4 cajas.</p>
                             </div>
@@ -259,7 +259,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                         <div className="flex flex-col items-center mt-2">
                             <div className="flex items-center gap-2 mb-2">
                                 <h4 className="font-black uppercase text-gray-900 dark:text-white">PARTES DE LA DIVISIÓN</h4>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PARTS} title="Partes de la división" videoId="/pag1/vv-4" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PARTS} title="Partes de la división" videoId="/pag1/vv-1" />
                             </div>
 
                             <div className="flex items-center gap-8 text-xl font-bold">

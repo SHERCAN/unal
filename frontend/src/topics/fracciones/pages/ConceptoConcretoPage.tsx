@@ -214,7 +214,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
                     {/* Play button */}
                     <div className="absolute top-3 left-3 z-20">
-                        <PlayVideoButton trackingId={VIDEO_TRACKING.C_PIZZA} title="Fracciones - Concepto Concreto" />
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.C_PIZZA} title="Fracciones - Concepto Concreto" videoId="/pag1/vv-1" />
                     </div>
 
                     {/* ── ROW 1: 3 MESAS ── */}
@@ -345,7 +345,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                 utilizando únicamente tres cortes. Luego, retira 3 de esas porciones.
                             </p>
                         </div>
-                        <PlayVideoButton trackingId={VIDEO_TRACKING.P_EXPLAIN} title="Fracciones - Proceso" size="sm" />
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.P_EXPLAIN} title="Fracciones - Proceso" videoId="/pag1/vv-1" />
                     </div>
 
                     {/* Labels */}

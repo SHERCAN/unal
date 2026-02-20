@@ -129,7 +129,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                     <p className="text-sm text-gray-800 dark:text-gray-200">
                                         ¿Qué pasa si alguna división <span className="text-red-600 font-bold">NO</span> es exacta? Veamos un ejemplo.
                                     </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOEXACT} title="División no exacta" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOEXACT} title="División no exacta" videoId="/pag1/vv-1" />
                                 </div>
 
                                 <div className="flex items-center gap-2">
@@ -137,7 +137,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                     <p className="text-sm text-gray-800 dark:text-gray-200">
                                         La división 14 ÷ 3 <span className="text-red-600 font-bold">NO</span> es exacta porque tiene resto.
                                     </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOEXACT2} title="14÷3" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOEXACT2} title="14÷3" videoId="/pag1/vv-1" />
                                 </div>
 
                                 <DivisionAlgorithm
@@ -180,7 +180,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                     ¿CÓMO HAGAMOS EL <span className="text-xl">USO DE ALGORITMO DE LA DIVISIÓN</span>?
                                 </p>
                                 <div className="flex items-center justify-center gap-2">
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_BONO} title="Bono Explicado" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_BONO} title="Bono Explicado" videoId="/pag1/vv-1" />
                                     <span className="font-black text-purple-600 text-sm">BONO EXPLICADO</span>
                                 </div>
                             </div>

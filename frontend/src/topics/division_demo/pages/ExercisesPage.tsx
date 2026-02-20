@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
@@ -19,10 +20,7 @@ export function ExercisesPage({ zoom = 1 }: DivisionExercisesPageProps) {
     };
 
     /* videoModal list removed */
-
-    // Use a ref to store the current tracking ID so it persists even after modal closes
     /* ref removed */
-
     /* handleVideoComplete removed */
 
     // Activity 1 State
@@ -246,29 +244,11 @@ export function ExercisesPage({ zoom = 1 }: DivisionExercisesPageProps) {
 
                         <div className="flex-1 space-y-4">
                             <div className="flex items-center gap-3">
-                                <button
-                                    onMouseEnter={() => {
-                                        currentTrackingIdRef.current = VIDEO_TRACKING_IDS.ACTIVITY_1;
-                                        setVideoModal({
-                                            isOpen: true,
-                                            title: 'Actividad 1',
-                                            videoId: VIDEO_IDS.MODULE_DIVISION,
-                                            trackingId: VIDEO_TRACKING_IDS.ACTIVITY_1
-                                        });
-                                    }}
-                                    className={`p-2 text-white rounded-full transition-all ${isVideoWatched(VIDEO_TRACKING_IDS.ACTIVITY_1)
-                                        ? 'bg-green-600 hover:bg-green-700'
-                                        : 'bg-purple-600 hover:bg-purple-700'
-                                        }`}
-                                >
-                                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                        {isVideoWatched(VIDEO_TRACKING_IDS.ACTIVITY_1) ? (
-                                            <path d="M8 5v14l11-7z" />
-                                        ) : (
-                                            <path d="M8 5v14l11-7z" />
-                                        )}
-                                    </svg>
-                                </button>
+                                <PlayVideoButton
+                                    trackingId={VIDEO_TRACKING_IDS.ACTIVITY_1}
+                                    title="Actividad 1"
+                                    videoId="/pag1/vv-1"
+                                />
 
                             </div>
 
@@ -474,29 +454,11 @@ export function ExercisesPage({ zoom = 1 }: DivisionExercisesPageProps) {
                         </div>
                         <div className="flex-1 space-y-4">
                             <div className="flex items-center gap-3">
-                                <button
-                                    onMouseEnter={() => {
-                                        currentTrackingIdRef.current = VIDEO_TRACKING_IDS.ACTIVITY_3;
-                                        setVideoModal({
-                                            isOpen: true,
-                                            title: 'Actividad 3',
-                                            videoId: VIDEO_IDS.MODULE_DIVISION,
-                                            trackingId: VIDEO_TRACKING_IDS.ACTIVITY_3
-                                        });
-                                    }}
-                                    className={`p-2 text-white rounded-full transition-all ${isVideoWatched(VIDEO_TRACKING_IDS.ACTIVITY_3)
-                                        ? 'bg-green-600 hover:bg-green-700'
-                                        : 'bg-purple-600 hover:bg-purple-700'
-                                        }`}
-                                >
-                                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                        {isVideoWatched(VIDEO_TRACKING_IDS.ACTIVITY_3) ? (
-                                            <path d="M8 5v14l11-7z" />
-                                        ) : (
-                                            <path d="M8 5v14l11-7z" />
-                                        )}
-                                    </svg>
-                                </button>
+                                <PlayVideoButton
+                                    trackingId={VIDEO_TRACKING_IDS.ACTIVITY_3}
+                                    title="Actividad 3"
+                                    videoId="/pag1/vv-1"
+                                />
                                 <span className="text-gray-800 dark:text-gray-200 text-lg">
                                     Encuentra la división falsa (<span className="text-red-500 font-bold">F</span>). ¿Cuál está <strong>incorrecta</strong>?
                                 </span>

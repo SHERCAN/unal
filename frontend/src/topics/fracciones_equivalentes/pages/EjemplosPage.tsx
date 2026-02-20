@@ -32,7 +32,7 @@ export function EjemplosPage({ zoom = 1 }: Props) {
                 {/* Example 1: Pizza equivalence */}
                 <div className="rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50 p-5">
                     <div className="flex items-center gap-2 mb-3">
-                        <PlayVideoButton trackingId={VIDEO_TRACKING.EX_PIZZA} title="Ejemplo: Pizza" />
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.EX_PIZZA} title="Ejemplo: Pizza" videoId="/pag1/vv-1" />
                         <span className="bg-purple-600 text-white text-sm font-bold px-3 py-1 rounded-full">1</span>
                         <p className="font-bold text-gray-800 dark:text-gray-200">Pizzas Equivalentes</p>
                     </div>
@@ -75,7 +75,7 @@ export function EjemplosPage({ zoom = 1 }: Props) {
                 {/* Example 2: Cross products */}
                 <div className="rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50 p-5">
                     <div className="flex items-center gap-2 mb-3">
-                        <PlayVideoButton trackingId={VIDEO_TRACKING.EX_CROSS} title="Ejemplo: Productos Cruzados" />
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.EX_CROSS} title="Ejemplo: Productos Cruzados" videoId="/pag1/vv-1" />
                         <span className="bg-purple-600 text-white text-sm font-bold px-3 py-1 rounded-full">2</span>
                         <p className="font-bold text-gray-800 dark:text-gray-200">Verificar con Productos Cruzados</p>
                     </div>

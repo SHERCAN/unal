@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
@@ -22,15 +23,8 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
         EXAMPLE: 'division-concept-example'
     };
 
-    function setVideoModal(arg0: { isOpen: boolean; title: string; videoId: string; trackingId: string; }) {
-        throw new Error('Function not implemented.');
-    }
-
     /* videoModal list removed */
-
-    // Use a ref to store the current tracking ID so it persists even after modal closes
     /* ref removed */
-
     /* handleVideoComplete removed */
 
     return (
@@ -55,30 +49,11 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                             <h2 className="font-bold text-gray-900 dark:text-white text-center" style={{ fontSize: 'clamp(1.5rem, 4vmin, 2.5rem)', lineHeight: '1.2' }}>
                                 Entendiendo la División
                             </h2>
-                            <button
-                                type="button"
-                                onMouseEnter={() => {
-                                    currentTrackingIdRef.current = VIDEO_TRACKING_IDS.UNDERSTANDING;
-                                    setVideoModal({
-                                        isOpen: true,
-                                        title: 'Entendiendo la División',
-                                        videoId: VIDEO_IDS.MODULE_DIVISION,
-                                        trackingId: VIDEO_TRACKING_IDS.UNDERSTANDING
-                                    });
-                                }}
-                                className={`p-1 text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(VIDEO_TRACKING_IDS.UNDERSTANDING)
-                                    ? 'bg-green-600 hover:bg-green-700'
-                                    : 'bg-purple-600 hover:bg-purple-700'
-                                    }`}
-                            >
-                                <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    {isVideoWatched(VIDEO_TRACKING_IDS.UNDERSTANDING) ? (
-                                        <path d="M8 5v14l11-7z" />
-                                    ) : (
-                                        <path d="M8 5v14l11-7z" />
-                                    )}
-                                </svg>
-                            </button>
+                            <PlayVideoButton
+                                trackingId={VIDEO_TRACKING_IDS.UNDERSTANDING}
+                                title="Entendiendo la División"
+                                videoId="/pag1/vv-1"
+                            />
                         </div>
 
                         {/* Main image */}
@@ -120,30 +95,11 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                             <p className="font-bold text-gray-900 dark:text-white text-center" style={{ fontSize: 'clamp(1.1rem, 2.8vmin, 1.75rem)' }}>
                                 Pero, ¿qué son las letras A, B y C?
                             </p>
-                            <button
-                                type="button"
-                                onMouseEnter={() => {
-                                    currentTrackingIdRef.current = VIDEO_TRACKING_IDS.PARTS;
-                                    setVideoModal({
-                                        isOpen: true,
-                                        title: 'Partes de la División',
-                                        videoId: VIDEO_IDS.MODULE_DIVISION,
-                                        trackingId: VIDEO_TRACKING_IDS.PARTS
-                                    });
-                                }}
-                                className={`p-1 text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(VIDEO_TRACKING_IDS.PARTS)
-                                    ? 'bg-green-600 hover:bg-green-700'
-                                    : 'bg-purple-600 hover:bg-purple-700'
-                                    }`}
-                            >
-                                <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    {isVideoWatched(VIDEO_TRACKING_IDS.PARTS) ? (
-                                        <path d="M8 5v14l11-7z" />
-                                    ) : (
-                                        <path d="M8 5v14l11-7z" />
-                                    )}
-                                </svg>
-                            </button>
+                            <PlayVideoButton
+                                trackingId={VIDEO_TRACKING_IDS.PARTS}
+                                title="Partes de la División"
+                                videoId="/pag1/vv-1"
+                            />
                         </div>
 
                         {/* Step by step intro */}
@@ -162,30 +118,11 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                                         <p className="font-bold text-gray-900 dark:text-white" style={{ fontSize: 'clamp(0.875rem, 2.2vmin, 1.125rem)' }}>
                                             → <span className="italic">el total (dividendo).</span>
                                         </p>
-                                        <button
-                                            type="button"
-                                            onMouseEnter={() => {
-                                                currentTrackingIdRef.current = VIDEO_TRACKING_IDS.DIVIDEND;
-                                                setVideoModal({
-                                                    isOpen: true,
-                                                    title: 'El Dividendo',
-                                                    videoId: VIDEO_IDS.MODULE_DIVISION,
-                                                    trackingId: VIDEO_TRACKING_IDS.DIVIDEND
-                                                });
-                                            }}
-                                            className={`p-1 text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(VIDEO_TRACKING_IDS.DIVIDEND)
-                                                ? 'bg-green-600 hover:bg-green-700'
-                                                : 'bg-purple-600 hover:bg-purple-700'
-                                                }`}
-                                        >
-                                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                                                {isVideoWatched(VIDEO_TRACKING_IDS.DIVIDEND) ? (
-                                                    <path d="M8 5v14l11-7z" />
-                                                ) : (
-                                                    <path d="M8 5v14l11-7z" />
-                                                )}
-                                            </svg>
-                                        </button>
+                                        <PlayVideoButton
+                                            trackingId={VIDEO_TRACKING_IDS.DIVIDEND}
+                                            title="El Dividendo"
+                                            videoId="/pag1/vv-1"
+                                        />
                                     </div>
                                     <p className="text-gray-700 dark:text-gray-300 mb-2" style={{ fontSize: 'clamp(0.75rem, 1.9vmin, 1rem)' }}>
                                         Es la cantidad completa que queremos repartir o el número que vamos a dividir.
@@ -213,30 +150,11 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                                         <p className="font-bold text-gray-900 dark:text-white" style={{ fontSize: 'clamp(0.875rem, 2.2vmin, 1.125rem)' }}>
                                             → <span className="italic">el número de grupos (el divisor).</span>
                                         </p>
-                                        <button
-                                            type="button"
-                                            onMouseEnter={() => {
-                                                currentTrackingIdRef.current = VIDEO_TRACKING_IDS.DIVISOR;
-                                                setVideoModal({
-                                                    isOpen: true,
-                                                    title: 'El Divisor',
-                                                    videoId: VIDEO_IDS.MODULE_DIVISION,
-                                                    trackingId: VIDEO_TRACKING_IDS.DIVISOR
-                                                });
-                                            }}
-                                            className={`p-1 text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(VIDEO_TRACKING_IDS.DIVISOR)
-                                                ? 'bg-green-600 hover:bg-green-700'
-                                                : 'bg-purple-600 hover:bg-purple-700'
-                                                }`}
-                                        >
-                                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                                                {isVideoWatched(VIDEO_TRACKING_IDS.DIVISOR) ? (
-                                                    <path d="M8 5v14l11-7z" />
-                                                ) : (
-                                                    <path d="M8 5v14l11-7z" />
-                                                )}
-                                            </svg>
-                                        </button>
+                                        <PlayVideoButton
+                                            trackingId={VIDEO_TRACKING_IDS.DIVISOR}
+                                            title="El Divisor"
+                                            videoId="/pag1/vv-1"
+                                        />
                                     </div>
                                     <p className="text-gray-700 dark:text-gray-300 mb-2" style={{ fontSize: 'clamp(0.75rem, 1.9vmin, 1rem)' }}>
                                         Es entre cuántos vamos a repartir o en cuántas partes iguales queremos dividir el total.
@@ -264,30 +182,11 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                                         <p className="font-bold text-gray-900 dark:text-white" style={{ fontSize: 'clamp(0.875rem, 2.2vmin, 1.125rem)' }}>
                                             → <span className="italic">cuánto recibe cada grupo (el cociente).</span>
                                         </p>
-                                        <button
-                                            type="button"
-                                            onMouseEnter={() => {
-                                                currentTrackingIdRef.current = VIDEO_TRACKING_IDS.QUOTIENT;
-                                                setVideoModal({
-                                                    isOpen: true,
-                                                    title: 'El Cociente',
-                                                    videoId: VIDEO_IDS.MODULE_DIVISION,
-                                                    trackingId: VIDEO_TRACKING_IDS.QUOTIENT
-                                                });
-                                            }}
-                                            className={`p-1 text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(VIDEO_TRACKING_IDS.QUOTIENT)
-                                                ? 'bg-green-600 hover:bg-green-700'
-                                                : 'bg-purple-600 hover:bg-purple-700'
-                                                }`}
-                                        >
-                                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                                                {isVideoWatched(VIDEO_TRACKING_IDS.QUOTIENT) ? (
-                                                    <path d="M8 5v14l11-7z" />
-                                                ) : (
-                                                    <path d="M8 5v14l11-7z" />
-                                                )}
-                                            </svg>
-                                        </button>
+                                        <PlayVideoButton
+                                            trackingId={VIDEO_TRACKING_IDS.QUOTIENT}
+                                            title="El Cociente"
+                                            videoId="/pag1/vv-1"
+                                        />
                                     </div>
                                     <p className="text-gray-700 dark:text-gray-300" style={{ fontSize: 'clamp(0.75rem, 1.9vmin, 1rem)' }}>
                                         Es el resultado de la división. Cuánto corresponde a cada parte.
@@ -299,30 +198,11 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                         {/* Practical example box */}
                         <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl border-2 border-amber-400 dark:border-amber-600" style={{ padding: 'clamp(1rem, 3vmin, 1.5rem)' }}>
                             <div className="flex items-center gap-2 mb-3">
-                                <button
-                                    type="button"
-                                    onMouseEnter={() => {
-                                        currentTrackingIdRef.current = VIDEO_TRACKING_IDS.EXAMPLE;
-                                        setVideoModal({
-                                            isOpen: true,
-                                            title: 'Ejemplo Práctico',
-                                            videoId: VIDEO_IDS.MODULE_DIVISION,
-                                            trackingId: VIDEO_TRACKING_IDS.EXAMPLE
-                                        });
-                                    }}
-                                    className={`p-1.5 text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(VIDEO_TRACKING_IDS.EXAMPLE)
-                                        ? 'bg-green-600 hover:bg-green-700'
-                                        : 'bg-purple-600 hover:bg-purple-700'
-                                        }`}
-                                >
-                                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                        {isVideoWatched(VIDEO_TRACKING_IDS.EXAMPLE) ? (
-                                            <path d="M8 5v14l11-7z" />
-                                        ) : (
-                                            <path d="M8 5v14l11-7z" />
-                                        )}
-                                    </svg>
-                                </button>
+                                <PlayVideoButton
+                                    trackingId={VIDEO_TRACKING_IDS.EXAMPLE}
+                                    title="Ejemplo Práctico"
+                                    videoId="/pag1/vv-1"
+                                />
                                 <div className="bg-green-600 text-white rounded-lg px-4 py-1.5">
                                     <span className="font-bold" style={{ fontSize: 'clamp(0.875rem, 2.2vmin, 1.125rem)' }}>Ejemplo:</span>
                                 </div>

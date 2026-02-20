@@ -144,7 +144,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                 {/* ===== ACTIVITY 1 ===== */}
                 <div className="mb-6 bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div className="flex items-center gap-2 mb-4">
-                        <PlayVideoButton trackingId={VIDEO_TRACKING.EJ_1} title="Ejercicio 1" />
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.EJ_1} title="Ejercicio 1" videoId="/pag1/vv-1" />
                         <span className="bg-purple-700 text-white text-sm font-bold w-8 h-8 rounded flex items-center justify-center flex-shrink-0">1</span>
                         <p className="text-sm font-bold text-gray-800 dark:text-gray-200">
                             Determinar si las siguientes divisiones son exactas u inexactas.
@@ -275,7 +275,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                             <div key={i} className="space-y-2 bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
                                 {/* Problem text */}
                                 <div className="flex items-start gap-2">
-                                    <PlayVideoButton trackingId={item.trackingId} title={`Problema ${i + 1}`} />
+                                    <PlayVideoButton trackingId={item.trackingId} title={`Problema ${i + 1}`} videoId="/pag1/vv-1" />
                                     <span className="w-3 h-3 bg-gray-800 dark:bg-gray-200 rounded-sm inline-block flex-shrink-0 mt-1.5"></span>
                                     <div>
                                         <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">{item.text}</p>

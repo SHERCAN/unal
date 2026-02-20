@@ -58,7 +58,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                         {/* SIMPLIFICACIÓN */}
                         <div>
                             <div className="flex items-center gap-2 mb-2">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A2_SIMP} title="Simplificación" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A2_SIMP} title="Simplificación" videoId="/pag1/vv-1" />
                                 <h3 className="font-bold text-purple-700 dark:text-purple-300">Simplificación</h3>
                             </div>
 
@@ -119,7 +119,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                         {/* AMPLIFICACIÓN */}
                         <div>
                             <div className="flex items-center gap-2 mb-2">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A2_AMP} title="Amplificación" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A2_AMP} title="Amplificación" videoId="/pag1/vv-1" />
                                 <h3 className="font-bold text-purple-700 dark:text-purple-300">Amplificación</h3>
                             </div>
 

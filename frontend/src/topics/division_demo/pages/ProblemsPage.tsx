@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
@@ -37,7 +38,6 @@ export function ProblemsPage({ zoom = 1 }: DivisionProblemsPageProps) {
     const { isVideoWatched, markVideoWatched, completeStage, watchedVideos } = useVideoProgress();
 
     /* videoModal list removed */
-
     /* handleVideoComplete removed */
 
     // Problem 1 states
@@ -159,27 +159,11 @@ export function ProblemsPage({ zoom = 1 }: DivisionProblemsPageProps) {
                         {/* Problem 1 */}
                         <div className="mb-8">
                             <div className="flex items-center gap-3 mb-3">
-                                <button
-                                    type="button"
-                                    onMouseEnter={() => setVideoModal({
-                                        isOpen: true,
-                                        title: 'Problema de Muñecas',
-                                        videoId: VIDEO_IDS.MODULE_DIVISION,
-                                        trackingId: VIDEO_TRACKING_IDS.PROB_1
-                                    })}
-                                    className={`p-2 text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(VIDEO_TRACKING_IDS.PROB_1)
-                                        ? 'bg-green-600 hover:bg-green-700'
-                                        : 'bg-purple-600 hover:bg-purple-700'
-                                        }`}
-                                >
-                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                        {isVideoWatched(VIDEO_TRACKING_IDS.PROB_1) ? (
-                                            <path d="M8 5v14l11-7z" />
-                                        ) : (
-                                            <path d="M8 5v14l11-7z" />
-                                        )}
-                                    </svg>
-                                </button>
+                                <PlayVideoButton
+                                    trackingId={VIDEO_TRACKING_IDS.PROB_1}
+                                    title="Problema de Muñecas"
+                                    videoId="/pag1/vv-1"
+                                />
                                 <div className="bg-purple-600 text-white rounded px-4 py-1 font-bold" style={{ fontSize: 'clamp(0.875rem, 2.2vmin, 1.125rem)' }}>
                                     Problema
                                 </div>
@@ -281,27 +265,11 @@ export function ProblemsPage({ zoom = 1 }: DivisionProblemsPageProps) {
                         {/* Problem 2 */}
                         <div className="mb-8">
                             <div className="flex items-center gap-3 mb-3">
-                                <button
-                                    type="button"
-                                    onMouseEnter={() => setVideoModal({
-                                        isOpen: true,
-                                        title: 'Problema de Cuadernos',
-                                        videoId: VIDEO_IDS.MODULE_DIVISION,
-                                        trackingId: VIDEO_TRACKING_IDS.PROB_2
-                                    })}
-                                    className={`p-2 text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(VIDEO_TRACKING_IDS.PROB_2)
-                                        ? 'bg-green-600 hover:bg-green-700'
-                                        : 'bg-purple-600 hover:bg-purple-700'
-                                        }`}
-                                >
-                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                        {isVideoWatched(VIDEO_TRACKING_IDS.PROB_2) ? (
-                                            <path d="M8 5v14l11-7z" />
-                                        ) : (
-                                            <path d="M8 5v14l11-7z" />
-                                        )}
-                                    </svg>
-                                </button>
+                                <PlayVideoButton
+                                    trackingId={VIDEO_TRACKING_IDS.PROB_2}
+                                    title="Problema de Cuadernos"
+                                    videoId="/pag1/vv-1"
+                                />
                                 <div className="bg-purple-600 text-white rounded px-4 py-1 font-bold" style={{ fontSize: 'clamp(0.875rem, 2.2vmin, 1.125rem)' }}>
                                     Problema
                                 </div>

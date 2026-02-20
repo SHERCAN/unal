@@ -58,7 +58,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
                     <div className="mt-4 flex flex-col gap-6">
                         <div className="flex items-center gap-4">
-                            <PlayVideoButton trackingId={VIDEO_TRACKING.C_SOCCER} title="Comparación de Fracciones - El Partido" />
+                            <PlayVideoButton trackingId={VIDEO_TRACKING.C_SOCCER} title="Comparación de Fracciones - El Partido" videoId="/pag1/vv-1" />
                             <div>
                                 <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200">El Gran Partido de Fútbol</h3>
                                 <p className="text-gray-600">Compara los goles anotados por cada equipo.</p>
@@ -173,7 +173,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
                     <div className="mt-4 space-y-4">
                         <div className="flex items-center gap-4">
-                            <PlayVideoButton trackingId={VIDEO_TRACKING.P_COMPARE} title="Cómo comparar fracciones" />
+                            <PlayVideoButton trackingId={VIDEO_TRACKING.P_COMPARE} title="Cómo comparar fracciones" videoId="/pag1/vv-1" />
                             <div>
                                 <p className="text-lg font-bold text-gray-800 dark:text-gray-200">¿Cómo comparamos fracciones?</p>
                                 <p className="text-sm text-gray-600">Aprende las reglas básicas.</p>

@@ -7,17 +7,13 @@ import { useVideoProgress } from '@/hooks/useVideoProgress';
 interface PlayVideoButtonProps {
     trackingId: string;
     title: string;
-    videoId?: string;
-    className?: string;
-    size?: 'sm' | 'md' | 'lg';
+    videoId: string;
 }
 
 export function PlayVideoButton({
     trackingId,
     title,
-    videoId = "/pag1/vv-1",
-    className = '',
-    size = 'md'
+    videoId,
 }: PlayVideoButtonProps) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
     const [isOpen, setIsOpen] = useState(false);
@@ -26,23 +22,19 @@ export function PlayVideoButton({
         markVideoWatched(trackingId);
     };
 
-    const sqSize = size === 'sm' ? 'w-6 h-6' : size === 'lg' ? 'w-10 h-10' : 'w-8 h-8';
-    const iconSz = size === 'sm' ? 'w-3 h-3' : size === 'lg' ? 'w-5 h-5' : 'w-4 h-4';
-    const padding = size === 'sm' ? 'p-1' : 'p-1.5';
-
     return (
         <>
             <button
                 type="button"
                 onMouseEnter={() => setIsOpen(true)}
                 onClick={() => setIsOpen(true)}
-                className={`${padding} text-white rounded-full transition-all flex-shrink-0 inline-flex items-center justify-center align-middle mx-1 ${isVideoWatched(trackingId)
+                className={`p-1.5 text-white rounded-full transition-all flex-shrink-0 inline-flex items-center justify-center align-middle mx-1 ${isVideoWatched(trackingId)
                     ? 'bg-green-600 hover:bg-green-700'
                     : 'bg-purple-600 hover:bg-purple-700'
-                    } ${className}`}
-                style={{ width: sqSize === 'w-8 h-8' ? 'clamp(1.5rem, 4vmin, 2rem)' : undefined, height: sqSize === 'w-8 h-8' ? 'clamp(1.5rem, 4vmin, 2rem)' : undefined }}
+                    }`}
+                style={{ width: 'clamp(1.5rem, 4vmin, 2rem)', height: 'clamp(1.5rem, 4vmin, 2rem)' }}
             >
-                <svg className={iconSz} fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M8 5v14l11-7z" />
                 </svg>
             </button>

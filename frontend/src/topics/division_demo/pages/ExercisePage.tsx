@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
@@ -96,10 +97,7 @@ export function ExercisePage({ zoom = 1 }: DivisionExercisePageProps) {
     };
 
     /* videoModal list removed */
-
-    // Use a ref to store the current tracking ID so it persists even after modal closes
     /* ref removed */
-
     /* handleVideoComplete removed */
 
     return (
@@ -181,30 +179,11 @@ export function ExercisePage({ zoom = 1 }: DivisionExercisePageProps) {
                                 <p className="text-sm text-gray-600 dark:text-gray-400">
                                     ¿Cuántas manzanas le corresponden a cada niño?
                                 </p>
-                                <button
-                                    type="button"
-                                    onMouseEnter={() => {
-                                        currentTrackingIdRef.current = VIDEO_TRACKING_IDS.C_INTRO;
-                                        setVideoModal({
-                                            isOpen: true,
-                                            title: 'División de Manzanas',
-                                            videoId: VIDEO_IDS.MODULE_DIVISION,
-                                            trackingId: VIDEO_TRACKING_IDS.C_INTRO
-                                        });
-                                    }}
-                                    className={`p-1 text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(VIDEO_TRACKING_IDS.C_INTRO)
-                                        ? 'bg-green-600 hover:bg-green-700'
-                                        : 'bg-purple-600 hover:bg-purple-700'
-                                        }`}
-                                >
-                                    <svg className="w-3 h-3 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 24 24">
-                                        {isVideoWatched(VIDEO_TRACKING_IDS.C_INTRO) ? (
-                                            <path d="M8 5v14l11-7z" />
-                                        ) : (
-                                            <path d="M8 5v14l11-7z" />
-                                        )}
-                                    </svg>
-                                </button>
+                                <PlayVideoButton
+                                    trackingId={VIDEO_TRACKING_IDS.C_INTRO}
+                                    title="División de Manzanas"
+                                    videoId="/pag1/vv-1"
+                                />
                             </div>
                         </div>
                     </div>
@@ -308,30 +287,11 @@ export function ExercisePage({ zoom = 1 }: DivisionExercisePageProps) {
                             <p className="text-center font-bold text-gray-900 dark:text-gray-100 text-base">
                                 ¿Cuántas manzanas debe tener cada niño?
                             </p>
-                            <button
-                                type="button"
-                                onMouseEnter={() => {
-                                    currentTrackingIdRef.current = VIDEO_TRACKING_IDS.C_QUESTION;
-                                    setVideoModal({
-                                        isOpen: true,
-                                        title: 'División de Manzanas',
-                                        videoId: VIDEO_IDS.MODULE_DIVISION,
-                                        trackingId: VIDEO_TRACKING_IDS.C_QUESTION
-                                    });
-                                }}
-                                className={`p-1 text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(VIDEO_TRACKING_IDS.C_QUESTION)
-                                    ? 'bg-green-600 hover:bg-green-700'
-                                    : 'bg-purple-600 hover:bg-purple-700'
-                                    }`}
-                            >
-                                <svg className="w-3 h-3 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 24 24">
-                                    {isVideoWatched(VIDEO_TRACKING_IDS.C_QUESTION) ? (
-                                        <path d="M8 5v14l11-7z" />
-                                    ) : (
-                                        <path d="M8 5v14l11-7z" />
-                                    )}
-                                </svg>
-                            </button>
+                            <PlayVideoButton
+                                trackingId={VIDEO_TRACKING_IDS.C_QUESTION}
+                                title="División de Manzanas"
+                                videoId="/pag1/vv-1"
+                            />
                         </div>
                         <div className="flex justify-center gap-3 flex-wrap">
                             {answers.map(ans => (
@@ -433,31 +393,11 @@ export function ExercisePage({ zoom = 1 }: DivisionExercisePageProps) {
                                     <h3 className="font-semibold text-gray-900 dark:text-white text-center" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.5rem)' }}>
                                         Notación Matemática
                                     </h3>
-                                    <button
-                                        type="button"
-                                        onMouseEnter={() => {
-                                            currentTrackingIdRef.current = VIDEO_TRACKING_IDS.P_EXPLANATION;
-                                            setVideoModal({
-                                                isOpen: true,
-                                                title: 'Explicación Pictórica',
-                                                videoId: VIDEO_IDS.MODULE_DIVISION,
-                                                trackingId: VIDEO_TRACKING_IDS.P_EXPLANATION
-                                            });
-                                        }}
-                                        className={`p-1 text-white rounded-full transition-all flex-shrink-0 ${isVideoWatched(VIDEO_TRACKING_IDS.P_EXPLANATION)
-                                            ? 'bg-green-600 hover:bg-green-700'
-                                            : 'bg-purple-600 hover:bg-purple-700'
-                                            }`}
-                                    // Keeping blue default for P section as per original, or switch to purple consistency? Original was blue.
-                                    >
-                                        <svg className="w-3 h-3 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 24 24">
-                                            {isVideoWatched(VIDEO_TRACKING_IDS.P_EXPLANATION) ? (
-                                                <path d="M8 5v14l11-7z" />
-                                            ) : (
-                                                <path d="M8 5v14l11-7z" />
-                                            )}
-                                        </svg>
-                                    </button>
+                                    <PlayVideoButton
+                                        trackingId={VIDEO_TRACKING_IDS.P_EXPLANATION}
+                                        title="Explicación Pictórica"
+                                        videoId="/pag1/vv-1"
+                                    />
                                 </div>
 
                                 <div className="flex flex-col md:flex-row items-center justify-center flex-1 min-h-0 overflow-hidden" style={{ gap: 'clamp(1.5rem, 4vmin, 3rem)' }}>

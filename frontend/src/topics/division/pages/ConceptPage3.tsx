@@ -200,7 +200,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                     Para dividir 25 entre 5, buscamos cuántas veces el número 5 está contenido en 25.
                                     Como 5 × 5 = 25, el cociente es 5 y el resto es 0.
                                 </p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE_MAIN} title="Explicación del ejemplo" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE_MAIN} title="Explicación del ejemplo" videoId="/pag1/vv-1" />
                             </div>
                         </div>
 
@@ -212,7 +212,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         {/* --- EXERCISE 1 --- */}
                         <div className="flex flex-col gap-4 pl-2">
                             <div className="flex items-start gap-2">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PRACTICE_1} title="Ejercicio 1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PRACTICE_1} title="Ejercicio 1" videoId="/pag1/vv-1" />
                                 <p className="font-bold text-gray-800 dark:text-gray-200 text-sm md:text-base">
                                     El número 21 se reparte en 7 grupos iguales.
                                     <br />
@@ -354,7 +354,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         {/* --- PROBLEM 1 --- */}
                         <div className="flex flex-col gap-2 pl-2">
                             <div className="flex items-start gap-2">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PROBLEM_1} title="Problema 1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PROBLEM_1} title="Problema 1" videoId="/pag1/vv-1" />
                                 <div className="border border-pink-300 rounded px-2 text-pink-700 font-bold text-xs py-0.5 self-start whitespace-nowrap">PROBLEMA 1</div>
                                 <p className="font-medium text-gray-800 dark:text-gray-200 text-sm leading-tight">
                                     Ana y María quieren repartir 12 muñecas entre las dos.<br />
@@ -378,7 +378,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         {/* --- PROBLEM 2 --- */}
                         <div className="flex flex-col gap-2 pl-2 pb-4">
                             <div className="flex items-start gap-2">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PROBLEM_2} title="Problema 2" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PROBLEM_2} title="Problema 2" videoId="/pag1/vv-1" />
                                 <div className="border border-pink-300 rounded px-2 text-pink-700 font-bold text-xs py-0.5 self-start whitespace-nowrap">PROBLEMA 2</div>
                                 <p className="font-medium text-gray-800 dark:text-gray-200 text-sm leading-tight">
                                     En la bodega hay 64 cuadernos. Cada paquete trae 8 cuadernos.

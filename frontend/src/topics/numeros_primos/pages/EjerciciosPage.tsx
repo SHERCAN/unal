@@ -140,7 +140,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
             {/* Exercise 1 header */}
             <div className="flex items-center gap-2 mb-6">
-                <PlayVideoButton trackingId={VIDEO_TRACKING.INTRO} title="Ejercicios de Números Primos" />
+                <PlayVideoButton trackingId={VIDEO_TRACKING.INTRO} title="Ejercicios de Números Primos" videoId="/pag1/vv-1" />
                 <span className="bg-purple-600 text-white font-extrabold text-xl px-3 py-1 rounded">1</span>
                 <p className="text-gray-800 dark:text-gray-200">
                     Los números dados relacionan correctamente con primos y compuestos.

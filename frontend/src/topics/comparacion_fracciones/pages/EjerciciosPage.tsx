@@ -48,7 +48,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Comparación de Fracciones' }} pageId="comp-frac-ejercicios">
             <div className="flex items-center gap-2 mb-6">
-                <PlayVideoButton trackingId={VIDEO_TRACKING.INTRO} title="Ejercicios de Comparación" size="md" />
+                <PlayVideoButton trackingId={VIDEO_TRACKING.INTRO} title="Ejercicios de Comparación" videoId="/pag1/vv-1" />
                 <h2 className="text-2xl font-bold text-orange-600 dark:text-orange-400">EJERCICIOS</h2>
             </div>
 
