@@ -1,7 +1,7 @@
 // src/app/api/[...slug]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 
-const API_URL = process.env.FRONTEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+const API_URL = process.env.API_URL || 'http://localhost:4000/api';
 
 export async function POST(req: NextRequest) {
   return proxyRequest(req);
