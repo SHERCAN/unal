@@ -55,7 +55,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                             <p>
                                 El total de <span className="font-bold text-orange-500">24</span> naranjas se reparte en <span className="font-bold text-green-600">4</span> cajas. Entonces, cada caja tiene <span className="font-bold text-purple-600">6</span> naranjas.
                             </p>
-                            <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.INTRO} title="Introducción" videoId="/pag1/vv-1" />
+                            <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.INTRO} title="Introducción" videoId="/pag2/vv-2" />
                         </div>
 
                         {/* Writing Division */}
@@ -96,7 +96,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                         <div className="flex flex-col items-center gap-4">
                             <div className="flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium text-center" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                 <p>En la notación matemática, la división se representa así:</p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.MATH_NOTATION} title="Representación matemática" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.MATH_NOTATION} title="Representación matemática" videoId="/pag1/vv-3" />
                             </div>
                             <div className="flex items-center gap-4 text-gray-800 dark:text-gray-200 font-black" style={{ fontSize: 'clamp(2rem, 5vmin, 3rem)' }}>
                                 <span className="text-orange-500">24</span>
@@ -110,7 +110,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                         {/* Meaning of Numbers */}
                         <div className="space-y-3">
                             <div className="flex items-center gap-2">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.MEANING} title="Significado de los números" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.MEANING} title="Significado de los números" videoId="/pag1/vv-4" />
                                 <p className="text-gray-800 dark:text-gray-200 font-medium" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                     El significado de los números dice que
                                 </p>
