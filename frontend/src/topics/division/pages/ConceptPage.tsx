@@ -62,7 +62,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                         <div>
                             <div className="flex items-center gap-2 mb-4 text-gray-800 dark:text-gray-200 font-medium" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                 <p>Dividir <span className="font-bold text-orange-500">24</span> entre <span className="font-bold text-green-600">4</span>, se escribe así:</p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.NOTATION} title="Notación de división" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.NOTATION} title="Notación de división" videoId="/pag1/vv-2" />
                             </div>
 
                             {/* Visualization: Bracket & Multiplication Table */}
