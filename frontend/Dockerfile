@@ -9,11 +9,13 @@ COPY package.json pnpm-lock.yaml* ./
 RUN pnpm install --frozen-lockfile
 
 # Copiar resto del código y construir
-# Copiar resto del código y construir
 COPY . .
-RUN pnpm build
 
-# -------------------------------------------------
+# Pasar las variables de entorno para que Next.js pueda compilarlas en el cliente
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
+RUN pnpm build
 # FINAL RUNTIME IMAGE (solo deps de producción)
 # -------------------------------------------------
 FROM node:22-alpine AS deps
