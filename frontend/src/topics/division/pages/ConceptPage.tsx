@@ -55,14 +55,14 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                             <p>
                                 El total de <span className="font-bold text-orange-500">24</span> naranjas se reparte en <span className="font-bold text-green-600">4</span> cajas. Entonces, cada caja tiene <span className="font-bold text-purple-600">6</span> naranjas.
                             </p>
-                            <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.INTRO} title="Introducción" videoId="/pag2/vv-2" />
+                            <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.INTRO} title="-" videoId="/pag2/vv-1" />
                         </div>
 
                         {/* Writing Division */}
                         <div>
                             <div className="flex items-center gap-2 mb-4 text-gray-800 dark:text-gray-200 font-medium" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                 <p>Dividir <span className="font-bold text-orange-500">24</span> entre <span className="font-bold text-green-600">4</span>, se escribe así:</p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.NOTATION} title="Notación de división" videoId="/pag1/vv-2" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.NOTATION} title="Notación de división" videoId="/pag2/vv-2" />
                             </div>
 
                             {/* Visualization: Bracket & Multiplication Table */}
@@ -96,7 +96,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                         <div className="flex flex-col items-center gap-4">
                             <div className="flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium text-center" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                 <p>En la notación matemática, la división se representa así:</p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.MATH_NOTATION} title="Representación matemática" videoId="/pag1/vv-3" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.MATH_NOTATION} title="Representación matemática" videoId="/pag2/vv-3" />
                             </div>
                             <div className="flex items-center gap-4 text-gray-800 dark:text-gray-200 font-black" style={{ fontSize: 'clamp(2rem, 5vmin, 3rem)' }}>
                                 <span className="text-orange-500">24</span>
