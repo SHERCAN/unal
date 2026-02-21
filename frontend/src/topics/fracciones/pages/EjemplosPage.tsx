@@ -46,7 +46,7 @@ export function EjemplosPage({ zoom = 1 }: Props) {
                             {/* EXAMPLE 1: Balls */}
                             <div className="space-y-6">
                                 <div className="flex items-center gap-4">
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.EX_BALLS} title="Ejemplo: Pelotas" videoId="/pag1/vv-1" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.EX_BALLS} title="Ejemplo: Pelotas" videoId="/pag20/vv-1" />
                                     <span className="bg-green-600 text-white px-4 py-1.5 font-bold text-lg rounded shadow-sm">Ejemplo:</span>
                                 </div>
 
@@ -99,7 +99,7 @@ export function EjemplosPage({ zoom = 1 }: Props) {
                             {/* EXAMPLE 2: Books */}
                             <div className="space-y-8 pt-12 border-t border-gray-100">
                                 <div className="flex items-center gap-4">
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.EX_BOOKS} title="Ejemplo: Libros" videoId="/pag1/vv-1" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.EX_BOOKS} title="Ejemplo: Libros" videoId="/pag20/vv-2" />
                                     <span className="bg-green-600 text-white px-4 py-1.5 font-bold text-lg rounded shadow-sm">Ejemplo:</span>
                                 </div>
 
