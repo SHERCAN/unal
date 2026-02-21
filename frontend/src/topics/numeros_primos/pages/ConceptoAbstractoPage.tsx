@@ -20,6 +20,7 @@ import { FeedbackButton } from '@/components/FeedbackButton';
 
 interface Props { zoom?: number; }
 
+//PAGINA 2 ABSTRACTO
 export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 

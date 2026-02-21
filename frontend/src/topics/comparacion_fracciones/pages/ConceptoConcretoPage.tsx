@@ -20,7 +20,7 @@ import felizMorado from '../equipofelizmorado.png';
 import tristeMorado from '../equipotristemorado.png';
 
 interface Props { zoom?: number; }
-
+// PAGINA 1 CONCRETO PICTORICO
 export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     const { submitExercise } = useVideoProgress();
 

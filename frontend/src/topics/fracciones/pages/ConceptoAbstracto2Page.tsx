@@ -17,6 +17,7 @@ import cebraOblicuaImg from '../cebraoblicua.png';
 
 interface Props { zoom?: number; }
 
+//PAGINA 3 ABSTRACTO
 export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 

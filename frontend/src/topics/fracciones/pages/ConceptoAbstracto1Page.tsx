@@ -9,6 +9,7 @@ import cuadriculaImg from '../cuadricula.png';
 
 interface Props { zoom?: number; }
 
+//PAGINA 2 ABSTRACTO
 export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 

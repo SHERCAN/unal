@@ -11,17 +11,17 @@ import { FeedbackButton } from '@/components/FeedbackButton';
 interface ExercisesPageProps {
     zoom?: number;
 }
-
+//PAGINA 5 EJERCICIOS
 export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
     /* videoModal list removed */
     const VIDEO_TRACKING_IDS = {
-        PRACTICE_1: 'division-exercises-practice-1',
-        PRACTICE_2: 'division-exercises-practice-2',
-        MATCHING: 'division-exercises-matching',
-        QUOTIENTS: 'division-exercises-quotients',
-        TRUE_FALSE: 'division-exercises-true-false',
-        SITUATION: 'division-exercises-situation'
+        PRACTICE_1: 'division-exercises-pag5-v1',
+        PRACTICE_2: 'division-exercises-pag5-v2',
+        MATCHING: 'division-exercises-pag5-v3',
+        QUOTIENTS: 'division-exercises-pag5-v4',
+        TRUE_FALSE: 'division-exercises-pag5-v5',
+        SITUATION: 'division-exercises-pag5-v6'
     };
 
     // --- ACTIVITY 1: SELECTION ---

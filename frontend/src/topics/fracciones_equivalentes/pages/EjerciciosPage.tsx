@@ -20,7 +20,7 @@ import linea3 from '../linea3.png';
 import image109 from '../image 109.png';
 
 interface Props { zoom?: number; }
-
+//PAGINA 6 EJERCICIOS
 export function EjerciciosPage({ zoom = 1 }: Props) {
     const { submitExercise } = useVideoProgress();
 

@@ -8,7 +8,7 @@ import { FeedbackButton } from '@/components/FeedbackButton';
 import { MdLightbulbOutline } from 'react-icons/md';
 
 interface Props { zoom?: number; }
-
+//PAGINA 4 ABSTRACTO
 export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 

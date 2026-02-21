@@ -13,7 +13,7 @@ import vueltasImg from '../vueltas.png';
 import image75Img from '../image 75.png';
 
 interface Props { zoom?: number; }
-
+//PAGINA 2 PICTORICO
 export function ConceptoProcesualPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 

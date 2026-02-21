@@ -16,7 +16,7 @@ interface Orange {
 interface DistributionExercisePageProps {
     zoom?: number;
 }
-
+//PAGINA 1 CONCRETO PICTORICO
 export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageProps) {
     const { isVideoWatched, markVideoWatched, completeStage, watchedVideos } = useVideoProgress();
 
@@ -149,10 +149,10 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
 
     // Video Tracking
     const VIDEO_TRACKING_IDS = {
-        C_INTRO: 'division-dist-c-intro',
-        C_DISTRIBUTION: 'division-dist-c-distribution',
-        P_INTRO: 'division-dist-p-intro',
-        P_DISTRIBUTION: 'division-dist-p-distribution'
+        C_INTRO: 'division-dist-pag1-v1',
+        C_DISTRIBUTION: 'division-dist-pag1-v2',
+        P_INTRO: 'division-dist-pag1-v3',
+        P_DISTRIBUTION: 'division-dist-pag1-v4'
     };
 
     // Stage C Logic

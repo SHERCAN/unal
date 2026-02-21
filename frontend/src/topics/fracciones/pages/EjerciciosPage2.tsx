@@ -16,7 +16,7 @@ import cuadernos2Img from '../cuadernos2.png';
 import cuadernos3Img from '../cuadernos3.png';
 
 interface Props { zoom?: number; }
-
+//PAGINA 6 EJERCICIOS
 export function EjerciciosPage2({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 

@@ -18,7 +18,7 @@ import piramideImg from '../piramide.png';
 import trapecioImg from '../trapecio.png';
 
 interface Props { zoom?: number; }
-
+//PAGINA 5 EJERCICIOS
 export function EjerciciosPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 

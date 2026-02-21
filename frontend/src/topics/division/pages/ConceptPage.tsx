@@ -9,19 +9,19 @@ import { useVideoProgress } from '@/hooks/useVideoProgress';
 interface DivisionConceptPageProps {
     zoom?: number;
 }
-
+//PAGINA 2 ABSTRACTO
 export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     // Define tracking IDs for videos
     const VIDEO_TRACKING_IDS = {
-        INTRO: 'division-concept-intro',
-        NOTATION: 'division-concept-notation',
-        MATH_NOTATION: 'division-concept-math-notation',
-        MEANING: 'division-concept-meaning',
-        DEFINITION: 'division-concept-definition',
-        COMPONENTS: 'division-concept-components',
-        DIVIDEND: 'division-concept-dividend',
+        INTRO: 'division-concept-pag2-v1',
+        NOTATION: 'division-concept-pag2-v2',
+        MATH_NOTATION: 'division-concept-pag2-v3',
+        MEANING: 'division-concept-pag2-v4',
+        DEFINITION: 'division-concept-pag2-v5',
+        COMPONENTS: 'division-concept-pag2-v6',
+        DIVIDEND: 'division-concept-pag2-v7',
     };
 
     /* videoModal list removed */
@@ -53,16 +53,16 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                         {/* Intro Text */}
                         <div className="flex items-start flex-wrap gap-2 text-gray-800 dark:text-gray-200 font-semibold" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                             <p>
-                                El total de <span className="font-bold text-orange-500" style={{fontSize: '20px'}}>24</span> naranjas se reparte en <span className="font-bold text-green-600" style={{fontSize: '20px'}}>4</span> cajas. Entonces, cada caja tiene <span className="font-bold text-purple-600" style={{fontSize: '20px'}}>6</span> naranjas.
-                            
-                            <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.INTRO} title="" videoId="/pag2/vv-1" />
+                                El total de <span className="font-bold text-orange-500" style={{ fontSize: '20px' }}>24</span> naranjas se reparte en <span className="font-bold text-green-600" style={{ fontSize: '20px' }}>4</span> cajas. Entonces, cada caja tiene <span className="font-bold text-purple-600" style={{ fontSize: '20px' }}>6</span> naranjas.
+
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.INTRO} title="" videoId="/pag2/vv-1" />
                             </p>
                         </div>
 
                         {/* Writing Division */}
                         <div>
                             <div className="flex items-center gap-2 mb-4 text-gray-800 dark:text-gray-200 font-semibold" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
-                                <p>Dividir <span className="font-bold text-orange-500" style={{fontSize: '20px'}}>24</span> entre <span className="font-bold text-green-600" style={{fontSize: '20px'}}>4</span>, se escribe así:</p>
+                                <p>Dividir <span className="font-bold text-orange-500" style={{ fontSize: '20px' }}>24</span> entre <span className="font-bold text-green-600" style={{ fontSize: '20px' }}>4</span>, se escribe así:</p>
                                 <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.NOTATION} title="Notación de división" videoId="/pag2/vv-2" />
                             </div>
 
@@ -72,7 +72,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                                     className="h-48 object-contain"
                                     draggable={false}
                                 />
-                            </div>   
+                            </div>
                         </div>
 
                         {/* Math Notation */}
@@ -87,7 +87,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                                     className="h-16 object-contain"
                                     draggable={false}
                                 />
-                            </div>  
+                            </div>
                         </div>
 
                         {/* Meaning of Numbers */}
@@ -101,15 +101,15 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                             <ul className="list-none space-y-2 pl-8 text-gray-800 dark:text-gray-200 font-semibold" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                 <li className="flex items-center gap-3">
                                     <span className="w-3 h-3 bg-black dark:bg-white inline-block flex-shrink-0"></span>
-                                    <span><span className="font-extrabold text-orange-500" style={{fontSize: '20px'}}>24</span>  es el total de naranjas.</span>
+                                    <span><span className="font-extrabold text-orange-500" style={{ fontSize: '20px' }}>24</span>  es el total de naranjas.</span>
                                 </li>
                                 <li className="flex items-center gap-3">
                                     <span className="w-3 h-3 bg-black dark:bg-white inline-block flex-shrink-0"></span>
-                                    <span><span className="font-extrabold text-green-600" style={{fontSize: '20px'}}>4</span>  es el número de cajas.</span>
+                                    <span><span className="font-extrabold text-green-600" style={{ fontSize: '20px' }}>4</span>  es el número de cajas.</span>
                                 </li>
                                 <li className="flex items-center gap-3">
                                     <span className="w-3 h-3 bg-black dark:bg-white inline-block flex-shrink-0"></span>
-                                    <span><span className="font-extrabold text-purple-600" style={{fontSize: '20px'}}>6</span>  es la cantidad de naranjas en cada caja.</span>
+                                    <span><span className="font-extrabold text-purple-600" style={{ fontSize: '20px' }}>6</span>  es la cantidad de naranjas en cada caja.</span>
                                 </li>
                             </ul>
                         </div>
@@ -152,7 +152,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                                     <div className="flex items-center flex-wrap gap-2">
                                         <p>
                                             <span className="font-bold">A</span> <span className="mx-1">→</span> <span className="italic font-bold">el total (dividendo).</span> <span className='font-semibold'>Es la cantidad completa que queremos repartir o el número que vamos a dividir.</span>
-                                        <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.DIVIDEND} title="El Dividendo" videoId="/pag2/vv-7" />
+                                            <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.DIVIDEND} title="El Dividendo" videoId="/pag2/vv-7" />
                                         </p>
                                     </div>
                                 </div>

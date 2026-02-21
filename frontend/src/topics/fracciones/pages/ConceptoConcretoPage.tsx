@@ -55,7 +55,7 @@ const SLICE_STYLES: React.CSSProperties[] = [
     // porcion8 – 1:30 (top-right sector lower). Tip is at bottom-right corner.
     { position: 'absolute', left: '140px', top: '82px' },
 ];
-
+//PAGINA 1 CONCRETO PICTORICO
 export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 

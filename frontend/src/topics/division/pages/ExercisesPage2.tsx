@@ -10,14 +10,14 @@ import { FeedbackButton } from '@/components/FeedbackButton';
 interface ExercisesPage2Props {
     zoom?: number;
 }
-
+//PAGINA 6 EJERCICIOS
 export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
     const { markVideoWatched } = useVideoProgress();
     const VIDEO_TRACKING_IDS = {
-        ACTIVITY_1_Q1: 'division-exercises-2-act1-q1',
-        ACTIVITY_1_Q2: 'division-exercises-2-act1-q2',
-        PROBLEM_SOLVING: 'division-exercises-2-problem-solving',
-        FALSE_DIVISION: 'division-exercises-2-false-division'
+        ACTIVITY_1_Q1: 'division-exercises-pag6-v1',
+        ACTIVITY_1_Q2: 'division-exercises-pag6-v2',
+        PROBLEM_SOLVING: 'division-exercises-pag6-v3',
+        FALSE_DIVISION: 'division-exercises-pag6-v4'
     };
 
     /* handleVideoComplete removed */

@@ -13,7 +13,7 @@ import pizza12Img from '../pizza12.png';
 import pizza4Img from '../pizza4.png';
 
 interface Props { zoom?: number; }
-
+//PAGINA 5 ABSTRACTO
 export function EjemplosPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 

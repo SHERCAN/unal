@@ -38,21 +38,31 @@ interface GroupedModule {
 }
 
 const formatModuleName = (id: string) => {
+    // Primero, revisamos de modo descendente para que no detecte mal "division" en "division-exacta"
+    if (id.startsWith('division-exacta')) return 'DIVISIÓN EXACTA';
+    if (id.startsWith('division-inexacta')) return 'DIVISIÓN INEXACTA';
+    if (id.startsWith('division')) return 'DIVISIÓN';
+    if (id.startsWith('numeros-primos')) return 'NÚMEROS PRIMOS';
+    if (id.startsWith('comparacion-fracciones')) return 'COMPARACIÓN DE FRACCIONES';
+    if (id.startsWith('fracciones-equivalentes')) return 'FRACCIONES EQUIVALENTES';
+    if (id.startsWith('fracciones')) return 'FRACCIONES';
+
+    // Fallback if it doesn't match directly
     const parts = id.split('-');
     if (parts.length > 1) {
-        if (parts[0] === 'division') {
-            if (parts[1] === 'concept') return 'División - Concepto';
-            if (parts[1] === 'exercises') return 'División - Ejercicios';
-            if (parts[1] === 'exacta') return 'División Exacta';
-            if (parts[1] === 'game') return 'División - Juego';
-        }
-        if (parts[0] === 'fracciones') return 'Fracciones ' + parts.slice(1).join(' ');
         return parts[0].charAt(0).toUpperCase() + parts[0].slice(1) + ' ' + parts.slice(1).join(' ');
     }
     return id.charAt(0).toUpperCase() + id.slice(1);
 };
 
 const formatItemName = (id: string, type: 'Video' | 'Ejercicio') => {
+    if (type === 'Video' && id.includes('-pag')) {
+        const pagMatch = id.match(/-pag(\d+)-v(\d+)/);
+        if (pagMatch) {
+            return `Video: Página ${pagMatch[1]} - Video ${pagMatch[2]}`;
+        }
+    }
+
     const parts = id.split('-');
     const nameStr = parts.slice(parts.length > 2 ? 2 : 1).join(' ');
     return `${type}: ${nameStr.charAt(0).toUpperCase() + nameStr.slice(1)}`;
@@ -128,6 +138,7 @@ export default function AdminDashboard() {
     const [error, setError] = useState('');
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [expandedModule, setExpandedModule] = useState<string | null>(null);
+    const [expandedSubModule, setExpandedSubModule] = useState<string | null>(null);
 
     const groupedModules = selectedUser ? getUserModules(selectedUser) : [];
 
@@ -303,30 +314,64 @@ export default function AdminDashboard() {
                                                     </button>
                                                     {expandedModule === mod.moduleName && (
                                                         <div className="p-4 bg-background-secondary/40 border-t dark:border-gray-700 space-y-3">
-                                                            {mod.activities.map((act, i) => (
-                                                                <div key={i} className="bg-background p-4 rounded-xl border dark:border-gray-800 flex flex-col md:flex-row justify-between items-start md:items-center text-sm shadow-sm gap-2">
-                                                                    <div>
-                                                                        <p className="font-semibold text-base">{act.name}</p>
-                                                                        <div className="flex items-center gap-2 mt-1">
-                                                                            <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${act.type === 'Video' ? 'bg-blue-100 text-blue-800' : (act.details.includes('Aprobado') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800')}`}>
-                                                                                {act.type}
-                                                                            </span>
-                                                                            <span className="text-text-secondary">{act.details}</span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="text-right flex flex-col items-end">
-                                                                        <p className="text-xs text-text-secondary mb-1">{new Date(act.date).toLocaleString()}</p>
-                                                                        {(act.flexPoints > 0 || act.defPoints > 0) ? (
-                                                                            <div className="flex space-x-2">
-                                                                                {act.flexPoints > 0 && <span className="text-purple-700 dark:text-purple-400 font-bold">+{act.flexPoints} pts flex</span>}
-                                                                                {act.defPoints > 0 && <span className="text-red-600 dark:text-red-400 font-bold">+{act.defPoints} pts def</span>}
+                                                            {['Actividad interactiva', 'Videos', 'Ejercicio'].map(category => {
+                                                                const categoryActivities = mod.activities.filter(act => {
+                                                                    if (category === 'Videos') return act.type === 'Video';
+                                                                    if (category === 'Ejercicio') return act.type === 'Ejercicio' && (act.id.includes('ej') || act.id.includes('ejercicio'));
+                                                                    return act.type === 'Ejercicio' && !act.id.includes('ej') && !act.id.includes('ejercicio');
+                                                                });
+
+                                                                if (categoryActivities.length === 0) return null;
+
+                                                                const isSubExpanded = expandedSubModule === `${mod.moduleName}-${category}`;
+
+                                                                return (
+                                                                    <div key={category} className="bg-background rounded-xl border dark:border-gray-800 overflow-hidden shadow-sm">
+                                                                        <button
+                                                                            onClick={() => setExpandedSubModule(isSubExpanded ? null : `${mod.moduleName}-${category}`)}
+                                                                            className="w-full text-left p-3 flex justify-between items-center hover:bg-background-secondary transition-colors"
+                                                                        >
+                                                                            <span className="font-semibold text-md">{category}</span>
+                                                                            <div className="flex items-center space-x-3">
+                                                                                <span className="text-xs font-semibold bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300 px-2 py-1 rounded-full">
+                                                                                    {categoryActivities.length} items
+                                                                                </span>
+                                                                                <svg className={`w-4 h-4 transition-transform ${isSubExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                                                </svg>
                                                                             </div>
-                                                                        ) : (
-                                                                            <span className="text-gray-400 font-medium">0 pts asignados</span>
+                                                                        </button>
+                                                                        {isSubExpanded && (
+                                                                            <div className="p-3 bg-background-secondary/20 border-t dark:border-gray-800 space-y-2">
+                                                                                {categoryActivities.map((act, i) => (
+                                                                                    <div key={i} className="bg-background p-3 rounded-lg border dark:border-gray-700 flex flex-col md:flex-row justify-between items-start md:items-center text-sm shadow-sm gap-2">
+                                                                                        <div>
+                                                                                            <p className="font-medium text-sm">{act.name}</p>
+                                                                                            <div className="flex items-center gap-2 mt-1">
+                                                                                                <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${act.type === 'Video' ? 'bg-blue-100 text-blue-800' : (act.details.includes('Aprobado') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800')}`}>
+                                                                                                    {act.type}
+                                                                                                </span>
+                                                                                                <span className="text-text-secondary text-xs">{act.details}</span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div className="text-right flex flex-col items-end">
+                                                                                            <p className="text-xs text-text-secondary mb-1">{new Date(act.date).toLocaleString()}</p>
+                                                                                            {(act.flexPoints > 0 || act.defPoints > 0) ? (
+                                                                                                <div className="flex space-x-2 text-xs">
+                                                                                                    {act.flexPoints > 0 && <span className="text-purple-700 dark:text-purple-400 font-bold">+{act.flexPoints} pts flex</span>}
+                                                                                                    {act.defPoints > 0 && <span className="text-red-600 dark:text-red-400 font-bold">+{act.defPoints} pts def</span>}
+                                                                                                </div>
+                                                                                            ) : (
+                                                                                                <span className="text-gray-400 font-medium text-xs">0 pts asignados</span>
+                                                                                            )}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                ))}
+                                                                            </div>
                                                                         )}
                                                                     </div>
-                                                                </div>
-                                                            ))}
+                                                                );
+                                                            })}
                                                         </div>
                                                     )}
                                                 </div>

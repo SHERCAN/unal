@@ -20,25 +20,25 @@ export const TOPICS_DATA: Topic[] = [
             }
         ]
     },
-    {
-        id: 'division-demo',
-        title: 'DIVISIÓN DEMO',
-        color: '#9333ea', // Purple
-        introText: 'Versión completa de demostración.',
-        presentationText: 'Explora todas las funcionalidades y páginas de la división.',
-        lessons: [
-            {
-                id: 'division-demo-intro',
-                title: 'Introducción a la división',
-                question: '¿Qué es dividir?',
-                options: ['Repartir', 'Sumar', 'Restar', 'Multiplicar'],
-                correctAnswer: 0,
-                progress: 0,
-                totalExercises: 5,
-                completedExercises: 0,
-            }
-        ]
-    },
+    // {
+    //     id: 'division-demo',
+    //     title: 'DIVISIÓN DEMO',
+    //     color: '#9333ea', // Purple
+    //     introText: 'Versión completa de demostración.',
+    //     presentationText: 'Explora todas las funcionalidades y páginas de la división.',
+    //     lessons: [
+    //         {
+    //             id: 'division-demo-intro',
+    //             title: 'Introducción a la división',
+    //             question: '¿Qué es dividir?',
+    //             options: ['Repartir', 'Sumar', 'Restar', 'Multiplicar'],
+    //             correctAnswer: 0,
+    //             progress: 0,
+    //             totalExercises: 5,
+    //             completedExercises: 0,
+    //         }
+    //     ]
+    // },
     {
         id: 'division-exacta',
         title: 'DIVISIÓN EXACTA',

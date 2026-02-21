@@ -4,7 +4,7 @@ import React from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 
 interface Props { zoom?: number; }
-
+//PAGINA 2 ABSTRACTO
 export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
     const VIDEO_TRACKING = {
         A_INTRO: 'comp-frac-a-intro',

@@ -17,7 +17,7 @@ import pistas2Img from '../pistas2.png';
  */
 
 interface Props { zoom?: number; }
-
+//PAGINA 1 CONCRETO
 export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 

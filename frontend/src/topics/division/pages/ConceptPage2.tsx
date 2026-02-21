@@ -95,16 +95,16 @@ const KidFigure = ({ variant = 0 }: { variant?: number }) => {
     const kids = [<Kid1 key="k1" />, <Kid2 key="k2" />, <Kid3 key="k3" />];
     return kids[variant % 3];
 };
-
+//PAGINA 3 ABSTRACTO
 export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     // Define tracking IDs for videos
     const VIDEO_TRACKING_IDS = {
-        DIVISOR: 'division-concept2-divisor',
-        QUOTIENT: 'division-concept2-quotient',
-        EXAMPLE: 'division-concept2-example',
-        PARTS: 'division-concept2-parts'
+        DIVISOR: 'division-concept-pag3-v1',
+        QUOTIENT: 'division-concept-pag3-v2',
+        EXAMPLE: 'division-concept-pag3-v3',
+        PARTS: 'division-concept-pag3-v4'
     };
 
     /* videoModal list removed */
@@ -175,9 +175,9 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                                 <div className="flex-1">
                                     <p className="font-medium text-gray-800 dark:text-gray-200">
                                         <span className="font-bold">B</span> <span className="mx-1">→</span> <span className="italic font-bold">el número de grupos (el divisor).</span> <span className='font-semibold'>Es entre cuántos vamos a repartir o en cuántas partes iguales queremos dividir el total.</span>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.DIVISOR} title="El Divisor" videoId="/pag3/vv-1" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.DIVISOR} title="El Divisor" videoId="/pag3/vv-1" />
                                     </p>
-                                </div>             
+                                </div>
                             </div>
 
                             {/* B Examples */}

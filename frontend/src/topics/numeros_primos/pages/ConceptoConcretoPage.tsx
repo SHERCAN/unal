@@ -18,6 +18,7 @@ interface Ball {
     location: 'bag' | number; // 'bag' or tenista index (0-based)
 }
 
+//PAGINA 1 CONCRETO PICTORICO
 export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 

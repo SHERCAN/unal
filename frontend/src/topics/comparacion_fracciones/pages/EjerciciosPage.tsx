@@ -6,7 +6,7 @@ import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
 
 interface Props { zoom?: number; }
-
+//PAGINA 3 EJERCICIOS
 export function EjerciciosPage({ zoom = 1 }: Props) {
     const { submitExercise } = useVideoProgress();
 

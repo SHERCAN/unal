@@ -11,7 +11,7 @@ import bolsadulcesImg from '../bolsadulces.png';
 import librosImg from '../libros.png';
 
 interface Props { zoom?: number; }
-
+//PAGINA 4 ABSTRACTO
 export function EjemplosPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 

@@ -14,7 +14,7 @@ import fraccionesEquivalentesImg from '../../comparacion_fracciones/fraccionesEq
 import equivalente30Img from '../../comparacion_fracciones/equivalente30.png';
 
 interface Props { zoom?: number; }
-
+//PAGINA 3 ABSTRACTO
 export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 

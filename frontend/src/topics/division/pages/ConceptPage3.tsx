@@ -11,17 +11,17 @@ import { FeedbackButton } from '@/components/FeedbackButton';
 interface DivisionConceptPage3Props {
     zoom?: number;
 }
-
+//PAGINA 4 ABSTRACTO
 export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     // Video Tracking IDs
     const VIDEO_TRACKING_IDS = {
-        EXAMPLE_MAIN: 'division-concept3-example',
-        PRACTICE_1: 'division-concept3-practice-1',
-        PRACTICE_2: 'division-concept3-practice-2',
-        PROBLEM_1: 'division-concept3-problem-1',
-        PROBLEM_2: 'division-concept3-problem-2'
+        EXAMPLE_MAIN: 'division-concept-pag4-v1',
+        PRACTICE_1: 'division-concept-pag4-v2',
+        PRACTICE_2: 'division-concept-pag4-v3', // Note: Need to see where practice 2 is
+        PROBLEM_1: 'division-concept-pag4-v4',
+        PROBLEM_2: 'division-concept-pag4-v5'
     };
 
     /* videoModal list removed */

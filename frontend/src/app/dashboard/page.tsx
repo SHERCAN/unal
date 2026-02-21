@@ -18,7 +18,6 @@ import { TopicConfig } from '@/types/topic';
 
 const TOPIC_CONFIGS: Record<string, TopicConfig> = {
   'division': divisionConfig,
-  'division-demo': divisionDemoConfig,
   'division-exacta': divisionExactaConfig,
   'division-inexacta': divisionInexactaConfig,
   'numeros-primos': numerosPrimosConfig,
@@ -273,6 +272,11 @@ export default function DashboardPage() {
 
       if (localUserData) {
         const parsedUser = JSON.parse(localUserData);
+        if (parsedUser.role === 'ADMIN') {
+          router.push('/admin');
+          return;
+        }
+
         // Cargar avatar personalizado si existe
         const savedAvatar = localStorage.getItem('userAvatar');
         if (savedAvatar) {
@@ -288,6 +292,10 @@ export default function DashboardPage() {
         });
         if (response.ok) {
           const freshUser = await response.json();
+          if (freshUser.role === 'ADMIN') {
+            router.push('/admin');
+            return;
+          }
           // Preserve locally saved avatar if exists and not in fresh data (or merge logic)
           const savedAvatar = localStorage.getItem('userAvatar');
           if (savedAvatar) freshUser.photoUrl = savedAvatar;
