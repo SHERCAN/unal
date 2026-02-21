@@ -114,7 +114,7 @@ export default function RegisterPage() {
               <PlayVideoButton
                 trackingId="register-general"
                 title="Cómo crear tu perfil"
-                videoId="/pag1/vv-1"
+                videoId="/regUsuario/vv - 01a"
               />
             </div>
 
@@ -125,7 +125,7 @@ export default function RegisterPage() {
                 <PlayVideoButton
                   trackingId="register-name"
                   title="¿Cómo te llamas?"
-                  videoId="/pag1/vv-1"
+                  videoId="/regUsuario/vv - 02a"
                 />
               </label>
               <input
@@ -145,7 +145,7 @@ export default function RegisterPage() {
                 <PlayVideoButton
                   trackingId="register-age"
                   title="¿Cuántos años tienes?"
-                  videoId="/pag1/vv-1"
+                  videoId="/regUsuario/vv - 03a"
                 />
               </label>
               <input
@@ -167,7 +167,7 @@ export default function RegisterPage() {
                 <PlayVideoButton
                   trackingId="register-grade"
                   title="¿En qué grado estás?"
-                  videoId="/pag1/vv-1"
+                  videoId="/regUsuario/vv - 04a"
                 />
               </label>
               <div className="grid grid-cols-3 md:flex gap-1 md:gap-2">
@@ -194,7 +194,7 @@ export default function RegisterPage() {
                 <PlayVideoButton
                   trackingId="register-avatar"
                   title="Selecciona tu avatar"
-                  videoId="/pag1/vv-1"
+                  videoId="/regUsuario/vv - 05a"
                 />
               </label>
 
@@ -220,7 +220,7 @@ export default function RegisterPage() {
                 <PlayVideoButton
                   trackingId="register-password"
                   title="Crea tu clave secreta"
-                  videoId="/pag1/vv-1"
+                  videoId="/regUsuario/vv - 06a"
                 />
               </label>
               <input
@@ -241,7 +241,7 @@ export default function RegisterPage() {
                 <PlayVideoButton
                   trackingId="register-confirm"
                   title="Confirma tu clave"
-                  videoId="/pag1/vv-1"
+                  videoId="/regUsuario/vv - 07a"
                 />
               </label>
               <input
@@ -262,7 +262,7 @@ export default function RegisterPage() {
                 <PlayVideoButton
                   trackingId="register-nickname"
                   title="Elige tu nombre de usuario"
-                  videoId="/pag1/vv-1"
+                  videoId="/regUsuario/vv - 08a"
                 />
               </label>
               <input
