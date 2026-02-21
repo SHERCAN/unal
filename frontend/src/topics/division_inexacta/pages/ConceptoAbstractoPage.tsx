@@ -107,7 +107,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                         cada grupo recibe la misma cantidad, pero hay resto <span className="font-bold text-lg text-red-600">2</span> medallas; estas
                                         corresponden al resto de la división.
                                     </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="Introducción" videoId="/pag1/vv-1" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="" videoId="/pag12/vv-1" />
                                 </div>
                             </div>
 
@@ -115,7 +115,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                             <div>
                                 <div className="flex items-center gap-2 mb-3">
                                     <p className="text-base text-gray-800 dark:text-gray-200">Se escribe matemáticamente como:</p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_MATH} title="Notación Matemática" videoId="/pag1/vv-1" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_MATH} title="Notación Matemática" videoId="/pag12/vv-2" />
                                 </div>
 
                                 <div className="text-center my-4">
@@ -133,7 +133,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                             <div>
                                 <div className="flex items-center gap-2 mb-2">
                                     <p className="text-base text-gray-800 dark:text-gray-200">Señala &quot;<span className="text-red-500">resto 2</span>&quot; como:</p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMO} title="Señala resto 2" videoId="/pag1/vv-1" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMO} title="" videoId="/pag12/vv-3" />
                                 </div>
 
                                 <DivisionAlgorithm
@@ -148,7 +148,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                             {/* Definition */}
                             <div>
                                 <div className="flex items-center gap-2 mb-1">
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_DEF} title="¿Qué es una división inexacta?" videoId="/pag1/vv-1" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_DEF} title="¿Qué es una división inexacta?" videoId="/pag12/vv-4" />
                                     <span className="bg-purple-600 text-white font-bold px-3 py-1 rounded text-sm">¿Qué es una división inexacta?</span>
                                 </div>
                                 <p className="text-base text-gray-800 dark:text-gray-200 mt-2">
