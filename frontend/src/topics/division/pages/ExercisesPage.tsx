@@ -1,4 +1,4 @@
-'use client';
+use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -127,7 +127,9 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
     return (
         <BookPageContainer
             zoom={zoom}
-            moduleHeader={{ icon: '/division-icon.png', name: 'División' }}
+            moduleHeader={{ 
+                //icon: '/division-icon.png', 
+                name: 'División' }}
             pageId="division-exercises"
         >
             <div className="flex flex-col gap-8">
@@ -146,8 +148,8 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                         <div className="flex items-start gap-2">
                             <PlayVideoButton
                                 trackingId={VIDEO_TRACKING_IDS.PRACTICE_1}
-                                title="Ejercicio 1"
-                                videoId="/pag1/vv-1"
+                                title="Ejercicio 1a"
+                                videoId="/pag5/vv-1"
                             />
                             <div className="flex flex-col gap-2 w-full">
                                 <p className="font-medium">El total de 56 pelotas de fútbol se reparte entre 7 bolsas de malla.</p>
@@ -195,8 +197,8 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                         <div className="flex items-start gap-2 mt-4">
                             <PlayVideoButton
                                 trackingId={VIDEO_TRACKING_IDS.PRACTICE_2}
-                                title="Ejercicio 2"
-                                videoId="/pag1/vv-1"
+                                title="Ejercicio 1b"
+                                videoId="/pag5/vv-2"
                             />
                             <div className="flex flex-col gap-2 w-full">
                                 <p className="font-medium">Hay 48 jugadores de baloncesto que se dividen en 4 equipos.</p>
@@ -252,8 +254,8 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                             <div className="flex items-center gap-2">
                                 <PlayVideoButton
                                     trackingId={VIDEO_TRACKING_IDS.MATCHING}
-                                    title="Relacionar divisiones"
-                                    videoId="/pag1/vv-1"
+                                    title="Ejercicio 3"
+                                    videoId="/pag5/vv-3"
                                 />
                                 <span className="font-bold text-gray-800 dark:text-gray-200">Relaciona cada división con su multiplicación correspondiente</span>
                             </div>
@@ -337,8 +339,8 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                             <div className="flex items-center gap-2">
                                 <PlayVideoButton
                                     trackingId={VIDEO_TRACKING_IDS.QUOTIENTS}
-                                    title="Hallar cocientes"
-                                    videoId="/pag1/vv-1"
+                                    title="Ejercicio 4"
+                                    videoId="/pag5/vv-4"
                                 />
                                 <span className="font-bold text-gray-800 dark:text-gray-200">Halle el cociente de las siguientes divisiones:</span>
                             </div>
@@ -396,8 +398,8 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                         <div className="flex items-center gap-2">
                             <PlayVideoButton
                                 trackingId={VIDEO_TRACKING_IDS.TRUE_FALSE}
-                                title="Verdadero o Falso"
-                                videoId="/pag1/vv-1"
+                                title="Ejercicio 5"
+                                videoId="/pag5/vv-5"
                             />
                             <span className="font-bold text-gray-800 dark:text-gray-200">Observa la situación y responde V o F</span>
                         </div>
@@ -405,8 +407,8 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                         <div className="flex items-center flex-wrap gap-4 ml-8 bg-gray-50 dark:bg-gray-800 p-6 rounded-2xl border-2 border-gray-100 dark:border-gray-700 shadow-sm">
                             <PlayVideoButton
                                 trackingId={VIDEO_TRACKING_IDS.SITUATION}
-                                title="Situación problemática"
-                                videoId="/pag1/vv-1"
+                                title="Ejercicio 5a"
+                                videoId="/pag5/vv-6"
                             />
                             <p className="font-medium text-lg text-gray-800 dark:text-gray-200">
                                 Una diseñadora de moda tiene 20 pantalones y los reparte en 5 cajas.
