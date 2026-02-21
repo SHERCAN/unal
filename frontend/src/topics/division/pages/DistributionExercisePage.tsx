@@ -229,7 +229,9 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
     return (
         <BookPageContainer
             zoom={zoom}
-            moduleHeader={{ icon: '/division-icon.png', name: 'División' }}
+            moduleHeader={{ 
+                //icon: '/division-icon.png', 
+                name: 'División' }}
             pageId="division-distribution"
         >
             <style jsx>{`
@@ -255,7 +257,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                             <div className="absolute top-4 left-4 z-20">
                                 <PlayVideoButton
                                     trackingId={VIDEO_TRACKING_IDS.C_INTRO}
-                                    title="Introducción"
+                                    title=""
                                     videoId="/pag1/vv-1"
                                 />
                             </div>
@@ -323,8 +325,8 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                             <div className="absolute top-0 left-0 z-10">
                                 <PlayVideoButton
                                     trackingId={VIDEO_TRACKING_IDS.C_DISTRIBUTION}
-                                    title="Distribución"
-                                    videoId="/pag1/vv-1"
+                                    title=""
+                                    videoId="/pag1/vv-2"
                                 />
                             </div>
 
@@ -339,7 +341,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
 
                                 </div>
 
-                                {cStageComplete && <div className="text-green-600 font-bold mb-2 celebrate-animation">CORRECTO!</div>}
+                                {cStageComplete && <div className="text-green-600 font-bold mb-2 celebrate-animation">¡CORRECTO!</div>}
 
                                 <div className="flex flex-col md:flex-row items-end justify-center w-full gap-8">
                                     {/* Boxes Area */}
@@ -414,13 +416,13 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                     <div className="flex-1 relative border-2 border-blue-300 dark:border-blue-900 p-4 rounded-r-lg -ml-0.5 rounded-tl-none">
 
                         <div className="flex items-center gap-2 mb-4">
-                            <p className="font-medium text-gray-700 dark:text-gray-300" style={{ fontSize: 'clamp(0.75rem, 1.9vmin, 1rem)' }}>
-                                Hay 24 naranjas en cuadro
+                            <p className="font-medium text-gray-700 dark:text-gray-300 font-semibold" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
+                                Hay 24 naranjas en cuadro.
                             </p>
                             <PlayVideoButton
                                 trackingId={VIDEO_TRACKING_IDS.P_INTRO}
-                                title="Introducción Pictórica"
-                                videoId="/pag1/vv-1"
+                                title=""
+                                videoId="/pag1/vv-3"
                             />
                         </div>
 
@@ -444,13 +446,13 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                         </div>
 
                         <div className="flex items-center gap-2 mb-4">
-                            <p className="font-medium text-gray-700 dark:text-gray-300" style={{ fontSize: 'clamp(0.75rem, 1.9vmin, 1rem)' }}>
-                                Se reparte en 4 partes iguales
+                            <p className="font-medium text-gray-700 dark:text-gray-300 font-semibold" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
+                                Se reparte en 4 partes iguales.
                             </p>
                             <PlayVideoButton
                                 trackingId={VIDEO_TRACKING_IDS.P_DISTRIBUTION}
-                                title="Distribución Pictórica"
-                                videoId="/pag1/vv-1"
+                                title=""
+                                videoId="/pag1/vv-4"
                             />
                         </div>
 
