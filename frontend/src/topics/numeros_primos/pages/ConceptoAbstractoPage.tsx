@@ -83,7 +83,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                 <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
                                     El número <span className="font-bold">7</span> tiene solo dos divisores <span className="font-bold text-lg">1</span> y <span className="font-bold text-lg">7</span>, pero no hay más divisores para que siempre forman partes iguales
                                 </p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_DIVISION} title="Divisores del 7" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_DIVISION} title="" videoId="/pag15/vv-1" />
                             </div>
                         </div>
 
@@ -107,7 +107,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                         {/* 5. ¿Qué es un número primo? */}
                         <div>
                             <div className="flex items-center gap-2 mb-2">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_PRIMO_DEF} title="¿Qué es un número primo?" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_PRIMO_DEF} title="¿Qué es un número primo?" videoId="/pag15/vv-2" />
                                 <span className="bg-purple-600 text-white font-bold px-3 py-1 rounded text-sm">¿Qué es un número primo?</span>
                             </div>
                             <p className="text-gray-800 dark:text-gray-200 leading-relaxed ml-10">
@@ -125,7 +125,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                     <p className="text-gray-800 dark:text-gray-200">
                                         El número 7 es <span className="font-bold text-green-600 dark:text-green-400">primo</span> porque solo tiene dos divisores <span className="font-bold">1</span> y <span className="font-bold">7</span>.
                                     </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_EJ_7} title="Ejemplo: 7 es primo" videoId="/pag1/vv-1" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_EJ_7} title="Ejemplo: 7 es primo" videoId="/pag15/vv-3" />
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <div className="w-3 h-3 bg-gray-800 dark:bg-gray-300 rounded-sm flex-shrink-0" />
@@ -138,7 +138,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                     <p className="text-gray-800 dark:text-gray-200">
                                         El número 8 NO es <span className="font-bold text-green-600 dark:text-green-400">primo</span> porque tiene cuatro divisores <span className="font-bold">1, 2, 4</span> y <span className="font-bold">8</span>.
                                     </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_EJ_8} title="Ejemplo: 8 no es primo" videoId="/pag1/vv-1" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_EJ_8} title="Ejemplo: 8 no es primo" videoId="/pag15/vv-4" />
                                 </div>
                             </div>
                         </div>
@@ -146,7 +146,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                         {/* 7. ¿Qué es un número compuesto? */}
                         <div>
                             <div className="flex items-center gap-2 mb-2">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMPUESTO_DEF} title="¿Qué es un número compuesto?" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMPUESTO_DEF} title="¿Qué es un número compuesto?" videoId="/pag15/vv-5" />
                                 <span className="bg-purple-600 text-white font-bold px-3 py-1 rounded text-sm">¿Qué es un número compuesto?</span>
                             </div>
                             <p className="text-gray-800 dark:text-gray-200 leading-relaxed ml-10">
@@ -161,7 +161,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                 <p className="text-gray-800 dark:text-gray-200">
                                     El número 8 es <span className="font-bold text-orange-600 dark:text-orange-400">compuesto</span> porque tiene cuatro divisores 1, 2, 4 y 8.
                                 </p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMPUESTO_EJ} title="Ejemplo: 8 es compuesto" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMPUESTO_EJ} title="Ejemplo: 8 es compuesto" videoId="/pag15/vv-6" />
                             </div>
                         </div>
 
