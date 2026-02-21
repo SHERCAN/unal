@@ -121,7 +121,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
         <BookPageContainer
             zoom={zoom}
             moduleHeader={{
-                icon: '/division-icon.png',
+                // icon: '/division-icon.png',
                 name: 'División'
             }}
             pageId="division-concept-2"
@@ -142,7 +142,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                                 <div className="bg-green-600 text-white px-3 py-1 rounded-md font-bold text-sm mb-2 w-full text-center">
                                     Ejemplo: <span className="text-white">12 manzanas</span>
                                 </div>
-                                <div className="grid grid-cols-4 gap-1 p-1 border border-green-200 dark:border-green-800 rounded-lg bg-white dark:bg-gray-800 w-[150px] h-[150px] justify-items-center">
+                                <div className="grid grid-cols-4 gap-1 p-1 border border-green-200 dark:border-green-800 rounded-lg bg-white dark:bg-gray-800 w-[120px] h-[120px] justify-items-center">
                                     {[...Array(12)].map((_, i) => (
                                         <img key={i} src="/division/manzanaverde.png" alt="manzana" className="w-full h-full object-contain" />
                                     ))}
@@ -151,7 +151,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                             {/* 30 dulces */}
                             <div className="flex flex-col items-center">
                                 <div className="font-bold text-gray-700 mb-2">30 dulces</div>
-                                <div className="grid grid-cols-6 gap-0.5 p-1 border border-purple-200 dark:border-purple-800 rounded-lg bg-white dark:bg-gray-800 w-[150px] h-[150px] justify-items-center">
+                                <div className="grid grid-cols-6 gap-0.5 p-1 border border-purple-200 dark:border-purple-800 rounded-lg bg-white dark:bg-gray-800 w-[120px] h-[120px] justify-items-center">
                                     {[...Array(30)].map((_, i) => (
                                         <img key={i} src="/division/dulce.png" alt="dulce" className="w-full h-full object-contain" />
                                     ))}
@@ -160,7 +160,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                             {/* 100 estrellas */}
                             <div className="flex flex-col items-center">
                                 <div className="font-bold text-gray-700 mb-2">100 estrellas</div>
-                                <div className="grid grid-cols-10 gap-px p-0.5 border border-orange-200 dark:border-orange-800 rounded-lg bg-white dark:bg-gray-800 w-[150px] h-[150px] justify-items-center">
+                                <div className="grid grid-cols-10 gap-px p-0.5 border border-orange-200 dark:border-orange-800 rounded-lg bg-white dark:bg-gray-800 w-[120px] h-[120px] justify-items-center">
                                     {[...Array(50)].map((_, i) => (
                                         <img key={i} src="/division/estrella.png" alt="estrella" className="w-full h-full object-contain" />
                                     ))}
@@ -174,10 +174,10 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                                 <span className="bg-red-400 w-4 h-4 mt-1 block rounded-sm flex-shrink-0"></span>
                                 <div className="flex-1">
                                     <p className="font-medium text-gray-800 dark:text-gray-200">
-                                        <span className="font-bold">B</span> <span className="mx-1">→</span> <span className="italic font-bold">el número de grupos (el divisor).</span> Es entre cuántos vamos a repartir o en cuántas partes iguales queremos dividir el total.
+                                        <span className="font-bold">B</span> <span className="mx-1">→</span> <span className="italic font-bold">el número de grupos (el divisor).</span> <span className='font-semibold'>Es entre cuántos vamos a repartir o en cuántas partes iguales queremos dividir el total.</span>
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.DIVISOR} title="El Divisor" videoId="/pag3/vv-1" />
                                     </p>
-                                </div>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.DIVISOR} title="El Divisor" videoId="/pag1/vv-1" />
+                                </div>             
                             </div>
 
                             {/* B Examples */}
@@ -188,21 +188,21 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                                         Ejemplo: <span className="font-normal">Entre</span> 3 niños
                                     </div>
                                     <div className="flex justify-center p-1 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                                        <img src="/division/infantes.png" alt="infantes" className="w-[150px] h-[150px] object-contain" />
+                                        <img src="/division/infantes.png" alt="infantes" className="w-[120px] h-[120px] object-contain" />
                                     </div>
                                 </div>
                                 {/* 6 cajas */}
                                 <div className="flex flex-col items-center">
                                     <div className="font-bold text-gray-700 mb-2">Entre 6 cajas</div>
                                     <div className="flex justify-center p-1 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                                        <img src="/division/cajas.png" alt="cajas" className="w-[150px] h-[150px] object-contain" />
+                                        <img src="/division/cajas.png" alt="cajas" className="w-[120px] h-[120px] object-contain" />
                                     </div>
                                 </div>
                                 {/* 4 equipos */}
                                 <div className="flex flex-col items-center">
                                     <div className="font-bold text-gray-700 mb-2">Entre 4 equipos</div>
                                     <div className="flex justify-center p-1 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                                        <img src="/division/equipos.png" alt="equipos" className="w-[150px] h-[150px] object-contain" />
+                                        <img src="/division/equipos.png" alt="equipos" className="w-[120px] h-[120px] object-contain" />
                                     </div>
                                 </div>
                             </div>
@@ -214,43 +214,43 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                                 <span className="bg-red-400 w-4 h-4 mt-1 block rounded-sm flex-shrink-0"></span>
                                 <div className="flex-1">
                                     <p className="font-medium text-gray-800 dark:text-gray-200">
-                                        <span className="font-bold">C</span> <span className="mx-1">→</span> <span className="italic font-bold">cuánto recibe cada grupo (el cociente).</span> Es el resultado de la división. Cuánto corresponde a cada parte.
+                                        <span className="font-bold">C</span> <span className="mx-1">→</span> <span className="italic font-bold">cuánto recibe cada grupo (el cociente).</span> <span className='font-semibold'>Es el resultado de la división. Cuánto corresponde a cada parte.</span>
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.QUOTIENT} title="El Cociente" videoId="/pag3/vv-2" />
                                     </p>
                                 </div>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.QUOTIENT} title="El Cociente" videoId="/pag1/vv-1" />
                             </div>
 
                             {/* C Example */}
                             <div className="pl-6">
                                 <div className="flex items-center gap-2 mb-2 bg-green-600 text-white px-3 py-1 rounded-md w-fit font-bold text-sm">
-                                    Ejemplo:
+                                    <span>Ejemplo: </span>
                                 </div>
                                 <p className="mb-4 font-medium text-gray-800 dark:text-gray-200">
-                                    Dividir 12 manzanas entre 3 niños. Cada niño recibe <span className="font-bold">4 manzanas</span>
+                                    <span className="font-semibold">Dividir 12 manzanas entre 3 niños. Cada niño recibe </span><span className="font-bold">4 manzanas</span>
                                 </p>
                                 <div className="flex justify-center bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
-                                    <img src="/division/infantesmanzanas.png" alt="infantes comiendo manzanas" className="w-[300px] h-[150px] object-contain" />
+                                    <img src="/division/infantesmanzanas.png" alt="infantes comiendo manzanas" className="w-[300px] h-[100px] object-contain" />
                                 </div>
                             </div>
                         </div>
 
                         {/* FINAL EXAMPLE */}
-                        <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                        <div className=" p-4 rounded-xl border border-gray-200 dark:border-gray-700">
                             <div className="flex items-center gap-2 mb-2">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE} title="Ejemplo Final" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE} title="Ejemplo" videoId="/pag3/vv-3" />
                                 <div className="bg-green-600 text-white px-3 py-1 rounded-md font-bold text-sm">Example:</div>
-                                <p className="font-bold text-gray-800 dark:text-white">Tenemos 28 galletas y queremos repartirlas en 4 cajas.</p>
+                                <p className="font-semibold text-gray-800 dark:text-white">Tenemos <span className='font-bold'>28 galletas</span> y queremos repartirlas en 4 cajas.</p>
                             </div>
 
-                            <div className="pl-8 space-y-1 font-bold font-mono text-lg">
-                                <p><span className="text-purple-600">A = 28</span> <span className="text-black dark:text-white text-base font-sans">(total de galletas)</span></p>
-                                <p><span className="text-pink-600">B = 4</span> <span className="text-black dark:text-white text-base font-sans">(número de cajas)</span></p>
-                                <p><span className="text-green-600">C = 7</span> <span className="text-black dark:text-white text-base font-sans">(galletas en cada caja)</span></p>
+                            <div className="mt-3 pl-8 space-y-1 font-black text-lg">
+                                <p><span className="text-purple-650">A = 28</span> <span className="text-black text-base">(total de galletas)</span></p>
+                                <p><span className="text-pink-650">B = 4</span> <span className="text-black text-base">(número de cajas)</span></p>
+                                <p><span className="text-green-650">C = 7</span> <span className="text-black text-base">(galletas en cada caja)</span></p>
                             </div>
 
                             <div className="mt-3 pl-8">
-                                <p className="font-bold text-gray-800 dark:text-white text-lg">
-                                    Entonces, <span className="text-purple-600">28</span> ÷ <span className="text-pink-600">4</span> = <span className="text-green-600">7</span>. <span className="text-base font-normal text-gray-700 dark:text-gray-300">Eso significa que a cada caja le corresponden <span className="font-bold text-green-600 underline">7 galletas</span>.</span>
+                                <p className="font-semibold dark:text-white text-lg">
+                                    Entonces, <span className="text-purple-650 font-black">28</span> ÷ <span className="text-pink-650 font-black">4</span> = <span className="text-green-650 font-black">7</span>. <span className="font-semibold">Eso significa que a cada caja le corresponden <span className="font-black text-green-650">7 galletas</span>.</span>
                                 </p>
                             </div>
                         </div>
@@ -259,29 +259,13 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                         <div className="flex flex-col items-center mt-2">
                             <div className="flex items-center gap-2 mb-2">
                                 <h4 className="font-black uppercase text-gray-900 dark:text-white">PARTES DE LA DIVISIÓN</h4>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PARTS} title="Partes de la división" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PARTS} title="Partes de la división" videoId="/pag3/vv-4" />
                             </div>
-
-                            <div className="flex items-center gap-8 text-xl font-bold">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-red-500">Dividendo</span>
-                                    <span className="text-red-500">←</span>
-                                    <span className="text-purple-800 dark:text-purple-300 text-2xl">A</span>
-                                </div>
-
-                                <div className="flex flex-col gap-2">
-                                    <div className="flex items-center gap-4 border-b-2 border-black dark:border-white pb-1">
-                                        <span className="text-pink-600 text-2xl">B</span>
-                                        <span className="text-red-500">→</span>
-                                        <span className="text-red-500">Divisor</span>
-                                    </div>
-                                    <div className="flex items-center gap-4">
-                                        <span className="text-green-600 text-2xl">C</span>
-                                        <span className="text-red-500">→</span>
-                                        <span className="text-red-500">Cociente</span>
-                                    </div>
-                                </div>
-                            </div>
+                            <img
+                                src="/division/img4.png"
+                                className="h-20 object-contain"
+                                draggable={false}
+                            />
                         </div>
 
                     </div>
