@@ -182,7 +182,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                     no es correcta porque no es apropiada para la fracción.
                                 </span>
 
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="Error Fraccion" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="" videoId="/pag19/vv-1" />
                             </div>
                         </div>
 
@@ -255,7 +255,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                     <p className="text-lg text-gray-800 font-medium">
                                         Como se muestra la siguiente figura, <span className="font-bold text-red-600">NO</span> es realmente una forma de fracción.
                                     </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="Nota Irregular" videoId="/pag1/vv-1" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="" videoId="/pag19/vv-2" />
                                 </div>
 
                                 <div className="flex flex-col items-start gap-4 mt-4 w-full">
@@ -270,7 +270,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                         <p className="text-lg font-medium">
                                             ¿Por qué esta figura no es una forma de fracción? Esas partes son diferentes.
                                         </p>
-                                        <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="Video Explicación" videoId="/pag1/vv-1" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="" videoId="/pag19/vv-3" />
                                     </div>
                                 </div>
                             </div>
