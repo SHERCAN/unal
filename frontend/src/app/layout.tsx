@@ -3,7 +3,7 @@ import './globals.css'
 import ClientLayout from '@/components/ClientLayout'
 
 export const metadata: Metadata = {
-  title: 'Aprendizaje Matemático - Lengua de Señas',
+  title: 'Libro Digital de Texto de Matemáticas Accesible e Interactivo',
   description: 'Plataforma educativa para mejorar habilidades matemáticas',
 }
 
