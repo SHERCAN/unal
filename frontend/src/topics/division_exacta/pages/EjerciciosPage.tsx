@@ -74,7 +74,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                 {/* Activity 1: Calculate divisions */}
                 <div className="mb-8 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div className="flex items-center gap-2 mb-4">
-                        <PlayVideoButton trackingId={VIDEO_TRACKING.EJ_1} title="Calcular divisiones" videoId="/pag1/vv-1" />
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.EJ_1} title="Calcular divisiones" videoId="/pag10/vv-1" />
                         <span className="w-4 h-4 bg-purple-700 rounded-sm inline-block flex-shrink-0"></span>
                         <p className="text-sm text-gray-800 dark:text-gray-200">
                             Calcule las siguientes divisiones exactas usando el algoritmo de división.
@@ -111,7 +111,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                 {/* Activity 2: Determine if exact */}
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div className="flex items-center gap-2 mb-4">
-                        <PlayVideoButton trackingId={VIDEO_TRACKING.EJ_2} title="Determinar si es exacta" videoId="/pag1/vv-1" />
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.EJ_2} title="Determinar si es exacta" videoId="/pag10/vv-2" />
                         <span className="w-4 h-4 bg-purple-700 rounded-sm inline-block flex-shrink-0"></span>
                         <p className="text-sm text-gray-800 dark:text-gray-200">
                             Determinar si las siguientes divisiones son exactas o no.
