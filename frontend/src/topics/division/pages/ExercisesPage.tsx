@@ -5,6 +5,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
+
 
 interface ExercisesPageProps {
     zoom?: number;
@@ -28,7 +30,14 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
     const [act1_a_selected, setAct1_a_selected] = useState<number | null>(null);
     // Problem B: 48 players / 4 teams = 12 players/team
     const [act1_b_selected, setAct1_b_selected] = useState<number | null>(null);
-    const [act1Status, setAct1Status] = useState<'idle' | 'correct' | 'incorrect'>('idle');
+    const [act1Status, setAct1Status] = useState<'correct' | 'incorrect' | null>(null);
+
+    const resetAct1 = () => {
+        setAct1_a_selected(null);
+        setAct1_b_selected(null);
+        setAct1Status(null);
+    };
+
 
     const checkAct1 = () => {
         // Assume option 1 is correct for A, option 2 is correct for B (just valid logic placeholders, can be adjusted)
@@ -56,7 +65,14 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
     // Connections: array of {from: number, to: number}
     const [connections, setConnections] = useState<{ from: number, to: number }[]>([]);
     const [selectedLeft, setSelectedLeft] = useState<number | null>(null);
-    const [act2Status, setAct2Status] = useState<'idle' | 'correct' | 'incorrect'>('idle');
+    const [act2Status, setAct2Status] = useState<'correct' | 'incorrect' | null>(null);
+
+    const resetAct2 = () => {
+        setConnections([]);
+        setSelectedLeft(null);
+        setAct2Status(null);
+    };
+
 
     const handleLeftClick = (index: number) => {
         // If already connected, remove connection
@@ -97,7 +113,13 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
     // --- ACTIVITY 3: QUOTIENTS ---
     // List of inputs
     const [act3Inputs, setAct3Inputs] = useState<string[]>(Array(10).fill(''));
-    const [act3Status, setAct3Status] = useState<'idle' | 'correct' | 'incorrect'>('idle');
+    const [act3Status, setAct3Status] = useState<'correct' | 'incorrect' | null>(null);
+
+    const resetAct3 = () => {
+        setAct3Inputs(Array(10).fill(''));
+        setAct3Status(null);
+    };
+
 
     const checkAct3 = () => {
         // Answers:
@@ -118,7 +140,13 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
 
     // --- ACTIVITY 4: TRUE/FALSE ---
     const [act4Selected, setAct4Selected] = useState<'V' | 'F' | null>(null);
-    const [act4Check, setAct4Check] = useState<'idle' | 'correct' | 'incorrect'>('idle');
+    const [act4Status, setAct4Status] = useState<'correct' | 'incorrect' | null>(null);
+
+    const resetAct4 = () => {
+        setAct4Selected(null);
+        setAct4Status(null);
+    };
+
 
     const checkAct4 = (selection: 'V' | 'F') => {
         setAct4Selected(selection);
@@ -127,9 +155,10 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
     return (
         <BookPageContainer
             zoom={zoom}
-            moduleHeader={{ 
+            moduleHeader={{
                 //icon: '/division-icon.png', 
-                name: 'División' }}
+                name: 'División'
+            }}
             pageId="division-exercises"
         >
             <div className="flex flex-col gap-8">
@@ -160,8 +189,9 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                                 key={i}
                                                 onClick={() => {
                                                     setAct1_a_selected(i);
-                                                    setAct1Status('idle'); // Reset checking on change
+                                                    setAct1Status(null); // Reset checking on change
                                                 }}
+
                                                 className={`border-2 rounded-xl p-1 cursor-pointer transition-all aspect-square flex items-center justify-center bg-white dark:bg-gray-800 relative overflow-hidden shadow-sm
                                                     ${act1_a_selected === i ? 'border-purple-600 ring-2 ring-purple-100 dark:ring-purple-900 bg-purple-50 dark:bg-purple-900/20' : 'border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-500 hover:shadow-md'}
                                                 `}
@@ -174,8 +204,9 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                                         className="w-full h-full object-contain"
                                                     />
                                                 </div>
-                                                {act1Status !== 'idle' && act1_a_selected === i && (
+                                                {act1Status && act1_a_selected === i && (
                                                     <div className={`absolute top-2 right-2 rounded-full p-1 shadow-sm ${i === 0 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-500'}`}>
+
                                                         {i === 0 ?
                                                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg> :
                                                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -186,9 +217,13 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                         ))}
                                     </div>
                                     <div className="self-center flex flex-col items-center gap-2">
-                                        <CheckButton onClick={checkAct1} />
-                                        <Feedback status={act1Status} />
+                                        <FeedbackButton
+                                            onCheck={checkAct1}
+                                            onReset={resetAct1}
+                                            status={act1Status}
+                                        />
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -209,8 +244,9 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                                 key={i}
                                                 onClick={() => {
                                                     setAct1_b_selected(i);
-                                                    setAct1Status('idle');
+                                                    setAct1Status(null);
                                                 }}
+
                                                 className={`border-2 rounded-xl p-0 cursor-pointer transition-all aspect-square flex items-center justify-center bg-white dark:bg-gray-800 relative overflow-hidden shadow-sm
                                                     ${act1_b_selected === i ? 'border-purple-600 ring-2 ring-purple-100 dark:ring-purple-900 bg-purple-50 dark:bg-purple-900/20' : 'border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-500 hover:shadow-md'}
                                                 `}
@@ -223,8 +259,9 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                                         className="w-full h-full object-contain"
                                                     />
                                                 </div>
-                                                {act1Status !== 'idle' && act1_b_selected === i && (
+                                                {act1Status && act1_b_selected === i && (
                                                     <div className={`absolute top-2 right-2 rounded-full p-1 shadow-sm ${i === 2 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-500'}`}>
+
                                                         {i === 2 ?
                                                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg> :
                                                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -235,9 +272,13 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                         ))}
                                     </div>
                                     <div className="self-center flex flex-col items-center gap-2">
-                                        <CheckButton onClick={checkAct1} />
-                                        <Feedback status={act1Status} />
+                                        <FeedbackButton
+                                            onCheck={checkAct1}
+                                            onReset={resetAct1}
+                                            status={act1Status}
+                                        />
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -293,9 +334,10 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                     <div
                                         key={i}
                                         onClick={() => {
-                                            setAct2Status('idle');
+                                            setAct2Status(null);
                                             handleLeftClick(i);
                                         }}
+
                                         className={`flex items-center justify-between cursor-pointer p-4 rounded-xl transition-all shadow-sm border h-16
                                             ${selectedLeft === i ? 'bg-purple-100 dark:bg-purple-900/40 border-purple-500 dark:border-purple-500 ring-2 ring-purple-300 dark:ring-purple-700 scale-105' : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-500 hover:shadow-md'}
                                         `}
@@ -312,9 +354,10 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                     <div
                                         key={i}
                                         onClick={() => {
-                                            setAct2Status('idle');
+                                            setAct2Status(null);
                                             handleRightClick(i);
                                         }}
+
                                         className={`flex items-center justify-between cursor-pointer p-4 rounded-xl transition-all shadow-sm border h-16 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-500 hover:shadow-md`}
                                     >
                                         <div className={`w-4 h-4 rounded-full border-2 ${connections.some(c => c.to === i) ? 'bg-purple-600 border-purple-600' : 'bg-white dark:bg-gray-700 border-purple-300 dark:border-purple-500'}`}></div>
@@ -325,9 +368,13 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                         </div>
 
                         <div className="flex items-center gap-4 mt-2 justify-end">
-                            <Feedback status={act2Status} />
-                            <CheckButton onClick={checkAct2} />
+                            <FeedbackButton
+                                onCheck={checkAct2}
+                                onReset={resetAct2}
+                                status={act2Status}
+                            />
                         </div>
+
                     </div>
                 </div>
 
@@ -358,16 +405,18 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                                 const newInputs = [...act3Inputs];
                                                 newInputs[i] = e.target.value;
                                                 setAct3Inputs(newInputs);
-                                                setAct3Status('idle'); // Clear status on edit
+                                                setAct3Status(null); // Clear status on edit
                                             }}
+
                                             className={`w-20 h-12 border-2 bg-white dark:bg-gray-800 text-center font-bold text-2xl dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all
                                                 ${act3Status === 'correct' ? 'border-green-400 bg-green-50 dark:bg-green-900/20' : (act3Status === 'incorrect' ? 'border-red-300 bg-red-50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-600 focus:border-purple-500')}
                                             `}
                                             inputMode="numeric"
                                         />
                                         {/* Individual feedback if checked */}
-                                        {act3Status !== 'idle' && (
+                                        {act3Status && (
                                             <div className="w-6">
+
                                                 {/* Correct answer logic check for this specific index */}
                                                 {((): boolean => {
                                                     const answers = ['5', '6', '6', '10', '3', '4', '9', '4', '5', '5'];
@@ -385,9 +434,13 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                         </div>
 
                         <div className="flex items-center gap-4 mt-6 justify-end">
-                            <Feedback status={act3Status} />
-                            <CheckButton onClick={checkAct3} />
+                            <FeedbackButton
+                                onCheck={checkAct3}
+                                onReset={resetAct3}
+                                status={act3Status}
+                            />
                         </div>
+
                     </div>
                 </div>
 
@@ -418,7 +471,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                 <button
                                     onClick={() => {
                                         setAct4Selected('V');
-                                        setAct4Check('idle');
+                                        setAct4Status(null);
                                     }}
                                     className={`w-12 h-12 font-bold text-2xl rounded-xl shadow-sm transition-all border-2
                                         ${act4Selected === 'V' ? 'bg-purple-600 text-white border-purple-600 scale-110 ring-2 ring-purple-200 dark:ring-purple-900' : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-300 hover:border-purple-300 dark:hover:border-purple-500 hover:text-purple-600'}
@@ -429,7 +482,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                 <button
                                     onClick={() => {
                                         setAct4Selected('F');
-                                        setAct4Check('idle');
+                                        setAct4Status(null);
                                     }}
                                     className={`w-12 h-12 font-bold text-2xl rounded-xl shadow-sm transition-all border-2
                                         ${act4Selected === 'F' ? 'bg-purple-600 text-white border-purple-600 scale-110 ring-2 ring-purple-200 dark:ring-purple-900' : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-300 hover:border-purple-300 dark:hover:border-purple-500 hover:text-purple-600'}
@@ -437,17 +490,22 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                 >
                                     F
                                 </button>
+
                             </div>
                         </div>
 
                         <div className="flex items-center gap-4 justify-end">
-                            <Feedback status={act4Check} />
-                            <CheckButton onClick={() => {
-                                if (!act4Selected) return;
-                                if (act4Selected === 'F') setAct4Check('correct');
-                                else setAct4Check('incorrect');
-                            }} />
+                            <FeedbackButton
+                                onCheck={() => {
+                                    if (!act4Selected) return;
+                                    if (act4Selected === 'F') setAct4Status('correct');
+                                    else setAct4Status('incorrect');
+                                }}
+                                onReset={resetAct4}
+                                status={act4Status}
+                            />
                         </div>
+
                     </div>
                 </div>
 
@@ -459,31 +517,5 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
     );
 }
 
-// --- Helpers ---
 
-const PlayButton = ({ onClick }: { onClick: () => void }) => (
-    <button
-        onClick={onClick}
-        className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center hover:bg-purple-700 hover:scale-105 transition-all shadow-sm"
-    >
-        <span className="ml-0.5 text-xs">▶</span>
-    </button>
-);
 
-const CheckButton = ({ onClick }: { onClick: () => void }) => (
-    <button
-        onClick={onClick}
-        className="bg-purple-700 hover:bg-purple-800 text-white font-bold py-1 px-6 rounded shadow-md transform active:scale-95 transition-all text-sm uppercase"
-    >
-        ¿Listo?
-    </button>
-);
-
-const Feedback = ({ status }: { status: 'idle' | 'correct' | 'incorrect' }) => {
-    if (status === 'idle') return null;
-    return (
-        <span className={`font-bold ${status === 'correct' ? 'text-green-600' : 'text-orange-500'}`}>
-            {status === 'correct' ? 'CORRECTO' : 'INCORRECTO'}
-        </span>
-    );
-};

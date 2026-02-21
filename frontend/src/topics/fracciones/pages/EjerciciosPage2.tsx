@@ -3,7 +3,9 @@
 import React, { useRef, useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
 import Image from 'next/image';
+
 
 // Import assets
 import lapices1Img from '../lapices1.png';
@@ -42,6 +44,26 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
 
     const [libraryAns, setLibraryAns] = useState('');
     const [libraryResult, setLibraryResult] = useState<'correct' | 'incorrect' | null>(null);
+
+    const checkPencil = () => {
+        if (pencilFrac.n === '5' && pencilFrac.d === '20') setPencilResult('correct');
+        else setPencilResult('incorrect');
+    };
+
+    const checkNotebook = () => {
+        if (notebookFrac.n === '6' && notebookFrac.d === '24') setNotebookResult('correct');
+        else setNotebookResult('incorrect');
+    };
+
+    const checkLibrary = () => {
+        if (libraryAns === '6') setLibraryResult('correct');
+        else setLibraryResult('incorrect');
+    };
+
+    const resetPencil = () => { setPencilFrac({ n: '', d: '' }); setPencilResult(null); };
+    const resetNotebook = () => { setNotebookFrac({ n: '', d: '' }); setNotebookResult(null); };
+    const resetLibrary = () => { setLibraryAns(''); setLibraryResult(null); };
+
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones' }} pageId="fracciones-ejercicios-2">
@@ -99,16 +121,11 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
                                                 </div>
 
                                                 <div className="absolute right-0 flex items-center gap-4">
-                                                    <button
-                                                        onClick={() => {
-                                                            if (pencilFrac.n === '5' && pencilFrac.d === '20') setPencilResult('correct');
-                                                            else setPencilResult('incorrect');
-                                                        }}
-                                                        className="bg-purple-600 text-white px-8 py-2.5 rounded-lg font-bold hover:bg-purple-700 transition-all shadow-md active:scale-95 text-sm">
-                                                        ¿LISTO?
-                                                    </button>
-                                                    {pencilResult === 'correct' && <span className="text-green-600 font-bold text-3xl animate-bounce">✓</span>}
-                                                    {pencilResult === 'incorrect' && <span className="text-red-500 font-bold text-sm">Intenta de nuevo</span>}
+                                                    <FeedbackButton
+                                                        onCheck={checkPencil}
+                                                        onReset={resetPencil}
+                                                        status={pencilResult}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -160,16 +177,11 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
                                                 </div>
 
                                                 <div className="absolute right-0 flex items-center gap-4">
-                                                    <button
-                                                        onClick={() => {
-                                                            if (notebookFrac.n === '6' && notebookFrac.d === '24') setNotebookResult('correct');
-                                                            else setNotebookResult('incorrect');
-                                                        }}
-                                                        className="bg-purple-600 text-white px-8 py-2.5 rounded-lg font-bold hover:bg-purple-700 transition-all shadow-md active:scale-95 text-sm">
-                                                        ¿LISTO?
-                                                    </button>
-                                                    {notebookResult === 'correct' && <span className="text-green-600 font-bold text-3xl animate-bounce">✓</span>}
-                                                    {notebookResult === 'incorrect' && <span className="text-red-500 font-bold text-sm">Intenta de nuevo</span>}
+                                                    <FeedbackButton
+                                                        onCheck={checkNotebook}
+                                                        onReset={resetNotebook}
+                                                        status={notebookResult}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -202,16 +214,11 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
                                                 </div>
 
                                                 <div className="absolute right-0 flex items-center gap-4">
-                                                    <button
-                                                        onClick={() => {
-                                                            if (libraryAns === '6') setLibraryResult('correct');
-                                                            else setLibraryResult('incorrect');
-                                                        }}
-                                                        className="bg-purple-600 text-white px-8 py-2.5 rounded-lg font-bold hover:bg-purple-700 transition-all shadow-md active:scale-95 text-sm">
-                                                        ¿LISTO?
-                                                    </button>
-                                                    {libraryResult === 'correct' && <span className="text-green-600 font-bold text-3xl animate-bounce">✓</span>}
-                                                    {libraryResult === 'incorrect' && <span className="text-red-500 font-bold text-sm">Intenta de nuevo</span>}
+                                                    <FeedbackButton
+                                                        onCheck={checkLibrary}
+                                                        onReset={resetLibrary}
+                                                        status={libraryResult}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>

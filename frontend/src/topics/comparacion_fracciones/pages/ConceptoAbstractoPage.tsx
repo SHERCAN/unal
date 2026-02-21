@@ -4,6 +4,8 @@ import { PlayVideoButton } from '@/components/PlayVideoButton';
 import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
+
 
 interface Props { zoom?: number; }
 
@@ -37,6 +39,12 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
         const allCorrect = exercises.every((ex, i) => answers[i] === ex.answer);
         setListoResult(allCorrect ? 'correct' : 'incorrect');
     };
+
+    const handleReset = () => {
+        setAnswers({});
+        setListoResult(null);
+    };
+
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Comparación de Fracciones' }} pageId="comp-frac-concepto-abstracto">
@@ -115,15 +123,12 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                             </div>
 
                             <div className="flex items-center gap-3 justify-center mt-4">
-                                {listoResult !== 'correct' && (
-                                    <button onClick={handleListo}
-                                        className="px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-lg text-sm">
-                                        ¿LISTO?
-                                    </button>
-                                )}
+                                <FeedbackButton
+                                    onCheck={handleListo}
+                                    onReset={handleReset}
+                                    status={listoResult}
+                                />
                             </div>
-                            {listoResult === 'correct' && <p className="text-center text-green-600 font-bold mt-2">✅ ¡Correcto!</p>}
-                            {listoResult === 'incorrect' && <p className="text-center text-red-500 font-bold text-sm mt-2">❌ Revisa los productos cruzados.</p>}
                         </div>
                     </div>
                 </div>

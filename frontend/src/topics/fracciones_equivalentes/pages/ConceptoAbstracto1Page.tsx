@@ -4,6 +4,8 @@ import { PlayVideoButton } from '@/components/PlayVideoButton';
 import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
+
 import Image from 'next/image';
 import { MdOutlineStickyNote2 } from 'react-icons/md';
 
@@ -46,27 +48,25 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
     // Practice state
     const [row1, setRow1] = useState({ i1: '', i2: '', i3: '', i4: '', r1: '', r2: '' });
     const [row2, setRow2] = useState({ i1: '', i2: '', i3: '', i4: '', r1: '', r2: '' });
-    const [row1Result, setRow1Result] = useState<boolean | null>(null);
-    const [row2Result, setRow2Result] = useState<boolean | null>(null);
+    const [row1Result, setRow1Result] = useState<'correct' | 'incorrect' | null>(null);
+    const [row2Result, setRow2Result] = useState<'correct' | 'incorrect' | null>(null);
+
 
     const checkRow1 = () => {
         const correct = row1.i1 === '3' && row1.i2 === '20' && row1.i3 === '5' && row1.i4 === '12' && row1.r1 === '60' && row1.r2 === '60';
-        setRow1Result(correct);
+        setRow1Result(correct ? 'correct' : 'incorrect');
     };
 
     const checkRow2 = () => {
         const correct = row2.i1 === '6' && row2.i2 === '20' && row2.i3 === '10' && row2.i4 === '12' && row2.r1 === '120' && row2.r2 === '120';
-        setRow2Result(correct);
+        setRow2Result(correct ? 'correct' : 'incorrect');
     };
 
-    const CheckButton = ({ onClick }: { onClick: () => void }) => (
-        <button
-            onClick={onClick}
-            className="bg-purple-700 hover:bg-purple-800 text-white font-bold py-2 px-8 rounded-lg shadow-md transform active:scale-95 transition-all text-sm uppercase tracking-wide whitespace-nowrap"
-        >
-            ¿LISTO?
-        </button>
-    );
+    const resetRow1 = () => { setRow1({ i1: '', i2: '', i3: '', i4: '', r1: '', r2: '' }); setRow1Result(null); };
+    const resetRow2 = () => { setRow2({ i1: '', i2: '', i3: '', i4: '', r1: '', r2: '' }); setRow2Result(null); };
+
+
+
 
     const PracticeInput = ({ value, onChange, placeholder = "?" }: any) => (
         <input
@@ -217,12 +217,12 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
 
                                             {/* Line 3: Button Row */}
                                             <div className="col-start-4 flex justify-center mt-2 relative">
-                                                <div className="absolute top-0 left-1/2 -translate-x-1/2 flex items-center gap-4">
-                                                    <CheckButton onClick={checkRow1} />
-                                                    <div className="w-24 flex-shrink-0">
-                                                        {row1Result === true && <span className="text-green-600 text-3xl font-bold">✓</span>}
-                                                        {row1Result === false && <span className="text-red-500 text-xs font-bold leading-tight">Intenta de<br />nuevo</span>}
-                                                    </div>
+                                                <div className="absolute top-0 left-1/2 -translate-x-1/2 flex items-center justify-center">
+                                                    <FeedbackButton
+                                                        onCheck={checkRow1}
+                                                        onReset={resetRow1}
+                                                        status={row1Result}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -267,12 +267,12 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
 
                                             {/* Line 3: Button Row */}
                                             <div className="col-start-4 flex justify-center mt-2 relative">
-                                                <div className="absolute top-0 left-1/2 -translate-x-1/2 flex items-center gap-4">
-                                                    <CheckButton onClick={checkRow2} />
-                                                    <div className="w-24 flex-shrink-0">
-                                                        {row2Result === true && <span className="text-green-600 text-3xl font-bold">✓</span>}
-                                                        {row2Result === false && <span className="text-red-500 text-xs font-bold leading-tight">Intenta de<br />nuevo</span>}
-                                                    </div>
+                                                <div className="absolute top-0 left-1/2 -translate-x-1/2 flex items-center justify-center">
+                                                    <FeedbackButton
+                                                        onCheck={checkRow2}
+                                                        onReset={resetRow2}
+                                                        status={row2Result}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>

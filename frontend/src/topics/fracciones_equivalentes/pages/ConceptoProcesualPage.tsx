@@ -4,7 +4,9 @@ import { PlayVideoButton } from '@/components/PlayVideoButton';
 import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
 import Image from 'next/image';
+
 
 // Assets
 import vueltasImg from '../vueltas.png';
@@ -37,6 +39,10 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
         if (desafioAns === '8') setDesafioResult('correct');
         else setDesafioResult('incorrect');
     };
+
+    const resetLaps = () => { setLapsAns(''); setLapsResult(null); };
+    const resetDesafio = () => { setDesafioAns(''); setDesafioResult(null); };
+
 
     /* videoModal list removed */
     /* ref removed */
@@ -90,13 +96,11 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                                     </div>
 
                                     <div className="absolute right-0 flex items-center gap-4">
-                                        <button
-                                            onClick={handleLapsCheck}
-                                            className="bg-purple-600 text-white px-8 py-2 rounded-lg font-bold hover:bg-purple-700 transition-all shadow-md active:scale-95 text-sm">
-                                            LISTO
-                                        </button>
-                                        {lapsResult === 'correct' && <span className="text-green-600 font-bold text-3xl animate-bounce">✓</span>}
-                                        {lapsResult === 'incorrect' && <span className="text-red-500 font-bold text-sm">Intenta de nuevo</span>}
+                                        <FeedbackButton
+                                            onCheck={handleLapsCheck}
+                                            onReset={resetLaps}
+                                            status={lapsResult}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -134,13 +138,11 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                                     </div>
 
                                     <div className="absolute right-0 flex items-center gap-4">
-                                        <button
-                                            onClick={handleDesafioCheck}
-                                            className="bg-purple-600 text-white px-8 py-2 rounded-lg font-bold hover:bg-purple-700 transition-all shadow-md active:scale-95 text-sm">
-                                            LISTO
-                                        </button>
-                                        {desafioResult === 'correct' && <span className="text-green-600 font-bold text-3xl animate-bounce">✓</span>}
-                                        {desafioResult === 'incorrect' && <span className="text-red-500 font-bold text-sm">Intenta de nuevo</span>}
+                                        <FeedbackButton
+                                            onCheck={handleDesafioCheck}
+                                            onReset={resetDesafio}
+                                            status={desafioResult}
+                                        />
                                     </div>
                                 </div>
                             </div>

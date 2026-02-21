@@ -5,6 +5,8 @@ import React, { useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
+
 
 interface DivisionConceptPage3Props {
     zoom?: number;
@@ -57,7 +59,17 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
     const ex1_m3_b = useInputState();
     const ex1_m3_res = useInputState();
 
-    const [ex1Status, setEx1Status] = useState<'idle' | 'correct' | 'incorrect'>('idle');
+    const [ex1Status, setEx1Status] = useState<'correct' | 'incorrect' | null>(null);
+
+    const resetEx1 = () => {
+        ex1_dividend.reset(); ex1_divisor.reset(); ex1_quotient.reset();
+        ex1_subtraction.reset(); ex1_remainder.reset();
+        ex1_m1_a.reset(); ex1_m1_b.reset(); ex1_m1_res.reset();
+        ex1_m2_a.reset(); ex1_m2_b.reset(); ex1_m2_res.reset();
+        ex1_m3_a.reset(); ex1_m3_b.reset(); ex1_m3_res.reset();
+        setEx1Status(null);
+    };
+
 
     const checkEx1 = () => {
         // Validation Logic:
@@ -93,7 +105,13 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
     const [ex2_val1, setEx2_val1] = useState('');
     const [ex2_val2, setEx2_val2] = useState('');
     const [ex2_val3, setEx2_val3] = useState('');
-    const [ex2Status, setEx2Status] = useState<'idle' | 'correct' | 'incorrect'>('idle');
+    const [ex2Status, setEx2Status] = useState<'correct' | 'incorrect' | null>(null);
+
+    const resetEx2 = () => {
+        setEx2_val1(''); setEx2_val2(''); setEx2_val3('');
+        setEx2Status(null);
+    };
+
 
     const checkEx2 = () => {
         if (ex2_val1 === 'dividendo' && ex2_val2 === 'divisor' && ex2_val3 === 'cociente') {
@@ -107,7 +125,13 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
     const p1_div1 = useInputState();
     const p1_div2 = useInputState();
     const p1_res = useInputState();
-    const [p1Status, setP1Status] = useState<'idle' | 'correct' | 'incorrect'>('idle');
+    const [p1Status, setP1Status] = useState<'correct' | 'incorrect' | null>(null);
+
+    const resetP1 = () => {
+        p1_div1.reset(); p1_div2.reset(); p1_res.reset();
+        setP1Status(null);
+    };
+
 
     const checkP1 = () => {
         if (p1_div1.value === '12' && p1_div2.value === '2' && p1_res.value === '6') {
@@ -121,7 +145,13 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
     const p2_div1 = useInputState();
     const p2_div2 = useInputState();
     const p2_res = useInputState();
-    const [p2Status, setP2Status] = useState<'idle' | 'correct' | 'incorrect'>('idle');
+    const [p2Status, setP2Status] = useState<'correct' | 'incorrect' | null>(null);
+
+    const resetP2 = () => {
+        p2_div1.reset(); p2_div2.reset(); p2_res.reset();
+        setP2Status(null);
+    };
+
 
     const checkP2 = () => {
         if (p2_div1.value === '64' && p2_div2.value === '8' && p2_res.value === '8') {
@@ -164,8 +194,8 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                             <div className="mt-4 text-sm text-gray-800 dark:text-gray-200 flex items-start gap-2">
                                 <p>
                                     <span className='font-semibold'> Para dividir 25 entre 5, buscamos cuántas veces el número 5 está contenido en 25.
-                                    Como 5 × 5 = 25, el cociente es 5 y el resto es 0. </span><PlayVideoButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE_MAIN} title="Explicación del ejemplo" videoId="/pag4/vv-1" />
-                                </p>                               
+                                        Como 5 × 5 = 25, el cociente es 5 y el resto es 0. </span><PlayVideoButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE_MAIN} title="Explicación del ejemplo" videoId="/pag4/vv-1" />
+                                </p>
                             </div>
                         </div>
 
@@ -256,8 +286,11 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                     </div>
 
                                     <div className="flex items-center gap-2 mt-2">
-                                        <CheckButton onClick={checkEx1} />
-                                        <Feedback status={ex1Status} />
+                                        <FeedbackButton
+                                            onCheck={checkEx1}
+                                            onReset={resetEx1}
+                                            status={ex1Status}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -311,8 +344,11 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                             </div>
 
                             <div className="flex items-center gap-2 mt-2 ml-5">
-                                <CheckButton onClick={checkEx2} />
-                                <Feedback status={ex2Status} />
+                                <FeedbackButton
+                                    onCheck={checkEx2}
+                                    onReset={resetEx2}
+                                    status={ex2Status}
+                                />
                             </div>
                         </div>
 
@@ -334,8 +370,11 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                 <InputBox value={p1_res.value} onChange={p1_res.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
 
                                 <div className="flex flex-col gap-1 ml-4">
-                                    <Feedback status={p1Status} />
-                                    <CheckButton onClick={checkP1} />
+                                    <FeedbackButton
+                                        onCheck={checkP1}
+                                        onReset={resetP1}
+                                        status={p1Status}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -358,8 +397,11 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                 <InputBox value={p2_res.value} onChange={p2_res.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
 
                                 <div className="flex flex-col gap-1 ml-4">
-                                    <Feedback status={p2Status} />
-                                    <CheckButton onClick={checkP2} />
+                                    <FeedbackButton
+                                        onCheck={checkP2}
+                                        onReset={resetP2}
+                                        status={p2Status}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -378,8 +420,13 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
 // Hook to manage input state
 const useInputState = (initialValue: string = '') => {
     const [value, setValue] = useState(initialValue);
-    return { value, onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setValue(e.target.value) };
+    return {
+        value,
+        onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setValue(e.target.value),
+        reset: () => setValue('')
+    };
 };
+
 
 // Input Component
 const InputBox = ({ value, onChange, className = "w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 focus:outline-none text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" }: { value: string; onChange: (e: any) => void; className?: string }) => (
@@ -391,22 +438,4 @@ const InputBox = ({ value, onChange, className = "w-10 h-10 text-center border-2
         inputMode="numeric"
         autoComplete="off"
     />
-);
-
-const Feedback = ({ status }: { status: 'idle' | 'correct' | 'incorrect' }) => {
-    if (status === 'idle') return null;
-    return (
-        <span className={`font-bold ml-2 ${status === 'correct' ? 'text-green-600' : 'text-orange-500'}`}>
-            {status === 'correct' ? 'CORRECTO' : 'INCORRECTO'}
-        </span>
-    );
-};
-
-const CheckButton = ({ onClick }: { onClick: () => void }) => (
-    <button
-        onClick={onClick}
-        className="bg-purple-700 hover:bg-purple-800 text-white font-bold py-1 px-4 rounded shadow-md transform active:scale-95 transition-all text-sm"
-    >
-        ¿LISTO?
-    </button>
 );

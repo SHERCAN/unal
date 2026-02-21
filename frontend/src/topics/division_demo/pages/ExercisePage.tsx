@@ -5,6 +5,8 @@ import { PlayVideoButton } from '@/components/PlayVideoButton';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
+
 
 interface Apple {
     id: number;
@@ -32,7 +34,9 @@ export function ExercisePage({ zoom = 1 }: DivisionExercisePageProps) {
         Array.from({ length: totalApples }, (_, i) => ({ id: i, inBox: null }))
     );
     const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+    const [stageCStatus, setStageCStatus] = useState<'correct' | 'incorrect' | null>(null);
     const [draggedApple, setDraggedApple] = useState<number | null>(null);
+
 
     // Effect to check Stage C completion (Video + Correct Answer)
     React.useEffect(() => {
@@ -94,7 +98,17 @@ export function ExercisePage({ zoom = 1 }: DivisionExercisePageProps) {
     const handleReset = () => {
         setApples(Array.from({ length: totalApples }, (_, i) => ({ id: i, inBox: null })));
         setSelectedAnswer(null);
+        setStageCStatus(null);
     };
+
+    const handleListo = () => {
+        if (selectedAnswer === 4) {
+            setStageCStatus('correct');
+        } else {
+            setStageCStatus('incorrect');
+        }
+    };
+
 
     /* videoModal list removed */
     /* ref removed */
@@ -299,8 +313,10 @@ export function ExercisePage({ zoom = 1 }: DivisionExercisePageProps) {
                                     key={ans}
                                     onClick={() => {
                                         setSelectedAnswer(ans);
+                                        setStageCStatus(null);
                                         submitGame('division-game-c-question', ans === 4);
                                     }}
+
                                     className={`
                                 w-12 h-12 text-xl font-bold rounded-xl border-2 transition-all
                                 ${selectedAnswer === ans
@@ -314,55 +330,17 @@ export function ExercisePage({ zoom = 1 }: DivisionExercisePageProps) {
                             ))}
                         </div>
 
-                        {selectedAnswer !== null && (
-                            <div className="mt-4 flex justify-center">
-                                {selectedAnswer === 4 ? (
-                                    <div className="relative flex items-center gap-2">
-                                        <span className="text-green-600 font-black text-2xl celebrate-animation">
-                                            ✓ CORRECTO
-                                        </span>
-                                        {/* Confetti particles */}
-                                        {[...Array(8)].map((_, i) => (
-                                            <div
-                                                key={i}
-                                                className="confetti-particle"
-                                                style={{
-                                                    backgroundColor: ['#10b981', '#f59e0b', '#8b5cf6', '#ec4899'][i % 4],
-                                                    left: `${i * 15}px`,
-                                                    animationDelay: `${i * 0.1}s`
-                                                }}
-                                            />
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="relative flex items-center gap-3">
-                                        <span className="text-orange-500 font-black text-2xl shake-animation">
-                                            INCORRECTO
-                                        </span>
-                                        <button
-                                            onClick={() => setSelectedAnswer(null)}
-                                            className="p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-all"
-                                            title="Reintentar"
-                                        >
-                                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                            </svg>
-                                        </button>
-                                        {/* Rain particles */}
-                                        {[...Array(6)].map((_, i) => (
-                                            <div
-                                                key={i}
-                                                className="rain-particle"
-                                                style={{
-                                                    left: `${i * 20 - 60}px`,
-                                                    animationDelay: `${i * 0.15}s`
-                                                }}
-                                            />
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        )}
+                        <div className="mt-6 flex justify-center">
+                            <FeedbackButton
+                                onCheck={handleListo}
+                                onReset={() => {
+                                    setSelectedAnswer(null);
+                                    setStageCStatus(null);
+                                }}
+                                status={stageCStatus}
+                            />
+                        </div>
+
                     </div>
                 </div>
                 {/* End of C - CONCRETO Box */}

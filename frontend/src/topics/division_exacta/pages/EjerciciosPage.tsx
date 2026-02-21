@@ -4,6 +4,8 @@ import { PlayVideoButton } from '@/components/PlayVideoButton';
 import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
+
 
 /**
  * Frame 163 — EJERCICIOS
@@ -39,14 +41,20 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         { dividend: 1059, divisor: 3, answer: 353 },
     ];
     const [calcAnswers, setCalcAnswers] = useState<Record<number, string>>({});
-    const [calcResults, setCalcResults] = useState<Record<number, boolean | null>>({});
+    const [calcResults, setCalcResults] = useState<Record<number, 'correct' | 'incorrect' | null>>({});
 
     const handleCalcListo = (index: number) => {
         const userAnswer = parseInt(calcAnswers[index] || '');
         const correct = userAnswer === calcItems[index].answer;
-        setCalcResults(prev => ({ ...prev, [index]: correct }));
+        setCalcResults(prev => ({ ...prev, [index]: correct ? 'correct' : 'incorrect' }));
         submitExercise(`div-exacta-calc-${index}`, correct);
     };
+
+    const resetCalc = (index: number) => {
+        setCalcAnswers(prev => ({ ...prev, [index]: '' }));
+        setCalcResults(prev => ({ ...prev, [index]: null }));
+    };
+
 
     // Activity 2: Determine if exact
     const exactItems = [
@@ -57,14 +65,20 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         { dividend: 60, divisor: 12, isExact: true },
     ];
     const [exactAnswers, setExactAnswers] = useState<Record<number, string>>({});
-    const [exactResults, setExactResults] = useState<Record<number, boolean | null>>({});
+    const [exactResults, setExactResults] = useState<Record<number, 'correct' | 'incorrect' | null>>({});
 
     const handleExactListo = (index: number) => {
         const userAnswer = exactAnswers[index] || '';
         const correct = (userAnswer === 'exacta') === exactItems[index].isExact;
-        setExactResults(prev => ({ ...prev, [index]: correct }));
+        setExactResults(prev => ({ ...prev, [index]: correct ? 'correct' : 'incorrect' }));
         submitExercise(`div-exacta-exact-${index}`, correct);
     };
+
+    const resetExact = (index: number) => {
+        setExactAnswers(prev => ({ ...prev, [index]: '' }));
+        setExactResults(prev => ({ ...prev, [index]: null }));
+    };
+
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'División Exacta' }} pageId="div-exacta-ejercicios">
@@ -92,17 +106,17 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                     type="number"
                                     value={calcAnswers[i] || ''}
                                     onChange={(e) => setCalcAnswers(prev => ({ ...prev, [i]: e.target.value }))}
-                                    className={`w-20 px-2 py-1 border-2 rounded text-center font-bold text-lg ${calcResults[i] === true ? 'border-green-500 bg-green-50 dark:bg-green-900/20' :
-                                        calcResults[i] === false ? 'border-red-500 bg-red-50 dark:bg-red-900/20' :
+                                    className={`w-20 px-2 py-1 border-2 rounded text-center font-bold text-lg ${calcResults[i] === 'correct' ? 'border-green-500 bg-green-50 dark:bg-green-900/20' :
+                                        calcResults[i] === 'incorrect' ? 'border-red-500 bg-red-50 dark:bg-red-900/20' :
                                             'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
                                         } text-gray-900 dark:text-white`}
+
                                 />
-                                <button onClick={() => handleCalcListo(i)}
-                                    className="px-4 py-1 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded">
-                                    ¿LISTO?
-                                </button>
-                                {calcResults[i] === true && <span className="text-green-600 font-bold">✅</span>}
-                                {calcResults[i] === false && <span className="text-red-500 font-bold">❌</span>}
+                                <FeedbackButton
+                                    onCheck={() => handleCalcListo(i)}
+                                    onReset={() => resetCalc(i)}
+                                    status={calcResults[i] ?? null}
+                                />
                             </div>
                         ))}
                     </div>
@@ -128,21 +142,21 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                 <select
                                     value={exactAnswers[i] || ''}
                                     onChange={(e) => setExactAnswers(prev => ({ ...prev, [i]: e.target.value }))}
-                                    className={`border-2 rounded px-3 py-1 text-sm font-medium ${exactResults[i] === true ? 'border-green-500 bg-green-50 dark:bg-green-900/20' :
-                                        exactResults[i] === false ? 'border-red-500 bg-red-50 dark:bg-red-900/20' :
+                                    className={`border-2 rounded px-3 py-1 text-sm font-medium ${exactResults[i] === 'correct' ? 'border-green-500 bg-green-50 dark:bg-green-900/20' :
+                                        exactResults[i] === 'incorrect' ? 'border-red-500 bg-red-50 dark:bg-red-900/20' :
                                             'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
                                         } text-gray-800 dark:text-gray-200`}
+
                                 >
                                     <option value="">Selecciona</option>
                                     <option value="exacta">es exacta</option>
                                     <option value="no-exacta">no es exacta</option>
                                 </select>
-                                <button onClick={() => handleExactListo(i)}
-                                    className="px-4 py-1 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded">
-                                    ¿LISTO?
-                                </button>
-                                {exactResults[i] === true && <span className="text-green-600 font-bold">✅</span>}
-                                {exactResults[i] === false && <span className="text-red-500 font-bold">❌</span>}
+                                <FeedbackButton
+                                    onCheck={() => handleExactListo(i)}
+                                    onReset={() => resetExact(i)}
+                                    status={exactResults[i] ?? null}
+                                />
                             </div>
                         ))}
                     </div>

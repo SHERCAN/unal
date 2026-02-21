@@ -4,6 +4,8 @@ import { PlayVideoButton } from '@/components/PlayVideoButton';
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
+
 
 /**
  * Frame 169 — Números Primos: Ejercicios
@@ -257,30 +259,14 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
             </div>
 
             {/* Check / Status */}
-            <div className="flex items-center gap-3 justify-center mt-4">
-                {result !== 'correct' && (
-                    <button onClick={handleCheck}
-                        className="px-5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded text-sm">
-                        ¿LISTO?
-                    </button>
-                )}
-                {result === 'incorrect' && (
-                    <button onClick={handleReset}
-                        className="px-4 py-1.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded text-sm">
-                        Reiniciar
-                    </button>
-                )}
+            <div className="flex justify-center mt-4">
+                <FeedbackButton
+                    onCheck={handleCheck}
+                    onReset={handleReset}
+                    status={result}
+                />
             </div>
-            {result === 'correct' && (
-                <p className="text-center text-green-600 dark:text-green-400 font-bold text-sm mt-3">
-                    ✅ ¡Excelente! Clasificaste correctamente todos los números.
-                </p>
-            )}
-            {result === 'incorrect' && (
-                <p className="text-center text-red-500 font-bold text-sm mt-3">
-                    ❌ Algunos números están mal clasificados. Verifica e intenta de nuevo.
-                </p>
-            )}
+
 
             {/* VideoModal removed */}
         </BookPageContainer>

@@ -5,6 +5,8 @@ import { PlayVideoButton } from '@/components/PlayVideoButton';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
+
 
 interface DivisionExercisesPageProps {
     zoom?: number;
@@ -281,52 +283,14 @@ export function ExercisesPage({ zoom = 1 }: DivisionExercisesPageProps) {
                                     </button>
                                 ))}
 
-                                <button
-                                    onClick={handleAct1Check}
-                                    disabled={act1Feedback === 'correct'}
-                                    className={`px-6 py-2 rounded font-bold text-white transition-all ml-4 ${act1Feedback === 'correct'
-                                        ? 'bg-gray-400 cursor-not-allowed'
-                                        : 'bg-purple-700 hover:bg-purple-800'
-                                        }`}
-                                >
-                                    ¿LISTO?
-                                </button>
+                                <div className="ml-4">
+                                    <FeedbackButton
+                                        onCheck={handleAct1Check}
+                                        onReset={resetAct1}
+                                        status={act1Feedback}
+                                    />
+                                </div>
 
-                                {act1Feedback === 'correct' && (
-                                    <div className="relative flex items-center gap-2">
-                                        <span className="text-green-600 font-black text-2xl celebrate-animation">
-                                            ✓ CORRECTO
-                                        </span>
-                                        {[...Array(8)].map((_, i) => (
-                                            <div
-                                                key={i}
-                                                className="confetti-particle"
-                                                style={{
-                                                    backgroundColor: ['#10b981', '#f59e0b', '#8b5cf6', '#ec4899'][i % 4],
-                                                    left: `${i * 15}px`,
-                                                    animationDelay: `${i * 0.1}s`
-                                                }}
-                                            />
-                                        ))}
-                                    </div>
-                                )}
-
-                                {act1Feedback === 'incorrect' && (
-                                    <div className="relative flex items-center gap-3">
-                                        <span className="text-orange-500 font-black text-2xl shake-animation">
-                                            INCORRECTO
-                                        </span>
-                                        <button
-                                            onClick={resetAct1}
-                                            className="p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-all"
-                                            title="Reintentar"
-                                        >
-                                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                )}
                             </div>
                         </div>
                     </div>
@@ -392,54 +356,14 @@ export function ExercisesPage({ zoom = 1 }: DivisionExercisesPageProps) {
                                             }`}
                                         inputMode="numeric"
                                     />
-                                    <div className="flex items-center gap-3 ml-8">
-                                        <button
-                                            onClick={handleAct2Check}
-                                            disabled={act2Feedback === 'correct'}
-                                            className={`px-6 py-2 rounded font-bold text-white transition-all text-lg ${act2Feedback === 'correct'
-                                                ? 'bg-gray-400 cursor-not-allowed'
-                                                : 'bg-purple-700 hover:bg-purple-800'
-                                                }`}
-                                        >
-                                            ¿LISTO?
-                                        </button>
-
-                                        {act2Feedback === 'correct' && (
-                                            <div className="relative flex items-center gap-2">
-                                                <span className="text-green-600 font-black text-2xl celebrate-animation">
-                                                    ✓ CORRECTO
-                                                </span>
-                                                {[...Array(8)].map((_, i) => (
-                                                    <div
-                                                        key={i}
-                                                        className="confetti-particle"
-                                                        style={{
-                                                            backgroundColor: ['#10b981', '#f59e0b', '#8b5cf6', '#ec4899'][i % 4],
-                                                            left: `${i * 15}px`,
-                                                            animationDelay: `${i * 0.1}s`
-                                                        }}
-                                                    />
-                                                ))}
-                                            </div>
-                                        )}
-
-                                        {act2Feedback === 'incorrect' && (
-                                            <div className="relative flex items-center gap-3">
-                                                <span className="text-orange-500 font-black text-2xl shake-animation">
-                                                    INCORRECTO
-                                                </span>
-                                                <button
-                                                    onClick={resetAct2}
-                                                    className="p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-all"
-                                                    title="Reintentar"
-                                                >
-                                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        )}
+                                    <div className="ml-8">
+                                        <FeedbackButton
+                                            onCheck={handleAct2Check}
+                                            onReset={resetAct2}
+                                            status={act2Feedback}
+                                        />
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -512,54 +436,14 @@ export function ExercisesPage({ zoom = 1 }: DivisionExercisesPageProps) {
                                     >
                                         F
                                     </button>
-                                    <div className="flex items-center gap-3 ml-8">
-                                        <button
-                                            onClick={handleAct3Check}
-                                            disabled={act3Feedback === 'correct'}
-                                            className={`px-6 py-2 rounded font-bold text-white transition-all text-lg ${act3Feedback === 'correct'
-                                                ? 'bg-gray-400 cursor-not-allowed'
-                                                : 'bg-purple-700 hover:bg-purple-800'
-                                                }`}
-                                        >
-                                            ¿LISTO?
-                                        </button>
-
-                                        {act3Feedback === 'correct' && (
-                                            <div className="relative flex items-center gap-2">
-                                                <span className="text-green-600 font-black text-2xl celebrate-animation">
-                                                    ✓ CORRECTO
-                                                </span>
-                                                {[...Array(8)].map((_, i) => (
-                                                    <div
-                                                        key={i}
-                                                        className="confetti-particle"
-                                                        style={{
-                                                            backgroundColor: ['#10b981', '#f59e0b', '#8b5cf6', '#ec4899'][i % 4],
-                                                            left: `${i * 15}px`,
-                                                            animationDelay: `${i * 0.1}s`
-                                                        }}
-                                                    />
-                                                ))}
-                                            </div>
-                                        )}
-
-                                        {act3Feedback === 'incorrect' && (
-                                            <div className="relative flex items-center gap-3">
-                                                <span className="text-orange-500 font-black text-2xl shake-animation">
-                                                    INCORRECTO
-                                                </span>
-                                                <button
-                                                    onClick={resetAct3}
-                                                    className="p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-all"
-                                                    title="Reintentar"
-                                                >
-                                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        )}
+                                    <div className="ml-8">
+                                        <FeedbackButton
+                                            onCheck={handleAct3Check}
+                                            onReset={resetAct3}
+                                            status={act3Feedback}
+                                        />
                                     </div>
+
                                 </div>
                             </div>
                         </div>

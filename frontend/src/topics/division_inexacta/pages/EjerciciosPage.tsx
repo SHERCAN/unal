@@ -4,6 +4,8 @@ import { PlayVideoButton } from '@/components/PlayVideoButton';
 import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
+
 
 /**
  * Frame 166 — EJERCICIOS – División Inexacta
@@ -44,14 +46,21 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         { dividend: 109, divisor: 3, correct: 'inexacta' },  // 109/3=36 r1
     ];
     const [act1Answers, setAct1Answers] = useState<Record<number, string>>({});
-    const [act1Results, setAct1Results] = useState<Record<number, boolean | null>>({});
+    const [act1Results, setAct1Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({});
+
 
     const handleAct1Listo = (index: number) => {
         const userAnswer = act1Answers[index] || '';
         const correct = userAnswer === act1Items[index].correct;
-        setAct1Results(prev => ({ ...prev, [index]: correct }));
+        setAct1Results(prev => ({ ...prev, [index]: correct ? 'correct' : 'incorrect' }));
         submitExercise(`div-inexacta-act1-${index}`, correct);
     };
+
+    const resetAct1 = (index: number) => {
+        setAct1Answers(prev => ({ ...prev, [index]: '' }));
+        setAct1Results(prev => ({ ...prev, [index]: null }));
+    };
+
 
     // ===== ACTIVITY 2: Resuelve =====
     const act2Items = [
@@ -59,7 +68,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         { dividend: 57, divisor: 14, quotient: 4, hasRemainder: true, remainder: 1, type: 'inexacta' },
     ];
     const [act2, setAct2] = useState<Record<string, string>>({});
-    const [act2Results, setAct2Results] = useState<Record<number, boolean | null>>({});
+    const [act2Results, setAct2Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({});
+
 
     const handleAct2Listo = (index: number) => {
         const item = act2Items[index];
@@ -74,9 +84,21 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         } else {
             correct = correct && userHasRemainder === 'no';
         }
-        setAct2Results(prev => ({ ...prev, [index]: correct }));
+        setAct2Results(prev => ({ ...prev, [index]: correct ? 'correct' : 'incorrect' }));
         submitExercise(`div-inexacta-act2-${index}`, correct);
     };
+
+    const resetAct2 = (index: number) => {
+        setAct2(prev => ({
+            ...prev,
+            [`${index}-q`]: '',
+            [`${index}-hasR`]: '',
+            [`${index}-r`]: '',
+            [`${index}-type`]: ''
+        }));
+        setAct2Results(prev => ({ ...prev, [index]: null }));
+    };
+
 
     // ===== ACTIVITY 3: Word problems =====
     const act3Items = [
@@ -106,7 +128,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         },
     ];
     const [act3, setAct3] = useState<Record<string, string>>({});
-    const [act3Results, setAct3Results] = useState<Record<number, boolean | null>>({});
+    const [act3Results, setAct3Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({});
+
 
     const handleAct3Listo = (index: number) => {
         const item = act3Items[index];
@@ -120,21 +143,34 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         } else {
             correct = correct && userHasRemainder === 'no';
         }
-        setAct3Results(prev => ({ ...prev, [index]: correct }));
+        setAct3Results(prev => ({ ...prev, [index]: correct ? 'correct' : 'incorrect' }));
         submitExercise(`div-inexacta-act3-${index}`, correct);
     };
 
-    const inputClass = (result: boolean | null) =>
-        `w-16 h-9 text-center font-bold rounded border-2 text-sm outline-none transition-colors ${result === true ? 'border-green-500 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300' :
-            result === false ? 'border-red-500 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300' :
+    const resetAct3 = (index: number) => {
+        setAct3(prev => ({
+            ...prev,
+            [`${index}-a`]: '',
+            [`${index}-hasR`]: '',
+            [`${index}-r`]: ''
+        }));
+        setAct3Results(prev => ({ ...prev, [index]: null }));
+    };
+
+
+    const inputClass = (result: 'correct' | 'incorrect' | null) =>
+        `w-16 h-9 text-center font-bold rounded border-2 text-sm outline-none transition-colors ${result === 'correct' ? 'border-green-500 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300' :
+            result === 'incorrect' ? 'border-red-500 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300' :
                 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100'
         }`;
 
-    const selectClass = (result: boolean | null) =>
-        `border-2 rounded px-2 py-1 text-sm font-medium outline-none transition-colors ${result === true ? 'border-green-500 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300' :
-            result === false ? 'border-red-500 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300' :
+
+    const selectClass = (result: 'correct' | 'incorrect' | null) =>
+        `border-2 rounded px-2 py-1 text-sm font-medium outline-none transition-colors ${result === 'correct' ? 'border-green-500 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300' :
+            result === 'incorrect' ? 'border-red-500 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300' :
                 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200'
         }`;
+
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'División Inexacta' }} pageId="division-inexacta-ejercicios">
@@ -162,19 +198,18 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                     value={act1Answers[i] || ''}
                                     onChange={(e) => setAct1Answers(prev => ({ ...prev, [i]: e.target.value }))}
                                     className={selectClass(act1Results[i] ?? null)}
-                                    disabled={act1Results[i] === true}
+                                    disabled={act1Results[i] === 'correct'}
+
                                 >
                                     <option value="">Selecciona</option>
                                     <option value="exacta">es exacta</option>
                                     <option value="inexacta">es inexacta</option>
                                 </select>
-                                <button onClick={() => handleAct1Listo(i)}
-                                    className="px-4 py-1 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded"
-                                    disabled={act1Results[i] === true}>
-                                    ¿LISTO?
-                                </button>
-                                {act1Results[i] === true && <span className="text-green-600 font-bold">✅</span>}
-                                {act1Results[i] === false && <span className="text-red-500 font-bold">❌</span>}
+                                <FeedbackButton
+                                    onCheck={() => handleAct1Listo(i)}
+                                    onReset={() => resetAct1(i)}
+                                    status={act1Results[i] ?? null}
+                                />
                             </div>
                         ))}
                     </div>
@@ -201,7 +236,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                         value={act2[`${i}-q`] || ''}
                                         onChange={(e) => setAct2(prev => ({ ...prev, [`${i}-q`]: e.target.value }))}
                                         className={inputClass(act2Results[i] ?? null)}
-                                        disabled={act2Results[i] === true}
+                                        disabled={act2Results[i] === 'correct'}
+
                                     />
                                 </div>
 
@@ -212,7 +248,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                         value={act2[`${i}-hasR`] || ''}
                                         onChange={(e) => setAct2(prev => ({ ...prev, [`${i}-hasR`]: e.target.value }))}
                                         className={selectClass(act2Results[i] ?? null)}
-                                        disabled={act2Results[i] === true}
+                                        disabled={act2Results[i] === 'correct'}
+
                                     >
                                         <option value="">...</option>
                                         <option value="si">Sí</option>
@@ -229,7 +266,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                                 onChange={(e) => setAct2(prev => ({ ...prev, [`${i}-r`]: e.target.value }))}
                                                 className={inputClass(act2Results[i] ?? null)}
                                                 style={{ width: '48px' }}
-                                                disabled={act2Results[i] === true}
+                                                disabled={act2Results[i] === 'correct'}
+
                                             />
                                         </>
                                     )}
@@ -242,19 +280,18 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                         value={act2[`${i}-type`] || ''}
                                         onChange={(e) => setAct2(prev => ({ ...prev, [`${i}-type`]: e.target.value }))}
                                         className={selectClass(act2Results[i] ?? null)}
-                                        disabled={act2Results[i] === true}
+                                        disabled={act2Results[i] === 'correct'}
+
                                     >
                                         <option value="">Selecciona</option>
                                         <option value="exacta">es exacta</option>
                                         <option value="inexacta">es inexacta</option>
                                     </select>
-                                    <button onClick={() => handleAct2Listo(i)}
-                                        className="px-4 py-1 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded"
-                                        disabled={act2Results[i] === true}>
-                                        ¿LISTO?
-                                    </button>
-                                    {act2Results[i] === true && <span className="text-green-600 font-bold">✅</span>}
-                                    {act2Results[i] === false && <span className="text-red-500 font-bold">❌</span>}
+                                    <FeedbackButton
+                                        onCheck={() => handleAct2Listo(i)}
+                                        onReset={() => resetAct2(i)}
+                                        status={act2Results[i] ?? null}
+                                    />
                                 </div>
                             </div>
                         ))}
@@ -290,7 +327,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                         value={act3[`${i}-a`] || ''}
                                         onChange={(e) => setAct3(prev => ({ ...prev, [`${i}-a`]: e.target.value }))}
                                         className={inputClass(act3Results[i] ?? null)}
-                                        disabled={act3Results[i] === true}
+                                        disabled={act3Results[i] === 'correct'}
+
                                     />
                                 </div>
 
@@ -301,7 +339,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                         value={act3[`${i}-hasR`] || ''}
                                         onChange={(e) => setAct3(prev => ({ ...prev, [`${i}-hasR`]: e.target.value }))}
                                         className={selectClass(act3Results[i] ?? null)}
-                                        disabled={act3Results[i] === true}
+                                        disabled={act3Results[i] === 'correct'}
+
                                     >
                                         <option value="">...</option>
                                         <option value="si">Sí</option>
@@ -317,7 +356,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                                 onChange={(e) => setAct3(prev => ({ ...prev, [`${i}-r`]: e.target.value }))}
                                                 className={inputClass(act3Results[i] ?? null)}
                                                 style={{ width: '48px' }}
-                                                disabled={act3Results[i] === true}
+                                                disabled={act3Results[i] === 'correct'}
+
                                             />
                                             {item.remainderUnit && (
                                                 <span className="text-sm text-gray-600 dark:text-gray-400">{item.remainderUnit}</span>
@@ -325,13 +365,11 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                         </>
                                     )}
 
-                                    <button onClick={() => handleAct3Listo(i)}
-                                        className="px-4 py-1 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded"
-                                        disabled={act3Results[i] === true}>
-                                        ¿LISTO?
-                                    </button>
-                                    {act3Results[i] === true && <span className="text-green-600 font-bold">✅</span>}
-                                    {act3Results[i] === false && <span className="text-red-500 font-bold">❌</span>}
+                                    <FeedbackButton
+                                        onCheck={() => handleAct3Listo(i)}
+                                        onReset={() => resetAct3(i)}
+                                        status={act3Results[i] ?? null}
+                                    />
                                 </div>
                             </div>
                         ))}

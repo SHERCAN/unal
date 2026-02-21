@@ -5,6 +5,8 @@ import { PlayVideoButton } from '@/components/PlayVideoButton';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
+
 
 interface Orange {
     id: number;
@@ -105,12 +107,15 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
         Array.from({ length: TOTAL_ORANGES }, (_, i) => ({ id: i, inBox: null }))
     );
     const [cDraggedId, setCDraggedId] = useState<number | null>(null);
-    const [cStageComplete, setCStageComplete] = useState(false);
+    const [cStageResult, setCStageResult] = useState<'correct' | 'incorrect' | null>(null);
+
 
     // State - Stage P
     const [boxInputs, setBoxInputs] = useState<string[]>(Array(BOX_COUNT).fill(''));
     const [finalAnswer, setFinalAnswer] = useState('');
-    const [pStageCheck, setPStageCheck] = useState<'idle' | 'correct' | 'incorrect'>('idle');
+    const [pStageResult, setPStageResult] = useState<'correct' | 'incorrect' | null>(null);
+    const [pStageCheck, setPStageCheck] = useState<'idle' | 'correct' | 'incorrect'>('idle'); // Kept for logic if needed but we'll use result
+
 
     // State - Stage P (Pictorial - Interactive)
     const [pOranges, setPOranges] = useState<{ id: number; boxId: number | null }[]>(
@@ -138,8 +143,9 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
     const resetStageP = () => {
         setPOranges(Array.from({ length: TOTAL_ORANGES }, (_, i) => ({ id: i, boxId: null })));
         setFinalAnswer('');
-        setPStageCheck('idle');
+        setPStageResult(null);
     };
+
 
     // Video Tracking
     const VIDEO_TRACKING_IDS = {
@@ -158,12 +164,13 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
         const boxes = Array.from({ length: BOX_COUNT }, (_, i) => i + 1);
         const isDistributedCorrectly = boxes.every(boxId => getOrangesInBox(boxId).length === ORANGES_PER_BOX);
 
-        if (isDistributedCorrectly && !cStageComplete) {
+        if (isDistributedCorrectly && !cStageResult) {
             // Optional: Auto-complete or wait for button? 
             // The image implies a check might be needed or it's interactive.
             // Let's rely on a explicit check or just visual feedback.
         }
-    }, [oranges, cStageComplete]);
+    }, [oranges, cStageResult]);
+
 
     const handleDragStart = (e: React.DragEvent, id: number) => {
         setCDraggedId(id);
@@ -191,18 +198,19 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
         const boxes = Array.from({ length: BOX_COUNT }, (_, i) => i + 1);
         const isCorrect = boxes.every(boxId => getOrangesInBox(boxId).length === ORANGES_PER_BOX);
         if (isCorrect) {
-            setCStageComplete(true);
+            setCStageResult('correct');
             completeStage('division-dist-c');
         } else {
-            // Add shake/error feedback logic here if desired
-            alert('Asegúrate de repartir todas las naranjas equitativamente.');
+            setCStageResult('incorrect');
         }
     };
 
+
     const resetStageC = () => {
         setOranges(Array.from({ length: TOTAL_ORANGES }, (_, i) => ({ id: i, inBox: null })));
-        setCStageComplete(false);
+        setCStageResult(null);
     };
+
 
     // Stage P Logic
     // Inputs are now read-only derived from pOranges state
@@ -213,12 +221,13 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
         const isCorrect = finalAnswer.trim() === '6';
 
         if (isCorrect) {
-            setPStageCheck('correct');
+            setPStageResult('correct');
             completeStage('division-dist-p');
         } else {
-            setPStageCheck('incorrect');
+            setPStageResult('incorrect');
         }
     };
+
 
     // Video Modal
     /* videoModal list removed */
@@ -229,9 +238,10 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
     return (
         <BookPageContainer
             zoom={zoom}
-            moduleHeader={{ 
+            moduleHeader={{
                 //icon: '/division-icon.png', 
-                name: 'División' }}
+                name: 'División'
+            }}
             pageId="division-distribution"
         >
             <style jsx>{`
@@ -332,16 +342,13 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
 
                             <div className="flex flex-col items-center py-4">
                                 <div className="flex items-center gap-4 mb-2">
-                                    <button
-                                        onClick={checkStageC}
-                                        className="bg-purple-600 text-white px-4 py-1 rounded-md font-bold uppercase text-sm hover:bg-purple-700 transition"
-                                    >
-                                        ¿LISTO?
-                                    </button>
-
+                                    <FeedbackButton
+                                        onCheck={checkStageC}
+                                        onReset={resetStageC}
+                                        status={cStageResult}
+                                    />
                                 </div>
 
-                                {cStageComplete && <div className="text-green-600 font-bold mb-2 celebrate-animation">¡CORRECTO!</div>}
 
                                 <div className="flex flex-col md:flex-row items-end justify-center w-full gap-8">
                                     {/* Boxes Area */}
@@ -416,7 +423,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                     <div className="flex-1 relative border-2 border-blue-300 dark:border-blue-900 p-4 rounded-r-lg -ml-0.5 rounded-tl-none">
 
                         <div className="flex items-center gap-2 mb-4">
-                            <p className="font-medium text-gray-700 dark:text-gray-300 font-semibold" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
+                            <p className="text-gray-700 dark:text-gray-300 font-semibold" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                 Hay 24 naranjas en cuadro.
                             </p>
                             <PlayVideoButton
@@ -446,7 +453,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                         </div>
 
                         <div className="flex items-center gap-2 mb-4">
-                            <p className="font-medium text-gray-700 dark:text-gray-300 font-semibold" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
+                            <p className="text-gray-700 dark:text-gray-300 font-semibold" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                 Se reparte en 4 partes iguales.
                             </p>
                             <PlayVideoButton
@@ -507,37 +514,13 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                 </p>
                             </div>
 
-                            <button
-                                onClick={checkStageP}
-                                className="bg-purple-600 text-white px-6 py-2 rounded-md font-bold uppercase hover:bg-purple-700 transition shadow-lg"
-                            >
-                                ¿LISTO?
-                            </button>
+                            <FeedbackButton
+                                onCheck={checkStageP}
+                                onReset={resetStageP}
+                                status={pStageResult}
+                            />
                         </div>
 
-                        {pStageCheck === 'correct' && (
-                            <div className="relative flex items-center justify-center gap-2 mt-4">
-                                <span className="text-green-600 font-black text-2xl celebrate-animation">
-                                    CORRECTO
-                                </span>
-                            </div>
-                        )}
-                        {pStageCheck === 'incorrect' && (
-                            <div className="relative flex items-center justify-center gap-3 mt-4">
-                                <span className="text-orange-500 font-black text-2xl shake-animation">
-                                    INCORRECTO
-                                </span>
-                                <button
-                                    onClick={() => setPStageCheck('idle')}
-                                    className="p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-all shadow-md"
-                                    title="Reintentar"
-                                >
-                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                    </svg>
-                                </button>
-                            </div>
-                        )}
                     </div>
                 </div>
             </div>

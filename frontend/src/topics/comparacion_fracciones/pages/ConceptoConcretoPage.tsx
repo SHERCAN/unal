@@ -4,6 +4,8 @@ import { PlayVideoButton } from '@/components/PlayVideoButton';
 import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
+
 
 /**
  * Frame 185 — Comparación de Fracciones
@@ -35,17 +37,19 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     const [listoResult, setListoResult] = useState<'correct' | 'incorrect' | null>(null);
 
     const handleListo = () => {
-        // Rojo (7/10) vs Morado (4/10)? Or based on image visual?
-        // Let's assume Scenario: Rojo 3/5, Morado 2/5 
-        // Based on "felizrojo" and "tristemorado" assets implication?
-        // Let's create a scenario: Rojo gana.
-
+        // Rojo (3/5) vs Morado (2/5)
         if (answer === 'rojo') {
             setListoResult('correct');
         } else {
             setListoResult('incorrect');
         }
     };
+
+    const handleReset = () => {
+        setAnswer('');
+        setListoResult(null);
+    };
+
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Comparación de Fracciones' }} pageId="comp-frac-concepto-concreto">
@@ -142,23 +146,13 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                 </button>
                             </div>
 
-                            <button onClick={handleListo}
-                                className="w-full md:w-auto px-12 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl shadow-md transform active:scale-95 transition-all text-lg">
-                                ¿LISTO?
-                            </button>
-
-                            {listoResult === 'correct' && (
-                                <div className="animate-bounce mt-4">
-                                    <p className="text-green-600 font-black text-xl">✅ ¡Correcto!</p>
-                                    <p className="text-gray-600">3/5 es mayor que 2/5</p>
-                                </div>
-                            )}
-                            {listoResult === 'incorrect' && (
-                                <div className="animate-shake mt-4">
-                                    <p className="text-red-500 font-bold text-lg">❌ Inténtalo de nuevo</p>
-                                    <p className="text-sm text-gray-500">Mira cuál barra es más larga.</p>
-                                </div>
-                            )}
+                            <div className="flex justify-center mt-6">
+                                <FeedbackButton
+                                    onCheck={handleListo}
+                                    onReset={handleReset}
+                                    status={listoResult}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>

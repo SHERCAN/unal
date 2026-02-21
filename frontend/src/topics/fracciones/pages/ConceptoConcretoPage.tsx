@@ -4,6 +4,8 @@ import { PlayVideoButton } from '@/components/PlayVideoButton';
 import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
+
 
 interface Props { zoom?: number; }
 
@@ -306,26 +308,11 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
                     {/* ── LISTO button ── */}
                     <div className="flex flex-col items-center mt-3 gap-2">
-                        <div className="flex gap-3">
-                            {listoResultC !== 'correct' && (
-                                <button onClick={handleListoC}
-                                    className="px-6 py-2 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white font-bold rounded-md shadow-md transform active:scale-95 transition-all text-sm">
-                                    ¿LISTO?
-                                </button>
-                            )}
-                            {listoResultC !== null && (
-                                <button onClick={handleResetC}
-                                    className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-md transition-colors text-sm">
-                                    Reiniciar
-                                </button>
-                            )}
-                        </div>
-                        {listoResultC === 'correct' && (
-                            <p className="text-green-600 font-bold animate-bounce text-sm">✅ ¡Muy bien! Serviste 3 porciones de pizza.</p>
-                        )}
-                        {listoResultC === 'incorrect' && (
-                            <p className="text-red-500 font-bold text-sm">❌ Debes llevar exactamente 3 porciones a las mesas. Tienes {Object.values(sliceLocations).filter(l => l > 0).length}.</p>
-                        )}
+                        <FeedbackButton
+                            onCheck={handleListoC}
+                            onReset={handleResetC}
+                            status={listoResultC}
+                        />
                     </div>
                 </div>
             </div>
@@ -440,30 +427,11 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
                     {/* ── LISTO button ── */}
                     <div className="flex flex-col items-center mt-6 gap-2">
-                        <div className="flex gap-3">
-                            {listoResultP !== 'correct' && (
-                                <button onClick={handleListoP}
-                                    className="px-6 py-2 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white font-bold rounded-md shadow-md transform active:scale-95 transition-all text-sm">
-                                    ¿LISTO?
-                                </button>
-                            )}
-                            {listoResultP !== null && (
-                                <button onClick={handleResetP}
-                                    className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-md transition-colors text-sm">
-                                    Reiniciar
-                                </button>
-                            )}
-                        </div>
-                        {listoResultP === 'correct' && (
-                            <p className="text-green-600 font-bold animate-bounce text-sm">
-                                ✅ ¡Correcto! Quedan {totalPortions - removedPortions.length} de {totalPortions} porciones → {totalPortions - removedPortions.length}/{totalPortions}
-                            </p>
-                        )}
-                        {listoResultP === 'incorrect' && (
-                            <p className="text-red-500 font-bold text-sm">
-                                ❌ Debes quitar exactamente 3 porciones. Tienes {removedPortions.length} en el área.
-                            </p>
-                        )}
+                        <FeedbackButton
+                            onCheck={handleListoP}
+                            onReset={handleResetP}
+                            status={listoResultP}
+                        />
                     </div>
                 </div>
             </div>

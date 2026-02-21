@@ -4,6 +4,8 @@ import { PlayVideoButton } from '@/components/PlayVideoButton';
 import React, { useState, useRef, useCallback } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
+
 
 interface Props { zoom?: number; }
 
@@ -71,6 +73,11 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         await submitExercise('frac-equiv-vf', allCorrect);
     };
 
+    const resetAmp = () => { setAmpAnswers({}); setAmpResult(null); };
+    const resetSimp = () => { setSimpAnswers({}); setSimpResult(null); };
+    const resetVF = () => { setVfAnswers({}); setVfResult(null); };
+
+
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones Equivalentes' }} pageId="frac-equiv-ejercicios">
             <div className="flex items-center gap-2 mb-6">
@@ -110,15 +117,12 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                     </div>
 
                     <div className="flex justify-center mt-3">
-                        {ampResult !== 'correct' && (
-                            <button onClick={handleCheckAmp}
-                                className="px-5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg text-sm">
-                                ¿LISTO?
-                            </button>
-                        )}
+                        <FeedbackButton
+                            onCheck={handleCheckAmp}
+                            onReset={resetAmp}
+                            status={ampResult}
+                        />
                     </div>
-                    {ampResult === 'correct' && <p className="text-center text-green-600 font-bold text-sm mt-1">✅ ¡Correcto!</p>}
-                    {ampResult === 'incorrect' && <p className="text-center text-red-500 font-bold text-sm mt-1">❌ Multiplica ambos por el factor.</p>}
                 </div>
 
                 {/* ACTIVITY 2: Simplification */}
@@ -152,15 +156,12 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                     </div>
 
                     <div className="flex justify-center mt-3">
-                        {simpResult !== 'correct' && (
-                            <button onClick={handleCheckSimp}
-                                className="px-5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg text-sm">
-                                ¿LISTO?
-                            </button>
-                        )}
+                        <FeedbackButton
+                            onCheck={handleCheckSimp}
+                            onReset={resetSimp}
+                            status={simpResult}
+                        />
                     </div>
-                    {simpResult === 'correct' && <p className="text-center text-green-600 font-bold text-sm mt-1">✅ ¡Correcto!</p>}
-                    {simpResult === 'incorrect' && <p className="text-center text-red-500 font-bold text-sm mt-1">❌ Divide ambos por el factor.</p>}
                 </div>
 
                 {/* ACTIVITY 3: V/F */}
@@ -192,15 +193,12 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                     </div>
 
                     <div className="flex justify-center mt-3">
-                        {vfResult !== 'correct' && (
-                            <button onClick={handleCheckVF}
-                                className="px-5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg text-sm">
-                                ¿LISTO?
-                            </button>
-                        )}
+                        <FeedbackButton
+                            onCheck={handleCheckVF}
+                            onReset={resetVF}
+                            status={vfResult}
+                        />
                     </div>
-                    {vfResult === 'correct' && <p className="text-center text-green-600 font-bold text-sm mt-1">✅ ¡Correcto!</p>}
-                    {vfResult === 'incorrect' && <p className="text-center text-red-500 font-bold text-sm mt-1">❌ Usa productos cruzados para verificar.</p>}
                 </div>
             </div>
 

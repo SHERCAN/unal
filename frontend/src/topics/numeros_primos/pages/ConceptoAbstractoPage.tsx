@@ -4,6 +4,8 @@ import { PlayVideoButton } from '@/components/PlayVideoButton';
 import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
+
 
 /**
  * Frame 168 — Números Primos: Concepto Abstracto
@@ -194,22 +196,13 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                 ))}
                             </div>
 
-                            <div className="flex items-center gap-3 justify-center mt-4">
-                                {listoResult !== 'correct' && (
-                                    <button onClick={handleListo}
-                                        className="px-5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded text-sm">
-                                        ¿LISTO?
-                                    </button>
-                                )}
-                                {listoResult === 'incorrect' && (
-                                    <button onClick={handleReset}
-                                        className="px-4 py-1.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded text-sm">
-                                        Reiniciar
-                                    </button>
-                                )}
+                            <div className="flex justify-center mt-4">
+                                <FeedbackButton
+                                    onCheck={handleListo}
+                                    onReset={handleReset}
+                                    status={listoResult}
+                                />
                             </div>
-                            {listoResult === 'correct' && <p className="text-center text-green-600 dark:text-green-400 font-bold text-sm mt-2">✅ ¡Correcto!</p>}
-                            {listoResult === 'incorrect' && <p className="text-center text-red-500 font-bold text-sm mt-2">❌ Revisa tus respuestas.</p>}
                         </div>
                     </div>
                 </div>

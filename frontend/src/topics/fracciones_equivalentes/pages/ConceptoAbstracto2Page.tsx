@@ -4,6 +4,8 @@ import { PlayVideoButton } from '@/components/PlayVideoButton';
 import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
+
 
 interface Props { zoom?: number; }
 
@@ -45,6 +47,10 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
             parseInt(ampAnswers['1-n']) === 6 && parseInt(ampAnswers['1-d']) === 15;
         setAmpResult(correct ? 'correct' : 'incorrect');
     };
+
+    const resetSimp = () => { setSimpAnswers({}); setSimpResult(null); };
+    const resetAmp = () => { setAmpAnswers({}); setAmpResult(null); };
+
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones Equivalentes' }} pageId="frac-equiv-concepto-abstracto-2">
@@ -103,15 +109,12 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                             </div>
 
                             <div className="flex justify-center mt-2">
-                                {simpResult !== 'correct' && (
-                                    <button onClick={handleCheckSimp}
-                                        className="px-5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg text-sm">
-                                        ¿LISTO?
-                                    </button>
-                                )}
+                                <FeedbackButton
+                                    onCheck={handleCheckSimp}
+                                    onReset={resetSimp}
+                                    status={simpResult}
+                                />
                             </div>
-                            {simpResult === 'correct' && <p className="text-center text-green-600 font-bold text-sm mt-1">✅ ¡Correcto!</p>}
-                            {simpResult === 'incorrect' && <p className="text-center text-red-500 font-bold text-sm mt-1">❌ Divide ambos números por el factor indicado.</p>}
                         </div>
 
                         <hr className="border-gray-200 dark:border-gray-700" />
@@ -164,15 +167,12 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                             </div>
 
                             <div className="flex justify-center mt-2">
-                                {ampResult !== 'correct' && (
-                                    <button onClick={handleCheckAmp}
-                                        className="px-5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg text-sm">
-                                        ¿LISTO?
-                                    </button>
-                                )}
+                                <FeedbackButton
+                                    onCheck={handleCheckAmp}
+                                    onReset={resetAmp}
+                                    status={ampResult}
+                                />
                             </div>
-                            {ampResult === 'correct' && <p className="text-center text-green-600 font-bold text-sm mt-1">✅ ¡Correcto!</p>}
-                            {ampResult === 'incorrect' && <p className="text-center text-red-500 font-bold text-sm mt-1">❌ Multiplica ambos números por el factor indicado.</p>}
                         </div>
                     </div>
                 </div>

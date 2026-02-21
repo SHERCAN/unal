@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
+
 
 /**
  * División Inexacta
@@ -137,6 +139,12 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
             setCircleResult('incorrect');
         }
     };
+
+    const handleCircleReset = () => {
+        setCircles(Array.from({ length: totalCircles }, (_, i) => ({ id: i, inGroup: null })));
+        setCircleResult(null);
+    };
+
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'División Inexacta' }} pageId="div-inexacta-concepto-concreto">
@@ -287,10 +295,11 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
                                     {/* ¿LISTO? button — bottom of right column */}
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
-                                        <button onClick={handleMedalListo}
-                                            className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-black rounded text-sm tracking-wide">
-                                            ¿LISTO?
-                                        </button>
+                                        <FeedbackButton
+                                            onCheck={handleMedalListo}
+                                            onReset={handleMedalReset}
+                                            status={medalResult}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -351,10 +360,11 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                     <p className="text-4xl font-bold text-yellow-500 mt-2">{getCirclesInPool().length}</p>
 
                                     <div className="flex items-center gap-3 mt-3">
-                                        <button onClick={handleCircleListo}
-                                            className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-black rounded text-sm tracking-wide">
-                                            ¿LISTO?
-                                        </button>
+                                        <FeedbackButton
+                                            onCheck={handleCircleListo}
+                                            onReset={handleCircleReset}
+                                            status={circleResult}
+                                        />
                                     </div>
                                 </div>
 
@@ -389,13 +399,6 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                     })}
                                 </div>
                             </div>
-
-                            {circleResult === 'correct' && (
-                                <p className="text-center text-green-600 dark:text-green-400 font-bold mt-3">✅ ¡Correcto! 17 ÷ 3 = 5, resto 2. Sobran 2 círculos.</p>
-                            )}
-                            {circleResult === 'incorrect' && (
-                                <p className="text-center text-red-500 dark:text-red-400 font-bold text-sm mt-3">❌ Los 3 grupos deben tener la misma cantidad y deben sobrar 2.</p>
-                            )}
                         </div>
                     </div>
                 </div>

@@ -4,6 +4,8 @@ import { PlayVideoButton } from '@/components/PlayVideoButton';
 import React, { useState, useRef } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
+
 
 interface Props { zoom?: number; }
 
@@ -95,21 +97,12 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                 </div>
 
                 <div className="flex items-center gap-3 justify-center mt-4">
-                    {result !== 'correct' && (
-                        <button onClick={handleCheck}
-                            className="px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-lg text-sm">
-                            ¿LISTO?
-                        </button>
-                    )}
-                    {result === 'incorrect' && (
-                        <button onClick={handleReset}
-                            className="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-lg text-sm">
-                            Reiniciar
-                        </button>
-                    )}
+                    <FeedbackButton
+                        onCheck={handleCheck}
+                        onReset={handleReset}
+                        status={result}
+                    />
                 </div>
-                {result === 'correct' && <p className="text-center text-green-600 font-bold mt-2">✅ ¡Excelente! Comparaste todas las fracciones correctamente.</p>}
-                {result === 'incorrect' && <p className="text-center text-red-500 font-bold text-sm mt-2">❌ Revisa: usa productos cruzados (a×d vs b×c).</p>}
             </div>
 
             {/* VideoModal removed */}

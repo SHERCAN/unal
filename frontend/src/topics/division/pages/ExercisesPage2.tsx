@@ -4,6 +4,8 @@ import { PlayVideoButton } from '@/components/PlayVideoButton';
 import React, { useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
+
 
 interface ExercisesPage2Props {
     zoom?: number;
@@ -25,7 +27,14 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
     // Q2: 88/10 = 8. False (F) (88/10 is 8 with remainder 8, or 8.8. "Las 8 atletas corren en cada carril" implies exact division or total 80).
     const [act1_q1, setAct1_q1] = useState<'V' | 'F' | null>(null);
     const [act1_q2, setAct1_q2] = useState<'V' | 'F' | null>(null);
-    const [act1Status, setAct1Status] = useState<'idle' | 'correct' | 'incorrect'>('idle');
+    const [act1Status, setAct1Status] = useState<'correct' | 'incorrect' | null>(null);
+
+    const resetAct1 = () => {
+        setAct1_q1(null);
+        setAct1_q2(null);
+        setAct1Status(null);
+    };
+
 
     const checkAct1 = () => {
         if (act1_q1 === 'V' && act1_q2 === 'F') {
@@ -67,7 +76,19 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
         Array(4).fill(null).map(() => ({ a: '', b: '', res: '' }))
     );
 
-    const [act4Status, setAct4Status] = useState<'idle' | 'correct' | 'incorrect'>('idle');
+    const [act4Status, setAct4Status] = useState<'correct' | 'incorrect' | null>(null);
+
+    const resetAct4 = () => {
+        setAct4_h_div(['', '', '']);
+        setAct4_v_dividend('');
+        setAct4_v_divisor('');
+        setAct4_v_quotient('');
+        setAct4_v_sub('');
+        setAct4_v_rem('');
+        setAct4_m_rows(Array(4).fill(null).map(() => ({ a: '', b: '', res: '' })));
+        setAct4Status(null);
+    };
+
 
     const checkAct4 = () => {
         // Logic:
@@ -109,7 +130,13 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
     // 2. 45 / 9 = 6  -> Incorrect (F)
     // 3. 72 / 6 = 14 -> Incorrect (F)
     const [act5_inputs, setAct5_inputs] = useState(['', '', '']);
-    const [act5Status, setAct5Status] = useState<'idle' | 'correct' | 'incorrect'>('idle');
+    const [act5Status, setAct5Status] = useState<'correct' | 'incorrect' | null>(null);
+
+    const resetAct5 = () => {
+        setAct5_inputs(['', '', '']);
+        setAct5Status(null);
+    };
+
 
     const checkAct5 = () => {
         // Expecting 'F' on index 1 and 2.
@@ -133,9 +160,10 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
     return (
         <BookPageContainer
             zoom={zoom}
-            moduleHeader={{ 
+            moduleHeader={{
                 //icon: '/division-icon.png', 
-                name: 'División' }}
+                name: 'División'
+            }}
             pageId="division-exercises-2"
         >
             <div className="flex flex-col gap-10 max-w-4xl mx-auto pb-32">
@@ -155,9 +183,10 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                                 Hay 40 caramelos para repartir en partes iguales entre 10 niños. <br />
                                 Cada niño recibe 4 caramelos.
                                 <span className="inline-flex gap-2 ml-4 align-middle">
-                                    <SelectButton label="V" selected={act1_q1 === 'V'} onClick={() => { setAct1Status('idle'); setAct1_q1('V'); }} />
-                                    <SelectButton label="F" selected={act1_q1 === 'F'} onClick={() => { setAct1Status('idle'); setAct1_q1('F'); }} />
+                                    <SelectButton label="V" selected={act1_q1 === 'V'} onClick={() => { setAct1Status(null); setAct1_q1('V'); }} />
+                                    <SelectButton label="F" selected={act1_q1 === 'F'} onClick={() => { setAct1Status(null); setAct1_q1('F'); }} />
                                 </span>
+
                             </p>
                         </div>
                     </div>
@@ -173,19 +202,22 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                                 En una competencia participan 88 atletas. Se reparten en 10 carriles de la pista. <br />
                                 Las 8 atletas corren en cada carril.
                                 <span className="inline-flex gap-2 ml-4 align-middle">
-                                    <SelectButton label="V" selected={act1_q2 === 'V'} onClick={() => { setAct1Status('idle'); setAct1_q2('V'); }} />
-                                    <SelectButton label="F" selected={act1_q2 === 'F'} onClick={() => { setAct1Status('idle'); setAct1_q2('F'); }} />
+                                    <SelectButton label="V" selected={act1_q2 === 'V'} onClick={() => { setAct1Status(null); setAct1_q2('V'); }} />
+                                    <SelectButton label="F" selected={act1_q2 === 'F'} onClick={() => { setAct1Status(null); setAct1_q2('F'); }} />
                                 </span>
+
                             </p>
                         </div>
                     </div>
 
                     <div className="flex justify-start gap-4 mt-2">
-                        <CheckButton onClick={checkAct1} />
-                        <div className="min-w-[100px] text-center">
-                            <Feedback status={act1Status} />
-                        </div>
+                        <FeedbackButton
+                            onCheck={checkAct1}
+                            onReset={resetAct1}
+                            status={act1Status}
+                        />
                     </div>
+
                 </div>
 
                 {/* --- ACTIVITY 4 --- */}
@@ -211,11 +243,12 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
 
                         {/* Horizontal Division */}
                         <div className="flex items-center gap-2 text-2xl font-bold justify-center md:justify-start text-gray-800 dark:text-white">
-                            <InputBox value={act4_h_div[0]} onChange={v => { const n = [...act4_h_div]; n[0] = v; setAct4_h_div(n); setAct4Status('idle'); }} />
+                            <InputBox value={act4_h_div[0]} onChange={v => { const n = [...act4_h_div]; n[0] = v; setAct4_h_div(n); setAct4Status(null); }} />
                             <span>÷</span>
-                            <InputBox value={act4_h_div[1]} onChange={v => { const n = [...act4_h_div]; n[1] = v; setAct4_h_div(n); setAct4Status('idle'); }} />
+                            <InputBox value={act4_h_div[1]} onChange={v => { const n = [...act4_h_div]; n[1] = v; setAct4_h_div(n); setAct4Status(null); }} />
                             <span>=</span>
-                            <InputBox value={act4_h_div[2]} onChange={v => { const n = [...act4_h_div]; n[2] = v; setAct4_h_div(n); setAct4Status('idle'); }} />
+                            <InputBox value={act4_h_div[2]} onChange={v => { const n = [...act4_h_div]; n[2] = v; setAct4_h_div(n); setAct4Status(null); }} />
+
                         </div>
 
                         <hr className="border-gray-200 dark:border-gray-700" />
@@ -226,32 +259,34 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                                 {/* Left Side: Dividend, Subtraction, Remainder */}
                                 <div className="flex flex-col items-end gap-1">
                                     {/* Dividend */}
-                                    <InputBox value={act4_v_dividend} onChange={v => { setAct4_v_dividend(v); setAct4Status('idle'); }} className="w-16 h-16 text-3xl" />
+                                    <InputBox value={act4_v_dividend} onChange={v => { setAct4_v_dividend(v); setAct4Status(null); }} className="w-16 h-16 text-3xl" />
 
                                     {/* Subtraction with minus sign */}
                                     <div className="relative">
                                         <span className="absolute -left-8 top-2 text-4xl font-bold text-gray-800 dark:text-gray-200 select-none">-</span>
-                                        <InputBox value={act4_v_sub} onChange={v => { setAct4_v_sub(v); setAct4Status('idle'); }} className="w-16 h-16 text-3xl" />
+                                        <InputBox value={act4_v_sub} onChange={v => { setAct4_v_sub(v); setAct4Status(null); }} className="w-16 h-16 text-3xl" />
                                     </div>
+
 
                                     {/* Line */}
                                     <div className="w-16 h-1 bg-black dark:bg-white rounded-full"></div>
 
                                     {/* Remainder */}
-                                    <InputBox value={act4_v_rem} onChange={v => { setAct4_v_rem(v); setAct4Status('idle'); }} className="w-16 h-16 text-3xl" />
+                                    <InputBox value={act4_v_rem} onChange={v => { setAct4_v_rem(v); setAct4Status(null); }} className="w-16 h-16 text-3xl" />
                                 </div>
 
                                 {/* Right Side: Bracket + Divisor + Quotient */}
                                 <div className="flex flex-col">
                                     {/* Top part: Bracket L-shape + Divisor */}
                                     <div className="border-l-4 border-b-4 border-black dark:border-white pl-2 pb-2 mb-2">
-                                        <InputBox value={act4_v_divisor} onChange={v => { setAct4_v_divisor(v); setAct4Status('idle'); }} className="w-16 h-16 text-3xl border-none focus:ring-0 bg-transparent" />
+                                        <InputBox value={act4_v_divisor} onChange={v => { setAct4_v_divisor(v); setAct4Status(null); }} className="w-16 h-16 text-3xl border-none focus:ring-0 bg-transparent" />
                                     </div>
 
                                     {/* Quotient (under the line) */}
                                     <div className="pl-2">
-                                        <InputBox value={act4_v_quotient} onChange={v => { setAct4_v_quotient(v); setAct4Status('idle'); }} className="w-16 h-16 text-3xl" />
+                                        <InputBox value={act4_v_quotient} onChange={v => { setAct4_v_quotient(v); setAct4Status(null); }} className="w-16 h-16 text-3xl" />
                                     </div>
+
                                 </div>
                             </div>
 
@@ -263,27 +298,30 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                                 {act4_m_rows.map((row, i) => (
                                     <div key={i} className="flex items-center gap-2">
                                         <InputBox value={row.a} onChange={v => {
-                                            const n = [...act4_m_rows]; n[i].a = v; setAct4_m_rows(n); setAct4Status('idle');
+                                            const n = [...act4_m_rows]; n[i].a = v; setAct4_m_rows(n); setAct4Status(null);
                                         }} className="w-14 h-12" />
                                         <span className="text-xl font-bold">×</span>
                                         <InputBox value={row.b} onChange={v => {
-                                            const n = [...act4_m_rows]; n[i].b = v; setAct4_m_rows(n); setAct4Status('idle');
+                                            const n = [...act4_m_rows]; n[i].b = v; setAct4_m_rows(n); setAct4Status(null);
                                         }} className="w-14 h-12" />
                                         <span className="text-xl font-bold">=</span>
                                         <InputBox value={row.res} onChange={v => {
-                                            const n = [...act4_m_rows]; n[i].res = v; setAct4_m_rows(n); setAct4Status('idle');
+                                            const n = [...act4_m_rows]; n[i].res = v; setAct4_m_rows(n); setAct4Status(null);
                                         }} className="w-14 h-12" />
+
                                     </div>
                                 ))}
                             </div>
                         </div>
 
                         <div className="flex justify-start gap-4 mt-2">
-                            <CheckButton onClick={checkAct4} />
-                            <div className="min-w-[100px] text-center">
-                                <Feedback status={act4Status} />
-                            </div>
+                            <FeedbackButton
+                                onCheck={checkAct4}
+                                onReset={resetAct4}
+                                status={act4Status}
+                            />
                         </div>
+
                     </div>
                 </div>
 
@@ -317,18 +355,23 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                                         const n = [...act5_inputs];
                                         n[item.idx] = v.toUpperCase(); // Force uppercase V/F
                                         setAct5_inputs(n);
-                                        setAct5Status('idle');
+                                        setAct5Status(null);
                                     }}
                                     className={`w-14 h-14 text-2xl uppercase ${act5Status === 'correct' && item.idx > 0 ? 'text-red-600 font-black' : ''}`}
                                     maxLength={1}
                                 />
+
                             </div>
                         ))}
 
                         <div className="flex justify-start items-center gap-4 mt-2 flex-wrap">
-                            <CheckButton onClick={checkAct5} />
-                            <Feedback status={act5Status} />
+                            <FeedbackButton
+                                onCheck={checkAct5}
+                                onReset={resetAct5}
+                                status={act5Status}
+                            />
                         </div>
+
                     </div>
                 </div>
 
@@ -344,14 +387,6 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
 
 
 
-const CheckButton = ({ onClick }: { onClick: () => void }) => (
-    <button
-        onClick={onClick}
-        className="bg-purple-700 hover:bg-purple-800 text-white font-bold py-2 px-8 rounded-lg shadow-md transform active:scale-95 transition-all text-sm uppercase tracking-wide whitespace-nowrap shrink-0"
-    >
-        ¿Listo?
-    </button>
-);
 
 const SelectButton = ({ label, selected, onClick }: { label: string, selected: boolean, onClick: () => void }) => (
     <button
@@ -373,11 +408,3 @@ const InputBox = ({ value, onChange, className = "w-16 h-12", maxLength }: { val
     />
 );
 
-const Feedback = ({ status }: { status: 'idle' | 'correct' | 'incorrect' }) => {
-    if (status === 'idle') return null;
-    return (
-        <span className={`font-bold uppercase tracking-wider ${status === 'correct' ? 'text-green-600' : 'text-orange-500'}`}>
-            {status === 'correct' ? 'CORRECTO' : 'INCORRECTO'}
-        </span>
-    );
-};

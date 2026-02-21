@@ -4,7 +4,9 @@ import { PlayVideoButton } from '@/components/PlayVideoButton';
 import React, { useRef, useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
 import Image from 'next/image';
+
 
 // Import assets
 import tablaEjercicioImg from '../tablaEjercicio.png';
@@ -39,6 +41,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     // User needs to fill Num and Den columns.
     const [tableInputs, setTableInputs] = useState<{ [key: string]: string }>({});
     const [tableResults, setTableResults] = useState<{ [key: string]: 'correct' | 'incorrect' | null }>({});
+    const [tableTotalResult, setTableTotalResult] = useState<'correct' | 'incorrect' | null>(null);
+
 
     const tableData = [
         { id: 1, shape: 'triangle', num: 1, den: 2, color: 'bg-green-400' },
@@ -60,7 +64,13 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
             if (resN === 'incorrect' || resD === 'incorrect') allCorrect = false;
         });
         setTableResults(newResults);
+        setTableTotalResult(allCorrect ? 'correct' : 'incorrect');
     };
+
+    const resetTable = () => { setTableInputs({}); setTableResults({}); setTableTotalResult(null); };
+    const resetIsFrac = () => { setIsFracAnswers(Array(6).fill('')); setIsFracResult(null); };
+    const resetDef = () => { setDefNum(''); setDefDen(''); setDefResult(null); };
+
 
     // --- State for Exercise 2 (Is Fraction?) ---
     const [isFracAnswers, setIsFracAnswers] = useState<string[]>(Array(6).fill(''));
@@ -142,9 +152,11 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                     </div>
                                 </div>
                                 <div className="flex justify-center">
-                                    <button onClick={checkTable} className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded shadow-md">
-                                        ¿LISTO?
-                                    </button>
+                                    <FeedbackButton
+                                        onCheck={checkTable}
+                                        onReset={resetTable}
+                                        status={tableTotalResult}
+                                    />
                                 </div>
                             </div>
 
@@ -199,12 +211,12 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                 </div>
 
                                 <div className="flex justify-center">
-                                    <button onClick={checkIsFrac} className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded shadow-md">
-                                        ¿LISTO?
-                                    </button>
+                                    <FeedbackButton
+                                        onCheck={checkIsFrac}
+                                        onReset={resetIsFrac}
+                                        status={isFracResult}
+                                    />
                                 </div>
-                                {isFracResult === 'correct' && <p className="text-green-600 text-center font-bold">✅ ¡Correcto!</p>}
-                                {isFracResult === 'incorrect' && <p className="text-red-500 text-center font-bold">❌ Intenta de nuevo. Recuerda: para ser fracción, las partes deben ser IGUALES.</p>}
                             </div>
 
                             {/* EXERCISE 3: Definitions */}
@@ -247,12 +259,12 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                 </div>
 
                                 <div className="flex justify-center">
-                                    <button onClick={checkDef} className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded shadow-md">
-                                        ¿LISTO?
-                                    </button>
+                                    <FeedbackButton
+                                        onCheck={checkDef}
+                                        onReset={resetDef}
+                                        status={defResult}
+                                    />
                                 </div>
-                                {defResult === 'correct' && <p className="text-green-600 text-center font-bold">✅ ¡Correcto!</p>}
-                                {defResult === 'incorrect' && <p className="text-red-500 text-center font-bold">❌ Repasa las definiciones.</p>}
                             </div>
 
                         </div>

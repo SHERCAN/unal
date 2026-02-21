@@ -5,6 +5,8 @@ import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
+
 
 // Import assets
 import romboImg from '../rombo.png';
@@ -38,7 +40,8 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
     });
 
     // State for validation messages
-    const [results, setResults] = useState<{ [key: string]: string | null }>({});
+    const [results, setResults] = useState<{ [key: string]: 'correct' | 'incorrect' | null }>({});
+
 
     /* handleVideoComplete removed */
 
@@ -52,9 +55,15 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
         if (n === correctN && d === correctD) {
             setResults({ ...results, [id]: 'correct' });
         } else {
-            setResults({ ...results, [id]: `Incorrecto` });
+            setResults({ ...results, [id]: 'incorrect' });
         }
     };
+
+    const reset = (id: string) => {
+        setInputs(prev => ({ ...prev, [`${id}_n`]: '', [`${id}_d`]: '' }));
+        setResults(prev => ({ ...prev, [id]: null }));
+    };
+
 
     const validateAcordeon = () => {
         const n1 = inputs.ex3_n1;
@@ -62,18 +71,18 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
         const n2 = inputs.ex3_n2;
         const d2 = inputs.ex3_d2;
 
-        // Correct values: Item C (acordeonImg) represents triangles. 
-        // Based on original code: correctN="5", correctD="14". 
-        // Let's assume user wants to represent the two split parts or something similar.
-        // For now, I'll validate based on the provided correct N/D for any of the two slots or just check completion.
-        // Actually, I'll just check if BOTH are filled and valid (e.g. they match the intended split if specified).
-        // Since I don't have the "new" correct values for 2 fractions, I'll allow both to be correct if they match 5 and 14 respectively.
         if (n1 === "5" && d1 === "14" && n2 === "5" && d2 === "14") {
             setResults({ ...results, ex3: 'correct' });
         } else {
-            setResults({ ...results, ex3: 'Incorrecto' });
+            setResults({ ...results, ex3: 'incorrect' });
         }
     };
+
+    const resetAcordeon = () => {
+        setInputs(prev => ({ ...prev, ex3_n1: '', ex3_d1: '', ex3_n2: '', ex3_d2: '' }));
+        setResults(prev => ({ ...prev, ex3: null }));
+    };
+
 
     const FractionInput = ({ id_n, id_d, nValue, dValue, isCorrect, onNChange, onDChange }: any) => (
         <div className="flex flex-col items-center gap-1">
@@ -135,16 +144,16 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                         isCorrect={results[id] === 'correct'}
                         nValue={inputs[`${id}_n` as keyof typeof inputs]}
                         dValue={inputs[`${id}_d` as keyof typeof inputs]}
-                        onNChange={(val: string) => setInputs({ ...inputs, [`${id}_n`]: val })}
-                        onDChange={(val: string) => setInputs({ ...inputs, [`${id}_d`]: val })}
+                        onNChange={(val: string) => { setInputs({ ...inputs, [`${id}_n`]: val }); setResults({ ...results, [id]: null }); }}
+                        onDChange={(val: string) => { setInputs({ ...inputs, [`${id}_d`]: val }); setResults({ ...results, [id]: null }); }}
                     />
 
-                    <div className="flex flex-col gap-1 w-24">
-                        <button
-                            onClick={() => validate(id, correctN, correctD)}
-                            className={`font-black py-2 px-2 rounded-lg shadow-sm text-xs w-full transition-all active:scale-95 ${results[id] === 'correct' ? 'bg-green-600 text-white cursor-default' : 'bg-purple-600 hover:bg-purple-700 text-white'}`}>
-                            {results[id] === 'correct' ? '¡OK!' : 'LISTO'}
-                        </button>
+                    <div className="flex flex-col gap-1">
+                        <FeedbackButton
+                            onCheck={() => validate(id, correctN, correctD)}
+                            onReset={() => reset(id)}
+                            status={results[id]}
+                        />
                     </div>
                 </div>
             </div>
@@ -219,25 +228,25 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                             isCorrect={results.ex3 === 'correct'}
                                             nValue={inputs.ex3_n1}
                                             dValue={inputs.ex3_d1}
-                                            onNChange={(val: string) => setInputs({ ...inputs, ex3_n1: val })}
-                                            onDChange={(val: string) => setInputs({ ...inputs, ex3_d1: val })}
+                                            onNChange={(val: string) => { setInputs({ ...inputs, ex3_n1: val }); setResults({ ...results, ex3: null }); }}
+                                            onDChange={(val: string) => { setInputs({ ...inputs, ex3_d1: val }); setResults({ ...results, ex3: null }); }}
                                         />
                                         <span className="text-xl font-bold text-purple-600">+</span>
                                         <FractionInput
                                             isCorrect={results.ex3 === 'correct'}
                                             nValue={inputs.ex3_n2}
                                             dValue={inputs.ex3_d2}
-                                            onNChange={(val: string) => setInputs({ ...inputs, ex3_n2: val })}
-                                            onDChange={(val: string) => setInputs({ ...inputs, ex3_d2: val })}
+                                            onNChange={(val: string) => { setInputs({ ...inputs, ex3_n2: val }); setResults({ ...results, ex3: null }); }}
+                                            onDChange={(val: string) => { setInputs({ ...inputs, ex3_d2: val }); setResults({ ...results, ex3: null }); }}
                                         />
                                     </div>
 
-                                    <div className="flex flex-col gap-1 w-24">
-                                        <button
-                                            onClick={validateAcordeon}
-                                            className={`font-black py-2 px-2 rounded-lg shadow-sm text-xs w-full transition-all active:scale-95 ${results.ex3 === 'correct' ? 'bg-green-600 text-white cursor-default' : 'bg-purple-600 hover:bg-purple-700 text-white'}`}>
-                                            {results.ex3 === 'correct' ? '¡OK!' : 'LISTO'}
-                                        </button>
+                                    <div className="flex flex-col gap-1">
+                                        <FeedbackButton
+                                            onCheck={validateAcordeon}
+                                            onReset={resetAcordeon}
+                                            status={results.ex3}
+                                        />
                                     </div>
                                 </div>
                             </div>
