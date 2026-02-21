@@ -81,199 +81,195 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones Equivalentes' }} pageId="frac-equiv-concepto-abstracto-1">
-            <div className="flex flex-col items-center">
-                {/* Main Title */}
-                <h1 className="text-3xl font-black text-purple-800 mb-8 text-center italic tracking-tight uppercase">FRACCIONES EQUIVALENTES</h1>
+            {/* Main Title Section removed */}
+            <div className="relative ml-2 flex items-start">
+                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de]" style={{ borderColor: '#be90de' }}>
+                    A
+                </div>
+                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white border-[#be90de]">
 
-                <div className="relative ml-2 flex items-start">
-                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de]" style={{ borderColor: '#be90de' }}>
-                        A
-                    </div>
-                    <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white border-[#be90de]">
-
-                        <div className="space-y-6">
-                            <div className="flex items-center gap-3">
-                                <p className="text-lg text-gray-800 font-semibold leading-snug">
-                                    Según las actividades anteriores, el color verde es el mismo tamaño. Cambian los números como partes, pero no cambia la cantidad.
-                                </p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="" videoId="/pag25/vv-1" />
-                            </div>
-
-                            <div className="flex items-center gap-3">
-                                <p className="text-lg text-gray-800 font-semibold leading-snug">
-                                    Así, en notación matemática, representan la misma cantidad:
-                                </p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOTATION} title="Notación Matemática" videoId="/pag25/vv-2" />
-                            </div>
-
-                            <div className="flex justify-center py-4">
-                                <Image src={fraccionesEquivalentesImg} alt="Fracciones Equivalentes" className="h-32 w-auto object-contain" />
-                            </div>
-
-                            <div className="flex items-center gap-3">
-                                <p className="text-xl text-gray-800 font-semibold">
-                                    Estas fracciones se llaman <span style={{ color: '#e95352' }} className="font-bold">fracciones equivalentes</span>.
-                                </p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_EQUIV_DEF} title="" videoId="/pag25/vv-3" />
-                            </div>
-
-                            <div className="flex items-center gap-4 mt-8">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_DEF_CONCEPT} title="" videoId="/pag25/vv-4" />
-                                <div className="text-white font-bold px-6 py-2 rounded-lg text-xl shadow-sm" style={{ backgroundColor: '#e95352' }}>
-                                    ¿Qué son fracciones equivalentes?
-                                </div>
-                            </div>
-
-                            <p className="text-xl text-gray-800 font-semibold pl-12">
-                                Dos o más de fracciones son <span style={{ color: '#e95352' }} className="font-black">equivalentes</span> cuando representan la misma cantidad.
+                    <div className="space-y-6">
+                        <div className="flex items-center gap-3">
+                            <p className="text-lg text-gray-800 font-semibold leading-snug">
+                                Según las actividades anteriores, el color verde es el mismo tamaño. Cambian los números como partes, pero no cambia la cantidad.
                             </p>
+                            <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="" videoId="/pag25/vv-1" />
+                        </div>
 
-                            <div className="space-y-6 pt-4">
-                                <div className="flex items-center gap-4">
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_EXAMPLE} title="Ejemplo" videoId="/pag25/vv-5" />
-                                    <div className="bg-green-600 text-white font-bold px-4 py-1 rounded inline-block text-lg italic shadow-sm">
-                                        Ejemplo:
-                                    </div>
-                                    <p className="text-2xl text-gray-800 font-bold">
-                                        <Fraction num="3" den="5" size="text-2xl" color="text-gray-800" /> ,
-                                        <Fraction num="6" den="10" size="text-2xl" color="text-gray-800" /> y
-                                        <Fraction num="12" den="20" size="text-2xl" color="text-gray-800" /> son fracciones equivalentes.
-                                    </p>
-                                </div>
+                        <div className="flex items-center gap-3">
+                            <p className="text-lg text-gray-800 font-semibold leading-snug">
+                                Así, en notación matemática, representan la misma cantidad:
+                            </p>
+                            <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOTATION} title="Notación Matemática" videoId="/pag25/vv-2" />
+                        </div>
 
-                                <div className="flex items-center justify-center gap-8 pl-12">
-                                    <div className="flex items-center gap-3 text-4xl font-bold">
-                                        <Fraction num="3" den="5" color="text-gray-800" size="text-4xl" />
-                                        <span>=</span>
-                                        <Fraction num="6" den="10" color="text-gray-800" size="text-4xl" />
-                                        <span>=</span>
-                                        <Fraction num="12" den="20" color="text-gray-800" size="text-4xl" />
-                                    </div>
-                                    <div className="bg-purple-600 p-2 rounded-lg shadow-md flex items-center justify-center">
-                                        <MdOutlineStickyNote2 className="text-white text-3xl" />
-                                    </div>
+                        <div className="flex justify-center py-4">
+                            <Image src={fraccionesEquivalentesImg} alt="Fracciones Equivalentes" className="h-32 w-auto object-contain" />
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <p className="text-xl text-gray-800 font-semibold">
+                                Estas fracciones se llaman <span style={{ color: '#e95352' }} className="font-bold">fracciones equivalentes</span>.
+                            </p>
+                            <PlayVideoButton trackingId={VIDEO_TRACKING.A_EQUIV_DEF} title="" videoId="/pag25/vv-3" />
+                        </div>
+
+                        <div className="flex items-center gap-4 mt-8">
+                            <PlayVideoButton trackingId={VIDEO_TRACKING.A_DEF_CONCEPT} title="" videoId="/pag25/vv-4" />
+                            <div className="text-white font-bold px-6 py-2 rounded-lg text-xl shadow-sm" style={{ backgroundColor: '#e95352' }}>
+                                ¿Qué son fracciones equivalentes?
+                            </div>
+                        </div>
+
+                        <p className="text-xl text-gray-800 font-semibold pl-12">
+                            Dos o más de fracciones son <span style={{ color: '#e95352' }} className="font-black">equivalentes</span> cuando representan la misma cantidad.
+                        </p>
+
+                        <div className="space-y-6 pt-4">
+                            <div className="flex items-center gap-4">
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_EXAMPLE} title="Ejemplo" videoId="/pag25/vv-5" />
+                                <div className="bg-green-600 text-white font-bold px-4 py-1 rounded inline-block text-lg italic shadow-sm">
+                                    Ejemplo:
                                 </div>
+                                <p className="text-2xl text-gray-800 font-bold">
+                                    <Fraction num="3" den="5" size="text-2xl" color="text-gray-800" /> ,
+                                    <Fraction num="6" den="10" size="text-2xl" color="text-gray-800" /> y
+                                    <Fraction num="12" den="20" size="text-2xl" color="text-gray-800" /> son fracciones equivalentes.
+                                </p>
                             </div>
 
-                            <div className="space-y-6 pt-8 border-t-2 border-dashed border-gray-100">
-                                <div className="flex items-center gap-4 justify-center">
-                                    <p className="text-xl text-gray-800 font-black">
-                                        ¿Cómo sabemos que <Fraction num="3" den="5" size="text-2xl" color="text-gray-800" /> y <Fraction num="6" den="10" size="text-2xl" color="text-gray-800" /> son equivalentes?
-                                    </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_HOW_TO} title="" videoId="/pag25/vv-6" />
+                            <div className="flex items-center justify-center gap-8 pl-12">
+                                <div className="flex items-center gap-3 text-4xl font-bold">
+                                    <Fraction num="3" den="5" color="text-gray-800" size="text-4xl" />
+                                    <span>=</span>
+                                    <Fraction num="6" den="10" color="text-gray-800" size="text-4xl" />
+                                    <span>=</span>
+                                    <Fraction num="12" den="20" color="text-gray-800" size="text-4xl" />
                                 </div>
-
-                                <div className="flex items-center gap-4 justify-center">
-                                    <div className="text-black font-black text-sm uppercase tracking-wider">USAR PRODUCTOS CRUZADOS:</div>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_CROSS} title="Productos Cruzados" videoId="/pag25/vv-7" />
-                                </div>
-
-                                <div className="flex justify-center py-8">
-                                    <Image src={equivalente30Img} alt="Productos Cruzados" className="w-[400px] object-contain" />
+                                <div className="bg-purple-600 p-2 rounded-lg shadow-md flex items-center justify-center">
+                                    <MdOutlineStickyNote2 className="text-white text-3xl" />
                                 </div>
                             </div>
+                        </div>
 
-                            {/* PRÁCTICA */}
-                            <div className="space-y-12 mt-12 pb-8">
-                                <div className="bg-[#800000] text-white font-bold px-6 py-1.5 rounded-sm w-fit text-lg shadow-md tracking-wider">
-                                    PRÁCTICA
+                        <div className="space-y-6 pt-8 border-t-2 border-dashed border-gray-100">
+                            <div className="flex items-center gap-4 justify-center">
+                                <p className="text-xl text-gray-800 font-black">
+                                    ¿Cómo sabemos que <Fraction num="3" den="5" size="text-2xl" color="text-gray-800" /> y <Fraction num="6" den="10" size="text-2xl" color="text-gray-800" /> son equivalentes?
+                                </p>
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_HOW_TO} title="" videoId="/pag25/vv-6" />
+                            </div>
+
+                            <div className="flex items-center gap-4 justify-center">
+                                <div className="text-black font-black text-sm uppercase tracking-wider">USAR PRODUCTOS CRUZADOS:</div>
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_CROSS} title="Productos Cruzados" videoId="/pag25/vv-7" />
+                            </div>
+
+                            <div className="flex justify-center py-8">
+                                <Image src={equivalente30Img} alt="Productos Cruzados" className="w-[400px] object-contain" />
+                            </div>
+                        </div>
+
+                        {/* PRÁCTICA */}
+                        <div className="space-y-12 mt-12 pb-8">
+                            <div className="bg-[#800000] text-white font-bold px-6 py-1.5 rounded-sm w-fit text-lg shadow-md tracking-wider">
+                                PRÁCTICA
+                            </div>
+
+                            {/* Row 1 - Exercise 1 */}
+                            <div className="flex items-start gap-6">
+                                {/* Fixed width container for left side to align arrows */}
+                                <div className="flex items-center gap-4 min-w-[340px]">
+                                    <div className="w-4 h-4 bg-[#800000] flex-shrink-0" />
+                                    <div className="flex items-center gap-4 justify-center flex-1">
+                                        <Fraction num="3" den="5" color="text-gray-800" size="text-5xl" />
+                                        <span className="text-5xl font-black text-gray-300">=</span>
+                                        <Fraction num="12" den="20" color="text-gray-800" size="text-5xl" />
+                                    </div>
+                                    <span className="text-4xl text-gray-300 w-12 text-center">→</span>
                                 </div>
 
-                                {/* Row 1 - Exercise 1 */}
-                                <div className="flex items-start gap-6">
-                                    {/* Fixed width container for left side to align arrows */}
-                                    <div className="flex items-center gap-4 min-w-[340px]">
-                                        <div className="w-4 h-4 bg-[#800000] flex-shrink-0" />
-                                        <div className="flex items-center gap-4 justify-center flex-1">
-                                            <Fraction num="3" den="5" color="text-gray-800" size="text-5xl" />
-                                            <span className="text-5xl font-black text-gray-300">=</span>
-                                            <Fraction num="12" den="20" color="text-gray-800" size="text-5xl" />
-                                        </div>
-                                        <span className="text-4xl text-gray-300 w-12 text-center">→</span>
-                                    </div>
+                                {/* Right Side - Inputs Part */}
+                                <div className="flex flex-col items-center">
+                                    <div className="grid grid-cols-[56px_40px_56px_48px_56px_40px_56px] items-center gap-y-4">
+                                        {/* Line 1: input x input = input x input */}
+                                        <PracticeInput value={row1.i1} onChange={(e: any) => { setRow1({ ...row1, i1: e.target.value }); setRow1Result(null); }} />
+                                        <span className="text-3xl font-black text-gray-700 text-center">×</span>
+                                        <PracticeInput value={row1.i2} onChange={(e: any) => { setRow1({ ...row1, i2: e.target.value }); setRow1Result(null); }} />
 
-                                    {/* Right Side - Inputs Part */}
-                                    <div className="flex flex-col items-center">
-                                        <div className="grid grid-cols-[56px_40px_56px_48px_56px_40px_56px] items-center gap-y-4">
-                                            {/* Line 1: input x input = input x input */}
-                                            <PracticeInput value={row1.i1} onChange={(e: any) => { setRow1({ ...row1, i1: e.target.value }); setRow1Result(null); }} />
-                                            <span className="text-3xl font-black text-gray-700 text-center">×</span>
-                                            <PracticeInput value={row1.i2} onChange={(e: any) => { setRow1({ ...row1, i2: e.target.value }); setRow1Result(null); }} />
+                                        <span className="text-3xl font-black text-gray-400 text-center">=</span>
 
-                                            <span className="text-3xl font-black text-gray-400 text-center">=</span>
+                                        <PracticeInput value={row1.i3} onChange={(e: any) => { setRow1({ ...row1, i3: e.target.value }); setRow1Result(null); }} />
+                                        <span className="text-3xl font-black text-gray-700 text-center">×</span>
+                                        <PracticeInput value={row1.i4} onChange={(e: any) => { setRow1({ ...row1, i4: e.target.value }); setRow1Result(null); }} />
 
-                                            <PracticeInput value={row1.i3} onChange={(e: any) => { setRow1({ ...row1, i3: e.target.value }); setRow1Result(null); }} />
-                                            <span className="text-3xl font-black text-gray-700 text-center">×</span>
-                                            <PracticeInput value={row1.i4} onChange={(e: any) => { setRow1({ ...row1, i4: e.target.value }); setRow1Result(null); }} />
+                                        {/* Line 2: result = result */}
+                                        <div /> {/* col 1 */}
+                                        <div /> {/* col 2 */}
+                                        <PracticeInput value={row1.r1} onChange={(e: any) => { setRow1({ ...row1, r1: e.target.value }); setRow1Result(null); }} />
+                                        <span className="text-3xl font-black text-gray-500 text-center">=</span>
+                                        <PracticeInput value={row1.r2} onChange={(e: any) => { setRow1({ ...row1, r2: e.target.value }); setRow1Result(null); }} />
+                                        <div /> {/* col 6 */}
+                                        <div /> {/* col 7 */}
 
-                                            {/* Line 2: result = result */}
-                                            <div /> {/* col 1 */}
-                                            <div /> {/* col 2 */}
-                                            <PracticeInput value={row1.r1} onChange={(e: any) => { setRow1({ ...row1, r1: e.target.value }); setRow1Result(null); }} />
-                                            <span className="text-3xl font-black text-gray-500 text-center">=</span>
-                                            <PracticeInput value={row1.r2} onChange={(e: any) => { setRow1({ ...row1, r2: e.target.value }); setRow1Result(null); }} />
-                                            <div /> {/* col 6 */}
-                                            <div /> {/* col 7 */}
-
-                                            {/* Line 3: Button Row */}
-                                            <div className="col-start-4 flex justify-center mt-2 relative">
-                                                <div className="absolute top-0 left-1/2 -translate-x-1/2 flex items-center justify-center">
-                                                    <FeedbackButton
-                                                        onCheck={checkRow1}
-                                                        onReset={resetRow1}
-                                                        status={row1Result}
-                                                    />
-                                                </div>
+                                        {/* Line 3: Button Row */}
+                                        <div className="col-start-4 flex justify-center mt-2 relative">
+                                            <div className="absolute top-0 left-1/2 -translate-x-1/2 flex items-center justify-center">
+                                                <FeedbackButton
+                                                    onCheck={checkRow1}
+                                                    onReset={resetRow1}
+                                                    status={row1Result}
+                                                />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
-                                {/* Row 2 - Exercise 2 */}
-                                <div className="flex items-start gap-6">
-                                    {/* Fixed width container for left side to align arrows */}
-                                    <div className="flex items-center gap-4 min-w-[340px]">
-                                        <div className="w-4 h-4 bg-[#800000] flex-shrink-0" />
-                                        <div className="flex items-center gap-4 justify-center flex-1">
-                                            <Fraction num="6" den="10" color="text-gray-800" size="text-5xl" />
-                                            <span className="text-5xl font-black text-gray-300">=</span>
-                                            <Fraction num="12" den="20" color="text-gray-800" size="text-5xl" />
-                                        </div>
-                                        <span className="text-4xl text-gray-300 w-12 text-center">→</span>
+                            {/* Row 2 - Exercise 2 */}
+                            <div className="flex items-start gap-6">
+                                {/* Fixed width container for left side to align arrows */}
+                                <div className="flex items-center gap-4 min-w-[340px]">
+                                    <div className="w-4 h-4 bg-[#800000] flex-shrink-0" />
+                                    <div className="flex items-center gap-4 justify-center flex-1">
+                                        <Fraction num="6" den="10" color="text-gray-800" size="text-5xl" />
+                                        <span className="text-5xl font-black text-gray-300">=</span>
+                                        <Fraction num="12" den="20" color="text-gray-800" size="text-5xl" />
                                     </div>
+                                    <span className="text-4xl text-gray-300 w-12 text-center">→</span>
+                                </div>
 
-                                    {/* Right Side - Inputs Part */}
-                                    <div className="flex flex-col items-center">
-                                        <div className="grid grid-cols-[56px_40px_56px_48px_56px_40px_56px] items-center gap-y-4">
-                                            {/* Line 1: input x input = input x input */}
-                                            <PracticeInput value={row2.i1} onChange={(e: any) => { setRow2({ ...row2, i1: e.target.value }); setRow2Result(null); }} />
-                                            <span className="text-3xl font-black text-gray-700 text-center">×</span>
-                                            <PracticeInput value={row2.i2} onChange={(e: any) => { setRow2({ ...row2, i2: e.target.value }); setRow2Result(null); }} />
+                                {/* Right Side - Inputs Part */}
+                                <div className="flex flex-col items-center">
+                                    <div className="grid grid-cols-[56px_40px_56px_48px_56px_40px_56px] items-center gap-y-4">
+                                        {/* Line 1: input x input = input x input */}
+                                        <PracticeInput value={row2.i1} onChange={(e: any) => { setRow2({ ...row2, i1: e.target.value }); setRow2Result(null); }} />
+                                        <span className="text-3xl font-black text-gray-700 text-center">×</span>
+                                        <PracticeInput value={row2.i2} onChange={(e: any) => { setRow2({ ...row2, i2: e.target.value }); setRow2Result(null); }} />
 
-                                            <span className="text-3xl font-black text-gray-400 text-center">=</span>
+                                        <span className="text-3xl font-black text-gray-400 text-center">=</span>
 
-                                            <PracticeInput value={row2.i3} onChange={(e: any) => { setRow2({ ...row2, i3: e.target.value }); setRow2Result(null); }} />
-                                            <span className="text-3xl font-black text-gray-700 text-center">×</span>
-                                            <PracticeInput value={row2.i4} onChange={(e: any) => { setRow2({ ...row2, i4: e.target.value }); setRow2Result(null); }} />
+                                        <PracticeInput value={row2.i3} onChange={(e: any) => { setRow2({ ...row2, i3: e.target.value }); setRow2Result(null); }} />
+                                        <span className="text-3xl font-black text-gray-700 text-center">×</span>
+                                        <PracticeInput value={row2.i4} onChange={(e: any) => { setRow2({ ...row2, i4: e.target.value }); setRow2Result(null); }} />
 
-                                            {/* Line 2: result = result */}
-                                            <div />
-                                            <div />
-                                            <PracticeInput value={row2.r1} onChange={(e: any) => { setRow2({ ...row2, r1: e.target.value }); setRow2Result(null); }} />
-                                            <span className="text-3xl font-black text-gray-500 text-center">=</span>
-                                            <PracticeInput value={row2.r2} onChange={(e: any) => { setRow2({ ...row2, r2: e.target.value }); setRow2Result(null); }} />
-                                            <div />
-                                            <div />
+                                        {/* Line 2: result = result */}
+                                        <div />
+                                        <div />
+                                        <PracticeInput value={row2.r1} onChange={(e: any) => { setRow2({ ...row2, r1: e.target.value }); setRow2Result(null); }} />
+                                        <span className="text-3xl font-black text-gray-500 text-center">=</span>
+                                        <PracticeInput value={row2.r2} onChange={(e: any) => { setRow2({ ...row2, r2: e.target.value }); setRow2Result(null); }} />
+                                        <div />
+                                        <div />
 
-                                            {/* Line 3: Button Row */}
-                                            <div className="col-start-4 flex justify-center mt-2 relative">
-                                                <div className="absolute top-0 left-1/2 -translate-x-1/2 flex items-center justify-center">
-                                                    <FeedbackButton
-                                                        onCheck={checkRow2}
-                                                        onReset={resetRow2}
-                                                        status={row2Result}
-                                                    />
-                                                </div>
+                                        {/* Line 3: Button Row */}
+                                        <div className="col-start-4 flex justify-center mt-2 relative">
+                                            <div className="absolute top-0 left-1/2 -translate-x-1/2 flex items-center justify-center">
+                                                <FeedbackButton
+                                                    onCheck={checkRow2}
+                                                    onReset={resetRow2}
+                                                    status={row2Result}
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -285,6 +281,6 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
             </div>
 
             {/* VideoModal removed */}
-        </BookPageContainer>
+        </BookPageContainer >
     );
 }

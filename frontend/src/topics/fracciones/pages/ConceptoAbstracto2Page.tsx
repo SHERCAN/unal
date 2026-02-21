@@ -162,129 +162,127 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones' }} pageId="fracciones-concepto-abstracto-2">
-            <div className="w-full p-4">
-                <div className="relative ml-2 flex items-start">
-                    {/* Header Tab "A" */}
-                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de]" style={{ borderColor: '#be90de' }}>
-                        A
+            <div className="relative ml-2 flex items-start">
+                {/* Header Tab "A" */}
+                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de]" style={{ borderColor: '#be90de' }}>
+                    A
+                </div>
+
+                {/* Content Container */}
+                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white border-[#be90de]">
+
+                    {/* NEW Header Section */}
+                    <div className="mb-10 space-y-4">
+                        <p className="text-xl text-gray-800 font-medium ml-4">
+                            donde <strong>4</strong> es el numerador y <strong>6</strong> es el denominador.
+                        </p>
+
+                        <div className="flex items-center flex-wrap gap-2 ml-4">
+                            <span className="text-red-600 font-black text-2xl">ERROR:</span>
+
+                            {/* Fraction 6/4 */}
+                            <div className="inline-flex flex-col items-center mx-2 align-middle leading-none">
+                                <span className="text-xl font-bold text-black border-b-2 border-black px-1">6</span>
+                                <span className="text-xl font-bold text-blue-600">4</span>
+                            </div>
+
+                            <span className="text-xl text-gray-800 font-medium">
+                                no es correcta porque no es apropiada para la fracción.
+                            </span>
+
+                            <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="" videoId="/pag19/vv-1" />
+                        </div>
                     </div>
 
-                    {/* Content Container */}
-                    <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white border-[#be90de]">
+                    <div className="flex flex-col gap-y-10 items-start border-t border-gray-100 pt-8 max-w-2xl mx-auto">
 
-                        {/* NEW Header Section */}
-                        <div className="mb-10 space-y-4">
-                            <p className="text-xl text-gray-800 font-medium ml-4">
-                                donde <strong>4</strong> es el numerador y <strong>6</strong> es el denominador.
-                            </p>
+                        {/* 1. Rombo */}
+                        <ExerciseRow
+                            id="ex1" title="Rombo"
+                            imgSrc={romboImg} correctN="9" correctD="16"
+                        />
 
-                            <div className="flex items-center flex-wrap gap-2 ml-4">
-                                <span className="text-red-600 font-black text-2xl">ERROR:</span>
+                        {/* 2. Cebra / Barras */}
+                        <ExerciseRow
+                            id="ex2" title="Barras"
+                            imgSrc={cebraImg} correctN="5" correctD="9"
+                        />
 
-                                {/* Fraction 6/4 */}
-                                <div className="inline-flex flex-col items-center mx-2 align-middle leading-none">
-                                    <span className="text-xl font-bold text-black border-b-2 border-black px-1">6</span>
-                                    <span className="text-xl font-bold text-blue-600">4</span>
-                                </div>
-
-                                <span className="text-xl text-gray-800 font-medium">
-                                    no es correcta porque no es apropiada para la fracción.
-                                </span>
-
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="" videoId="/pag19/vv-1" />
+                        {/* 3. Acordeon (Special Case: 2 fractions) */}
+                        <div className="flex items-center gap-4">
+                            <div className="flex items-center shrink-0">
+                                <div className="w-4 h-4 border-2 border-purple-600 bg-white"></div>
                             </div>
-                        </div>
-
-                        <div className="flex flex-col gap-y-10 items-start border-t border-gray-100 pt-8 max-w-2xl mx-auto">
-
-                            {/* 1. Rombo */}
-                            <ExerciseRow
-                                id="ex1" title="Rombo"
-                                imgSrc={romboImg} correctN="9" correctD="16"
-                            />
-
-                            {/* 2. Cebra / Barras */}
-                            <ExerciseRow
-                                id="ex2" title="Barras"
-                                imgSrc={cebraImg} correctN="5" correctD="9"
-                            />
-
-                            {/* 3. Acordeon (Special Case: 2 fractions) */}
-                            <div className="flex items-center gap-4">
-                                <div className="flex items-center shrink-0">
-                                    <div className="w-4 h-4 border-2 border-purple-600 bg-white"></div>
-                                </div>
-                                <div className="w-48 flex justify-center px-1">
-                                    <Image
-                                        src={acordeonImg}
-                                        alt="Acordeon"
-                                        className="h-28 w-auto object-contain drop-shadow-sm"
+                            <div className="w-48 flex justify-center px-1">
+                                <Image
+                                    src={acordeonImg}
+                                    alt="Acordeon"
+                                    className="h-28 w-auto object-contain drop-shadow-sm"
+                                />
+                            </div>
+                            <span className="text-2xl font-bold text-gray-400 mx-1 shrink-0">=</span>
+                            <div className="flex items-center gap-3 bg-gray-50 p-2 rounded-xl border border-gray-100 shadow-sm shrink-0">
+                                <div className="flex items-center gap-2">
+                                    <FractionInput
+                                        isCorrect={results.ex3 === 'correct'}
+                                        nValue={inputs.ex3_n1}
+                                        dValue={inputs.ex3_d1}
+                                        onNChange={(val: string) => { setInputs({ ...inputs, ex3_n1: val }); setResults({ ...results, ex3: null }); }}
+                                        onDChange={(val: string) => { setInputs({ ...inputs, ex3_d1: val }); setResults({ ...results, ex3: null }); }}
+                                    />
+                                    <span className="text-xl font-bold text-purple-600">+</span>
+                                    <FractionInput
+                                        isCorrect={results.ex3 === 'correct'}
+                                        nValue={inputs.ex3_n2}
+                                        dValue={inputs.ex3_d2}
+                                        onNChange={(val: string) => { setInputs({ ...inputs, ex3_n2: val }); setResults({ ...results, ex3: null }); }}
+                                        onDChange={(val: string) => { setInputs({ ...inputs, ex3_d2: val }); setResults({ ...results, ex3: null }); }}
                                     />
                                 </div>
-                                <span className="text-2xl font-bold text-gray-400 mx-1 shrink-0">=</span>
-                                <div className="flex items-center gap-3 bg-gray-50 p-2 rounded-xl border border-gray-100 shadow-sm shrink-0">
-                                    <div className="flex items-center gap-2">
-                                        <FractionInput
-                                            isCorrect={results.ex3 === 'correct'}
-                                            nValue={inputs.ex3_n1}
-                                            dValue={inputs.ex3_d1}
-                                            onNChange={(val: string) => { setInputs({ ...inputs, ex3_n1: val }); setResults({ ...results, ex3: null }); }}
-                                            onDChange={(val: string) => { setInputs({ ...inputs, ex3_d1: val }); setResults({ ...results, ex3: null }); }}
-                                        />
-                                        <span className="text-xl font-bold text-purple-600">+</span>
-                                        <FractionInput
-                                            isCorrect={results.ex3 === 'correct'}
-                                            nValue={inputs.ex3_n2}
-                                            dValue={inputs.ex3_d2}
-                                            onNChange={(val: string) => { setInputs({ ...inputs, ex3_n2: val }); setResults({ ...results, ex3: null }); }}
-                                            onDChange={(val: string) => { setInputs({ ...inputs, ex3_d2: val }); setResults({ ...results, ex3: null }); }}
-                                        />
-                                    </div>
 
-                                    <div className="flex flex-col gap-1">
-                                        <FeedbackButton
-                                            onCheck={validateAcordeon}
-                                            onReset={resetAcordeon}
-                                            status={results.ex3}
-                                        />
-                                    </div>
+                                <div className="flex flex-col gap-1">
+                                    <FeedbackButton
+                                        onCheck={validateAcordeon}
+                                        onReset={resetAcordeon}
+                                        status={results.ex3}
+                                    />
                                 </div>
                             </div>
-
-                            {/* 4. Circulos */}
-                            <ExerciseRow
-                                id="ex4" title="Círculos"
-                                imgSrc={circulosImg} correctN="8" correctD="15"
-                            />
-
-                            {/* NOTA spanning full width */}
-                            <div className="w-full flex flex-col items-start gap-4 pt-10 border-t-2 border-gray-100 mt-2">
-                                <div className="flex items-center gap-4 flex-wrap">
-                                    <span className="font-bold text-red-600 text-xl">NOTA:</span>
-                                    <p className="text-lg text-gray-800 font-medium">
-                                        Como se muestra la siguiente figura, <span className="font-bold text-red-600">NO</span> es realmente una forma de fracción.
-                                    </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="" videoId="/pag19/vv-2" />
-                                </div>
-
-                                <div className="flex flex-col items-start gap-4 mt-4 w-full">
-                                    <div className="w-full flex justify-center">
-                                        <Image
-                                            src={cebraOblicuaImg}
-                                            alt="Cebra Oblicua"
-                                            className="h-32 w-auto object-contain border-2 border-black shadow-md"
-                                        />
-                                    </div>
-                                    <div className="flex items-center gap-3 text-gray-800">
-                                        <p className="text-lg font-medium">
-                                            ¿Por qué esta figura no es una forma de fracción? Esas partes son diferentes.
-                                        </p>
-                                        <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="" videoId="/pag19/vv-3" />
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
+
+                        {/* 4. Circulos */}
+                        <ExerciseRow
+                            id="ex4" title="Círculos"
+                            imgSrc={circulosImg} correctN="8" correctD="15"
+                        />
+
+                        {/* NOTA spanning full width */}
+                        <div className="w-full flex flex-col items-start gap-4 pt-10 border-t-2 border-gray-100 mt-2">
+                            <div className="flex items-center gap-4 flex-wrap">
+                                <span className="font-bold text-red-600 text-xl">NOTA:</span>
+                                <p className="text-lg text-gray-800 font-medium">
+                                    Como se muestra la siguiente figura, <span className="font-bold text-red-600">NO</span> es realmente una forma de fracción.
+                                </p>
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="" videoId="/pag19/vv-2" />
+                            </div>
+
+                            <div className="flex flex-col items-start gap-4 mt-4 w-full">
+                                <div className="w-full flex justify-center">
+                                    <Image
+                                        src={cebraOblicuaImg}
+                                        alt="Cebra Oblicua"
+                                        className="h-32 w-auto object-contain border-2 border-black shadow-md"
+                                    />
+                                </div>
+                                <div className="flex items-center gap-3 text-gray-800">
+                                    <p className="text-lg font-medium">
+                                        ¿Por qué esta figura no es una forma de fracción? Esas partes son diferentes.
+                                    </p>
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="" videoId="/pag19/vv-3" />
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
