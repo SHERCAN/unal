@@ -96,14 +96,14 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                 <p className="text-lg text-gray-800 font-semibold leading-snug">
                                     Según las actividades anteriores, el color verde es el mismo tamaño. Cambian los números como partes, pero no cambia la cantidad.
                                 </p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="Introducción" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="" videoId="/pag25/vv-1" />
                             </div>
 
                             <div className="flex items-center gap-3">
                                 <p className="text-lg text-gray-800 font-semibold leading-snug">
                                     Así, en notación matemática, representan la misma cantidad:
                                 </p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOTATION} title="Notación Matemática" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOTATION} title="Notación Matemática" videoId="/pag25/vv-2" />
                             </div>
 
                             <div className="flex justify-center py-4">
@@ -114,11 +114,11 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                 <p className="text-xl text-gray-800 font-semibold">
                                     Estas fracciones se llaman <span style={{ color: '#e95352' }} className="font-bold">fracciones equivalentes</span>.
                                 </p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_EQUIV_DEF} title="Definición" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_EQUIV_DEF} title="" videoId="/pag25/vv-3" />
                             </div>
 
                             <div className="flex items-center gap-4 mt-8">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_DEF_CONCEPT} title="Concepto" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_DEF_CONCEPT} title="" videoId="/pag25/vv-4" />
                                 <div className="text-white font-bold px-6 py-2 rounded-lg text-xl shadow-sm" style={{ backgroundColor: '#e95352' }}>
                                     ¿Qué son fracciones equivalentes?
                                 </div>
@@ -130,14 +130,14 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
 
                             <div className="space-y-6 pt-4">
                                 <div className="flex items-center gap-4">
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_EXAMPLE} title="Ejemplo" videoId="/pag1/vv-1" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_EXAMPLE} title="Ejemplo" videoId="/pag25/vv-5" />
                                     <div className="bg-green-600 text-white font-bold px-4 py-1 rounded inline-block text-lg italic shadow-sm">
                                         Ejemplo:
                                     </div>
                                     <p className="text-2xl text-gray-800 font-bold">
                                         <Fraction num="3" den="5" size="text-2xl" color="text-gray-800" /> ,
                                         <Fraction num="6" den="10" size="text-2xl" color="text-gray-800" /> y
-                                        <Fraction num="3" den="5" size="text-2xl" color="text-gray-800" /> son fracciones equivalentes.
+                                        <Fraction num="12" den="20" size="text-2xl" color="text-gray-800" /> son fracciones equivalentes.
                                     </p>
                                 </div>
 
@@ -160,12 +160,12 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                     <p className="text-xl text-gray-800 font-black">
                                         ¿Cómo sabemos que <Fraction num="3" den="5" size="text-2xl" color="text-gray-800" /> y <Fraction num="6" den="10" size="text-2xl" color="text-gray-800" /> son equivalentes?
                                     </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_HOW_TO} title="Cómo saber" videoId="/pag1/vv-1" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_HOW_TO} title="" videoId="/pag25/vv-6" />
                                 </div>
 
                                 <div className="flex items-center gap-4 justify-center">
                                     <div className="text-black font-black text-sm uppercase tracking-wider">USAR PRODUCTOS CRUZADOS:</div>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_CROSS} title="Productos Cruzados" videoId="/pag1/vv-1" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_CROSS} title="Productos Cruzados" videoId="/pag25/vv-7" />
                                 </div>
 
                                 <div className="flex justify-center py-8">
