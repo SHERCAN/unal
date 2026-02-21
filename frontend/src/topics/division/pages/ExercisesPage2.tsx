@@ -133,7 +133,9 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
     return (
         <BookPageContainer
             zoom={zoom}
-            moduleHeader={{ icon: '/division-icon.png', name: 'División' }}
+            moduleHeader={{ 
+                //icon: '/division-icon.png', 
+                name: 'División' }}
             pageId="division-exercises-2"
         >
             <div className="flex flex-col gap-10 max-w-4xl mx-auto pb-32">
@@ -145,8 +147,8 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                     <div className="flex items-start gap-4">
                         <PlayVideoButton
                             trackingId={VIDEO_TRACKING_IDS.ACTIVITY_1_Q1}
-                            title="Caramelos"
-                            videoId="/pag1/vv-1"
+                            title="Ejercicio 5b"
+                            videoId="/pag6/vv-1"
                         />
                         <div className="flex-1">
                             <p className="font-medium text-lg leading-relaxed text-gray-800 dark:text-gray-200">
@@ -163,8 +165,8 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                     <div className="flex items-start gap-4">
                         <PlayVideoButton
                             trackingId={VIDEO_TRACKING_IDS.ACTIVITY_1_Q2}
-                            title="Atletas"
-                            videoId="/pag1/vv-1"
+                            title="Ejercicio 5c"
+                            videoId="/pag6/vv-2"
                         />
                         <div className="flex-1">
                             <p className="font-medium text-lg leading-relaxed text-gray-800 dark:text-gray-200">
@@ -193,8 +195,8 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                         <div className="flex items-center gap-2">
                             <PlayVideoButton
                                 trackingId={VIDEO_TRACKING_IDS.PROBLEM_SOLVING}
-                                title="Situación problemática"
-                                videoId="/pag1/vv-1"
+                                title="Ejercicio 6"
+                                videoId="/pag6/vv-3"
                             />
                             <p className="font-bold text-gray-800 dark:text-gray-200">Resuelve una situación problemática:</p>
                         </div>
@@ -292,8 +294,8 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                         <div className="flex items-center gap-2">
                             <PlayVideoButton
                                 trackingId={VIDEO_TRACKING_IDS.FALSE_DIVISION}
-                                title="División falsa"
-                                videoId="/pag1/vv-1"
+                                title="Ejercicio 7"
+                                videoId="/pag6/vv-4"
                             />
                             <p className="font-bold text-gray-800 dark:text-gray-200">Encuentra la división falsa (F). ¿Cuál está incorrecta?</p>
                         </div>
