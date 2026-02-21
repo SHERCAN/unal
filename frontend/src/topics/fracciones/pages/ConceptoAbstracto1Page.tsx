@@ -50,7 +50,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                 </div>
 
                                 <div className="flex items-center gap-4">
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="Introducción a la fracción" videoId="/pag1/vv-1" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="Introducción a la fracción" videoId="/pag18/vv-2" />
                                     <p className="font-bold text-gray-700">La <span className="text-red-500">fracción</span> se representa cómo</p>
                                 </div>
 
@@ -86,7 +86,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                             {/* 2. Definition */}
                             <div className="space-y-6">
                                 <div className="flex items-center gap-4">
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_DEF} title="¿Qué es una fracción?" videoId="/pag1/vv-1" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_DEF} title="¿Qué es una fracción?" videoId="/pag18/vv-3" />
                                     <span className="bg-red-500 text-white px-4 py-1 font-bold text-lg shadow-sm transform -skew-x-12">
                                         <span className="transform skew-x-12 inline-block">¿Qué es una fracción?</span>
                                     </span>
@@ -146,7 +146,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                         <div className="w-4 h-4 bg-blue-600 mt-1.5 flex-shrink-0"></div>
                                         <p className="text-lg text-gray-800">
                                             <span className="font-bold text-blue-700">Numerador:</span> representa un número de partes que se toman.
-                                            <PlayVideoButton trackingId={VIDEO_TRACKING.A_PARTS} title="Numerador" videoId="/pag1/vv-1" />
+                                            <PlayVideoButton trackingId={VIDEO_TRACKING.A_PARTS} title="Numerador" videoId="/pag18/vv-6" />
                                         </p>
                                     </div>
 
@@ -155,14 +155,14 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                         <div className="flex-1">
                                             <p className="text-lg text-gray-800">
                                                 <span className="font-bold text-purple-700">Denominador:</span> representa en cuántas partes iguales se divide el todo.
-                                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_PARTS} title="Denominador" videoId="/pag1/vv-1" />
+                                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_PARTS} title="Denominador" videoId="/pag18/vv-7" />
                                             </p>
                                         </div>
                                     </div>
 
                                     <p className="text-lg text-red-500 font-medium italic pt-2">
                                         <span className="font-bold">NOTA:</span> El denominador siempre es un número distinto de cero.
-                                        <PlayVideoButton trackingId={VIDEO_TRACKING.A_ERROR} title="Nota importante" videoId="/pag1/vv-1" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.A_ERROR} title="Nota:" videoId="/pag18/vv-8" />
                                     </p>
                                 </div>
                             </div>
@@ -172,7 +172,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                 {/* Top Row: Text and Fraction in one line */}
                                 <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 w-full">
                                     <div className="flex items-center gap-2">
-                                        <PlayVideoButton trackingId={VIDEO_TRACKING.A_EXAMPLE} title="Ejemplo 4/6" videoId="/pag1/vv-1" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.A_EXAMPLE} title="Ejemplo" videoId="/pag18/vv-9" />
                                         <span className="bg-green-600 text-white px-3 py-1 font-bold rounded shadow-sm text-base">
                                             Ejemplo:
                                         </span>
