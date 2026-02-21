@@ -158,8 +158,8 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                     <div>
                                         <PlayVideoButton
                                             trackingId={VIDEO_TRACKING.C_INTRO}
-                                            title="División Inexacta - Concreto"
-                                            videoId="/pag1/vv-1"
+                                            title=""
+                                            videoId="/pag11/vv-1"
                                         />
                                     </div>
 
@@ -321,8 +321,8 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                 </div>
                                 <PlayVideoButton
                                     trackingId={VIDEO_TRACKING.P_INTRO}
-                                    title="División Inexacta - Procesual"
-                                    videoId="/pag1/vv-1"
+                                    title=""
+                                    videoId="/pag11/vv-2"
                                 />
                             </div>
 
