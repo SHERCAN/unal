@@ -149,15 +149,7 @@ export function EjemplosPage({ zoom = 1 }: Props) {
                                     </p>
                                 </div>
                             </div>
-
-                            <div className="flex justify-center pt-12 border-t border-gray-50">
-                                <div className="flex items-center gap-4">
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.EX_BONUS} title="Bono Explicado" videoId="/pag1/vv-1" />
-                                    <span className="text-purple-700 font-bold text-xl uppercase tracking-wide">BONO EXPLICADO</span>
-                                </div>
-                            </div>
                         </div>
-
                     </div>
                 </div>
             </div>

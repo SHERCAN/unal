@@ -1,140 +1,185 @@
 'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
-
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
-import { useVideoProgress } from '@/hooks/useVideoProgress';
-import { FeedbackButton } from '@/components/FeedbackButton';
-
 
 interface Props { zoom?: number; }
 
 export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
-
     const VIDEO_TRACKING = {
-        A_NOTATION: 'comp-frac-a-notation',
+        A_INTRO: 'comp-frac-a-intro',
+        A_SAME_DEN: 'comp-frac-a-same-den',
+        A_STRATEGY: 'comp-frac-a-strategy',
+        A_DIFF_DEN: 'comp-frac-a-diff-den'
     };
 
-    /* videoModal list removed */
-    /* ref removed */
+    const Fraction = ({ num, den, size = "text-3xl", numColor = "text-black" }: any) => (
+        <div className={`inline-flex flex-col items-center align-middle ${size} font-black px-1`}>
+            <span className={numColor}>{num}</span>
+            <div className={`w-full h-0.5 bg-black my-0.5`} />
+            <span className="text-black">{den}</span>
+        </div>
+    );
 
-    /* handleVideoComplete removed */
-
-    /* openVideo removed */
-
-    /* PlayButton definition removed */
-
-    // Practice: compare fractions with cross products
-    const exercises = [
-        { a: 2, b: 3, c: 3, d: 5, answer: '>' },   // 2×5=10 vs 3×3=9 → 10>9 → >
-        { a: 1, b: 4, c: 2, d: 6, answer: '<' },    // 1×6=6 vs 4×2=8 → 6<8 → <
-        { a: 3, b: 6, c: 2, d: 4, answer: '=' },    // 3×4=12 vs 6×2=12 → = 
-    ];
-
-    const [answers, setAnswers] = useState<Record<number, string>>({});
-    const [listoResult, setListoResult] = useState<'correct' | 'incorrect' | null>(null);
-
-    const handleListo = () => {
-        const allCorrect = exercises.every((ex, i) => answers[i] === ex.answer);
-        setListoResult(allCorrect ? 'correct' : 'incorrect');
-    };
-
-    const handleReset = () => {
-        setAnswers({});
-        setListoResult(null);
-    };
-
+    const ExampleRow = ({ num1, den1, sign, num2, den2, reason }: any) => (
+        <div className="flex items-center gap-4 text-xl font-bold">
+            <div className="w-2 h-2 bg-green-600 rounded-sm flex-shrink-0" />
+            <Fraction num={num1} den={den1} size="text-2xl" />
+            <span className="text-2xl text-gray-400 font-light">{sign}</span>
+            <Fraction num={num2} den={den2} size="text-2xl" />
+            <span className="text-gray-600 ml-4">porque <span className="font-black text-black ml-2 px-2 py-1 bg-gray-100 rounded">{reason}</span>.</span>
+        </div>
+    );
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Comparación de Fracciones' }} pageId="comp-frac-concepto-abstracto">
-            {/* A - ABSTRACTO Section */}
-            <div className="relative ml-2 flex items-start">
-                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#be90de' }}>
-                    A
-                </div>
-                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white" style={{ borderColor: '#be90de' }}>
+            <div className="space-y-10 pb-20">
+                {/* A - ABSTRACTO Section */}
+                <div className="relative ml-2 flex items-start mb-8">
+                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#be90de' }}>
+                        A
+                    </div>
+                    <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5" style={{ borderColor: '#be90de' }}>
 
-                    <div className="mt-4 space-y-5">
-                        <div className="flex items-center gap-2">
-                            <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOTATION} title="Comparación Matemática" videoId="/pag1/vv-1" />
-                            <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-                                Compara con Productos Cruzados
-                            </p>
-                        </div>
-
-                        {/* Rule box */}
-                        <div className="bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-xl border-2 border-orange-300 dark:border-orange-700 p-4">
-                            <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed">
-                                Para comparar <span className="font-bold">a/b</span> y <span className="font-bold">c/d</span>:
-                            </p>
-                            <div className="grid grid-cols-3 gap-2 mt-2 text-center text-sm">
-                                <div className="bg-green-100 dark:bg-green-900/30 rounded p-2">
-                                    <p className="font-bold">a×d &gt; b×c</p>
-                                    <p className="text-xs text-gray-500">a/b &gt; c/d</p>
+                        <div className="w-full h-full flex flex-col overflow-y-auto mt-2" style={{ gap: 'clamp(0.75rem, 2vh, 1.5rem)', padding: 'clamp(0.5rem, 2vmin, 1rem)' }}>
+                            {/* Intro */}
+                            <div className="space-y-6">
+                                <div className="flex items-center gap-4">
+                                    <p className="font-bold text-gray-800" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.5rem)' }}>
+                                        A continuación, la comparación de dos fracciones se expresa mediante notación matemática:
+                                    </p>
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="" videoId="/pag1/vv-4" />
                                 </div>
-                                <div className="bg-red-100 dark:bg-red-900/30 rounded p-2">
-                                    <p className="font-bold">a×d &lt; b×c</p>
-                                    <p className="text-xs text-gray-500">a/b &lt; c/d</p>
+                                <div className="flex justify-center items-center gap-8" style={{ fontSize: 'clamp(2rem, 6vmin, 3rem)' }}>
+                                    <Fraction num="1" den="3" size="text-4xl" numColor="text-purple-600" />
+                                    <span className="text-blue-500 font-black">&lt;</span>
+                                    <Fraction num="2" den="3" size="text-4xl" numColor="text-red-600" />
                                 </div>
-                                <div className="bg-blue-100 dark:bg-blue-900/30 rounded p-2">
-                                    <p className="font-bold">a×d = b×c</p>
-                                    <p className="text-xs text-gray-500">a/b = c/d</p>
+                                <div className="flex justify-center flex-wrap items-center gap-4 font-bold" style={{ fontSize: 'clamp(0.875rem, 2.2vmin, 1.25rem)' }}>
+                                    <span>Se lee en español:</span>
+                                    <Fraction num="2" den="3" size="text-xl" numColor="text-red-600" />
+                                    <span className="text-gray-800">es mayor que</span>
+                                    <Fraction num="1" den="3" size="text-xl" numColor="text-purple-600" />
+                                    <span className="font-black">.</span>
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="" videoId="/pag1/vv-5" />
                                 </div>
                             </div>
-                        </div>
 
-                        {/* PRÁCTICA */}
-                        <div className="bg-white dark:bg-gray-800 rounded-xl border-2 border-orange-300 dark:border-orange-700 p-4">
-                            <h4 className="bg-orange-600 text-white font-bold px-3 py-1 rounded inline-block text-sm mb-4">PRÁCTICA</h4>
+                            {/* SAME DENOMINATOR */}
+                            <div className="space-y-6 pt-4">
+                                <h2 className="font-black text-gray-800 uppercase tracking-wide" style={{ fontSize: 'clamp(1.25rem, 3.5vmin, 1.75rem)' }}>
+                                    DOS FRACCIONES CON EL MISMO DENOMINADOR
+                                </h2>
+                                <div className="flex items-center gap-4">
+                                    <p className="text-gray-700" style={{ fontSize: 'clamp(0.875rem, 2.2vmin, 1.125rem)' }}>
+                                        Cuando dos fracciones tienen el mismo denominador, compararlas es más sencillo.
+                                    </p>
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_SAME_DEN} title="" videoId="/pag1/vv-6" />
+                                </div>
+                                <div className="space-y-4 ml-6">
+                                    <span className="bg-green-600 text-white font-black px-4 py-1 rounded text-sm mb-2 inline-block">Ejemplo:</span>
+                                    <ExampleRow num1="12" den1="19" sign="<" num2="15" den2="19" reason="12 < 15" />
+                                    <ExampleRow num1="26" den1="27" sign=">" num2="16" den2="27" reason="26 > 16" />
+                                    <ExampleRow num1="8" den1="16" sign="=" num2="16" den2="32" reason="estas dos fracciones son equivalentes" />
+                                </div>
+                            </div>
 
-                            <div className="space-y-4">
-                                {exercises.map((ex, i) => (
-                                    <div key={i} className={`flex items-center gap-3 p-3 rounded-lg border-2 flex-wrap ${listoResult === 'correct' ? 'border-green-300 bg-green-50 dark:bg-green-900/10' :
-                                        listoResult === 'incorrect' && answers[i] !== ex.answer
-                                            ? 'border-red-300 bg-red-50 dark:bg-red-900/10' :
-                                            'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50'
-                                        }`}>
-                                        <span className="text-lg font-bold">
-                                            <span className="text-blue-600">{ex.a}</span>/<span className="text-red-600">{ex.b}</span>
-                                        </span>
+                            {/* DIFFERENT DENOMINATOR */}
+                            <div className="space-y-6 pt-4">
+                                <h2 className="font-black text-gray-800 uppercase tracking-wide" style={{ fontSize: 'clamp(1.25rem, 3.5vmin, 1.75rem)' }}>
+                                    DOS FRACCIONES CON DIFERENTE DENOMINADOR
+                                </h2>
+                                <div className="flex items-center gap-4">
+                                    <p className="text-gray-700 leading-tight" style={{ fontSize: 'clamp(0.875rem, 2.2vmin, 1.125rem)' }}>
+                                        Cuando dos fracciones tienen el diferente denominador, compararlas es poco difícil.
+                                    </p>
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_DIFF_DEN} title="" videoId="/pag1/vv-7" />
+                                </div>
 
-                                        <select
-                                            value={answers[i] || ''}
-                                            onChange={(e) => { setAnswers(prev => ({ ...prev, [i]: e.target.value })); setListoResult(null); }}
-                                            className="border-2 rounded px-3 py-1 text-lg font-bold border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 min-w-[60px] text-center"
-                                            disabled={listoResult === 'correct'}
-                                        >
-                                            <option value="">?</option>
-                                            <option value=">">&gt;</option>
-                                            <option value="<">&lt;</option>
-                                            <option value="=">=</option>
-                                        </select>
-
-                                        <span className="text-lg font-bold">
-                                            <span className="text-blue-600">{ex.c}</span>/<span className="text-red-600">{ex.d}</span>
-                                        </span>
-
-                                        <span className="text-xs text-gray-400">
-                                            ({ex.a}×{ex.d}={ex.a * ex.d} vs {ex.b}×{ex.c}={ex.b * ex.c})
-                                        </span>
+                                <div className="flex items-start gap-4 ml-6">
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_STRATEGY} title="" videoId="/pag1/vv-8" />
+                                    <div>
+                                        <h3 className="text-red-600 font-black text-lg uppercase mb-2">ESTRATEGIA:</h3>
+                                        <ol className="list-decimal pl-5 text-gray-800 dark:text-gray-300 space-y-2 font-bold leading-snug" style={{ fontSize: 'clamp(0.875rem, 2.2vmin, 1.1rem)' }}>
+                                            <li>Primero dos fracciones se amplifican para obtener fracciones equivalentes con el mismo denominador.</li>
+                                            <li>Luego esas fracciones se comparan.</li>
+                                        </ol>
                                     </div>
-                                ))}
-                            </div>
+                                </div>
 
-                            <div className="flex items-center gap-3 justify-center mt-4">
-                                <FeedbackButton
-                                    onCheck={handleListo}
-                                    onReset={handleReset}
-                                    status={listoResult}
-                                />
+                                <div className="space-y-8 ml-6">
+                                    <div className="flex items-center gap-4">
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.A_STRATEGY} title="" videoId="/pag1/vv-8" />
+                                        <span className="bg-green-600 text-white font-black px-4 py-1 rounded text-sm inline-block">Ejemplo:</span>
+                                    </div>
+                                    <div className="flex items-center gap-6 font-black ml-4" style={{ fontSize: 'clamp(1.5rem, 4vmin, 2rem)' }}>
+                                        <div className="w-2 h-2 bg-green-600 rounded-sm" />
+                                        <Fraction num="3" den="4" size="text-2xl" />
+                                        <span className="text-gray-400">&gt;</span>
+                                        <Fraction num="1" den="2" size="text-2xl" />
+                                        <span className="text-gray-600 font-bold ml-2" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>porque</span>
+                                    </div>
+
+                                    <div className="space-y-8 pl-4 md:pl-12">
+                                        <div className="flex items-center flex-wrap gap-4 md:gap-12 font-black" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
+                                            <span>1.</span>
+                                            <div className="flex items-center gap-2">
+                                                <Fraction num="3" den="4" size="text-xl" />
+                                                <span>=</span>
+                                                <div className="flex flex-col items-center">
+                                                    <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 rounded px-2 gap-8">
+                                                        <span>3</span>
+                                                        <span className="text-red-500">2</span>
+                                                    </div>
+                                                    <div className="w-full h-0.5 bg-black dark:bg-white my-1" />
+                                                    <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 rounded px-2 gap-8">
+                                                        <span>4</span>
+                                                        <span className="text-red-500">2</span>
+                                                    </div>
+                                                </div>
+                                                <span>=</span>
+                                                <Fraction num="6" den="8" size="text-xl" />
+                                            </div>
+                                            <span className="hidden md:inline text-gray-400">,</span>
+                                            <div className="flex items-center gap-2">
+                                                <Fraction num="1" den="2" size="text-xl" />
+                                                <span>=</span>
+                                                <div className="flex flex-col items-center">
+                                                    <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 rounded px-2 gap-8">
+                                                        <span>1</span>
+                                                        <span className="text-red-500">4</span>
+                                                    </div>
+                                                    <div className="w-full h-0.5 bg-black dark:bg-white my-1" />
+                                                    <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 rounded px-2 gap-8">
+                                                        <span>2</span>
+                                                        <span className="text-red-500">4</span>
+                                                    </div>
+                                                </div>
+                                                <span>=</span>
+                                                <Fraction num="4" den="8" size="text-xl" />
+                                            </div>
+                                        </div>
+                                        <p className="text-gray-700 dark:text-gray-400 italic font-bold">tienen el mismo denominador.</p>
+
+                                        <div className="flex items-center gap-12 font-black" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
+                                            <span>2.</span>
+                                            <div className="flex items-center gap-2">
+                                                <Fraction num="6" den="8" size="text-xl" />
+                                                <span className="text-blue-500">&gt;</span>
+                                                <Fraction num="4" den="8" size="text-xl" />
+                                            </div>
+                                            <span className="text-gray-800 dark:text-gray-200 font-black ml-4 text-xl">
+                                                porque <span className="ml-2 bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded text-black dark:text-white">6 &gt; 4 .</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                {/* End of A - ABSTRACTO Section */}
             </div>
-
-            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

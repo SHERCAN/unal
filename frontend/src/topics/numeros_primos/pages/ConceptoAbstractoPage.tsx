@@ -99,13 +99,6 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                 draggable={false}
                             />
                         </div>
-
-                        {/* 4. BONO EXPLICADO */}
-                        <div className="flex items-center justify-center gap-2">
-                            <PlayVideoButton trackingId={VIDEO_TRACKING.A_BONO} title="Bono Explicado" videoId="/pag1/vv-1" />
-                            <span className="font-extrabold text-gray-800 dark:text-gray-200 tracking-wide">BONO EXPLICADO</span>
-                        </div>
-
                         {/* 5. ¿Qué es un número primo? */}
                         <div>
                             <div className="flex items-center gap-2 mb-2">

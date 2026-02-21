@@ -18,21 +18,18 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
     className = ""
 }) => {
     return (
-        <div className={`flex items-center gap-3 ${className}`}>
-            <button
-                type="button"
-                onClick={onCheck}
-                disabled={status === 'correct' || disabled}
-                className={`flex-shrink-0 px-6 py-2 rounded font-bold text-white transition-all text-lg ${status === 'correct'
-                        ? 'bg-gray-400 cursor-not-allowed'
-                        : 'bg-purple-700 hover:bg-purple-800'
-                    }`}
-            >
-                ¿LISTO?
-            </button>
-
-            {status === 'correct' && (
-                <div className="relative flex items-center gap-2 flex-shrink-0">
+        <div className={`flex items-center justify-center min-w-[200px] h-12 ${className}`}>
+            {status === null ? (
+                <button
+                    type="button"
+                    onClick={onCheck}
+                    disabled={disabled}
+                    className="px-6 py-2 rounded font-bold text-white transition-all text-lg bg-purple-700 hover:bg-purple-800 flex-shrink-0"
+                >
+                    ¿LISTO?
+                </button>
+            ) : status === 'correct' ? (
+                <div className="relative flex items-center gap-2 flex-shrink-0 animate-in fade-in zoom-in duration-300">
                     <span className="text-green-600 font-black text-2xl celebrate-animation">
                         ✓ CORRECTO
                     </span>
@@ -48,17 +45,15 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
                         />
                     ))}
                 </div>
-            )}
-
-            {status === 'incorrect' && (
-                <div className="relative flex items-center gap-3 flex-shrink-0">
+            ) : (
+                <div className="relative flex items-center gap-3 flex-shrink-0 animate-in fade-in slide-in-from-top-1 duration-300">
                     <span className="text-orange-500 font-black text-2xl shake-animation">
                         INCORRECTO
                     </span>
                     <button
                         type="button"
                         onClick={onReset}
-                        className="p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-all flex items-center justify-center"
+                        className="p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-all flex items-center justify-center shadow-md scale-110"
                         title="Reintentar"
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

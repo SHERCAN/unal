@@ -24,6 +24,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
         A_MATH: 'div-inexacta-a-math',
         A_COMO: 'div-inexacta-a-como',
         A_DEF: 'div-inexacta-a-def',
+        A_PARTES: 'div-inexacta-a-partes',
     };
 
     /* videoModal list removed */
@@ -158,9 +159,12 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
 
                             {/* PARTES DE LA DIVISIÓN */}
                             <div className="mt-8 pt-6 border-t-2 border-gray-200 dark:border-gray-700">
-                                <h3 className="text-center text-xl font-black text-gray-900 dark:text-white mb-6 tracking-wide uppercase">
-                                    Partes de la División
-                                </h3>
+                                <div className="flex items-center justify-center gap-4 mb-6">
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_PARTES} title="" videoId="/pag12/vv-5" />
+                                    <h3 className="text-xl font-black text-gray-900 dark:text-white tracking-wide uppercase">
+                                        Partes de la División
+                                    </h3>
+                                </div>
 
                                 <div className="flex justify-center">
                                     <div className="relative">

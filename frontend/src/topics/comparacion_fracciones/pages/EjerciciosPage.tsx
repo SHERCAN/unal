@@ -1,111 +1,134 @@
 'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
-
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
 
-
 interface Props { zoom?: number; }
 
 export function EjerciciosPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched, submitExercise } = useVideoProgress();
+    const { submitExercise } = useVideoProgress();
 
-    const VIDEO_TRACKING = { INTRO: 'comp-frac-ej-intro' };
-
-    /* videoModal list removed */
-    /* ref removed */
-
-    /* handleVideoComplete removed */
-
-    /* openVideo removed */
-
-    /* PlayButton definition removed */
-
-    // Comparison exercises
-    const exercises = [
-        { a: 3, b: 4, c: 5, d: 8, answer: '>' },   // 3×8=24 vs 4×5=20 → >
-        { a: 2, b: 7, c: 1, d: 3, answer: '<' },    // 2×3=6 vs 7×1=7 → <
-        { a: 4, b: 6, c: 2, d: 3, answer: '=' },    // 4×3=12 vs 6×2=12 → =
-        { a: 5, b: 9, c: 2, d: 3, answer: '<' },    // 5×3=15 vs 9×2=18 → <
-        { a: 7, b: 10, c: 3, d: 5, answer: '>' },   // 7×5=35 vs 10×3=30 → >
-        { a: 1, b: 2, c: 3, d: 6, answer: '=' },    // 1×6=6 vs 2×3=6 → =
-    ];
-
-    const [answers, setAnswers] = useState<Record<number, string>>({});
-    const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
-
-    const handleCheck = async () => {
-        const allCorrect = exercises.every((ex, i) => answers[i] === ex.answer);
-        setResult(allCorrect ? 'correct' : 'incorrect');
-        await submitExercise('comp-frac-exercises', allCorrect);
+    const VIDEO_TRACKING = {
+        EJ_INTRO: 'comp-frac-ej-intro',
+        EJ_A: 'comp-frac-ej-a',
+        EJ_B: 'comp-frac-ej-b'
     };
 
-    const handleReset = () => {
-        setAnswers({});
-        setResult(null);
+    // Correct answers
+    const answersA = { 0: '<', 1: '<', 2: '>', 3: '>' };
+    const answersB = { 0: '<', 1: '<', 2: '>', 3: '>', 4: '=', 5: '=' };
+
+    const [actA, setActA] = useState<Record<number, string>>({});
+    const [actB, setActB] = useState<Record<number, string>>({});
+    const [resultsA, setResultsA] = useState<Record<number, 'correct' | 'incorrect' | null>>({});
+    const [resultsB, setResultsB] = useState<Record<number, 'correct' | 'incorrect' | null>>({});
+
+    const checkA = async (idx: number) => {
+        const isCorrect = actA[idx] === answersA[idx as keyof typeof answersA];
+        setResultsA(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
+        await submitExercise(`comp-frac-ej-a-${idx}`, isCorrect);
     };
+
+    const checkB = async (idx: number) => {
+        const isCorrect = actB[idx] === answersB[idx as keyof typeof answersB];
+        setResultsB(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
+        await submitExercise(`comp-frac-ej-b-${idx}`, isCorrect);
+    };
+
+    const Fraction = ({ num, den }: any) => (
+        <div className="inline-flex flex-col items-center align-middle text-2xl font-black px-1">
+            <span>{num}</span>
+            <div className="w-full h-0.5 bg-black my-0.5" />
+            <span>{den}</span>
+        </div>
+    );
+
+    const Exercise = ({ num1, den1, num2, den2, idx, state, setState, result, onCheck, onReset }: any) => (
+        <div className="flex items-center gap-4 p-2 rounded-xl hover:bg-gray-50 transition-colors group">
+            <div className="w-4 h-4 bg-purple-600 rounded-sm flex-shrink-0" />
+            <div className="flex items-center gap-3">
+                <Fraction num={num1} den={den1} />
+                <div className="relative">
+                    <select
+                        value={state[idx] || ''}
+                        onChange={(e) => {
+                            setState((prev: any) => ({ ...prev, [idx]: e.target.value }));
+                            onReset(idx);
+                        }}
+                        className="w-14 h-14 text-2xl font-black text-purple-700 bg-gray-100 rounded-lg appearance-none text-center outline-none border-2 border-transparent focus:border-purple-300 cursor-pointer"
+                    >
+                        <option value=""></option>
+                        <option value="<">&lt;</option>
+                        <option value=">">&gt;</option>
+                        <option value="=">=</option>
+                    </select>
+                    <div className="absolute right-1 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px] border-t-gray-400"></div>
+                    </div>
+                </div>
+                <Fraction num={num2} den={den2} />
+            </div>
+            <FeedbackButton
+                status={result ?? null}
+                onCheck={() => onCheck(idx)}
+                onReset={() => {
+                    setState((prev: any) => ({ ...prev, [idx]: '' }));
+                    onReset(idx);
+                }}
+                className="scale-75 origin-left"
+            />
+        </div>
+    );
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Comparación de Fracciones' }} pageId="comp-frac-ejercicios">
-            <div className="flex items-center gap-2 mb-6">
-                <PlayVideoButton trackingId={VIDEO_TRACKING.INTRO} title="Ejercicios de Comparación" videoId="/pag1/vv-1" />
-                <h2 className="text-2xl font-bold text-orange-600 dark:text-orange-400">EJERCICIOS</h2>
-            </div>
-
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Compara cada par de fracciones usando <span className="font-bold">&gt;</span>, <span className="font-bold">&lt;</span> o <span className="font-bold">=</span>.
-                Puedes calcular los productos cruzados para ayudarte.
-            </p>
-
-            <div className={`rounded-xl border-2 p-5 ${result === 'correct' ? 'border-green-400 bg-green-50 dark:bg-green-900/10' :
-                result === 'incorrect' ? 'border-red-400 bg-red-50 dark:bg-red-900/10' :
-                    'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50'
-                }`}>
-                <div className="space-y-3">
-                    {exercises.map((ex, i) => (
-                        <div key={i} className={`flex items-center gap-3 p-3 rounded-lg border ${result === 'correct' ? 'border-green-200' :
-                            result === 'incorrect' && answers[i] !== ex.answer ? 'border-red-300 bg-red-50 dark:bg-red-900/20' :
-                                'border-gray-200 dark:border-gray-700'
-                            }`}>
-                            <span className="bg-orange-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0">
-                                {i + 1}
-                            </span>
-
-                            <span className="text-lg font-bold min-w-[45px] text-right">
-                                <span className="text-blue-600">{ex.a}</span>/<span className="text-red-600">{ex.b}</span>
-                            </span>
-
-                            <select
-                                value={answers[i] || ''}
-                                onChange={(e) => { setAnswers(prev => ({ ...prev, [i]: e.target.value })); setResult(null); }}
-                                className="border-2 rounded px-2 py-1 text-lg font-bold border-orange-400 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 min-w-[50px] text-center"
-                                disabled={result === 'correct'}
-                            >
-                                <option value="">?</option>
-                                <option value=">">&gt;</option>
-                                <option value="<">&lt;</option>
-                                <option value="=">=</option>
-                            </select>
-
-                            <span className="text-lg font-bold min-w-[45px]">
-                                <span className="text-blue-600">{ex.c}</span>/<span className="text-red-600">{ex.d}</span>
-                            </span>
-                        </div>
-                    ))}
+            <div className="space-y-10 pb-20">
+                <div className="flex items-center gap-6">
+                    <h1 className="text-4xl font-black text-purple-700 tracking-tight uppercase">EJERCICIOS</h1>
                 </div>
 
-                <div className="flex items-center gap-3 justify-center mt-4">
-                    <FeedbackButton
-                        onCheck={handleCheck}
-                        onReset={handleReset}
-                        status={result}
-                    />
+                <div className="flex items-center gap-4">
+                    <PlayVideoButton trackingId={VIDEO_TRACKING.EJ_INTRO} title="" videoId="/pag1/vv-9" />
+                    <div className="bg-purple-700 text-white font-black text-4xl w-14 h-14 flex items-center justify-center rounded-xl shadow-lg flex-shrink-0">1</div>
+                    <p className="text-2xl font-black text-gray-800">Coloca el signo correcto: &lt; , &gt; o = entre las fracciones.</p>
+                </div>
+
+                {/* PART A */}
+                <div className="space-y-6 ml-16">
+                    <div className="flex items-center gap-4">
+                        <div className="bg-[#be90de] text-white font-black text-2xl px-4 py-2 rounded-lg">A</div>
+                        <p className="text-xl font-black text-gray-700">Fracciones con el mismo denominador.</p>
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.EJ_A} title="" videoId="/pag1/vv-10" />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 px-8">
+                        <Exercise num1="2" den1="5" num2="4" den2="5" idx={0} state={actA} setState={setActA} result={resultsA[0]} onCheck={checkA} onReset={(i: number) => setResultsA(p => ({ ...p, [i]: null }))} />
+                        <Exercise num1="1" den1="10" num2="9" den2="10" idx={1} state={actA} setState={setActA} result={resultsA[1]} onCheck={checkA} onReset={(i: number) => setResultsA(p => ({ ...p, [i]: null }))} />
+                        <Exercise num1="7" den1="9" num2="3" den2="9" idx={2} state={actA} setState={setActA} result={resultsA[2]} onCheck={checkA} onReset={(i: number) => setResultsA(p => ({ ...p, [i]: null }))} />
+                        <Exercise num1="11" den1="12" num2="10" den2="12" idx={3} state={actA} setState={setActA} result={resultsA[3]} onCheck={checkA} onReset={(i: number) => setResultsA(p => ({ ...p, [i]: null }))} />
+                    </div>
+                </div>
+
+                {/* PART B */}
+                <div className="space-y-6 pt-4 ml-16">
+                    <div className="flex items-center gap-4">
+                        <div className="bg-[#be90de] text-white font-black text-2xl px-4 py-2 rounded-lg">B</div>
+                        <p className="text-xl font-black text-gray-700">Fracciones con el diferente denominador.</p>
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.EJ_B} title="" videoId="/pag1/vv-11" />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 px-8">
+                        <Exercise num1="1" den1="2" num2="3" den2="4" idx={0} state={actB} setState={setActB} result={resultsB[0]} onCheck={checkB} onReset={(i: number) => setResultsB(p => ({ ...p, [i]: null }))} />
+                        <Exercise num1="1" den1="2" num2="4" den2="8" idx={4} state={actB} setState={setActB} result={resultsB[4]} onCheck={checkB} onReset={(i: number) => setResultsB(p => ({ ...p, [i]: null }))} />
+                        <Exercise num1="3" den1="4" num2="2" den2="3" idx={2} state={actB} setState={setActB} result={resultsB[2]} onCheck={checkB} onReset={(i: number) => setResultsB(p => ({ ...p, [i]: null }))} />
+                        <Exercise num1="7" den1="9" num2="2" den2="3" idx={3} state={actB} setState={setActB} result={resultsB[3]} onCheck={checkB} onReset={(i: number) => setResultsB(p => ({ ...p, [i]: null }))} />
+                        <Exercise num1="3" den1="9" num2="1" den2="3" idx={5} state={actB} setState={setActB} result={resultsB[5]} onCheck={checkB} onReset={(i: number) => setResultsB(p => ({ ...p, [i]: null }))} />
+                        <Exercise num1="1" den1="10" num2="1" den2="3" idx={1} state={actB} setState={setActB} result={resultsB[1]} onCheck={checkB} onReset={(i: number) => setResultsB(p => ({ ...p, [i]: null }))} />
+                    </div>
                 </div>
             </div>
-
-            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

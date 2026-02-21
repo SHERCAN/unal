@@ -1,11 +1,11 @@
 'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
-
+import { MdLightbulbOutline } from 'react-icons/md';
 
 interface Props { zoom?: number; }
 
@@ -13,165 +13,336 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        A2_SIMP: 'frac-equiv-a2-simplification',
-        A2_AMP: 'frac-equiv-a2-amplification',
+        SIMP_INTRO: 'frac-equiv-a2-simp-intro',
+        SIMP_EXAMPLE: 'frac-equiv-a2-simp-example',
+        SIMP_PRAC: 'frac-equiv-a2-simp-practice',
+        AMP_INTRO: 'frac-equiv-a2-amp-intro',
+        AMP_EXAMPLE: 'frac-equiv-a2-amp-example',
+        AMP_PRAC: 'frac-equiv-a2-amp-practice',
     };
 
-    /* videoModal list removed */
-    /* ref removed */
-
-    /* handleVideoComplete removed */
-
-    /* openVideo removed */
-
-    /* PlayButton definition removed */
-
-    // Simplification exercises
-    const [simpAnswers, setSimpAnswers] = useState<Record<string, string>>({});
+    // --- State for Exercises ---
+    const [simpAns, setSimpAns] = useState({ n: '', d: '' });
     const [simpResult, setSimpResult] = useState<'correct' | 'incorrect' | null>(null);
 
-    // Amplification exercises
-    const [ampAnswers, setAmpAnswers] = useState<Record<string, string>>({});
-    const [ampResult, setAmpResult] = useState<'correct' | 'incorrect' | null>(null);
+    const [amp1Ans, setAmp1Ans] = useState({ n: '', d: '' });
+    const [amp2Ans, setAmp2Ans] = useState({ n: '', d: '' });
+    const [amp1Result, setAmp1Result] = useState<'correct' | 'incorrect' | null>(null);
+    const [amp2Result, setAmp2Result] = useState<'correct' | 'incorrect' | null>(null);
 
-    const handleCheckSimp = () => {
-        // 4/8 ÷2 → 2/4, 6/9 ÷3 → 2/3
-        const correct = parseInt(simpAnswers['0-n']) === 2 && parseInt(simpAnswers['0-d']) === 4 &&
-            parseInt(simpAnswers['1-n']) === 2 && parseInt(simpAnswers['1-d']) === 3;
-        setSimpResult(correct ? 'correct' : 'incorrect');
+    const handleSimpCheck = () => {
+        if (simpAns.n === '2' && simpAns.d === '5') setSimpResult('correct');
+        else setSimpResult('incorrect');
     };
 
-    const handleCheckAmp = () => {
-        // 1/3 ×2 → 2/6, 2/5 ×3 → 6/15
-        const correct = parseInt(ampAnswers['0-n']) === 2 && parseInt(ampAnswers['0-d']) === 6 &&
-            parseInt(ampAnswers['1-n']) === 6 && parseInt(ampAnswers['1-d']) === 15;
-        setAmpResult(correct ? 'correct' : 'incorrect');
+    const handleAmp1Check = () => {
+        if (amp1Ans.n === '10' && amp1Ans.d === '15') setAmp1Result('correct');
+        else setAmp1Result('incorrect');
     };
 
-    const resetSimp = () => { setSimpAnswers({}); setSimpResult(null); };
-    const resetAmp = () => { setAmpAnswers({}); setAmpResult(null); };
+    const handleAmp2Check = () => {
+        if (amp2Ans.n === '25' && amp2Ans.d === '35') setAmp2Result('correct');
+        else setAmp2Result('incorrect');
+    };
 
+    const resetSimp = () => { setSimpAns({ n: '', d: '' }); setSimpResult(null); };
+    const resetAmp1 = () => { setAmp1Ans({ n: '', d: '' }); setAmp1Result(null); };
+    const resetAmp2 = () => { setAmp2Ans({ n: '', d: '' }); setAmp2Result(null); };
+
+    // Helper components
+    const Fraction = ({ num, den, size = "text-3xl", color = "text-black" }: any) => (
+        <div className={`inline-flex flex-col items-center align-middle ${size} font-bold px-1`}>
+            <span className={color}>{num}</span>
+            <div className={`w-full h-0.5 ${color === 'text-white' ? 'bg-white' : 'bg-black'} my-0.5`} />
+            <span className={color}>{den}</span>
+        </div>
+    );
+
+    const InputFraction = ({ value, onChange, result, disabled }: any) => (
+        <div className="flex flex-col items-center gap-1">
+            <input
+                type="text"
+                className="w-14 h-14 text-center rounded-lg text-2xl font-black outline-none border-none shadow-sm"
+                style={{ backgroundColor: '#d9d9d9' }}
+                value={value.n}
+                onChange={e => onChange({ ...value, n: e.target.value })}
+                disabled={disabled}
+            />
+            <div className="w-14 h-1 bg-black rounded-full" />
+            <input
+                type="text"
+                className="w-14 h-14 text-center rounded-lg text-2xl font-black outline-none border-none shadow-sm"
+                style={{ backgroundColor: '#d9d9d9' }}
+                value={value.d}
+                onChange={e => onChange({ ...value, d: e.target.value })}
+                disabled={disabled}
+            />
+        </div>
+    );
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones Equivalentes' }} pageId="frac-equiv-concepto-abstracto-2">
             <div className="relative ml-2 flex items-start">
-                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#be90de' }}>
+                {/* CPA Indicator "A" */}
+                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de]">
                     A
                 </div>
-                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white" style={{ borderColor: '#be90de' }}>
 
-                    <div className="mt-4 space-y-6">
-                        {/* SIMPLIFICACIÓN */}
-                        <div>
-                            <div className="flex items-center gap-2 mb-2">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A2_SIMP} title="Simplificación" videoId="/pag1/vv-1" />
-                                <h3 className="font-bold text-purple-700 dark:text-purple-300">Simplificación</h3>
+                {/* Content Container */}
+                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-10 bg-white border-[#be90de]">
+                    <div className="space-y-16">
+                        {/* 1. SIMPLIFICACIÓN */}
+                        <div className="space-y-8">
+                            <div className="flex items-center gap-4">
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.SIMP_INTRO} title="" videoId="/pag26/vv-1" />
+                                <div className="text-white font-bold px-6 py-2 rounded-lg text-xl shadow-sm" style={{ backgroundColor: '#e95352' }}>
+                                    ¿Qué es una simplificación?
+                                </div>
                             </div>
 
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                                Dividir numerador y denominador por el <span className="font-bold">mismo número</span>.
+                            <p className="text-xl text-gray-800 font-semibold pl-12 leading-relaxed">
+                                <span className="text-[#e95352] font-black">Simplificar una fracción</span> consiste en dividir numerador y denominador por un mismo número.
                             </p>
 
-                            <div className="space-y-3">
-                                {/* 4/8 ÷ 2 = ?/? */}
-                                <div className={`flex items-center gap-2 flex-wrap p-3 rounded-lg border-2 ${simpResult === 'correct' ? 'border-green-300 bg-green-50 dark:bg-green-900/10' :
-                                    'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50'
-                                    }`}>
-                                    <span className="text-lg font-bold"><span className="text-blue-600">4</span>/<span className="text-red-600">8</span></span>
-                                    <span className="text-sm text-gray-500">÷ 2 →</span>
-                                    <input type="number" value={simpAnswers['0-n'] || ''}
-                                        onChange={(e) => { setSimpAnswers(prev => ({ ...prev, '0-n': e.target.value })); setSimpResult(null); }}
-                                        className="w-10 h-7 text-center font-bold text-blue-600 rounded border-2 border-blue-400 bg-white dark:bg-gray-700 text-sm"
-                                        placeholder="?" disabled={simpResult === 'correct'} />
-                                    <span className="text-gray-400 font-bold">/</span>
-                                    <input type="number" value={simpAnswers['0-d'] || ''}
-                                        onChange={(e) => { setSimpAnswers(prev => ({ ...prev, '0-d': e.target.value })); setSimpResult(null); }}
-                                        className="w-10 h-7 text-center font-bold text-red-600 rounded border-2 border-red-400 bg-white dark:bg-gray-700 text-sm"
-                                        placeholder="?" disabled={simpResult === 'correct'} />
+                            {/* EXAMPLE 1 */}
+                            <div className="space-y-6">
+                                <div className="flex items-center gap-4">
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.SIMP_EXAMPLE} title="Ejemplo Simplificación" videoId="/pag26/vv-2" />
+                                    <div className="bg-green-600 text-white font-bold px-4 py-1 rounded inline-block text-lg italic shadow-sm">
+                                        Ejemplo:
+                                    </div>
+                                    <p className="text-xl text-gray-800 font-semibold">
+                                        Observa cómo se simplificó la siguiente fracción:
+                                    </p>
                                 </div>
 
-                                {/* 6/9 ÷ 3 = ?/? */}
-                                <div className={`flex items-center gap-2 flex-wrap p-3 rounded-lg border-2 ${simpResult === 'correct' ? 'border-green-300 bg-green-50 dark:bg-green-900/10' :
-                                    'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50'
-                                    }`}>
-                                    <span className="text-lg font-bold"><span className="text-blue-600">6</span>/<span className="text-red-600">9</span></span>
-                                    <span className="text-sm text-gray-500">÷ 3 →</span>
-                                    <input type="number" value={simpAnswers['1-n'] || ''}
-                                        onChange={(e) => { setSimpAnswers(prev => ({ ...prev, '1-n': e.target.value })); setSimpResult(null); }}
-                                        className="w-10 h-7 text-center font-bold text-blue-600 rounded border-2 border-blue-400 bg-white dark:bg-gray-700 text-sm"
-                                        placeholder="?" disabled={simpResult === 'correct'} />
-                                    <span className="text-gray-400 font-bold">/</span>
-                                    <input type="number" value={simpAnswers['1-d'] || ''}
-                                        onChange={(e) => { setSimpAnswers(prev => ({ ...prev, '1-d': e.target.value })); setSimpResult(null); }}
-                                        className="w-10 h-7 text-center font-bold text-red-600 rounded border-2 border-red-400 bg-white dark:bg-gray-700 text-sm"
-                                        placeholder="?" disabled={simpResult === 'correct'} />
+                                <div className="flex items-center justify-center gap-6 py-4 pl-6">
+                                    <div className="flex items-center gap-6 shrink-0">
+                                        <Fraction num="12" den="20" size="text-5xl" />
+                                        <span className="text-5xl font-black text-gray-300">=</span>
+                                        <Fraction num="3" den="5" size="text-5xl" />
+                                    </div>
+
+                                    <span className="text-5xl text-gray-300 shrink-0">→</span>
+
+                                    <div className="flex items-center gap-8 shrink-0">
+                                        <div className="flex items-center gap-4">
+                                            <Fraction num="12" den="20" size="text-5xl" />
+                                            <span className="text-5xl font-black text-gray-400">=</span>
+                                            <div className="inline-flex flex-col items-center align-middle text-4xl font-bold px-1">
+                                                <div className="flex items-center">
+                                                    <span>3 × </span>
+                                                    <span className="relative">
+                                                        2
+                                                        <div className="absolute top-1/2 left-0 w-full h-[2px] bg-red-500 rotate-[45deg]" />
+                                                    </span>
+                                                    <span> × </span>
+                                                    <span className="relative">
+                                                        2
+                                                        <div className="absolute top-1/2 left-0 w-full h-[2px] bg-red-500 rotate-[45deg]" />
+                                                    </span>
+                                                </div>
+                                                <div className="w-full h-0.5 bg-black my-0.5" />
+                                                <div className="flex items-center">
+                                                    <span>5 × </span>
+                                                    <span className="relative">
+                                                        2
+                                                        <div className="absolute top-1/2 left-0 w-full h-[2px] bg-red-500 rotate-[45deg]" />
+                                                    </span>
+                                                    <span> × </span>
+                                                    <span className="relative">
+                                                        2
+                                                        <div className="absolute top-1/2 left-0 w-full h-[2px] bg-red-500 rotate-[45deg]" />
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <span className="text-5xl font-black text-gray-400">=</span>
+                                            <Fraction num="3" den="5" size="text-5xl" />
+                                        </div>
+
+                                        <div className="bg-purple-600 p-2 rounded-lg shadow-md flex items-center justify-center shrink-0">
+                                            <MdLightbulbOutline className="text-white text-3xl" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center gap-4 pl-12 w-full">
+                                    <p className="text-xl text-gray-800 font-semibold leading-relaxed flex-1">
+                                        La fracción <Fraction num="3" den="5" size="text-2xl" /> no se puede simplificar más porque esos números 3 y 5 son primos y no tienen factores.
+                                    </p>
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.SIMP_EXAMPLE} title="" videoId="/pag26/vv-3" />
                                 </div>
                             </div>
 
-                            <div className="flex justify-center mt-2">
-                                <FeedbackButton
-                                    onCheck={handleCheckSimp}
-                                    onReset={resetSimp}
-                                    status={simpResult}
-                                />
+                            {/* PRACTICE 1 */}
+                            <div className="space-y-8 pt-4">
+                                <div className="flex items-center gap-4">
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.SIMP_PRAC} title="Práctica Simplificación" videoId="/pag26/vv-4" />
+                                    <div className="bg-[#800000] text-white font-bold px-6 py-1.5 rounded-sm text-lg shadow-md tracking-wider">
+                                        PRÁCTICA
+                                    </div>
+                                    <p className="text-xl text-gray-800 font-bold italic">
+                                        Simplificar la siguiente fracción:
+                                    </p>
+                                </div>
+
+                                <div className="flex items-center justify-center gap-12 pl-12 bg-gray-50/50 p-8 rounded-2xl relative">
+                                    <div className="flex items-center gap-8">
+                                        <div className="w-4 h-4 bg-[#800000] flex-shrink-0" />
+                                        <Fraction num="4" den="10" size="text-6xl" />
+                                        <span className="text-6xl font-black text-gray-300">=</span>
+                                        <InputFraction
+                                            value={simpAns}
+                                            onChange={(val: any) => { setSimpAns(val); setSimpResult(null); }}
+                                            disabled={simpResult === 'correct'}
+                                        />
+                                    </div>
+
+                                    <div className="flex flex-col gap-1">
+                                        <FeedbackButton
+                                            onCheck={handleSimpCheck}
+                                            onReset={resetSimp}
+                                            status={simpResult}
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <hr className="border-gray-200 dark:border-gray-700" />
-
-                        {/* AMPLIFICACIÓN */}
-                        <div>
-                            <div className="flex items-center gap-2 mb-2">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A2_AMP} title="Amplificación" videoId="/pag1/vv-1" />
-                                <h3 className="font-bold text-purple-700 dark:text-purple-300">Amplificación</h3>
+                        {/* 2. AMPLIFICACIÓN */}
+                        <div className="space-y-8 pt-8 border-t-2 border-dashed border-gray-100">
+                            <div className="flex items-center gap-4">
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.AMP_INTRO} title="" videoId="/pag26/vv-5" />
+                                <div className="text-white font-bold px-6 py-2 rounded-lg text-xl shadow-sm" style={{ backgroundColor: '#e95352' }}>
+                                    ¿Qué es una amplificación?
+                                </div>
                             </div>
 
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                                Multiplicar numerador y denominador por el <span className="font-bold">mismo número</span>.
+                            <p className="text-xl text-gray-800 font-semibold pl-12 leading-relaxed">
+                                <span className="text-[#e95352] font-black">Amplificar una fracción</span> consiste en multiplicar numerador y denominador por un mismo número.
                             </p>
 
-                            <div className="space-y-3">
-                                {/* 1/3 × 2 = ?/? */}
-                                <div className={`flex items-center gap-2 flex-wrap p-3 rounded-lg border-2 ${ampResult === 'correct' ? 'border-green-300 bg-green-50 dark:bg-green-900/10' :
-                                    'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50'
-                                    }`}>
-                                    <span className="text-lg font-bold"><span className="text-blue-600">1</span>/<span className="text-red-600">3</span></span>
-                                    <span className="text-sm text-gray-500">× 2 →</span>
-                                    <input type="number" value={ampAnswers['0-n'] || ''}
-                                        onChange={(e) => { setAmpAnswers(prev => ({ ...prev, '0-n': e.target.value })); setAmpResult(null); }}
-                                        className="w-10 h-7 text-center font-bold text-blue-600 rounded border-2 border-blue-400 bg-white dark:bg-gray-700 text-sm"
-                                        placeholder="?" disabled={ampResult === 'correct'} />
-                                    <span className="text-gray-400 font-bold">/</span>
-                                    <input type="number" value={ampAnswers['0-d'] || ''}
-                                        onChange={(e) => { setAmpAnswers(prev => ({ ...prev, '0-d': e.target.value })); setAmpResult(null); }}
-                                        className="w-10 h-7 text-center font-bold text-red-600 rounded border-2 border-red-400 bg-white dark:bg-gray-700 text-sm"
-                                        placeholder="?" disabled={ampResult === 'correct'} />
+                            {/* EXAMPLE 2 */}
+                            <div className="space-y-6">
+                                <div className="flex items-center gap-4">
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.AMP_EXAMPLE} title="Ejemplo Amplificación" videoId="/pag26/vv-6" />
+                                    <div className="bg-green-600 text-white font-bold px-4 py-1 rounded inline-block text-lg italic shadow-sm">
+                                        Ejemplo:
+                                    </div>
+                                    <p className="text-xl text-gray-800 font-semibold">
+                                        Observa cómo se amplificó la siguiente fracción:
+                                    </p>
                                 </div>
 
-                                {/* 2/5 × 3 = ?/? */}
-                                <div className={`flex items-center gap-2 flex-wrap p-3 rounded-lg border-2 ${ampResult === 'correct' ? 'border-green-300 bg-green-50 dark:bg-green-900/10' :
-                                    'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50'
-                                    }`}>
-                                    <span className="text-lg font-bold"><span className="text-blue-600">2</span>/<span className="text-red-600">5</span></span>
-                                    <span className="text-sm text-gray-500">× 3 →</span>
-                                    <input type="number" value={ampAnswers['1-n'] || ''}
-                                        onChange={(e) => { setAmpAnswers(prev => ({ ...prev, '1-n': e.target.value })); setAmpResult(null); }}
-                                        className="w-10 h-7 text-center font-bold text-blue-600 rounded border-2 border-blue-400 bg-white dark:bg-gray-700 text-sm"
-                                        placeholder="?" disabled={ampResult === 'correct'} />
-                                    <span className="text-gray-400 font-bold">/</span>
-                                    <input type="number" value={ampAnswers['1-d'] || ''}
-                                        onChange={(e) => { setAmpAnswers(prev => ({ ...prev, '1-d': e.target.value })); setAmpResult(null); }}
-                                        className="w-10 h-7 text-center font-bold text-red-600 rounded border-2 border-red-400 bg-white dark:bg-gray-700 text-sm"
-                                        placeholder="?" disabled={ampResult === 'correct'} />
+                                <div className="flex items-center justify-center gap-6 py-8 pl-6">
+                                    <div className="relative flex items-center gap-4 shrink-0">
+                                        {/* Arches for x4 */}
+                                        <div className="absolute -top-10 left-0 w-full flex justify-center">
+                                            <div className="relative group">
+                                                <svg className="w-16 h-8 overflow-visible" viewBox="0 0 100 50">
+                                                    <path d="M 10 40 Q 50 10 90 40" fill="none" stroke="#e95352" strokeWidth="2" />
+                                                    <path d="M 90 40 L 85 35 M 90 40 L 82 40" fill="none" stroke="#e95352" strokeWidth="2" />
+                                                </svg>
+                                                <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[#e95352] font-black text-xl italic">4</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="absolute -bottom-10 left-0 w-full flex justify-center">
+                                            <div className="relative group">
+                                                <svg className="w-16 h-8 overflow-visible" viewBox="0 0 100 50">
+                                                    <path d="M 10 10 Q 50 40 90 10" fill="none" stroke="#e95352" strokeWidth="2" />
+                                                    <path d="M 90 10 L 85 15 M 90 10 L 82 10" fill="none" stroke="#e95352" strokeWidth="2" />
+                                                </svg>
+                                                <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-[#e95352] font-black text-xl italic">4</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-6">
+                                            <Fraction num="3" den="5" size="text-5xl" />
+                                            <span className="text-5xl font-black text-gray-300">=</span>
+                                            <Fraction num="12" den="20" size="text-5xl" />
+                                        </div>
+                                    </div>
+
+                                    <span className="text-5xl text-gray-300 shrink-0">→</span>
+
+                                    <div className="flex items-center gap-4 shrink-0">
+                                        <Fraction num="3" den="5" size="text-5xl" />
+                                        <span className="text-5xl font-black text-gray-400">=</span>
+                                        <div className="inline-flex flex-col items-center align-middle text-5xl font-bold px-1">
+                                            <div className="flex items-center gap-2">
+                                                <span>3</span>
+                                                <span className="text-[#e95352] text-4xl">4</span>
+                                            </div>
+                                            <div className="w-full h-0.5 bg-black my-1" />
+                                            <div className="flex items-center gap-2">
+                                                <span>5</span>
+                                                <span className="text-[#e95352] text-4xl">4</span>
+                                            </div>
+                                        </div>
+                                        <span className="text-5xl font-black text-gray-400">=</span>
+                                        <Fraction num="12" den="20" size="text-5xl" />
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="flex justify-center mt-2">
-                                <FeedbackButton
-                                    onCheck={handleCheckAmp}
-                                    onReset={resetAmp}
-                                    status={ampResult}
-                                />
+                            {/* PRACTICE 2 */}
+                            <div className="space-y-8 pt-4">
+                                <div className="flex items-center gap-4">
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.AMP_PRAC} title="Práctica Amplificación" videoId="/pag26/vv-7" />
+                                    <div className="bg-[#800000] text-white font-bold px-6 py-1.5 rounded-sm text-lg shadow-md tracking-wider">
+                                        PRÁCTICA
+                                    </div>
+                                    <p className="text-xl text-gray-800 font-bold italic">
+                                        Las dos siguientes fracciones se amplifiquen por 5:
+                                    </p>
+                                </div>
+
+                                <div className="space-y-12 pl-12">
+                                    {/* Exercise 1 */}
+                                    <div className="flex items-center gap-12 bg-gray-50/50 p-8 rounded-2xl w-fit">
+                                        <div className="flex items-center gap-8">
+                                            <div className="w-4 h-4 bg-[#800000] flex-shrink-0" />
+                                            <Fraction num="2" den="3" size="text-6xl" />
+                                            <span className="text-6xl font-black text-gray-300">=</span>
+                                            <InputFraction
+                                                value={amp1Ans}
+                                                onChange={(val: any) => { setAmp1Ans(val); setAmp1Result(null); }}
+                                                disabled={amp1Result === 'correct'}
+                                            />
+                                        </div>
+
+                                        <div className="flex flex-col gap-1">
+                                            <FeedbackButton
+                                                onCheck={handleAmp1Check}
+                                                onReset={resetAmp1}
+                                                status={amp1Result}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Exercise 2 */}
+                                    <div className="flex items-center gap-12 bg-gray-50/50 p-8 rounded-2xl w-fit">
+                                        <div className="flex items-center gap-8">
+                                            <div className="w-4 h-4 bg-[#800000] flex-shrink-0" />
+                                            <Fraction num="5" den="7" size="text-6xl" />
+                                            <span className="text-6xl font-black text-gray-300">=</span>
+                                            <InputFraction
+                                                value={amp2Ans}
+                                                onChange={(val: any) => { setAmp2Ans(val); setAmp2Result(null); }}
+                                                disabled={amp2Result === 'correct'}
+                                            />
+                                        </div>
+
+                                        <div className="flex flex-col gap-1">
+                                            <FeedbackButton
+                                                onCheck={handleAmp2Check}
+                                                onReset={resetAmp2}
+                                                status={amp2Result}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

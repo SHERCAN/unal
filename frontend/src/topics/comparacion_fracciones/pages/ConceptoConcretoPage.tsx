@@ -1,203 +1,190 @@
 'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
-
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
+import Image from 'next/image';
 
-
-/**
- * Frame 185 — Comparación de Fracciones
- * C section: Teams (Rojo/Morado), Shields, Happy/Sad states
- * Assets: /comparacion_fracciones/equipofelizmorado.png, equipofelizrojo.png, equipotristemorado.png, equipotristerojo.png, escudo1.png, escudo2.png
- */
+// Assets
+import escudoRojo from '../escudo2.png';
+import escudoMorado from '../escudo1.png';
+import partido1Img from '../partido1.png';
+import partido2Img from '../partido2.png';
+import partido3Img from '../partido3.png';
+import morado1Img from '../morado1.png';
+import rojo1Img from '../rojo1.png';
+import felizRojo from '../equipofelizrojo.png';
+import tristeRojo from '../equipotristerojo.png';
+import felizMorado from '../equipofelizmorado.png';
+import tristeMorado from '../equipotristemorado.png';
 
 interface Props { zoom?: number; }
 
 export function ConceptoConcretoPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
+    const { submitExercise } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        C_SOCCER: 'comp-frac-c-soccer',
-        P_COMPARE: 'comp-frac-p-compare',
+        C_INTRO: 'comp-frac-c-intro',
+        P_RECT: 'comp-frac-p-rect',
+        P_WHY: 'comp-frac-p-why'
     };
 
-    /* videoModal list removed */
-    /* ref removed */
+    const matchData = [
+        { label: 'PARTIDO 1', redImg: felizRojo, purpleImg: tristeMorado },
+        { label: 'PARTIDO 2', redImg: felizRojo, purpleImg: tristeMorado },
+        { label: 'PARTIDO 3', redImg: tristeRojo, purpleImg: felizMorado }
+    ];
 
-    /* handleVideoComplete removed */
+    // --- ACTIVITY P: PICTORICO ---
+    const [pSign, setPSign] = useState<string>('');
+    const [pNum1, setPNum1] = useState('');
+    const [pNum2, setPNum2] = useState('');
+    const [pResult, setPResult] = useState<'correct' | 'incorrect' | null>(null);
 
-    /* openVideo removed */
-
-    /* PlayButton definition removed */
-
-    // Interactive: compare fraction bars — who scored more
-    const [answer, setAnswer] = useState('');
-    const [listoResult, setListoResult] = useState<'correct' | 'incorrect' | null>(null);
-
-    const handleListo = () => {
-        // Rojo (3/5) vs Morado (2/5)
-        if (answer === 'rojo') {
-            setListoResult('correct');
-        } else {
-            setListoResult('incorrect');
-        }
+    const checkP = async () => {
+        const correct = pSign === '<' && pNum1 === '1' && pNum2 === '2';
+        setPResult(correct ? 'correct' : 'incorrect');
+        await submitExercise('comp-frac-p-interaction', correct);
     };
 
-    const handleReset = () => {
-        setAnswer('');
-        setListoResult(null);
-    };
-
+    const InputBoxSmall = ({ value, onChange, width = "w-10" }: any) => (
+        <input
+            type="text"
+            className={`${width} h-10 text-center rounded-lg text-xl font-bold bg-[#e2e2e2] outline-none border-none`}
+            value={value}
+            onChange={e => onChange(e.target.value)}
+        />
+    );
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Comparación de Fracciones' }} pageId="comp-frac-concepto-concreto">
-            {/* C - CONCRETO Section */}
-            <div className="relative ml-2 flex items-start mb-8">
-                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#4ade80' }}>
-                    C
-                </div>
-                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white" style={{ borderColor: '#4ade80' }}>
-
-                    <div className="mt-4 flex flex-col gap-6">
-                        <div className="flex items-center gap-4">
-                            <PlayVideoButton trackingId={VIDEO_TRACKING.C_SOCCER} title="Comparación de Fracciones - El Partido" videoId="/pag1/vv-1" />
-                            <div>
-                                <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200">El Gran Partido de Fútbol</h3>
-                                <p className="text-gray-600">Compara los goles anotados por cada equipo.</p>
-                            </div>
-                        </div>
-
-                        {/* Escenario Deportivo */}
-                        <div className="relative bg-gradient-to-b from-green-50 to-green-100 rounded-xl p-6 border-2 border-green-200 shadow-inner">
-                            <div className="grid grid-cols-2 gap-8 items-end">
-
-                                {/* Equipo Rojo */}
-                                <div className="flex flex-col items-center gap-2 group">
-                                    <div className="relative">
-                                        <img src="/comparacion_fracciones/escudo2.png" alt="Escudo Rojo" className="w-16 h-16 absolute -top-8 -right-4 drop-shadow-md animate-pulse" />
-                                        <img
-                                            src={listoResult === 'correct' ? "/comparacion_fracciones/equipofelizrojo.png" : "/comparacion_fracciones/equipofelizrojo.png"} // Always happy initially? No, let's keep them happy/neutral
-                                            alt="Equipo Rojo"
-                                            className="w-32 md:w-40 h-auto drop-shadow-lg transition-transform hover:scale-105"
-                                        />
-                                    </div>
-                                    <div className="bg-red-100 border-2 border-red-400 rounded-lg px-4 py-2 text-center shadow-sm w-full">
-                                        <p className="font-black text-red-600 text-xl">3/5</p>
-                                        <p className="text-xs text-red-800 font-bold uppercase">Goles</p>
-                                    </div>
+            <div className="space-y-12 pb-20">
+                {/* C - CONCRETO Section */}
+                <div className="relative ml-2 flex items-start mb-12">
+                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#4ade80' }}>
+                        C
+                    </div>
+                    <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-white/50" style={{ borderColor: '#4ade80' }}>
+                        <div className="w-full h-full flex flex-col mt-2" style={{ gap: 'clamp(0.75rem, 2vh, 1.5rem)', padding: 'clamp(0.5rem, 2vmin, 1rem)' }}>
+                            <div className="flex items-center gap-8">
+                                <div className="w-48 flex justify-center">
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.C_INTRO} title="" videoId="/pag1/vv-1" />
                                 </div>
-
-                                {/* Equipo Morado */}
-                                <div className="flex flex-col items-center gap-2 group">
-                                    <div className="relative">
-                                        <img src="/comparacion_fracciones/escudo1.png" alt="Escudo Morado" className="w-16 h-16 absolute -top-8 -left-4 drop-shadow-md" />
-                                        <img
-                                            src={listoResult === 'correct' ? "/comparacion_fracciones/equipotristemorado.png" : "/comparacion_fracciones/equipofelizmorado.png"}
-                                            alt="Equipo Morado"
-                                            className="w-32 md:w-40 h-auto drop-shadow-lg transition-transform hover:scale-105"
-                                        />
+                                <div className="flex-1 flex justify-around items-center">
+                                    <div className="w-40 flex justify-center">
+                                        <Image src={escudoMorado} alt="Escudo Morado" width={80} height={80} className="drop-shadow-md" />
                                     </div>
-                                    <div className="bg-purple-100 border-2 border-purple-400 rounded-lg px-4 py-2 text-center shadow-sm w-full">
-                                        <p className="font-black text-purple-600 text-xl">2/5</p>
-                                        <p className="text-xs text-purple-800 font-bold uppercase">Goles</p>
+                                    <div className="w-40 flex justify-center">
+                                        <Image src={escudoRojo} alt="Escudo Rojo" width={80} height={80} className="drop-shadow-md" />
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Visual Bar Comparison */}
-                            <div className="mt-6 space-y-4 bg-white/60 p-4 rounded-lg backdrop-blur-sm">
-                                <div className="flex items-center gap-2">
-                                    <span className="font-bold text-red-600 w-16 text-right">Rojo</span>
-                                    <div className="flex-1 h-6 bg-gray-200 rounded-full overflow-hidden border border-gray-300">
-                                        <div className="h-full bg-red-500 w-[60%] shadow-inner flex items-center justify-end px-2 text-white text-xs font-bold">3/5</div>
+                            <div className="space-y-4">
+                                {matchData.map((row, i) => (
+                                    <div key={i} className="flex items-center gap-8">
+                                        <div className="bg-purple-700 text-white font-black px-6 py-2 rounded-lg text-xl w-48 text-center">{row.label}</div>
+                                        <div className="flex-1 flex justify-around items-center">
+                                            <div className="w-40 h-28 relative">
+                                                <Image src={row.purpleImg} alt="Equipo Morado" fill className="object-contain" />
+                                            </div>
+                                            <div className="w-40 h-28 relative">
+                                                <Image src={row.redImg} alt="Equipo Rojo" fill className="object-contain" />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <span className="font-bold text-purple-600 w-16 text-right">Morado</span>
-                                    <div className="flex-1 h-6 bg-gray-200 rounded-full overflow-hidden border border-gray-300">
-                                        <div className="h-full bg-purple-500 w-[40%] shadow-inner flex items-center justify-end px-2 text-white text-xs font-bold">2/5</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="bg-gray-50 p-4 rounded-xl text-center space-y-4 shadow-sm border border-gray-100">
-                            <p className="text-lg font-bold text-gray-800 dark:text-gray-200">¿Quién hizo más goles?</p>
-
-                            <div className="flex justify-center gap-4">
-                                <button
-                                    onClick={() => { setAnswer('rojo'); setListoResult(null); }}
-                                    className={`flex items-center gap-2 px-6 py-3 rounded-xl border-2 font-bold transition-all shadow-sm ${answer === 'rojo' ? 'bg-red-100 border-red-500 text-red-700 ring-2 ring-red-200' : 'bg-white border-gray-200 hover:border-red-300 text-gray-600'
-                                        }`}
-                                >
-                                    <img src="/comparacion_fracciones/escudo2.png" className="w-6 h-6" alt="" />
-                                    Equipo Rojo
-                                </button>
-
-                                <button
-                                    onClick={() => { setAnswer('morado'); setListoResult(null); }}
-                                    className={`flex items-center gap-2 px-6 py-3 rounded-xl border-2 font-bold transition-all shadow-sm ${answer === 'morado' ? 'bg-purple-100 border-purple-500 text-purple-700 ring-2 ring-purple-200' : 'bg-white border-gray-200 hover:border-purple-300 text-gray-600'
-                                        }`}
-                                >
-                                    <img src="/comparacion_fracciones/escudo1.png" className="w-6 h-6" alt="" />
-                                    Equipo Morado
-                                </button>
-                            </div>
-
-                            <div className="flex justify-center mt-6">
-                                <FeedbackButton
-                                    onCheck={handleListo}
-                                    onReset={handleReset}
-                                    status={listoResult}
-                                />
+                                ))}
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {/* P - PROCESUAL Section */}
-            <div className="relative ml-2 flex items-start">
-                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#60a5fa' }}>
-                    P
-                </div>
-                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-blue-50/30" style={{ borderColor: '#60a5fa' }}>
-
-                    <div className="mt-4 space-y-4">
-                        <div className="flex items-center gap-4">
-                            <PlayVideoButton trackingId={VIDEO_TRACKING.P_COMPARE} title="Cómo comparar fracciones" videoId="/pag1/vv-1" />
-                            <div>
-                                <p className="text-lg font-bold text-gray-800 dark:text-gray-200">¿Cómo comparamos fracciones?</p>
-                                <p className="text-sm text-gray-600">Aprende las reglas básicas.</p>
-                            </div>
-                        </div>
-
-                        <div className="grid md:grid-cols-2 gap-4">
-                            <div className="bg-white rounded-xl p-4 shadow-sm border border-blue-100 hover:shadow-md transition-shadow">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <span className="bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded text-xs">CASO 1</span>
-                                    <p className="font-bold text-blue-700 text-sm">Mismo denominador</p>
+                {/* P - PICTORICO Section */}
+                <div className="relative ml-2 flex items-start">
+                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#60a5fa' }}>
+                        P
+                    </div>
+                    <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-blue-50/20" style={{ borderColor: '#60a5fa' }}>
+                        <div className="w-full h-full flex flex-col mt-2" style={{ gap: 'clamp(0.75rem, 2vh, 1.5rem)', padding: 'clamp(0.5rem, 2vmin, 1rem)' }}>
+                            <div className="grid grid-cols-3 gap-8 justify-items-center">
+                                <div className="flex items-center gap-4">
+                                    <span className="font-black text-lg vertical-text">PARTIDO 1</span>
+                                    <div className="w-16 h-32 relative">
+                                        <Image src={partido1Img} alt="Partido 1" fill className="object-contain" />
+                                    </div>
                                 </div>
-                                <p className="text-sm text-gray-600 mb-2">
-                                    Compara solo los numeradores.
-                                </p>
-                                <div className="text-center font-mono bg-gray-50 p-2 rounded border border-dashed border-gray-300">
-                                    <span className="text-green-600 font-bold">3</span>/5 &gt; <span className="text-red-500 font-bold">2</span>/5
+                                <div className="flex items-center gap-4">
+                                    <span className="font-black text-lg vertical-text">PARTIDOS 2</span>
+                                    <div className="w-16 h-32 relative">
+                                        <Image src={partido2Img} alt="Partido 2" fill className="object-contain" />
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <span className="font-black text-lg vertical-text">PARTIDOS 3</span>
+                                    <div className="w-20 h-32 relative">
+                                        <Image src={partido3Img} alt="Partido 3" fill className="object-contain" />
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="bg-white rounded-xl p-4 shadow-sm border border-purple-100 hover:shadow-md transition-shadow">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <span className="bg-purple-100 text-purple-700 font-bold px-2 py-0.5 rounded text-xs">CASO 2</span>
-                                    <p className="font-bold text-purple-700 text-sm">Diferente denominador</p>
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-4">
+                                    <p className="text-xl font-bold text-gray-800 leading-tight">
+                                        De acuerdo con la actividad anterior, observamos dos figuras rectangulares que representan fracciones.
+                                    </p>
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.P_RECT} title="" videoId="/pag1/vv-2" />
                                 </div>
-                                <p className="text-sm text-gray-600 mb-2">
-                                    Usa productos cruzados.
-                                </p>
-                                <div className="text-center font-mono bg-gray-50 p-2 rounded border border-dashed border-gray-300 text-xs">
-                                    1/2 vs 3/4 → 1×4 &lt; 2×3
+
+                                <div className="flex items-center gap-4">
+                                    <p className="text-xl text-gray-800 leading-tight">
+                                        ¿Cuál figura tiene mayor cantidad de color naranja, la de la izquierda o la de la derecha?
+                                    </p>
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.P_WHY} title="" videoId="/pag1/vv-3" />
+                                </div>
+
+                                <div className="flex flex-col items-center gap-6 mt-8">
+                                    <div className="flex items-center gap-12">
+                                        {/* Left Rect */}
+                                        <div className="w-20 h-40 relative shadow-sm">
+                                            <Image src={morado1Img} alt="1/3" fill className="object-contain" />
+                                        </div>
+
+                                        {/* Selector */}
+                                        <div className="flex flex-col items-center gap-2">
+                                            <div className="relative">
+                                                <select
+                                                    value={pSign}
+                                                    onChange={(e) => { setPSign(e.target.value); setPResult(null); }}
+                                                    className="w-20 h-20 text-4xl font-black text-purple-700 bg-gray-100 rounded-lg appearance-none text-center outline-none border-none cursor-pointer"
+                                                >
+                                                    <option value=""></option>
+                                                    <option value="<">&lt;</option>
+                                                    <option value=">">&gt;</option>
+                                                    <option value="=">=</option>
+                                                </select>
+                                                <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
+                                                    <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] border-t-gray-400"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Right Rect */}
+                                        <div className="w-20 h-40 relative shadow-sm">
+                                            <Image src={rojo1Img} alt="2/3" fill className="object-contain" />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-4 text-2xl font-black">
+                                        <span>¿Por qué?</span>
+                                        <InputBoxSmall value={pNum1} onChange={setPNum1} />
+                                        <span className="text-purple-400 font-black">&lt;</span>
+                                        <InputBoxSmall value={pNum2} onChange={setPNum2} />
+                                    </div>
+
+                                    <div className="mt-4">
+                                        <FeedbackButton status={pResult} onCheck={checkP} onReset={() => { setPSign(''); setPNum1(''); setPNum2(''); setPResult(null); }} />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -205,7 +192,13 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                 </div>
             </div>
 
-            {/* VideoModal removed */}
+            <style jsx>{`
+                .vertical-text {
+                    writing-mode: vertical-rl;
+                    transform: rotate(180deg);
+                    white-space: nowrap;
+                }
+            `}</style>
         </BookPageContainer>
     );
 }

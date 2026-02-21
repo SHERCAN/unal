@@ -44,12 +44,11 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                             <div className="flex items-start gap-4">
                                 <p className="text-gray-800 text-lg leading-relaxed font-medium">
                                     De acuerdo con la actividad anterior, la pizza se corta en <span className="font-bold text-purple-600 text-xl">8</span> porciones. Los tres
-                                    clientes comen 3 porciones. Se quedan <span className="font-bold text-orange-500 text-xl">5</span> porciones. Su fracción se expresa como
+                                    clientes comen 3 porciones. Se quedan <span className="font-bold text-orange-500 text-xl">5</span> porciones. Su fracción se expresa como <span className="inline-block align-middle ml-2"><PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="Introducción a la fracción" videoId="/pag18/vv-2" /></span>
                                 </p>
                             </div>
 
                             <div className="flex items-center gap-4">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="Introducción a la fracción" videoId="/pag18/vv-2" />
                                 <p className="font-bold text-gray-700">La <span className="text-red-500">fracción</span> se representa cómo</p>
                             </div>
 
@@ -106,14 +105,17 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                 </div>
 
                                 <p className="text-lg text-gray-800 leading-relaxed max-w-3xl">
-                                    donde <span className="font-bold text-blue-700 text-2xl">a</span> y <span className="font-bold text-purple-700 text-2xl">b</span> son números naturales, <span className="font-bold text-purple-700 text-2xl">b</span> es siempre diferente de cero <span className="font-bold text-purple-700 text-2xl">b ≠ 0</span>.
+                                    donde <span className="font-bold text-blue-700 text-2xl">a</span> y <span className="font-bold text-purple-700 text-2xl">b</span> son números naturales, <span className="font-bold text-purple-700 text-2xl">b</span> es siempre diferente de cero <span className="font-bold text-purple-700 text-2xl">b ≠ 0</span>. <span className="inline-block align-middle ml-2"><PlayVideoButton trackingId="fracciones-a-def-2" title="" videoId="/pag18/vv-4" /></span>
                                 </p>
                             </div>
                         </div>
 
                         {/* 3. Parts of a Fraction */}
                         <div className="flex flex-col items-center space-y-6">
-                            <h3 className="text-xl font-bold text-black uppercase tracking-widest border-b-2 border-gray-200 pb-2">Partes de la Fracción</h3>
+                            <div className="flex items-center gap-4 border-b-2 border-gray-200 pb-2">
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_PARTS} title="" videoId="/pag18/vv-5" />
+                                <h3 className="text-xl font-bold text-black uppercase tracking-widest">Partes de la Fracción</h3>
+                            </div>
 
                             <div className="flex items-center gap-12 w-full max-w-lg">
                                 <div className="flex flex-col items-center gap-4">

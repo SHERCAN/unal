@@ -107,13 +107,16 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                                     en <span className="font-bold text-lg text-red-600">3</span> grupos de deportistas. Así, cada uno de 3 grupos tiene la misma
                                     cantidad de <span className="font-bold text-lg text-green-600">6</span> medallas. <span className="font-bold text-lg text-red-600">NO SOBRE</span> ninguna medalla.
                                 </p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOTA} title="" videoId="/pag8/vv-1" />
-
-                                <div className="mt-2 bg-gray-50 dark:bg-gray-700 rounded-lg p-3 border-l-4 border-purple-500">
-                                    <p className="text-sm text-gray-700 dark:text-gray-300">
-                                        <span className="font-bold">NOTA:</span> SOBRE es lo mismo que RESTO.<br />
-                                        RESTO se usa en matemáticas, y SOBRA se usa en español.
-                                    </p>
+                                <div className="mt-4 flex items-center gap-4">
+                                    <div className="shrink-0">
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOTA} title="" videoId="/pag8/vv-1" />
+                                    </div>
+                                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 border-l-4 border-purple-500 flex-1">
+                                        <p className="text-sm text-gray-700 dark:text-gray-300">
+                                            <span className="font-bold">NOTA:</span> SOBRE es lo mismo que RESTO.<br />
+                                            RESTO se usa en matemáticas, y SOBRA se usa en español.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
 
