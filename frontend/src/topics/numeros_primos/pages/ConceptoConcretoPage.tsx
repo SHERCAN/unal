@@ -184,7 +184,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
                     {/* Play button top-left */}
                     <div className="mb-4">
-                        <PlayVideoButton trackingId={VIDEO_TRACKING.C_INTRO} title="Números Primos - Concepto Concreto" videoId="/pag1/vv-1" />
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.C_INTRO} title="" videoId="/pag14/vv-1" />
                     </div>
 
                     {/* === TOP ROW: Tenistas + "+" button + ¿IGUALES? === */}
@@ -401,7 +401,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                 Representa los repartos con <span className="font-bold">7</span> cuadrados. Intenta agruparlos en <span className="font-bold">2 grupos, 3 grupos o 4 grupos</span> iguales.
                             </p>
                             <div className="mt-2">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.P_INTRO} title="Concepto Procesual" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.P_INTRO} title="" videoId="/pag14/vv-2" />
                             </div>
                         </div>
 
@@ -411,7 +411,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                 <p className="font-semibold text-gray-800 dark:text-gray-200">
                                     No se forman 2, 3 y 4 grupos iguales.
                                 </p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.P_FAIL} title="Grupos que no funcionan" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.P_FAIL} title="Grupos que no funcionan" videoId="/pag14/vv-3" />
                             </div>
 
                             <div className="flex justify-center">
@@ -430,7 +430,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                 <p className="font-semibold text-gray-800 dark:text-gray-200">
                                     Se pueden formar solo uno grupo o siete grupos iguales.
                                 </p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.P_SUCCESS} title="Grupos que sí funcionan" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.P_SUCCESS} title="Grupos que sí funcionan" videoId="/pag14/vv-4" />
                             </div>
 
                             <div className="flex justify-center">
@@ -448,7 +448,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                             <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
                                 Se observa que el número <span className="font-bold">7</span> se puede dividir en <span className="font-bold">1</span> ó en sí mismo <span className="font-bold">7</span> partes iguales.
                             </p>
-                            <PlayVideoButton trackingId={VIDEO_TRACKING.P_CONCLUSION} title="Conclusión" videoId="/pag1/vv-1" />
+                            <PlayVideoButton trackingId={VIDEO_TRACKING.P_CONCLUSION} title="" videoId="/pag14/vv-5" />
                         </div>
                     </div>
                 </div>
