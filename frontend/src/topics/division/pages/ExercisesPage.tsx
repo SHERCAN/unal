@@ -1,4 +1,4 @@
-use client';
+'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useState, useRef, useEffect } from 'react';
