@@ -14,28 +14,11 @@ export default function Home() {
       <div className="max-w-4xl w-full space-y-8">
         <div className="text-center space-y-4">
           <h1 className="text-5xl font-bold text-primary">
-            Aprendizaje Matemático
+            Bienviendo al Libro Digital de Texto de Matemáticas Accesible e Interactivo
           </h1>
-          <h2 className="text-3xl font-semibold text-text">
-            Para Personas con Discapacidad Auditiva
-          </h2>
         </div>
 
         <div className="bg-background-secondary rounded-2xl p-8 shadow-xl space-y-6">
-          <p className="text-lg text-text-secondary leading-relaxed">
-            Bienvenido a nuestra plataforma educativa diseñada especialmente
-            para personas con discapacidad auditiva que conocen lengua de señas.
-            Nuestro objetivo es mejorar las habilidades matemáticas a través de
-            contenido visual, interactivo y accesible.
-          </p>
-
-          <p className="text-lg text-text-secondary leading-relaxed">
-            Sabemos que los conceptos matemáticos pueden ser abstractos, por eso
-            hemos creado un sistema de aprendizaje que utiliza videos en lengua
-            de señas, ejercicios interactivos y un seguimiento personalizado de
-            tu progreso.
-          </p>
-
           {/* Espacio para video de YouTube */}
           <div className="aspect-video bg-gray-300 dark:bg-gray-700 rounded-lg flex items-center justify-center">
              <div className="w-full h-full">
