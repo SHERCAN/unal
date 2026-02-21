@@ -135,7 +135,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
         <BookPageContainer
             zoom={zoom}
             moduleHeader={{
-                icon: '/division-icon.png',
+                // icon: '/division-icon.png',
                 name: 'División'
             }}
             pageId="division-concept-3"
@@ -154,49 +154,18 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                 <div className="bg-green-600 text-white px-3 py-1 rounded font-bold text-sm">Ejemplo:</div>
                                 <span className="font-bold text-gray-800 dark:text-gray-200">Calcule 25 ÷ 5:</span>
                             </div>
-
-                            <div className="flex flex-wrap justify-around items-start gap-8">
-
-                                {/* Division Visual */}
-                                <div className="flex items-center gap-4">
-                                    <div className="flex flex-col items-end text-red-500 font-bold text-sm gap-1">
-                                        <span>Dividendo</span>
-                                        <span className="mt-8 font-black text-black dark:text-white">- 25</span>
-                                        <div className="border-t-2 border-black dark:border-white w-full text-center font-black text-black dark:text-white">00</div>
-                                    </div>
-                                    <div className="flex gap-2 items-start">
-                                        <div className="flex flex-col items-center">
-                                            <div className="flex">
-                                                <span className="font-black text-2xl px-2 text-black dark:text-white">25</span>
-                                                <div className="border-l-2 border-b-2 border-black dark:border-white pl-2 pb-1 pr-2">
-                                                    <span className="font-black text-2xl text-black dark:text-white">5</span>
-                                                </div>
-                                            </div>
-                                            <span className="font-black text-purple-600 text-2xl mt-1">5</span>
-                                        </div>
-                                        <div className="flex flex-col gap-4 text-red-500 font-bold text-sm mt-1">
-                                            <span>Divisor</span>
-                                            <span className="mt-4">Cociente</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Multiplication Table */}
-                                <div className="border-l-2 border-gray-300 dark:border-gray-600 pl-4 font-bold font-mono text-gray-700 dark:text-gray-300">
-                                    <p>5 × 1 = 5</p>
-                                    <p>5 × 2 = 10</p>
-                                    <p>5 × 3 = 15</p>
-                                    <p>5 × 4 = 20</p>
-                                    <p>5 × <span className="text-purple-600 dark:text-purple-400">5</span> = <span className="text-red-500">25</span></p>
-                                </div>
+                            <div className='flex justify-center'>
+                                <img
+                                    src="/division/img5.png"
+                                    className="h-32 object-contain"
+                                    draggable={false}
+                                />
                             </div>
-
                             <div className="mt-4 text-sm text-gray-800 dark:text-gray-200 flex items-start gap-2">
                                 <p>
-                                    Para dividir 25 entre 5, buscamos cuántas veces el número 5 está contenido en 25.
-                                    Como 5 × 5 = 25, el cociente es 5 y el resto es 0.
-                                </p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE_MAIN} title="Explicación del ejemplo" videoId="/pag1/vv-1" />
+                                    <span className='font-semibold'> Para dividir 25 entre 5, buscamos cuántas veces el número 5 está contenido en 25.
+                                    Como 5 × 5 = 25, el cociente es 5 y el resto es 0. </span><PlayVideoButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE_MAIN} title="Explicación del ejemplo" videoId="/pag4/vv-1" />
+                                </p>                               
                             </div>
                         </div>
 
@@ -208,7 +177,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         {/* --- EXERCISE 1 --- */}
                         <div className="flex flex-col gap-4 pl-2">
                             <div className="flex items-start gap-2">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PRACTICE_1} title="Ejercicio 1" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PRACTICE_1} title="Práctica 1" videoId="/pag4/vv-2" />
                                 <p className="font-bold text-gray-800 dark:text-gray-200 text-sm md:text-base">
                                     El número 21 se reparte en 7 grupos iguales.
                                     <br />
@@ -350,7 +319,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         {/* --- PROBLEM 1 --- */}
                         <div className="flex flex-col gap-2 pl-2">
                             <div className="flex items-start gap-2">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PROBLEM_1} title="Problema 1" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PROBLEM_1} title="Problema 1" videoId="/pag4/vv-3" />
                                 <div className="border border-pink-300 rounded px-2 text-pink-700 font-bold text-xs py-0.5 self-start whitespace-nowrap">PROBLEMA 1</div>
                                 <p className="font-medium text-gray-800 dark:text-gray-200 text-sm leading-tight">
                                     Ana y María quieren repartir 12 muñecas entre las dos.<br />
@@ -374,7 +343,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         {/* --- PROBLEM 2 --- */}
                         <div className="flex flex-col gap-2 pl-2 pb-4">
                             <div className="flex items-start gap-2">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PROBLEM_2} title="Problema 2" videoId="/pag1/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PROBLEM_2} title="Problema 2" videoId="/pag4/vv-4" />
                                 <div className="border border-pink-300 rounded px-2 text-pink-700 font-bold text-xs py-0.5 self-start whitespace-nowrap">PROBLEMA 2</div>
                                 <p className="font-medium text-gray-800 dark:text-gray-200 text-sm leading-tight">
                                     En la bodega hay 64 cuadernos. Cada paquete trae 8 cuadernos.
