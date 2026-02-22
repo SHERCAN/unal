@@ -1,7 +1,7 @@
 'use client';
 // Force rebuild
 
-import { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
@@ -16,15 +16,20 @@ import { fraccionesEquivalentesConfig } from '@/topics/fracciones_equivalentes/c
 import { comparacionFraccionesConfig } from '@/topics/comparacion_fracciones/config';
 import { TopicConfig } from '@/types/topic';
 
-const TOPIC_CONFIGS: Record<string, TopicConfig> = {
-  'division': divisionConfig,
-  'division-exacta': divisionExactaConfig,
-  'division-inexacta': divisionInexactaConfig,
-  'numeros-primos': numerosPrimosConfig,
-  'fracciones': fraccionesConfig,
-  'fracciones-equivalentes': fraccionesEquivalentesConfig,
-  'comparacion-fracciones': comparacionFraccionesConfig,
-};
+const ORDERED_TOPICS = [
+  divisionConfig,
+  divisionExactaConfig,
+  divisionInexactaConfig,
+  numerosPrimosConfig,
+  fraccionesConfig,
+  fraccionesEquivalentesConfig,
+  comparacionFraccionesConfig,
+];
+
+const TOPIC_CONFIGS: Record<string, TopicConfig> = ORDERED_TOPICS.reduce((acc, config) => {
+  acc[config.id] = config;
+  return acc;
+}, {} as Record<string, TopicConfig>);
 import { TopicDropdown } from '@/components/dashboard/TopicDropdown';
 import { InfiniteBook } from '@/components/dashboard/InfiniteBook';
 import { ProgressNavigation } from '@/components/navigation/ProgressNavigation';
@@ -412,13 +417,14 @@ export default function DashboardPage() {
   };
 
   const handleSelectTopic = (topicId: string) => {
-    const config = TOPIC_CONFIGS[topicId];
-    if (config) {
-      setCurrentTopicConfig(config);
-      // Reset to page 1 when switching topics
-      if (navigateToPage) {
-        navigateToPage(1);
+    // Find the starting page of the selected topic
+    let globalPageOffset = 1; // Index 0 is the IndexPage
+    for (const topic of ORDERED_TOPICS) {
+      if (topic.id === topicId) {
+        if (navigateToPage) navigateToPage(globalPageOffset);
+        return;
       }
+      globalPageOffset += (topic.pages.length + topic.exercisePages.length);
     }
   };
 
@@ -643,7 +649,7 @@ export default function DashboardPage() {
         <InfiniteBookWrapper
           completedPages={completedPages}
           setCompletedPages={setCompletedPages}
-          topicConfig={currentTopicConfig}
+          topics={ORDERED_TOPICS}
           setNavigateToPage={setNavigateToPage}
           completedModules={completedModules}
         />
@@ -656,17 +662,17 @@ export default function DashboardPage() {
 function InfiniteBookWrapper({
   completedPages,
   setCompletedPages,
-  topicConfig,
+  topics,
   setNavigateToPage,
   completedModules
 }: {
   completedPages: number[];
   setCompletedPages: React.Dispatch<React.SetStateAction<number[]>>;
-  topicConfig: TopicConfig;
+  topics: TopicConfig[];
   setNavigateToPage: React.Dispatch<React.SetStateAction<((page: number) => void) | null>>;
   completedModules: string[];
 }) {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const navigateCallbackRef = useRef<((page: number) => void) | null>(null);
 
   const handlePageChange = useCallback((page: number, completed: number[]) => {
@@ -676,7 +682,6 @@ function InfiniteBookWrapper({
 
   const handleNavigationRequest = useCallback((callback: (page: number) => void) => {
     navigateCallbackRef.current = callback;
-    // Update parent state once without causing re-renders
     setNavigateToPage(() => callback);
   }, [setNavigateToPage]);
 
@@ -686,24 +691,59 @@ function InfiniteBookWrapper({
     }
   }, []);
 
+  // Determine current topic based on page index
+  const currentTopicInfo = React.useMemo(() => {
+    if (currentPage === 0) return null;
+    let offset = 1;
+    for (const topic of topics) {
+      const count = topic.pages.length + topic.exercisePages.length;
+      if (currentPage < offset + count) {
+        return {
+          topic,
+          relativePage: currentPage - offset + 1,
+          totalTopicPages: count
+        };
+      }
+      offset += count;
+    }
+    return null;
+  }, [currentPage, topics]);
+
+  const totalPagesInBook = topics.reduce((acc, t) => acc + t.pages.length + t.exercisePages.length, 1);
+
   return (
     <div className="flex-1 relative">
       <InfiniteBook
-        topicConfig={topicConfig}
+        topics={topics}
         onPageChange={handlePageChange}
         onNavigationRequest={handleNavigationRequest}
       />
 
-      {/* Progress Navigation Footer - Full width of main content */}
+      {/* Progress Navigation Footer */}
       <div className="sticky bottom-0 z-50 w-full">
         <ProgressNavigation
-          lessonPages={topicConfig.pages.length}
-          exercisePages={topicConfig.exercisePages.length}
-          currentPage={currentPage}
+          lessonPages={currentTopicInfo ? currentTopicInfo.topic.pages.length : 0}
+          exercisePages={currentTopicInfo ? currentTopicInfo.topic.exercisePages.length : 0}
+          currentPage={currentTopicInfo ? currentTopicInfo.relativePage : 0}
           completedPages={completedPages}
           completedModules={completedModules}
-          onPageChange={handleNavigateToPage}
+          onPageChange={(relativePage) => {
+            // Convert relative page back to global page
+            if (!currentTopicInfo) return;
+            let globalOffset = 1;
+            for (const t of topics) {
+              if (t.id === currentTopicInfo.topic.id) {
+                handleNavigateToPage(globalOffset + relativePage - 1);
+                return;
+              }
+              globalOffset += (t.pages.length + t.exercisePages.length);
+            }
+          }}
         />
+        {/* Global Page Indicator Overlay */}
+        <div className="absolute top-[-30px] right-4 bg-black/50 text-white px-3 py-1 rounded-t-lg text-xs font-mono backdrop-blur-sm pointer-events-none">
+          LIBRO: Pág. {currentPage + 1} / {totalPagesInBook}
+        </div>
       </div>
     </div>
   );

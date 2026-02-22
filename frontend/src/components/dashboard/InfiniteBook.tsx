@@ -1,17 +1,18 @@
 import { motion } from 'framer-motion';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import React from 'react';
 import { TopicConfig } from '@/types/topic';
+import { IndexPage } from './IndexPage';
 
 interface InfiniteBookProps {
-    topicConfig: TopicConfig;
+    topics: TopicConfig[];
     onPageChange?: (page: number, completed: number[]) => void;
     onNavigationRequest?: (callback: (page: number) => void) => void;
 }
 
-export function InfiniteBook({ topicConfig, onPageChange, onNavigationRequest }: InfiniteBookProps) {
+export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: InfiniteBookProps) {
     const [globalZoom, setGlobalZoom] = useState(1);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(0); // 0 is Index
     const [completedPages, setCompletedPages] = useState<number[]>([]);
     const pageRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -26,6 +27,13 @@ export function InfiniteBook({ topicConfig, onPageChange, onNavigationRequest }:
     const handleResetZoom = () => {
         setGlobalZoom(1);
     };
+
+    const navigateToPage = useCallback((page: number) => {
+        const element = pageRefs.current[page];
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, []);
 
     // Intersection Observer for page tracking
     useEffect(() => {
@@ -49,9 +57,8 @@ export function InfiniteBook({ topicConfig, onPageChange, onNavigationRequest }:
             if (maxEntry && maxRatio > 0.1) {
                 const pageIndex = pageRefs.current.findIndex(ref => ref === maxEntry!.target);
                 if (pageIndex !== -1) {
-                    const pageNumber = pageIndex + 1;
-                    setCurrentPage(pageNumber);
-                    const newCompleted = Array.from(new Set([...Array.from({ length: pageNumber - 1 }, (_, i) => i + 1)]));
+                    setCurrentPage(pageIndex);
+                    const newCompleted = Array.from(new Set([...Array.from({ length: pageIndex }, (_, i) => i)]));
                     setCompletedPages(newCompleted);
                 }
             }
@@ -74,27 +81,28 @@ export function InfiniteBook({ topicConfig, onPageChange, onNavigationRequest }:
 
     // Expose navigation function to parent
     useEffect(() => {
-        const navigateToPage = (page: number) => {
-            const element = pageRefs.current[page - 1];
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        };
-
         if (onNavigationRequest) {
             onNavigationRequest(navigateToPage);
         }
-    }, [onNavigationRequest]);
+    }, [onNavigationRequest, navigateToPage]);
 
-    // Combine lesson pages and exercise pages
-    const pages = [
-        ...topicConfig.pages,
-        ...topicConfig.exercisePages,
+    // Combine index + all lesson pages and exercise pages from all topics
+    const allPages = [
+        {
+            id: 'index-page',
+            component: ({ zoom }: { zoom?: number }) => (
+                <IndexPage topics={topics} onNavigate={navigateToPage} zoom={zoom} />
+            )
+        },
+        ...topics.flatMap(topic => [
+            ...topic.pages,
+            ...topic.exercisePages.map(ep => ({ ...ep, isExercise: true }))
+        ]),
     ];
 
     return (
         <div className="max-w-5xl mx-auto bg-transparent min-h-screen px-4 md:px-8 pb-40">
-            {/* Global Zoom Controls - Fixed position with opacity transition */}
+            {/* Global Zoom Controls */}
             <div className="fixed top-24 right-8 z-50 flex flex-col gap-2 bg-white dark:bg-[#1a1c23] p-3 rounded-lg shadow-xl dark:shadow-none dark:border dark:border-white/10 opacity-60 hover:opacity-100 transition-opacity duration-300">
                 <button
                     onClick={handleZoomIn}
@@ -130,17 +138,17 @@ export function InfiniteBook({ topicConfig, onPageChange, onNavigationRequest }:
             </div>
 
             <div className="relative z-10">
-                {pages.map((pageDef, index) => {
+                {allPages.map((pageDef, index) => {
                     const PageComponent = pageDef.component;
                     return (
                         <motion.div
-                            key={pageDef.id}
+                            key={`${pageDef.id}-${index}`}
                             ref={(el) => { pageRefs.current[index] = el; }}
                             initial={{ opacity: 0, y: 50 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-100px" }}
-                            transition={{ duration: 0.6, delay: index * 0.1 }}
-                            className="snap-start snap-always"
+                            transition={{ duration: 0.6, delay: 0.1 }}
+                            className="snap-start snap-always mb-16"
                             style={{ scrollMarginTop: '1rem' }}
                         >
                             <PageComponent zoom={globalZoom} />
@@ -149,7 +157,7 @@ export function InfiniteBook({ topicConfig, onPageChange, onNavigationRequest }:
                 })}
             </div>
 
-            {/* Loading/End Indicator */}
+            {/* End Indicator */}
             <div className="relative z-10 text-center py-12 mb-32">
                 <div className="inline-block p-4 rounded-full bg-white/50 backdrop-blur text-primary animate-pulse shadow-sm">
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -160,3 +168,4 @@ export function InfiniteBook({ topicConfig, onPageChange, onNavigationRequest }:
         </div>
     );
 }
+
