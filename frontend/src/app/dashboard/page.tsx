@@ -35,6 +35,7 @@ import { InfiniteBook } from '@/components/dashboard/InfiniteBook';
 import { ProgressNavigation } from '@/components/navigation/ProgressNavigation';
 import { UserProfile } from '@/components/dashboard/UserProfile';
 import { ToastProvider } from '@/contexts/ToastContext';
+import { GlosarioView } from '@/components/dashboard/GlosarioView';
 
 export const dynamic = 'force-dynamic';
 
@@ -243,6 +244,7 @@ export default function DashboardPage() {
   // Estados para el perfil de usuario
   const [showProfile, setShowProfile] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [activeView, setActiveView] = useState<'book' | 'glossary'>('book');
 
   // Animar los valores de puntos
   const animatedPuntos = useAnimatedCounter(user?.puntos || 0);
@@ -417,6 +419,7 @@ export default function DashboardPage() {
   };
 
   const handleSelectTopic = (topicId: string) => {
+    setActiveView('book');
     // Find the starting page of the selected topic
     let globalPageOffset = 1; // Index 0 is the IndexPage
     for (const topic of ORDERED_TOPICS) {
@@ -637,6 +640,15 @@ export default function DashboardPage() {
 
           <div className="flex items-center gap-3 mr-16">
             <button
+              onClick={() => setActiveView(activeView === 'book' ? 'glossary' : 'book')}
+              className={`px-8 py-4 rounded-xl shadow-xl border border-purple-500/30 font-black tracking-wide text-sm transition-all ${activeView === 'glossary'
+                ? 'bg-pink-500 text-white'
+                : 'bg-[#7e22ce] text-white hover:bg-[#6b21a8]'
+                }`}
+            >
+              {activeView === 'book' ? 'GLOSARIO' : 'LIBRO'}
+            </button>
+            <button
               onClick={handleLogout}
               className="px-4 py-2 text-m font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors"
             >
@@ -646,13 +658,19 @@ export default function DashboardPage() {
         </header>
 
         {/* Contenido Principal */}
-        <InfiniteBookWrapper
-          completedPages={completedPages}
-          setCompletedPages={setCompletedPages}
-          topics={ORDERED_TOPICS}
-          setNavigateToPage={setNavigateToPage}
-          completedModules={completedModules}
-        />
+        <div className={`flex-1 flex flex-col ${activeView !== 'book' ? 'hidden' : ''}`}>
+          <InfiniteBookWrapper
+            completedPages={completedPages}
+            setCompletedPages={setCompletedPages}
+            topics={ORDERED_TOPICS}
+            setNavigateToPage={setNavigateToPage}
+            completedModules={completedModules}
+          />
+        </div>
+
+        <div className={`flex-1 flex flex-col ${activeView !== 'glossary' ? 'hidden' : ''}`}>
+          <GlosarioView />
+        </div>
       </main>
     </div>
   );
