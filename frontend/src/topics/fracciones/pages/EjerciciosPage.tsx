@@ -25,7 +25,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const VIDEO_TRACKING = {
         EX1_TABLE: 'fracciones-ex1-table',
         EX1_ISFRAC: 'fracciones-ex1-isfrac',
-        EX3_DEFS: 'fracciones-ex3-defs',
+        EX3_DEFS: 'fracciones-pag21-v4',
     };
 
     /* videoModal list removed */

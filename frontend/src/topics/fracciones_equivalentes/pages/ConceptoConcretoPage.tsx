@@ -22,7 +22,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        C_TRACK: 'frac-equiv-c-track',
+        C_TRACK: 'fracciones_equivalentes-pag23-v1',
     };
 
     /* videoModal list removed */

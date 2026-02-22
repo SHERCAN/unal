@@ -21,8 +21,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched, submitExercise } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        EJ_1: 'div-exacta-ej-1',
-        EJ_2: 'div-exacta-ej-2',
+        EJ_1: 'division_exacta-pag10-v1',
+        EJ_2: 'division_exacta-pag10-v2',
     };
 
     /* videoModal list removed */

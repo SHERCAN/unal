@@ -23,8 +23,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched, submitExercise } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        EJ_1: 'div-inexacta-ej-1',
-        EJ_3: 'div-inexacta-ej-3',
+        EJ_1: 'division_inexacta-pag13-v1',
+        EJ_3: 'division_inexacta-pag13-v2',
         EJ_3_1: 'div-inexacta-ej-3-1',
         EJ_3_2: 'div-inexacta-ej-3-2',
         EJ_3_3: 'div-inexacta-ej-3-3',

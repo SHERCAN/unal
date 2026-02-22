@@ -101,10 +101,10 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
 
     // Define tracking IDs for videos
     const VIDEO_TRACKING_IDS = {
-        DIVISOR: 'division-concept-pag3-v1',
-        QUOTIENT: 'division-concept-pag3-v2',
-        EXAMPLE: 'division-concept-pag3-v3',
-        PARTS: 'division-concept-pag3-v4'
+        DIVISOR: 'division-pag3-v1',
+        QUOTIENT: 'division-pag3-v2',
+        EXAMPLE: 'division-pag3-v3',
+        PARTS: 'division-pag3-v4'
     };
 
     /* videoModal list removed */

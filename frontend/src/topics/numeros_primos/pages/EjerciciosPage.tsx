@@ -19,7 +19,7 @@ interface Props { zoom?: number; }
 export function EjerciciosPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched, submitExercise } = useVideoProgress();
 
-    const VIDEO_TRACKING = { INTRO: 'numeros-primos-ej-intro' };
+    const VIDEO_TRACKING = { INTRO: 'numeros_primos-pag16-v1' };
 
     /* videoModal list removed */
     /* ref removed */

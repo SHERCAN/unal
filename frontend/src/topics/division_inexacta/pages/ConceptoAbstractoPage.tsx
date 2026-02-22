@@ -20,11 +20,11 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        A_INTRO: 'div-inexacta-a-intro',
-        A_MATH: 'div-inexacta-a-math',
-        A_COMO: 'div-inexacta-a-como',
-        A_DEF: 'div-inexacta-a-def',
-        A_PARTES: 'div-inexacta-a-partes',
+        A_INTRO: 'division_inexacta-pag12-v1',
+        A_MATH: 'division_inexacta-pag12-v2',
+        A_COMO: 'division_inexacta-pag12-v3',
+        A_DEF: 'division_inexacta-pag12-v4',
+        A_PARTES: 'division_inexacta-pag12-v5',
     };
 
     /* videoModal list removed */

@@ -17,11 +17,11 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
 
     // Video Tracking IDs
     const VIDEO_TRACKING_IDS = {
-        EXAMPLE_MAIN: 'division-concept-pag4-v1',
-        PRACTICE_1: 'division-concept-pag4-v2',
+        EXAMPLE_MAIN: 'division-pag4-v1',
+        PRACTICE_1: 'division-pag4-v2',
         PRACTICE_2: 'division-concept-pag4-v3', // Note: Need to see where practice 2 is
-        PROBLEM_1: 'division-concept-pag4-v4',
-        PROBLEM_2: 'division-concept-pag4-v5'
+        PROBLEM_1: 'division-pag4-v3',
+        PROBLEM_2: 'division-pag4-v4'
     };
 
     /* videoModal list removed */

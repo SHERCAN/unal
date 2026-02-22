@@ -18,9 +18,9 @@ export function EjemplosPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        INTRO: 'frac-equiv-ex-intro',
-        COMPARISON: 'frac-equiv-ex-comparison',
-        SOLUTIONS: 'frac-equiv-ex-solutions',
+        INTRO: 'fracciones_equivalentes-pag27-v1',
+        COMPARISON: 'fracciones_equivalentes-pag27-v2',
+        SOLUTIONS: 'fracciones_equivalentes-pag27-v3',
     };
 
     // Solution 1: Cross Multiplication

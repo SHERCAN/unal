@@ -15,13 +15,13 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
 
     // Define tracking IDs for videos
     const VIDEO_TRACKING_IDS = {
-        INTRO: 'division-concept-pag2-v1',
-        NOTATION: 'division-concept-pag2-v2',
-        MATH_NOTATION: 'division-concept-pag2-v3',
-        MEANING: 'division-concept-pag2-v4',
-        DEFINITION: 'division-concept-pag2-v5',
-        COMPONENTS: 'division-concept-pag2-v6',
-        DIVIDEND: 'division-concept-pag2-v7',
+        INTRO: 'division-pag2-v1',
+        NOTATION: 'division-pag2-v2',
+        MATH_NOTATION: 'division-pag2-v3',
+        MEANING: 'division-pag2-v4',
+        DEFINITION: 'division-pag2-v5',
+        COMPONENTS: 'division-pag2-v6',
+        DIVIDEND: 'division-pag2-v7',
     };
 
     /* videoModal list removed */

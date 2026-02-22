@@ -21,11 +21,11 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        A_NOTA: 'div-exacta-a-nota',
-        A_MATH: 'div-exacta-a-math',
-        A_COMO: 'div-exacta-a-como',
-        A_DEF: 'div-exacta-a-def',
-        A_EXAMPLE: 'div-exacta-a-example',
+        A_NOTA: 'division_exacta-pag8-v1',
+        A_MATH: 'division_exacta-pag8-v3',
+        A_COMO: 'division_exacta-pag8-v4',
+        A_DEF: 'division_exacta-pag8-v5',
+        A_EXAMPLE: 'division_exacta-pag8-v6',
     };
 
     /* videoModal list removed */

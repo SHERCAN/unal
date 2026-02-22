@@ -19,13 +19,13 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        A_INTRO: 'frac-equiv-a-intro',
-        A_NOTATION: 'frac-equiv-a-notation',
-        A_EQUIV_DEF: 'frac-equiv-a-equiv-def',
-        A_DEF_CONCEPT: 'frac-equiv-a-def-concept',
-        A_EXAMPLE: 'frac-equiv-a-example',
-        A_HOW_TO: 'frac-equiv-a-how-to',
-        A_CROSS: 'frac-equiv-a-cross',
+        A_INTRO: 'fracciones_equivalentes-pag25-v1',
+        A_NOTATION: 'fracciones_equivalentes-pag25-v2',
+        A_EQUIV_DEF: 'fracciones_equivalentes-pag25-v3',
+        A_DEF_CONCEPT: 'fracciones_equivalentes-pag25-v4',
+        A_EXAMPLE: 'fracciones_equivalentes-pag25-v5',
+        A_HOW_TO: 'fracciones_equivalentes-pag25-v6',
+        A_CROSS: 'fracciones_equivalentes-pag25-v7',
     };
 
     /* videoModal list removed */

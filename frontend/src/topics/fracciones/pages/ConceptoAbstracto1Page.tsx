@@ -14,11 +14,11 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        A_INTRO: 'fracciones-a-intro',
-        A_DEF: 'fracciones-a-def',
-        A_PARTS: 'fracciones-a-parts',
-        A_ERROR: 'fracciones-a-error',
-        A_EXAMPLE: 'fracciones-a-example',
+        A_INTRO: 'fracciones-pag18-v2',
+        A_DEF: 'fracciones-pag18-v3',
+        A_PARTS: 'fracciones-pag18-v7',
+        A_ERROR: 'fracciones-pag18-v8',
+        A_EXAMPLE: 'fracciones-pag18-v9',
     };
 
     /* videoModal list removed */
@@ -106,7 +106,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                 </div>
 
                                 <p className="text-lg text-gray-800 leading-relaxed max-w-3xl">
-                                    donde <span className="font-bold text-blue-700 text-2xl">a</span> y <span className="font-bold text-purple-700 text-2xl">b</span> son números naturales, <span className="font-bold text-purple-700 text-2xl">b</span> es siempre diferente de cero <span className="font-bold text-purple-700 text-2xl">b ≠ 0</span>. <span className="inline-block align-middle ml-2"><PlayVideoButton trackingId="fracciones-a-def-2" title="" videoId="/pag18/vv-4" /></span>
+                                    donde <span className="font-bold text-blue-700 text-2xl">a</span> y <span className="font-bold text-purple-700 text-2xl">b</span> son números naturales, <span className="font-bold text-purple-700 text-2xl">b</span> es siempre diferente de cero <span className="font-bold text-purple-700 text-2xl">b ≠ 0</span>. <span className="inline-block align-middle ml-2"><PlayVideoButton trackingId="fracciones-pag18-v4" title="" videoId="/pag18/vv-4" /></span>
                                 </p>
                             </div>
                         </div>

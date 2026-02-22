@@ -13,12 +13,12 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        SIMP_INTRO: 'frac-equiv-a2-simp-intro',
-        SIMP_EXAMPLE: 'frac-equiv-a2-simp-example',
-        SIMP_PRAC: 'frac-equiv-a2-simp-practice',
-        AMP_INTRO: 'frac-equiv-a2-amp-intro',
-        AMP_EXAMPLE: 'frac-equiv-a2-amp-example',
-        AMP_PRAC: 'frac-equiv-a2-amp-practice',
+        SIMP_INTRO: 'fracciones_equivalentes-pag26-v1',
+        SIMP_EXAMPLE: 'fracciones_equivalentes-pag26-v3',
+        SIMP_PRAC: 'fracciones_equivalentes-pag26-v4',
+        AMP_INTRO: 'fracciones_equivalentes-pag26-v5',
+        AMP_EXAMPLE: 'fracciones_equivalentes-pag26-v6',
+        AMP_PRAC: 'fracciones_equivalentes-pag26-v7',
     };
 
     // --- State for Exercises ---

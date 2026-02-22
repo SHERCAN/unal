@@ -149,10 +149,10 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
 
     // Video Tracking
     const VIDEO_TRACKING_IDS = {
-        C_INTRO: 'division-dist-pag1-v1',
-        C_DISTRIBUTION: 'division-dist-pag1-v2',
-        P_INTRO: 'division-dist-pag1-v3',
-        P_DISTRIBUTION: 'division-dist-pag1-v4'
+        C_INTRO: 'division-pag1-v1',
+        C_DISTRIBUTION: 'division-pag1-v2',
+        P_INTRO: 'division-pag1-v3',
+        P_DISTRIBUTION: 'division-pag1-v4'
     };
 
     // Stage C Logic

@@ -25,10 +25,10 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const { submitExercise } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        I1: 'frac-equiv-ej-1',
-        I2: 'frac-equiv-ej-2',
-        I3: 'frac-equiv-ej-3',
-        I4: 'frac-equiv-ej-4',
+        I1: 'fracciones_equivalentes-pag28-v1',
+        I2: 'fracciones_equivalentes-pag28-v2',
+        I3: 'fracciones_equivalentes-pag28-v3',
+        I4: 'fracciones_equivalentes-pag28-v4',
     };
 
     // --- ACTIVITY 1: MATCHING ---

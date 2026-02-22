@@ -7,10 +7,10 @@ interface Props { zoom?: number; }
 //PAGINA 2 ABSTRACTO
 export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
     const VIDEO_TRACKING = {
-        A_INTRO: 'comp-frac-a-intro',
-        A_SAME_DEN: 'comp-frac-a-same-den',
-        A_STRATEGY: 'comp-frac-a-strategy',
-        A_DIFF_DEN: 'comp-frac-a-diff-den'
+        A_INTRO: 'comparacion_fracciones-pag1-v5',
+        A_SAME_DEN: 'comparacion_fracciones-pag1-v6',
+        A_STRATEGY: 'comparacion_fracciones-pag1-v8',
+        A_DIFF_DEN: 'comparacion_fracciones-pag1-v7'
     };
 
     const Fraction = ({ num, den, size = "text-3xl", numColor = "text-black" }: any) => (

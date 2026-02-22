@@ -16,8 +16,8 @@ export function EjemplosPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        EX_BALLS: 'fracciones-ex-balls',
-        EX_BOOKS: 'fracciones-ex-books',
+        EX_BALLS: 'fracciones-pag20-v1',
+        EX_BOOKS: 'fracciones-pag20-v2',
         EX_BONUS: 'fracciones-ex-bonus',
     };
 

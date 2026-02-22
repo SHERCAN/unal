@@ -26,7 +26,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
         FIG_2: 'fracciones-fig-2',
         FIG_3: 'fracciones-fig-3',
         FIG_4: 'fracciones-fig-4',
-        NOTA: 'fracciones-nota-irreg',
+        NOTA: 'fracciones-pag19-v3',
     };
 
     /* videoModal list removed */

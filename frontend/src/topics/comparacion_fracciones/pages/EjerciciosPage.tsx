@@ -11,9 +11,9 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const { submitExercise } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        EJ_INTRO: 'comp-frac-ej-intro',
-        EJ_A: 'comp-frac-ej-a',
-        EJ_B: 'comp-frac-ej-b'
+        EJ_INTRO: 'comparacion_fracciones-pag1-v9',
+        EJ_A: 'comparacion_fracciones-pag1-v10',
+        EJ_B: 'comparacion_fracciones-pag1-v11'
     };
 
     // Correct answers

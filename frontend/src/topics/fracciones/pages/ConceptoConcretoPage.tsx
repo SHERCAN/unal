@@ -60,8 +60,8 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        C_PIZZA: 'fracciones-c-pizza',
-        P_EXPLAIN: 'fracciones-p-explain',
+        C_PIZZA: 'fracciones-pag17-v1',
+        P_EXPLAIN: 'fracciones-pag17-v2',
     };
 
     /* videoModal list removed */

@@ -25,9 +25,9 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     const { submitExercise } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        C_INTRO: 'comp-frac-c-intro',
-        P_RECT: 'comp-frac-p-rect',
-        P_WHY: 'comp-frac-p-why'
+        C_INTRO: 'comparacion_fracciones-pag1-v1',
+        P_RECT: 'comparacion_fracciones-pag1-v2',
+        P_WHY: 'comparacion_fracciones-pag1-v3'
     };
 
     const matchData = [

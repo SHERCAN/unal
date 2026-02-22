@@ -16,12 +16,12 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
     /* videoModal list removed */
     const VIDEO_TRACKING_IDS = {
-        PRACTICE_1: 'division-exercises-pag5-v1',
-        PRACTICE_2: 'division-exercises-pag5-v2',
-        MATCHING: 'division-exercises-pag5-v3',
-        QUOTIENTS: 'division-exercises-pag5-v4',
-        TRUE_FALSE: 'division-exercises-pag5-v5',
-        SITUATION: 'division-exercises-pag5-v6'
+        PRACTICE_1: 'division-pag5-v1',
+        PRACTICE_2: 'division-pag5-v2',
+        MATCHING: 'division-pag5-v3',
+        QUOTIENTS: 'division-pag5-v4',
+        TRUE_FALSE: 'division-pag5-v5',
+        SITUATION: 'division-pag5-v6'
     };
 
     // --- ACTIVITY 1: SELECTION ---

@@ -25,13 +25,13 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        A_DIVISION: 'numeros-primos-a-division',
+        A_DIVISION: 'numeros_primos-pag15-v1',
         A_BONO: 'numeros-primos-a-bono',
-        A_PRIMO_DEF: 'numeros-primos-a-primo-def',
-        A_EJ_7: 'numeros-primos-a-ej-7',
-        A_EJ_8: 'numeros-primos-a-ej-8',
-        A_COMPUESTO_DEF: 'numeros-primos-a-compuesto-def',
-        A_COMPUESTO_EJ: 'numeros-primos-a-compuesto-ej',
+        A_PRIMO_DEF: 'numeros_primos-pag15-v2',
+        A_EJ_7: 'numeros_primos-pag15-v3',
+        A_EJ_8: 'numeros_primos-pag15-v4',
+        A_COMPUESTO_DEF: 'numeros_primos-pag15-v5',
+        A_COMPUESTO_EJ: 'numeros_primos-pag15-v6',
     };
 
     /* videoModal list removed */

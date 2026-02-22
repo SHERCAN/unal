@@ -18,9 +18,9 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        BONO_EXPLICADO: 'frac-equiv-bono-explicado',
-        LAPS_QUESTION: 'frac-equiv-laps-question',
-        DESAFIO_VIDEO: 'frac-equiv-desafio-video',
+        BONO_EXPLICADO: 'fracciones_equivalentes-pag1-v1',
+        LAPS_QUESTION: 'fracciones_equivalentes-pag24-v1',
+        DESAFIO_VIDEO: 'fracciones_equivalentes-pag24-v3',
     };
 
     // --- State for Exercises ---

@@ -14,10 +14,10 @@ interface ExercisesPage2Props {
 export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
     const { markVideoWatched } = useVideoProgress();
     const VIDEO_TRACKING_IDS = {
-        ACTIVITY_1_Q1: 'division-exercises-pag6-v1',
-        ACTIVITY_1_Q2: 'division-exercises-pag6-v2',
-        PROBLEM_SOLVING: 'division-exercises-pag6-v3',
-        FALSE_DIVISION: 'division-exercises-pag6-v4'
+        ACTIVITY_1_Q1: 'division-pag6-v1',
+        ACTIVITY_1_Q2: 'division-pag6-v2',
+        PROBLEM_SOLVING: 'division-pag6-v3',
+        FALSE_DIVISION: 'division-pag6-v4'
     };
 
     /* handleVideoComplete removed */

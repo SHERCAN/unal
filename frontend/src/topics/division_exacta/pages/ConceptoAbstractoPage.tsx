@@ -19,9 +19,9 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        A_NOEXACT: 'div-exacta-a-noexact',
-        A_NOEXACT2: 'div-exacta-a-noexact2',
-        A_BONO: 'div-exacta-a-bono',
+        A_NOEXACT: 'division_exacta-pag9-v1',
+        A_NOEXACT2: 'division_exacta-pag9-v2',
+        A_BONO: 'division_exacta-pag9-v3',
     };
 
     /* videoModal list removed */

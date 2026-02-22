@@ -30,8 +30,8 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        C_INTRO: 'div-exacta-c-intro',
-        P_INTRO: 'div-exacta-p-intro',
+        C_INTRO: 'division_exacta-pag7-v1',
+        P_INTRO: 'division_exacta-pag7-v2',
     };
 
     /* videoModal list removed */

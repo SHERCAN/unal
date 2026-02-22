@@ -23,11 +23,11 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
-        C_INTRO: 'numeros-primos-c-intro',
-        P_INTRO: 'numeros-primos-p-intro',
-        P_FAIL: 'numeros-primos-p-fail',
-        P_SUCCESS: 'numeros-primos-p-success',
-        P_CONCLUSION: 'numeros-primos-p-conclusion',
+        C_INTRO: 'numeros_primos-pag14-v1',
+        P_INTRO: 'numeros_primos-pag14-v2',
+        P_FAIL: 'numeros_primos-pag14-v3',
+        P_SUCCESS: 'numeros_primos-pag14-v4',
+        P_CONCLUSION: 'numeros_primos-pag14-v5',
     };
 
     /* videoModal list removed */
