@@ -69,7 +69,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                         <div className="w-full h-full flex flex-col mt-2" style={{ gap: 'clamp(0.75rem, 2vh, 1.5rem)', padding: 'clamp(0.5rem, 2vmin, 1rem)' }}>
                             <div className="flex items-center gap-8">
                                 <div className="w-48 flex justify-center">
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.C_INTRO} title="" videoId="/pag1/vv-1" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.C_INTRO} title="" videoId="/pag29/vv-1" />
                                 </div>
                                 <div className="flex-1 flex justify-around items-center">
                                     <div className="w-40 flex justify-center">
@@ -130,17 +130,17 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
                             <div className="space-y-4">
                                 <div className="flex items-center gap-4">
-                                    <p className="text-xl font-bold text-gray-800 leading-tight">
+                                    <p className="text-base font-semibold text-gray-800 leading-tight">
                                         De acuerdo con la actividad anterior, observamos dos figuras rectangulares que representan fracciones.
-                                    </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.P_RECT} title="" videoId="/pag1/vv-2" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.P_RECT} title="" videoId="/pag29/vv-2" />
+                                    </p>                                    
                                 </div>
 
                                 <div className="flex items-center gap-4">
-                                    <p className="text-xl text-gray-800 leading-tight">
-                                        ¿Cuál figura tiene mayor cantidad de color naranja, la de la izquierda o la de la derecha?
+                                    <p className="text-base font-semibold text-gray-800 leading-tight">
+                                        ¿Cuál figura tiene mayor cantidad de color, la de la izquierda o la de la derecha?
                                     </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.P_WHY} title="" videoId="/pag1/vv-3" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.P_WHY} title="" videoId="/pag29/vv-3" />
                                 </div>
 
                                 <div className="flex flex-col items-center gap-6 mt-8">

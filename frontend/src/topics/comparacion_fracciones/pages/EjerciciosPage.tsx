@@ -92,14 +92,14 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                 <div className="flex items-center gap-4">
                     <PlayVideoButton trackingId={VIDEO_TRACKING.EJ_INTRO} title="" videoId="/pag1/vv-9" />
                     <div className="bg-purple-700 text-white font-black text-4xl w-14 h-14 flex items-center justify-center rounded-xl shadow-lg flex-shrink-0">1</div>
-                    <p className="text-2xl font-black text-gray-800">Coloca el signo correcto: &lt; , &gt; o = entre las fracciones.</p>
+                    <p className="text-base font-bold text-gray-800">Coloca el signo correcto: &lt; , &gt; o = entre las fracciones.</p>
                 </div>
 
                 {/* PART A */}
                 <div className="space-y-6 ml-16">
                     <div className="flex items-center gap-4">
-                        <div className="bg-[#be90de] text-white font-black text-2xl px-4 py-2 rounded-lg">A</div>
-                        <p className="text-xl font-black text-gray-700">Fracciones con el mismo denominador.</p>
+                        <div className="bg-purple-700 text-white font-black text-2xl px-4 py-2 rounded-lg">A</div>
+                        <p className="text-base font-bold text-gray-800">Fracciones con el mismo denominador.</p>
                         <PlayVideoButton trackingId={VIDEO_TRACKING.EJ_A} title="" videoId="/pag1/vv-10" />
                     </div>
 
@@ -114,8 +114,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                 {/* PART B */}
                 <div className="space-y-6 pt-4 ml-16">
                     <div className="flex items-center gap-4">
-                        <div className="bg-[#be90de] text-white font-black text-2xl px-4 py-2 rounded-lg">B</div>
-                        <p className="text-xl font-black text-gray-700">Fracciones con el diferente denominador.</p>
+                        <div className="bg-purple-700 text-white font-black text-2xl px-4 py-2 rounded-lg">B</div>
+                        <p className="text-base font-bold text-gray-800">Fracciones con el diferente denominador.</p>
                         <PlayVideoButton trackingId={VIDEO_TRACKING.EJ_B} title="" videoId="/pag1/vv-11" />
                     </div>
 

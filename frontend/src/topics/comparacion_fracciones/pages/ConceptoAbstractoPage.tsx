@@ -45,23 +45,23 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                             {/* Intro */}
                             <div className="space-y-6">
                                 <div className="flex items-center gap-4">
-                                    <p className="font-bold text-gray-800" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.5rem)' }}>
-                                        A continuación, la comparación de dos fracciones se expresa mediante notación matemática:
+                                    <p className="font-semibold text-gray-800 text-base">
+                                        A continuación, la comparación de dos fracciones se expresa mediante notación matemática: <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="" videoId="/pag30/vv-1" />
                                     </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="" videoId="/pag1/vv-4" />
+                                    
                                 </div>
                                 <div className="flex justify-center items-center gap-8" style={{ fontSize: 'clamp(2rem, 6vmin, 3rem)' }}>
-                                    <Fraction num="1" den="3" size="text-4xl" numColor="text-purple-600" />
-                                    <span className="text-blue-500 font-black">&lt;</span>
-                                    <Fraction num="2" den="3" size="text-4xl" numColor="text-red-600" />
+                                    <Fraction num="1" den="3" size="text-2xl" numColor="text-[#6e5be0]" />
+                                    <span className="text-purple-700 font-black">&lt;</span>
+                                    <Fraction num="2" den="3" size="text-2xl" numColor="text-red-600" />
                                 </div>
-                                <div className="flex justify-center flex-wrap items-center gap-4 font-bold" style={{ fontSize: 'clamp(0.875rem, 2.2vmin, 1.25rem)' }}>
+                                <div className="flex flex-wrap items-center gap-4 font-semibold text-base">
                                     <span>Se lee en español:</span>
                                     <Fraction num="2" den="3" size="text-xl" numColor="text-red-600" />
                                     <span className="text-gray-800">es mayor que</span>
-                                    <Fraction num="1" den="3" size="text-xl" numColor="text-purple-600" />
+                                    <Fraction num="1" den="3" size="text-xl" numColor="text-[#6e5be0]" />
                                     <span className="font-black">.</span>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="" videoId="/pag1/vv-5" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="" videoId="/pag30/vv-2" />
                                 </div>
                             </div>
 
@@ -71,10 +71,10 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                     DOS FRACCIONES CON EL MISMO DENOMINADOR
                                 </h2>
                                 <div className="flex items-center gap-4">
-                                    <p className="text-gray-700" style={{ fontSize: 'clamp(0.875rem, 2.2vmin, 1.125rem)' }}>
+                                    <p className="text-gray-700 text-base font-semibold">
                                         Cuando dos fracciones tienen el mismo denominador, compararlas es más sencillo.
                                     </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_SAME_DEN} title="" videoId="/pag1/vv-6" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_SAME_DEN} title="" videoId="/pag30/vv-3" />
                                 </div>
                                 <div className="space-y-4 ml-6">
                                     <span className="bg-green-600 text-white font-black px-4 py-1 rounded text-sm mb-2 inline-block">Ejemplo:</span>
@@ -90,17 +90,17 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                     DOS FRACCIONES CON DIFERENTE DENOMINADOR
                                 </h2>
                                 <div className="flex items-center gap-4">
-                                    <p className="text-gray-700 leading-tight" style={{ fontSize: 'clamp(0.875rem, 2.2vmin, 1.125rem)' }}>
+                                    <p className="text-gray-700 leading-tight text-base font-semibold">
                                         Cuando dos fracciones tienen el diferente denominador, compararlas es poco difícil.
                                     </p>
                                     <PlayVideoButton trackingId={VIDEO_TRACKING.A_DIFF_DEN} title="" videoId="/pag1/vv-7" />
                                 </div>
 
                                 <div className="flex items-start gap-4 ml-6">
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_STRATEGY} title="" videoId="/pag1/vv-8" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_STRATEGY} title="" videoId="/pag30/vv-4" />
                                     <div>
                                         <h3 className="text-red-600 font-black text-lg uppercase mb-2">ESTRATEGIA:</h3>
-                                        <ol className="list-decimal pl-5 text-gray-800 dark:text-gray-300 space-y-2 font-bold leading-snug" style={{ fontSize: 'clamp(0.875rem, 2.2vmin, 1.1rem)' }}>
+                                        <ol className="list-decimal pl-5 text-gray-800 dark:text-gray-300 space-y-2 font-semibold leading-snug text-base">
                                             <li>Primero dos fracciones se amplifican para obtener fracciones equivalentes con el mismo denominador.</li>
                                             <li>Luego esas fracciones se comparan.</li>
                                         </ol>
@@ -109,67 +109,34 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
 
                                 <div className="space-y-8 ml-6">
                                     <div className="flex items-center gap-4">
-                                        <PlayVideoButton trackingId={VIDEO_TRACKING.A_STRATEGY} title="" videoId="/pag1/vv-8" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.A_STRATEGY} title="" videoId="/pag30/vv-5" />
                                         <span className="bg-green-600 text-white font-black px-4 py-1 rounded text-sm inline-block">Ejemplo:</span>
                                     </div>
                                     <div className="flex items-center gap-6 font-black ml-4" style={{ fontSize: 'clamp(1.5rem, 4vmin, 2rem)' }}>
                                         <div className="w-2 h-2 bg-green-600 rounded-sm" />
                                         <Fraction num="3" den="4" size="text-2xl" />
-                                        <span className="text-gray-400">&gt;</span>
+                                        <span className="text-gray-800">&gt;</span>
                                         <Fraction num="1" den="2" size="text-2xl" />
-                                        <span className="text-gray-600 font-bold ml-2" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>porque</span>
+                                        <span className="text-gray-800 font-semibold ml-2 text-base">porque</span>
                                     </div>
 
                                     <div className="space-y-8 pl-4 md:pl-12">
-                                        <div className="flex items-center flex-wrap gap-4 md:gap-12 font-black" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
-                                            <span>1.</span>
-                                            <div className="flex items-center gap-2">
-                                                <Fraction num="3" den="4" size="text-xl" />
-                                                <span>=</span>
-                                                <div className="flex flex-col items-center">
-                                                    <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 rounded px-2 gap-8">
-                                                        <span>3</span>
-                                                        <span className="text-red-500">2</span>
-                                                    </div>
-                                                    <div className="w-full h-0.5 bg-black dark:bg-white my-1" />
-                                                    <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 rounded px-2 gap-8">
-                                                        <span>4</span>
-                                                        <span className="text-red-500">2</span>
-                                                    </div>
-                                                </div>
-                                                <span>=</span>
-                                                <Fraction num="6" den="8" size="text-xl" />
-                                            </div>
-                                            <span className="hidden md:inline text-gray-400">,</span>
-                                            <div className="flex items-center gap-2">
-                                                <Fraction num="1" den="2" size="text-xl" />
-                                                <span>=</span>
-                                                <div className="flex flex-col items-center">
-                                                    <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 rounded px-2 gap-8">
-                                                        <span>1</span>
-                                                        <span className="text-red-500">4</span>
-                                                    </div>
-                                                    <div className="w-full h-0.5 bg-black dark:bg-white my-1" />
-                                                    <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 rounded px-2 gap-8">
-                                                        <span>2</span>
-                                                        <span className="text-red-500">4</span>
-                                                    </div>
-                                                </div>
-                                                <span>=</span>
-                                                <Fraction num="4" den="8" size="text-xl" />
-                                            </div>
+                                        <div className="flex items-center flex-wrap gap-4 md:gap-12 font-semibold" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
+                                            <span>1. <div className="flex justify-center my-8 pl-32">
+                                            <img src="/comparacion_fracciones/img1.png" alt="Ejemplo" className="h-14 object-containshadow-md" />
+                                            </div></span>
                                         </div>
-                                        <p className="text-gray-700 dark:text-gray-400 italic font-bold">tienen el mismo denominador.</p>
+                                        <p className="text-gray-800 dark:text-gray-800 font-semibold text-base">tienen el mismo denominador.</p>
 
-                                        <div className="flex items-center gap-12 font-black" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
+                                        <div className="flex items-center gap-12 font-semibold" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                             <span>2.</span>
                                             <div className="flex items-center gap-2">
                                                 <Fraction num="6" den="8" size="text-xl" />
-                                                <span className="text-blue-500">&gt;</span>
+                                                <span className="text-gray-800">&gt;</span>
                                                 <Fraction num="4" den="8" size="text-xl" />
                                             </div>
-                                            <span className="text-gray-800 dark:text-gray-200 font-black ml-4 text-xl">
-                                                porque <span className="ml-2 bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded text-black dark:text-white">6 &gt; 4 .</span>
+                                            <span className="text-gray-800 dark:text-gray-200 font-semibold ml-4 text-base">
+                                                porque <span className="ml-2 font-black text-2xl px-3 py-1 rounded text-black dark:text-white">6 &gt; 4 </span>.
                                             </span>
                                         </div>
                                     </div>
