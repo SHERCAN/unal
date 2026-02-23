@@ -174,20 +174,20 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
 
                     {/* NEW Header Section */}
                     <div className="mb-10 space-y-4">
-                        <p className="text-xl text-gray-800 font-medium ml-4">
-                            donde <strong>4</strong> es el numerador y <strong>6</strong> es el denominador.
+                        <p className="text-base text-gray-800 font-semibold ml-4">
+                            donde <strong className='text-blue-700 text-2xl'>4</strong> es el numerador y <strong className='text-2xl'>6</strong> es el denominador.
                         </p>
 
                         <div className="flex items-center flex-wrap gap-2 ml-4">
-                            <span className="text-red-600 font-black text-2xl">ERROR:</span>
+                            <span className="text-red-600 font-extrabold text-base">ERROR:</span>
 
                             {/* Fraction 6/4 */}
                             <div className="inline-flex flex-col items-center mx-2 align-middle leading-none">
-                                <span className="text-xl font-bold text-black border-b-2 border-black px-1">6</span>
-                                <span className="text-xl font-bold text-blue-600">4</span>
+                                <span className="text-xl font-extrabold text-black border-b-2 border-black px-1">6</span>
+                                <span className="text-xl font-extrabold text-blue-700">4</span>
                             </div>
 
-                            <span className="text-xl text-gray-800 font-medium">
+                            <span className="text-base text-gray-800 font-semibold">
                                 no es correcta porque no es apropiada para la fracción.
                             </span>
 
@@ -260,11 +260,11 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                         {/* NOTA spanning full width */}
                         <div className="w-full flex flex-col items-start gap-4 pt-10 border-t-2 border-gray-100 mt-2">
                             <div className="flex items-center gap-4 flex-wrap">
-                                <span className="font-bold text-red-600 text-xl">NOTA:</span>
-                                <p className="text-lg text-gray-800 font-medium">
+                                <span className="font-extrabold text-[#e95352] text-xl">NOTA:</span>
+                                <p className="text-base text-gray-800 font-semibold">
                                     Como se muestra la siguiente figura, <span className="font-bold text-red-600">NO</span> es realmente una forma de fracción.
-                                </p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="" videoId="/pag19/vv-2" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="" videoId="/pag19/vv-2" />
+                                </p>                                
                             </div>
 
                             <div className="flex flex-col items-start gap-4 mt-4 w-full">
@@ -276,10 +276,10 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                     />
                                 </div>
                                 <div className="flex items-center gap-3 text-gray-800">
-                                    <p className="text-lg font-medium">
-                                        ¿Por qué esta figura no es una forma de fracción? Esas partes son diferentes.
+                                    <p className="text-base font-semibold">
+                                        ¿Por qué esta figura no es una forma de fracción? Esas partes son diferentes. <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="" videoId="/pag19/vv-3"/>
                                     </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="" videoId="/pag19/vv-3" />
+                                    
                                 </div>
                             </div>
                         </div>

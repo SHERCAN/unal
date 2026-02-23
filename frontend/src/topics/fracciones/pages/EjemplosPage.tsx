@@ -49,66 +49,32 @@ export function EjemplosPage({ zoom = 1 }: Props) {
                                 <span className="bg-green-600 text-white px-4 py-1.5 font-bold text-lg rounded shadow-sm">Ejemplo:</span>
                             </div>
 
-                            <p className="text-xl text-gray-800 leading-relaxed">
+                            <p className="text-base font-semibold text-gray-800 leading-relaxed">
                                 Se tienen en una bolsa <span className="text-red-600 font-bold">doce pelotas rojas</span> y <span className="text-blue-600 font-bold">ocho azules</span>. La fracción que representa el número de pelotas azules:
                             </p>
-
-                            <div className="flex justify-between items-center bg-white p-4">
-                                {/* Visual Bag */}
-                                <div className="flex flex-col items-center">
-                                    <h4 className="font-bold text-gray-600 mb-4">Dibuje la representación</h4>
-                                    <div className="relative">
-                                        <Image
-                                            src={bolsadulcesImg}
-                                            alt="Bolsa de dulces"
-                                            className="h-64 w-auto object-contain"
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Divider Line */}
-                                <div className="w-0.5 h-48 bg-gray-200 mx-8"></div>
-
-                                {/* Calculation */}
-                                <div className="flex flex-col items-center gap-6 flex-1">
-                                    <div className="flex flex-col items-center">
-                                        <h4 className="font-bold text-gray-600 text-lg">Total de pelotas iguales:</h4>
-                                        <div className="text-3xl font-bold mt-2">
-                                            <span className="text-blue-600">8</span> + <span className="text-red-600">12</span> = 20
-                                        </div>
-                                    </div>
-
-                                    <div className="flex flex-col items-center">
-                                        <p className="font-bold text-gray-600 mb-2 text-lg">Número de pelotas azules:</p>
-                                        <p className="text-4xl font-bold text-blue-600 text-center">8</p>
-                                    </div>
-
-                                    <div className="flex flex-col items-center text-center mt-4 w-full">
-                                        <p className="font-bold text-gray-700 mb-2 text-lg underline underline-offset-4 decoration-purple-300">La fracción es:</p>
-                                        <div className="flex flex-col items-center">
-                                            <span className="text-5xl font-bold text-blue-600">8</span>
-                                            <div className="w-20 h-1.5 bg-black my-2 rounded-full"></div>
-                                            <span className="text-5xl font-bold text-black">20</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <div className="flex justify-center my-8">
+                                <img 
+                                    className="h-64 object-contain"
+                                    src="/fracciones/img4.png"
+                                    draggable={false}
+                                />
+                            </div>                            
                         </div>
 
                         {/* EXAMPLE 2: Books */}
-                        <div className="space-y-8 pt-12 border-t border-gray-100">
+                        <div className="space-y-4 border-t border-gray-100">
                             <div className="flex items-center gap-4">
                                 <PlayVideoButton trackingId={VIDEO_TRACKING.EX_BOOKS} title="Ejemplo: Libros" videoId="/pag20/vv-2" />
                                 <span className="bg-green-600 text-white px-4 py-1.5 font-bold text-lg rounded shadow-sm">Ejemplo:</span>
                             </div>
 
-                            <p className="text-xl text-gray-800 leading-relaxed max-w-4xl">
-                                Dentro de una caja hay 45 textos escolares. Si la quinta parte <span className="font-bold text-purple-700">1/5</span> de ellos son de matemáticas, <span className="font-bold">¿cuántos libros de matemáticas hay en total?</span>
+                            <p className="text-base font-semibold text-gray-800 leading-relaxed max-w-4xl">
+                                Dentro de una caja hay 45 textos escolares. Si la quinta parte 1/5 de ellos son de matemáticas, <span className="font-bold">¿cuántos libros de matemáticas hay en total?</span>
                             </p>
 
                             <div className="space-y-4">
                                 <p className="font-bold text-gray-700 text-lg">Vamos a resolver:</p>
-                                <div className="text-lg text-gray-800 flex items-center gap-2 flex-wrap">
+                                <div className="text-base font-semibold text-gray-800 flex items-center gap-2 flex-wrap">
                                     La fracción
                                     <div className="inline-flex flex-col items-center align-middle mx-1 font-bold">
                                         <span className="leading-none border-b-2 border-black px-1">1</span>
@@ -125,27 +91,28 @@ export function EjemplosPage({ zoom = 1 }: Props) {
                                         <Image
                                             src={librosImg}
                                             alt="Libros escolares"
-                                            className="h-56 w-auto object-contain"
+                                            className="h-40 w-auto object-contain"
                                         />
                                     </div>
-
-                                    <p className="text-xl text-gray-800 font-medium text-center">Para saber cuántos libros son de matemáticas, se divide:</p>
                                 </div>
+
+                            <div> 
+                                <p className="text-base text-gray-800 font-semibold">Para saber cuántos libros son de matemáticas, se divide:</p>
+                                <div className="flex justify-center">
+                                    <img 
+                                        className="h-12 object-contain"
+                                        src="/fracciones/img5.png"
+                                        draggable={false}
+                                    />
+                                </div>  
+                            </div>
 
                                 {/* Calculation & Response */}
                                 <div className="w-full flex flex-col items-start space-y-8">
-                                    <div className="flex items-center justify-center w-full">
-                                        <div className="text-5xl font-black text-gray-800 flex items-center gap-6 tracking-wider">
-                                            <span className="text-gray-400">45</span>
-                                            <span className="text-purple-400">÷</span>
-                                            <span className="text-purple-600">5</span>
-                                            <span className="text-gray-400">=</span>
-                                            <span className="text-green-600 text-6xl scale-110 transform">9</span>
-                                        </div>
-                                    </div>
+                                    
 
-                                    <p className="text-2xl text-gray-800 font-medium">
-                                        <span className="text-red-600 font-bold">RESPUESTA:</span> Hay 9 libros de matemáticas.
+                                    <p className="text-base text-gray-800 font-semibold">
+                                        <span className="text-[#e95352] font-bold">RESPUESTA:</span> Hay 9 libros de matemáticas.
                                     </p>
                                 </div>
                             </div>

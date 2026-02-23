@@ -74,7 +74,7 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
                         <div className="max-w-4xl mx-auto space-y-16">
 
                             <div className="flex items-center gap-4 border-b pb-4">
-                                <span className="bg-purple-900 text-white px-6 py-2 rounded-lg font-black text-xl tracking-widest uppercase">EJERCICIOS</span>
+                                <span className="text-purple-900 px-6 py-2 rounded-lg font-black text-3xl tracking-widest uppercase">EJERCICIOS</span>
                             </div>
 
                             {/* EXERCISE 4: Pencils */}
@@ -194,7 +194,7 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
                                 <div className="flex items-center gap-3">
                                     <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold shrink-0">6</div>
                                     <p className="font-bold text-gray-700 text-xl">
-                                        En una biblioteca hay <span className="font-bold text-purple-700">36</span> libros. Si <span className="font-bold">1/6</span> son de cuentos, ¿cuántos libros de cuentos hay?
+                                        En una biblioteca hay <span className="font-bold">36</span> libros. Si <span className="font-bold">1/6</span> son de cuentos, ¿cuántos libros de cuentos hay?
                                     </p>
                                 </div>
 

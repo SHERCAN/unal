@@ -327,22 +327,23 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                     {/* Instruction text */}
                     <div className="flex items-start gap-3 mb-6">
                         <div className="flex-1">
-                            <p className="text-gray-800 dark:text-gray-200 text-sm leading-relaxed">
+                            <p className="text-gray-800 font-semibold dark:text-gray-200 text-base leading-relaxed">
                                 De acuerdo con la actividad anterior, divide el círculo en 8 porciones iguales
                                 utilizando únicamente tres cortes. Luego, retira 3 de esas porciones.
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.P_EXPLAIN} title="" videoId="/pag17/vv-2" />
                             </p>
                         </div>
-                        <PlayVideoButton trackingId={VIDEO_TRACKING.P_EXPLAIN} title="" videoId="/pag17/vv-2" />
+                        
                     </div>
 
                     {/* Labels */}
                     <div className="flex justify-between mb-2 px-4">
                         <div className="text-center flex-1">
-                            <p className="text-purple-600 font-bold text-sm">{getPortionLabel()}</p>
-                            <p className="text-purple-600 font-semibold text-xs">{totalPortions} porciones</p>
+                            <p className="text-[#f49d45] font-bold text-lg">{getPortionLabel()}</p>
+                            <p className="text-purple-600 font-semibold text-base">{totalPortions} porciones</p>
                         </div>
                         <div className="text-center" style={{ width: '180px' }}>
-                            <p className="font-bold text-gray-800 dark:text-gray-200 text-sm">Porciones que quedan</p>
+                            <p className="font-bold text-gray-800 dark:text-gray-200 text-base">Porciones que quedan</p>
                         </div>
                     </div>
 

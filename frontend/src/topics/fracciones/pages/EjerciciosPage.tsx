@@ -107,14 +107,14 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                         <div className="max-w-4xl mx-auto space-y-12">
 
                             <div className="flex items-center gap-4 border-b pb-4">
-                                <span className="bg-purple-900 text-white px-6 py-2 rounded-lg font-black text-xl tracking-widest uppercase">EJERCICIOS</span>
+                                <span className="text-purple-900 px-6 py-2 rounded-lg font-black text-3xl tracking-widest uppercase">EJERCICIOS</span>
                             </div>
 
                             {/* EXERCISE 1: Table */}
                             <div className="space-y-6">
                                 <div className="flex items-center gap-3">
                                     <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">1</div>
-                                    <p className="font-bold text-gray-700">Completa la tabla de acuerdo con la informacion solicitada.</p>
+                                    <p className="font-bold text-base text-gray-800">Completa la tabla de acuerdo con la informacion solicitada.</p>
                                 </div>
 
                                 <div className="relative w-full">
@@ -164,7 +164,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                             <div className="space-y-6 pt-8 border-t">
                                 <div className="flex items-center gap-3">
                                     <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">2</div>
-                                    <p className="font-bold text-gray-700">Determinar si las siguientes figuras son formas de fracción o no.</p>
+                                    <p className="font-bold text-gray-800">Determinar si las siguientes figuras son formas de fracción o no.</p>
                                 </div>
 
                                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 py-4">
@@ -230,7 +230,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                     <div className="flex items-center gap-4 flex-wrap">
                                         <PlayVideoButton trackingId={VIDEO_TRACKING.EX3_DEFS} title="" videoId="/pag21/vv-3" />
                                         <div className="w-4 h-4 bg-purple-600 shrink-0"></div>
-                                        <span className="text-lg text-gray-800">El</span>
+                                        <span className="text-base font-semibold text-gray-800">El</span>
                                         <select
                                             value={defNum}
                                             onChange={(e) => { setDefNum(e.target.value); setDefResult(null); }}
@@ -239,13 +239,13 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                             <option value="numerador">numerador</option>
                                             <option value="denominador">denominador</option>
                                         </select>
-                                        <span className="text-lg text-gray-800">significa que en cuántas partes se divide el todo.</span>
+                                        <span className="text-base font-semibold text-gray-800">significa que en cuántas partes se divide el todo.</span>
                                     </div>
 
                                     <div className="flex items-center gap-4 flex-wrap">
                                         <PlayVideoButton trackingId={VIDEO_TRACKING.EX3_DEFS} title="" videoId="/pag21/vv-4" />
                                         <div className="w-4 h-4 bg-purple-600 shrink-0"></div>
-                                        <span className="text-lg text-gray-800">El</span>
+                                        <span className="text-base font-semibold text-gray-800">El</span>
                                         <select
                                             value={defDen}
                                             onChange={(e) => { setDefDen(e.target.value); setDefResult(null); }}
@@ -254,7 +254,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                             <option value="numerador">numerador</option>
                                             <option value="denominador">denominador</option>
                                         </select>
-                                        <span className="text-lg text-gray-800">significa que cuántas partes se toman.</span>
+                                        <span className="text-base font-semibold text-gray-800">significa que cuántas partes se toman.</span>
                                     </div>
                                 </div>
 
