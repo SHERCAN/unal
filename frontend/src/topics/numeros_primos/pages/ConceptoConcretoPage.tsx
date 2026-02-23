@@ -395,7 +395,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                 </div>
                 <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white dark:bg-gray-800 border-[#60a5fa] dark:border-blue-700">
 
-                    <div className="mt-2 space-y-6">
+                    <div className="font-semibold text-base space-y-6">
                         {/* Intro text + play */}
                         <div>
                             <p className="text-gray-800 dark:text-gray-200 leading-relaxed">

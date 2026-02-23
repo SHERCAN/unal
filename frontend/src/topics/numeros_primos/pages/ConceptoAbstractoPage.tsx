@@ -82,11 +82,12 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
 
                         {/* 1. Division proofs text + play */}
                         <div>
-                            <div className="flex items-start gap-2">
+                            <div className="font-semibold text-base flex items-start gap-2">
                                 <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
-                                    El número <span className="font-bold">7</span> tiene solo dos divisores <span className="font-bold text-lg">1</span> y <span className="font-bold text-lg">7</span>, pero no hay más divisores para que siempre forman partes iguales
+                                    El número <span className="font-bold text-base">7</span> tiene solo dos divisores <span className="font-extrabold text-2xl text-purple-700">1</span> y <span className="font-extrabold text-2xl text-purple-700">7</span>, pero no hay más divisores para que siempre forman partes iguales. 
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_DIVISION} title="" videoId="/pag15/vv-1" />
                                 </p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_DIVISION} title="" videoId="/pag15/vv-1" />
+                                
                             </div>
                         </div>
 
@@ -94,9 +95,9 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                         {/* 2. Long division and group visualization */}
                         <div className="flex justify-center">
                             <img
-                                src="/numeros_primos/frame213.png"
+                                src="/numeros_primos/img1.png"
                                 alt="División y grupos"
-                                className="h-80 object-contain"
+                                className="h-80 object-contain my-12"
                                 draggable={false}
                             />
                         </div>
@@ -104,35 +105,35 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                         <div>
                             <div className="flex items-center gap-2 mb-2">
                                 <PlayVideoButton trackingId={VIDEO_TRACKING.A_PRIMO_DEF} title="¿Qué es un número primo?" videoId="/pag15/vv-2" />
-                                <span className="bg-purple-600 text-white font-bold px-3 py-1 rounded text-sm">¿Qué es un número primo?</span>
+                                <span className="bg-[#e95352] text-white font-bold px-3 py-1 rounded text-sm">¿Qué es un número primo?</span>
                             </div>
-                            <p className="text-gray-800 dark:text-gray-200 leading-relaxed ml-10">
-                                Un <span className="font-bold text-green-600 dark:text-green-400">número primo</span> es un número natural mayor que 1 que tiene solo dos
-                                divisores: <span className="font-bold text-lg">1</span> y <span className="font-bold text-lg">sí mismo</span>.
+                            <p className="text-gray-800 font-semibold text-base dark:text-gray-200 leading-relaxed ml-10">
+                                Un <span className="font-bold text-[#e95352]">número primo</span> es un número natural mayor que 1 que tiene solo dos
+                                divisores: <span className="font-bold text-purple-700 text-2xl">1</span> y <span className="font-bold text-purple-700 text-2xl">sí mismo</span>.
                             </p>
                         </div>
 
                         {/* 6. Ejemplo */}
                         <div className="ml-10">
-                            <span className="bg-purple-600 text-white font-bold px-3 py-1 rounded text-sm mb-3 inline-block">Ejemplo:</span>
+                            <span className="bg-green-600 text-white font-bold px-3 py-1 rounded text-sm mb-3 inline-block">Ejemplo:</span>
                             <div className="space-y-2 mt-2">
                                 <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 bg-gray-800 dark:bg-gray-300 rounded-sm flex-shrink-0" />
-                                    <p className="text-gray-800 dark:text-gray-200">
-                                        El número 7 es <span className="font-bold text-green-600 dark:text-green-400">primo</span> porque solo tiene dos divisores <span className="font-bold">1</span> y <span className="font-bold">7</span>.
+                                    <div className="w-3 h-3 bg-green-600 dark:bg-gray-300 rounded-sm flex-shrink-0" />
+                                    <p className="text-gray-800 text-base font-semibold dark:text-gray-200">
+                                        El número 7 es <span className="font-bold text-[#e95352] dark:text-green-400">primo</span> porque solo tiene dos divisores <span className="font-bold text-purple-700">1</span> y <span className="font-bold text-purple-700">7</span>.
                                     </p>
                                     <PlayVideoButton trackingId={VIDEO_TRACKING.A_EJ_7} title="Ejemplo: 7 es primo" videoId="/pag15/vv-3" />
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 bg-gray-800 dark:bg-gray-300 rounded-sm flex-shrink-0" />
-                                    <p className="text-gray-800 dark:text-gray-200">
-                                        El número 11 es <span className="font-bold text-green-600 dark:text-green-400">primo</span> porque solo tiene dos divisores <span className="font-bold">1</span> y <span className="font-bold">11</span>.
+                                    <div className="w-3 h-3 bg-green-600 dark:bg-gray-300 rounded-sm flex-shrink-0" />
+                                    <p className="text-gray-800 font-semibold dark:text-gray-200">
+                                        El número 11 es <span className="font-bold text-[#e95352] dark:text-green-400">primo</span> porque solo tiene dos divisores <span className="font-bold text-purple-700">1</span> y <span className="font-bold text-purple-700">11</span>.
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 bg-gray-800 dark:bg-gray-300 rounded-sm flex-shrink-0" />
-                                    <p className="text-gray-800 dark:text-gray-200">
-                                        El número 8 NO es <span className="font-bold text-green-600 dark:text-green-400">primo</span> porque tiene cuatro divisores <span className="font-bold">1, 2, 4</span> y <span className="font-bold">8</span>.
+                                    <div className="w-3 h-3 bg-green-600 dark:bg-gray-300 rounded-sm flex-shrink-0" />
+                                    <p className="text-gray-800 font-semibold dark:text-gray-200">
+                                        El número 8 NO es <span className="font-bold text-[#e95352] dark:text-green-400">primo</span> porque tiene cuatro divisores <span className="font-bold text-purple-700">1, 2, 4</span> y <span className="font-bold text-purple-700">8</span>.
                                     </p>
                                     <PlayVideoButton trackingId={VIDEO_TRACKING.A_EJ_8} title="Ejemplo: 8 no es primo" videoId="/pag15/vv-4" />
                                 </div>
@@ -143,19 +144,19 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                         <div>
                             <div className="flex items-center gap-2 mb-2">
                                 <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMPUESTO_DEF} title="¿Qué es un número compuesto?" videoId="/pag15/vv-5" />
-                                <span className="bg-purple-600 text-white font-bold px-3 py-1 rounded text-sm">¿Qué es un número compuesto?</span>
+                                <span className="bg-[#e95352] text-white font-bold px-3 py-1 rounded text-sm">¿Qué es un número compuesto?</span>
                             </div>
-                            <p className="text-gray-800 dark:text-gray-200 leading-relaxed ml-10">
-                                Un número natural es un <span className="font-bold text-orange-600 dark:text-orange-400">número compuesto</span> cuando no es primo.
+                            <p className="text-gray-800 font-semibold dark:text-gray-200 leading-relaxed ml-10">
+                                Un número natural es un <span className="font-bold text-[#e95352] dark:text-orange-400">número compuesto</span> cuando no es primo.
                             </p>
                         </div>
 
                         {/* 8. Ejemplo compuesto */}
                         <div className="ml-10 flex items-start gap-3">
-                            <span className="bg-purple-600 text-white font-bold px-3 py-1 rounded text-sm flex-shrink-0">Ejemplo:</span>
+                            <span className="bg-green-600 text-white font-bold px-3 py-1 rounded text-sm flex-shrink-0">Ejemplo:</span>
                             <div className="flex items-center gap-2">
-                                <p className="text-gray-800 dark:text-gray-200">
-                                    El número 8 es <span className="font-bold text-orange-600 dark:text-orange-400">compuesto</span> porque tiene cuatro divisores 1, 2, 4 y 8.
+                                <p className="text-gray-800 font-semibold dark:text-gray-200">
+                                    El número 8 es <span className="font-bold text-[#e95352] dark:text-orange-400">compuesto</span> porque tiene cuatro divisores 1, 2, 4 y 8.
                                 </p>
                                 <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMPUESTO_EJ} title="Ejemplo: 8 es compuesto" videoId="/pag15/vv-6" />
                             </div>
@@ -163,13 +164,13 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
 
                         {/* 9. PRÁCTICA */}
                         <div>
-                            <span className="bg-purple-600 text-white font-bold px-3 py-1 rounded text-sm inline-block mb-4">PRÁCTICA</span>
+                            <span className="bg-pink-900 text-white font-bold px-4 py-2 inline-block w-fit shadow-sm text-base rounded">PRÁCTICA</span>
 
-                            <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+                            <div className="grid grid-cols-2 gap-x-6 gap-y-3 my-8">
                                 {numbers.map(({ num }) => (
                                     <div key={num} className="flex items-center gap-2">
-                                        <div className="w-3 h-3 bg-gray-800 dark:bg-gray-300 rounded-sm flex-shrink-0" />
-                                        <span className="text-gray-800 dark:text-gray-200">
+                                        <div className="w-3 h-3 bg-pink-900 dark:bg-gray-300 rounded-sm flex-shrink-0" />
+                                        <span className="text-gray-800 font-semibold dark:text-gray-200">
                                             El número {num} es
                                         </span>
                                         <select
