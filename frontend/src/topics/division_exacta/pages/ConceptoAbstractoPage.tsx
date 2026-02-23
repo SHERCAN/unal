@@ -108,56 +108,55 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                             {/* Example: 48 ÷ 12 = 4 */}
                             <div>
                                 <div className="flex items-center gap-2">
-                                    <span className="w-3 h-3 bg-gray-800 dark:bg-gray-200 rounded-sm inline-block"></span>
-                                    <p className="text-sm text-gray-800 dark:text-gray-200">
-                                        La división 48 ÷ 12 = 4 es <span className="text-green-600 font-bold">exacta</span> porque no tiene resto.
+                                    <span className="w-3 h-3 bg-green-600 dark:bg-gray-200 rounded-sm inline-block"></span>
+                                    <p className="text-base font-semibold text-gray-800 dark:text-gray-200">
+                                        La división 48 ÷ 12 = 4 es <span className="text-[#e95352] font-bold">exacta</span> porque no tiene resto.
                                     </p>
                                 </div>
-
-                                <DivisionAlgorithm
-                                    dividend={48} divisor={12} quotient={4} subtract={48} remainder={0}
-                                    multTable={[
-                                        { mult: 1, result: 12 }, { mult: 2, result: 24 }, { mult: 3, result: 36 },
-                                        { mult: 4, result: 48 },
-                                    ]}
-                                />
+                                <div className="flex justify-center my-8">
+                                    <img 
+                                        className="h-48 object-contain"
+                                        src="/division_exacta/img4.png"
+                                        draggable={false}
+                                    />
+                                </div>                               
                             </div>
 
                             {/* Non-exact example intro */}
                             <div>
                                 <div className="flex items-center gap-2 mb-2">
-                                    <p className="text-sm text-gray-800 dark:text-gray-200">
-                                        ¿Qué pasa si alguna división <span className="text-red-600 font-bold">NO</span> es exacta? Veamos un ejemplo.
+                                    <p className="text-base font-semibold text-gray-800 dark:text-gray-200">
+                                        ¿Qué pasa si alguna división <span className="text-[#e95352] font-bold">NO</span> es exacta? Veamos un ejemplo.
                                     </p>
                                     <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOEXACT} title="" videoId="/pag9/vv-1" />
                                 </div>
 
                                 <div className="flex items-center gap-2">
-                                    <span className="w-3 h-3 bg-gray-800 dark:bg-gray-200 rounded-sm inline-block"></span>
-                                    <p className="text-sm text-gray-800 dark:text-gray-200">
-                                        La división 14 ÷ 3 <span className="text-red-600 font-bold">NO</span> es exacta porque tiene resto.
+                                    <span className="w-3 h-3 bg-green-600 dark:bg-gray-200 rounded-sm inline-block"></span>
+                                    <p className="text-base font-semibold text-gray-800 dark:text-gray-200">
+                                        La división 14 ÷ 3 <span className="text-[#e95352] font-bold">NO</span> es exacta porque tiene resto.
                                     </p>
                                     <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOEXACT2} title="" videoId="/pag9/vv-2" />
                                 </div>
 
-                                <DivisionAlgorithm
-                                    dividend={14} divisor={3} quotient={4} subtract={12} remainder={2}
-                                    multTable={[
-                                        { mult: 1, result: 3 }, { mult: 2, result: 6 }, { mult: 3, result: 9 },
-                                        { mult: 4, result: 12 }, { mult: 5, result: 15 },
-                                    ]}
-                                />
+                                <div className="flex justify-center my-8">
+                                    <img 
+                                        className="h-48 object-contain"
+                                        src="/division_exacta/img5.png"
+                                        draggable={false}
+                                    />
+                                </div>  
                             </div>
 
                             {/* PRÁCTICA */}
                             <div>
-                                <span className="bg-purple-800 text-white font-bold px-3 py-1 rounded text-sm">PRÁCTICA</span>
+                                <span className="bg-pink-900 text-white font-bold px-4 py-2 inline-block w-fit shadow-sm text-base rounded">PRÁCTICA</span>
 
                                 <div className="mt-3 space-y-3">
                                     {practicaItems.map((item, i) => (
                                         <div key={i} className="flex items-center gap-3">
-                                            <span className="w-3 h-3 bg-gray-800 dark:bg-gray-200 rounded-sm inline-block flex-shrink-0"></span>
-                                            <p className="text-sm font-medium text-gray-800 dark:text-gray-200 min-w-[140px]">
+                                            <span className="w-3 h-3 bg-pink-900 dark:bg-gray-200 rounded-sm inline-block flex-shrink-0"></span>
+                                            <p className="text-base font-semibold text-gray-800 dark:text-gray-200 min-w-[140px]">
                                                 La división {item.dividend} ÷ {item.divisor}
                                             </p>
                                             <select
@@ -176,8 +175,8 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
 
                             {/* BONO */}
                             <div className="text-center border-t-2 border-gray-200 dark:border-gray-700 pt-4 mt-4">
-                                <p className="text-lg font-black text-gray-900 dark:text-white mb-2">
-                                    ¿CÓMO HAGAMOS EL <span className="text-xl">USO DE ALGORITMO DE LA DIVISIÓN</span>?
+                                <p className="text-lg font-black text-purple-700 dark:text-white mb-2">
+                                    ¿CÓMO HAGAMOS EL <span className="text-xl text-[#e95352] ">USO DE ALGORITMO DE LA DIVISIÓN</span>?
                                 </p>
                                 <div className="flex items-center justify-center gap-2">
                                     <PlayVideoButton trackingId={VIDEO_TRACKING.A_BONO} title="Bono Explicado" videoId="/pag9/vv-3" />

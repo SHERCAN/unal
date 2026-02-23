@@ -102,18 +102,18 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                         <div className="mt-4 space-y-6">
                             {/* Intro text */}
                             <div>
-                                <p className="text-base text-gray-800 dark:text-gray-200 leading-relaxed">
-                                    De acuerdo con la actividad anterior, todas las <span className="font-bold text-lg">18</span> medallas se reparten
-                                    en <span className="font-bold text-lg text-red-600">3</span> grupos de deportistas. Así, cada uno de 3 grupos tiene la misma
-                                    cantidad de <span className="font-bold text-lg text-green-600">6</span> medallas. <span className="font-bold text-lg text-red-600">NO SOBRE</span> ninguna medalla.
+                                <p className="font-semibold text-base text-gray-800 dark:text-gray-200 leading-relaxed">
+                                    De acuerdo con la actividad anterior, todas las <span className="font-extrabold text-2xl">18</span> medallas se reparten
+                                    en <span className="font-extrabold text-2xl text-purple-800">3</span> grupos de deportistas. Así, cada uno de 3 grupos tiene la misma
+                                    cantidad de <span className="font-extrabold text-2xl text-green-600">6</span> medallas. <span className="font-bold text-2xl text-red-600">NO SOBRE</span> ninguna medalla.
                                 </p>
                                 <div className="mt-4 flex items-center gap-4">
                                     <div className="shrink-0">
                                         <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOTA} title="" videoId="/pag8/vv-1" />
                                     </div>
                                     <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 border-l-4 border-purple-500 flex-1">
-                                        <p className="text-sm text-gray-700 dark:text-gray-300">
-                                            <span className="font-bold">NOTA:</span> SOBRE es lo mismo que RESTO.<br />
+                                        <p className="text-base font-semibold text-gray-700 dark:text-gray-300">
+                                            <span className="font-extrabold text-[#e95352] text-lg">NOTA:</span> SOBRE es lo mismo que RESTO.<br />
                                             RESTO se usa en matemáticas, y SOBRA se usa en español.
                                         </p>
                                     </div>
@@ -123,65 +123,62 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                             {/* Math notation */}
                             <div>
                                 <div className="flex items-center gap-2 mb-2">
-                                    <p className="text-base text-gray-800 dark:text-gray-200">Vemos la notación matemática:</p>
+                                    <p className="text-base font-semibold text-gray-800 dark:text-gray-200">Vemos la notación matemática:</p>
                                     <PlayVideoButton trackingId={VIDEO_TRACKING.A_MATH} title="Notación Matemática" videoId="/pag8/vv-3" />
                                 </div>
-
-                                <div className="text-center my-3">
-                                    <span className="text-4xl font-black text-gray-900 dark:text-white">18</span>
-                                    <span className="text-3xl font-bold text-gray-500 mx-2">÷</span>
-                                    <span className="text-4xl font-black text-red-600">3</span>
-                                    <span className="text-3xl font-bold text-gray-500 mx-2">=</span>
-                                    <span className="text-4xl font-black text-green-600">6</span>
-                                    <span className="text-2xl text-red-500 ml-2">resto</span>
-                                    <span className="text-4xl font-black text-green-600 ml-1">0</span>
+                                
+                                <div className="flex justify-center my-8 pl-12">
+                                    <img 
+                                        className="h-10 object-contain"
+                                        src="/division_exacta/img1.png"
+                                        draggable={false}
+                                    />
                                 </div>
 
                                 <div className="flex items-center gap-2">
-                                    <p className="text-sm text-gray-700 dark:text-gray-300">
-                                        &quot;<span className="text-red-500">resto 0</span>&quot; significa que no hay resto. ¿Cómo sabemos esto?
+                                    <p className="text-base font-bold text-gray-700 dark:text-gray-300">
+                                        &quot;<span className="text-[#e95352] text-lg">resto 0</span>&quot; significa que no hay resto. ¿Cómo sabemos esto?
                                     </p>
                                     <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMO} title="" videoId="/pag8/vv-4" />
                                 </div>
-
-                                <DivisionAlgorithm
-                                    dividend={18} divisor={3} quotient={6} subtract={18} remainder={0}
-                                    multTable={[
-                                        { mult: 1, result: 3 }, { mult: 2, result: 6 }, { mult: 3, result: 9 },
-                                        { mult: 4, result: 12 }, { mult: 5, result: 15 }, { mult: 6, result: 18 },
-                                    ]}
-                                />
+                                <div className="flex justify-center my-8 pl-32">
+                                    <img 
+                                        className="h-48 object-contain"
+                                        src="/division_exacta/img2.png"
+                                        draggable={false}
+                                    />
+                                </div>
                             </div>
 
                             {/* Definition */}
                             <div>
                                 <div className="flex items-center gap-2 mb-1">
                                     <PlayVideoButton trackingId={VIDEO_TRACKING.A_DEF} title="¿Qué es una división exacta?" videoId="/pag8/vv-5" />
-                                    <span className="bg-purple-600 text-white font-bold px-3 py-1 rounded text-sm">¿Qué es una división exacta?</span>
+                                    <span className="bg-[#e95352] text-white font-bold px-3 py-1 text-base">¿Qué es una división exacta?</span>
                                 </div>
-                                <p className="text-base text-gray-800 dark:text-gray-200 mt-2">
-                                    Una división es <span className="text-green-600 font-bold">exacta</span> cuando su resto es cero, es decir, no hay resto.
+                                <p className="text-base font-semibold text-gray-800 dark:text-gray-200 mt-2">
+                                    Una división es <span className="text-[#e95352] font-bold">exacta</span> cuando su resto es cero, es decir, no hay resto.
                                 </p>
                             </div>
 
                             {/* Example: 32 ÷ 4 = 8 */}
                             <div>
-                                <span className="bg-red-500 text-white font-bold px-3 py-1 rounded text-sm">Ejemplo:</span>
+                                <span className="bg-green-600 text-white font-bold px-3 py-1 rounded text-sm">Ejemplo:</span>
                                 <div className="flex items-center gap-2 mt-2">
                                     <PlayVideoButton trackingId={VIDEO_TRACKING.A_EXAMPLE} title="Ejemplo" videoId="/pag8/vv-6" />
-                                    <span className="w-3 h-3 bg-gray-800 dark:bg-gray-200 rounded-sm inline-block"></span>
-                                    <p className="text-sm text-gray-800 dark:text-gray-200">
-                                        La división 32 ÷ 4 = 8 es <span className="text-green-600 font-bold">exacta</span> porque no tiene resto.
+                                    <span className="w-3 h-3 bg-green-600 dark:bg-gray-200 rounded-sm inline-block"></span>
+                                    <p className="text-base font-semibold text-gray-800 dark:text-gray-200">
+                                        La división 32 ÷ 4 = 8 es <span className="text-[#e95352] font-bold">exacta</span> porque no tiene resto.
                                     </p>
                                 </div>
-
-                                <DivisionAlgorithm
-                                    dividend={32} divisor={4} quotient={8} subtract={32} remainder={0}
-                                    multTable={[
-                                        { mult: 1, result: 4 }, { mult: 2, result: 8 }, { mult: 3, result: 12 },
-                                        { mult: 8, result: 32 }, { mult: 9, result: 36 },
-                                    ]}
-                                />
+                                <div className="flex justify-center my-8 pl-8">
+                                    <img 
+                                        className="h-48 object-contain"
+                                        src="/division_exacta/img3.png"
+                                        draggable={false}
+                                    />
+                                </div>
+                                
                             </div>
                         </div>
                     </div>

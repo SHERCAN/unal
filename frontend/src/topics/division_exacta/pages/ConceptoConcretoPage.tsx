@@ -317,15 +317,15 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                         <div className="mt-4">
                             <div className="flex items-start gap-2 mb-4">
                                 <div className="flex-1">
-                                    <p className="text-base text-gray-800 dark:text-gray-200">
+                                    <p className="font-semibold text-base text-gray-800 dark:text-gray-200">
                                         Arrastra los <span className="text-2xl font-bold text-yellow-500">{totalCircles}</span> circulos y repártelos en 3 partes iguales. Verifica que no sobre ninguno.
+                                    <PlayVideoButton
+                                        trackingId={VIDEO_TRACKING.P_INTRO}
+                                        title=""
+                                        videoId="/pag7/vv-2"
+                                    />
                                     </p>
-                                </div>
-                                <PlayVideoButton
-                                    trackingId={VIDEO_TRACKING.P_INTRO}
-                                    title=""
-                                    videoId="/pag7/vv-2"
-                                />
+                                </div>                              
                             </div>
 
                             <div className="flex flex-col md:flex-row gap-6">
@@ -347,7 +347,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                             ))}
                                         </div>
                                         {getCirclesInPool().length === 0 && (
-                                            <p className="text-center text-xs text-gray-400 dark:text-gray-500 italic mt-2">Arrastra aquí para devolver</p>
+                                            <p className="text-center text-base text-gray-400 dark:text-gray-500 italic mt-2">Arrastra aquí para devolver</p>
                                         )}
                                     </div>
                                     <p className="text-4xl font-bold text-yellow-500 mt-2">{getCirclesInPool().length}</p>
