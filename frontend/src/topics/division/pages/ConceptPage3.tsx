@@ -181,26 +181,26 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         {/* --- EXAMPLE SECTION --- */}
                         <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800 shadow-sm">
                             <div className="flex items-center gap-2 mb-4">
-                                <div className="bg-green-600 text-white px-3 py-1 rounded font-bold text-sm">Ejemplo:</div>
-                                <span className="font-bold text-gray-800 dark:text-gray-200">Calcule 25 ÷ 5:</span>
+                                <div className="bg-green-600 text-white px-3 py-1 rounded font-bold text-base">Ejemplo:</div>
+                                <span className="font-semibold text-gray-800 dark:text-gray-200 text-base">Calcule 25 ÷ 5:</span>
                             </div>
                             <div className='flex justify-center'>
                                 <img
                                     src="/division/img5.png"
-                                    className="h-32 object-contain"
+                                    className="h-40 object-contain"
                                     draggable={false}
                                 />
                             </div>
                             <div className="mt-4 text-sm text-gray-800 dark:text-gray-200 flex items-start gap-2">
                                 <p>
-                                    <span className='font-semibold'> Para dividir 25 entre 5, buscamos cuántas veces el número 5 está contenido en 25.
-                                        Como 5 × 5 = 25, el cociente es 5 y el resto es 0. </span><PlayVideoButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE_MAIN} title="Explicación del ejemplo" videoId="/pag4/vv-1" />
+                                    <span className='font-semibold text-base'> Para dividir 25 entre 5, buscamos cuántas veces el número 5 está contenido en 25.
+                                        <p>Como 5 × 5 = 25, el cociente es 5 y el resto es 0.<PlayVideoButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE_MAIN} title="Explicación del ejemplo" videoId="/pag4/vv-1" /></p></span>
                                 </p>
                             </div>
                         </div>
 
                         {/* --- PRACTICE LABEL --- */}
-                        <div className="bg-purple-900 text-white font-bold px-4 py-1 inline-block w-fit rounded-sm shadow-sm text-sm">
+                        <div className="bg-pink-900 text-white font-bold px-4 py-2 inline-block w-fit rounded-sm shadow-sm text-base">
                             PRÁCTICA
                         </div>
 
@@ -208,7 +208,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         <div className="flex flex-col gap-4 pl-2">
                             <div className="flex items-start gap-2">
                                 <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PRACTICE_1} title="Práctica 1" videoId="/pag4/vv-2" />
-                                <p className="font-bold text-gray-800 dark:text-gray-200 text-sm md:text-base">
+                                <p className="font-semibold text-gray-800 dark:text-gray-200 text-sm md:text-base">
                                     El número 21 se reparte en 7 grupos iguales.
                                     <br />
                                     ¿Cuántos elementos recibe cada grupo?
@@ -297,11 +297,11 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         </div>
 
                         {/* --- EXERCISE 2 (Terms) --- */}
-                        <div className="flex flex-col gap-3 pl-4 border-l-4 border-purple-100 py-2">
+                        <div className="flex flex-col gap-3 pl-4 border-purple-100 py-2">
                             <div className="grid gap-2">
                                 <div className="flex items-center flex-wrap gap-2">
-                                    <span className="w-3 h-3 bg-purple-800 rounded-sm"></span>
-                                    <span className="font-bold text-gray-800 dark:text-gray-200">El número 21 es</span>
+                                    <span className="w-3 h-3 bg-pink-900 rounded-sm"></span>
+                                    <span className="font-semibold text-gray-800 dark:text-gray-200 text-base">El número 21 es</span>
                                     <select
                                         className="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-800 dark:text-white"
                                         value={ex2_val1}
@@ -315,7 +315,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                 </div>
 
                                 <div className="flex items-center flex-wrap gap-2">
-                                    <span className="font-bold text-gray-800 dark:text-gray-200 ml-5">El número de grupos 7 es</span>
+                                    <span className="font-semibold text-gray-800 dark:text-gray-200 ml-5 text-base">El número de grupos 7 es</span>
                                     <select
                                         className="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-800 dark:text-white"
                                         value={ex2_val2}
@@ -329,7 +329,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                 </div>
 
                                 <div className="flex items-center flex-wrap gap-2">
-                                    <span className="font-bold text-gray-800 dark:text-gray-200 ml-5">El resultado de que cada grupo recibe es</span>
+                                    <span className="font-semibold text-gray-800 dark:text-gray-200 ml-5 text-base">El resultado de que cada grupo recibe es</span>
                                     <select
                                         className="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-800 dark:text-white"
                                         value={ex2_val3}
@@ -356,13 +356,13 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         <div className="flex flex-col gap-2 pl-2">
                             <div className="flex items-start gap-2">
                                 <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PROBLEM_1} title="Problema 1" videoId="/pag4/vv-3" />
-                                <div className="border border-pink-300 rounded px-2 text-pink-700 font-bold text-xs py-0.5 self-start whitespace-nowrap">PROBLEMA 1</div>
-                                <p className="font-medium text-gray-800 dark:text-gray-200 text-sm leading-tight">
+                                <div className="border border-pink-900 rounded px-2 text-pink-900 font-bold self-start whitespace-nowrap text-base">PROBLEMA 1</div>
+                                <p className="font-semibold text-gray-800 dark:text-gray-200 text-base">
                                     Ana y María quieren repartir 12 muñecas entre las dos.<br />
                                     ¿Cuántas muñecas tendrán <span className="text-red-500 font-bold">cada una</span>?
                                 </p>
                             </div>
-                            <div className="flex items-center gap-2 ml-12 mt-1">
+                            <div className="flex items-center justify-center gap-2 ml-12 mt-1">
                                 <InputBox value={p1_div1.value} onChange={p1_div1.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
                                 <span className="text-xl font-bold dark:text-white">÷</span>
                                 <InputBox value={p1_div2.value} onChange={p1_div2.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
@@ -383,13 +383,13 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         <div className="flex flex-col gap-2 pl-2 pb-4">
                             <div className="flex items-start gap-2">
                                 <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PROBLEM_2} title="Problema 2" videoId="/pag4/vv-4" />
-                                <div className="border border-pink-300 rounded px-2 text-pink-700 font-bold text-xs py-0.5 self-start whitespace-nowrap">PROBLEMA 2</div>
-                                <p className="font-medium text-gray-800 dark:text-gray-200 text-sm leading-tight">
+                                <div className="border border-pink-900 rounded px-2 text-pink-900 font-bold py-0.5 self-start whitespace-nowrap text-base">PROBLEMA 2</div>
+                                <p className="font-semibold text-gray-800 dark:text-gray-200 text-base">
                                     En la bodega hay 64 cuadernos. Cada paquete trae 8 cuadernos.
                                     ¿Cuántos <span className="text-red-500 font-bold">paquetes completos</span> se pueden armar?
                                 </p>
                             </div>
-                            <div className="flex items-center gap-2 ml-12 mt-1">
+                            <div className="flex items-center justify-center gap-2 ml-12 mt-1">
                                 <InputBox value={p2_div1.value} onChange={p2_div1.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
                                 <span className="text-xl font-bold dark:text-white">÷</span>
                                 <InputBox value={p2_div2.value} onChange={p2_div2.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />

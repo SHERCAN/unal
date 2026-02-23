@@ -500,7 +500,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
 
                         <div className="flex flex-wrap items-center justify-center gap-6 mt-6">
                             <div className="flex items-center gap-2">
-                                <p className="font-bold text-gray-700 dark:text-gray-300" style={{ fontSize: 'clamp(0.75rem, 1.9vmin, 1rem)' }}>
+                                <p className="font-bold text-gray-700 dark:text-gray-300" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                     Cada caja tiene
                                 </p>
                                 <input
@@ -509,7 +509,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                     value={finalAnswer}
                                     onChange={(e) => setFinalAnswer(e.target.value)}
                                 />
-                                <p className="font-bold text-gray-700 dark:text-gray-300" style={{ fontSize: 'clamp(0.75rem, 1.9vmin, 1rem)' }}>
+                                <p className="font-bold text-gray-700 dark:text-gray-300" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                     naranjas.
                                 </p>
                             </div>

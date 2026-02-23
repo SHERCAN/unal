@@ -179,7 +179,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                             videoId="/pag6/vv-1"
                         />
                         <div className="flex-1">
-                            <p className="font-medium text-lg leading-relaxed text-gray-800 dark:text-gray-200">
+                            <p className="font-semibold text-base leading-relaxed text-gray-800 dark:text-gray-200">
                                 Hay 40 caramelos para repartir en partes iguales entre 10 niños. <br />
                                 Cada niño recibe 4 caramelos.
                                 <span className="inline-flex gap-2 ml-4 align-middle">
@@ -198,7 +198,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                             videoId="/pag6/vv-2"
                         />
                         <div className="flex-1">
-                            <p className="font-medium text-lg leading-relaxed text-gray-800 dark:text-gray-200">
+                            <p className="font-semibold text-base leading-relaxed text-gray-800 dark:text-gray-200">
                                 En una competencia participan 88 atletas. Se reparten en 10 carriles de la pista. <br />
                                 Las 8 atletas corren en cada carril.
                                 <span className="inline-flex gap-2 ml-4 align-middle">
@@ -235,14 +235,14 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                     </div>
 
                     <div className="ml-0 md:ml-12 flex flex-col gap-6">
-                        <p className="text-lg text-gray-800 dark:text-gray-200">
+                        <p className="text-base text-gray-800 dark:text-gray-200 font-semibold">
                             En una piscina entrenan 36 nadadores. Se organizan en 12 grupos iguales.
                             <br />
                             <strong>¿Cuántos nadadores hay en cada grupo?</strong>
                         </p>
 
                         {/* Horizontal Division */}
-                        <div className="flex items-center gap-2 text-2xl font-bold justify-center md:justify-start text-gray-800 dark:text-white">
+                        <div className="flex items-center gap-2 text-2xl font-bold justify-center md:justify-center text-gray-800 dark:text-white">
                             <InputBox value={act4_h_div[0]} onChange={v => { const n = [...act4_h_div]; n[0] = v; setAct4_h_div(n); setAct4Status(null); }} />
                             <span>÷</span>
                             <InputBox value={act4_h_div[1]} onChange={v => { const n = [...act4_h_div]; n[1] = v; setAct4_h_div(n); setAct4Status(null); }} />
@@ -335,7 +335,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                                 title="Ejercicio 7"
                                 videoId="/pag6/vv-4"
                             />
-                            <p className="font-bold text-gray-800 dark:text-gray-200">Encuentra la división falsa (F). ¿Cuál está incorrecta?</p>
+                            <p className="font-semibold text-gray-800 dark:text-gray-200">Encuentra la división falsa <span className='text-red-500'>(F)</span>. ¿Cuál está incorrecta?</p>
                         </div>
                     </div>
 

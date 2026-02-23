@@ -174,7 +174,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                                 <span className="bg-red-400 w-4 h-4 mt-1 block rounded-sm flex-shrink-0"></span>
                                 <div className="flex-1">
                                     <p className="font-medium text-gray-800 dark:text-gray-200">
-                                        <span className="font-bold">B</span> <span className="mx-1">→</span> <span className="italic font-bold">el número de grupos (el divisor).</span> <span className='font-semibold'>Es entre cuántos vamos a repartir o en cuántas partes iguales queremos dividir el total.</span>
+                                        <span className="font-bold">B</span> <span className="mx-1">→</span> <span className="italic font-bold" >el número de grupos (el divisor).</span> <span className='font-semibold'>Es entre cuántos vamos a repartir o en cuántas partes iguales queremos dividir el total.</span>
                                         <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.DIVISOR} title="El Divisor" videoId="/pag3/vv-1" />
                                     </p>
                                 </div>
@@ -184,7 +184,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pl-6">
                                 {/* 3 niños */}
                                 <div className="flex flex-col items-center">
-                                    <div className="bg-green-600 text-white px-3 py-1 rounded-md font-bold text-sm mb-2 w-full text-center">
+                                    <div className="bg-green-600 text-white px-3 py-1 rounded-md font-bold text-base mb-2 w-full text-center">
                                         Ejemplo: <span className="font-normal">Entre</span> 3 niños
                                     </div>
                                     <div className="flex justify-center p-1 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
@@ -222,7 +222,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
 
                             {/* C Example */}
                             <div className="pl-6">
-                                <div className="flex items-center gap-2 mb-2 bg-green-600 text-white px-3 py-1 rounded-md w-fit font-bold text-sm">
+                                <div className="flex items-center gap-2 mb-2 bg-green-600 text-white px-3 py-1 rounded-md w-fit font-bold text-base">
                                     <span>Ejemplo: </span>
                                 </div>
                                 <p className="mb-4 font-medium text-gray-800 dark:text-gray-200">
@@ -238,19 +238,19 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                         <div className=" p-4 rounded-xl border border-gray-200 dark:border-gray-700">
                             <div className="flex items-center gap-2 mb-2">
                                 <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE} title="Ejemplo" videoId="/pag3/vv-3" />
-                                <div className="bg-green-600 text-white px-3 py-1 rounded-md font-bold text-sm">Example:</div>
+                                <div className="bg-green-600 text-white px-3 py-1 rounded-md font-bold text-base">Example:</div>
                                 <p className="font-semibold text-gray-800 dark:text-white">Tenemos <span className='font-bold'>28 galletas</span> y queremos repartirlas en 4 cajas.</p>
                             </div>
 
-                            <div className="mt-3 pl-8 space-y-1 font-black text-lg">
-                                <p><span className="text-purple-650">A = 28</span> <span className="text-black text-base">(total de galletas)</span></p>
-                                <p><span className="text-pink-650">B = 4</span> <span className="text-black text-base">(número de cajas)</span></p>
-                                <p><span className="text-green-650">C = 7</span> <span className="text-black text-base">(galletas en cada caja)</span></p>
+                            <div className="mt-3 pl-8 space-y-1 font-black text-base">
+                                <p><span className="text-[#3600b3]">A = 28</span> <span className="text-black text-base">(total de galletas)</span></p>
+                                <p><span className="text-[#ad026e]">B = 4</span> <span className="text-black text-base">(número de cajas)</span></p>
+                                <p><span className="text-[#018b6a]">C = 7</span> <span className="text-black text-base">(galletas en cada caja)</span></p>
                             </div>
 
                             <div className="mt-3 pl-8">
-                                <p className="font-semibold dark:text-white text-lg">
-                                    Entonces, <span className="text-purple-650 font-black">28</span> ÷ <span className="text-pink-650 font-black">4</span> = <span className="text-green-650 font-black">7</span>. <span className="font-semibold">Eso significa que a cada caja le corresponden <span className="font-black text-green-650">7 galletas</span>.</span>
+                                <p className="font-semibold dark:text-white text-base">
+                                    Entonces, <span className="text-[#3600b3] font-black">28</span> ÷ <span className="text-[#ad026e] font-black">4</span> = <span className="text-[#018b6a] font-black">7</span>. <span className="font-semibold">Eso significa que a cada caja le corresponden <span className="font-black text-[#018b6a]">7 galletas</span>.</span>
                                 </p>
                             </div>
                         </div>

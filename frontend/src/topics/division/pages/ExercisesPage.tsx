@@ -181,7 +181,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                 videoId="/pag5/vv-1"
                             />
                             <div className="flex flex-col gap-2 w-full">
-                                <p className="font-medium">El total de 56 pelotas de fútbol se reparte entre 7 bolsas de malla.</p>
+                                <p className="font-semibold text-base">El total de 56 pelotas de fútbol se reparte entre 7 bolsas de malla.</p>
                                 <div className="flex items-center gap-4">
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
                                         {[0, 1, 2].map(i => (
@@ -236,7 +236,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                 videoId="/pag5/vv-2"
                             />
                             <div className="flex flex-col gap-2 w-full">
-                                <p className="font-medium">Hay 48 jugadores de baloncesto que se dividen en 4 equipos.</p>
+                                <p className="font-semibold text-base">Hay 48 jugadores de baloncesto que se dividen en 4 equipos.</p>
                                 <div className="flex items-center gap-4">
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
                                         {[0, 1, 2].map(i => (
@@ -302,7 +302,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                             </div>
                         </div>
 
-                        <div className="relative flex justify-between items-stretch px-4 md:px-12 py-4 select-none min-h-[350px]">
+                        <div className="relative flex justify-between items-stretch px-4 md:px-12 py-8 select-none min-h-[350px]">
                             {/* SVG Lines Layer */}
                             {/* Using percentages is tricky because items have height. Let's use simple flex distribution and assume center alignment. */}
                             {/* If we have 5 items in a column with `justify-between` and known height container, we can calculate % positions. */}
@@ -463,9 +463,9 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                 title="Ejercicio 5a"
                                 videoId="/pag5/vv-6"
                             />
-                            <p className="font-medium text-lg text-gray-800 dark:text-gray-200">
+                            <p className="font-semibold text-base text-gray-800 dark:text-gray-200">
                                 Una diseñadora de moda tiene 20 pantalones y los reparte en 5 cajas.
-                                En cada caja <strong>hay 5 pantalones</strong>
+                                En cada caja <p>hay 5 pantalones.</p>
                             </p>
                             <div className="ml-auto flex gap-3">
                                 <button
