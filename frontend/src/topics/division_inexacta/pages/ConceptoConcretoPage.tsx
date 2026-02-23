@@ -324,7 +324,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                         <div className="mt-4">
                             <div className="flex items-start gap-2 mb-4">
                                 <div className="flex-1">
-                                    <p className="text-base text-gray-800 dark:text-gray-200">
+                                    <p className="text-base font-semibold text-gray-800 dark:text-gray-200">
                                         Arrastra los <span className="text-2xl font-bold text-yellow-500">{totalCircles}</span> circulos y repártelos en 3 partes iguales. Verifica cuántos sobran.
                                     </p>
                                 </div>

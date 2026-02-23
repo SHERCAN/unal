@@ -182,7 +182,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                     <div className="flex items-center gap-2 mb-4">
                         <PlayVideoButton trackingId={VIDEO_TRACKING.EJ_1} title="Ejercicio 1" videoId="/pag13/vv-1" />
                         <span className="bg-purple-700 text-white text-sm font-bold w-8 h-8 rounded flex items-center justify-center flex-shrink-0">1</span>
-                        <p className="text-sm font-bold text-gray-800 dark:text-gray-200">
+                        <p className="text-base font-bold text-gray-800 dark:text-gray-200">
                             Determinar si las siguientes divisiones son exactas u inexactas.
                         </p>
                     </div>
@@ -219,7 +219,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                 <div className="mb-6 bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div className="flex items-center gap-2 mb-4">
                         <span className="bg-purple-700 text-white text-sm font-bold w-8 h-8 rounded flex items-center justify-center flex-shrink-0">2</span>
-                        <p className="text-sm font-bold text-gray-800 dark:text-gray-200">Resuelve.</p>
+                        <p className="text-base font-bold text-gray-800 dark:text-gray-200">Resuelve.</p>
                     </div>
 
                     <div className="space-y-6">
@@ -243,7 +243,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
                                 {/* ¿Hay resto? */}
                                 <div className="flex flex-wrap items-center gap-3 ml-6">
-                                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">¿Hay resto?</span>
+                                    <span className="text-base font-semibold text-gray-700 dark:text-gray-300">¿Hay resto?</span>
                                     <select
                                         value={act2[`${i}-hasR`] || ''}
                                         onChange={(e) => setAct2(prev => ({ ...prev, [`${i}-hasR`]: e.target.value }))}
@@ -259,7 +259,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                     {/* Show ¿Cuál? only if user answered "si" */}
                                     {act2[`${i}-hasR`] === 'si' && (
                                         <>
-                                            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">¿Cuál?</span>
+                                            <span className="text-base font-semibold text-gray-700 dark:text-gray-300">¿Cuál?</span>
                                             <input
                                                 type="number"
                                                 value={act2[`${i}-r`] || ''}
@@ -275,7 +275,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
                                 {/* Esta división es... */}
                                 <div className="flex flex-wrap items-center gap-3 ml-6">
-                                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Esta división es</span>
+                                    <span className="text-base font-semibold text-gray-700 dark:text-gray-300">Esta división es</span>
                                     <select
                                         value={act2[`${i}-type`] || ''}
                                         onChange={(e) => setAct2(prev => ({ ...prev, [`${i}-type`]: e.target.value }))}
@@ -303,7 +303,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                     <div className="flex items-center gap-3 mb-4">
                         <PlayVideoButton trackingId={VIDEO_TRACKING.EJ_3} title="" videoId="/pag13/vv-2" />
                         <span className="bg-purple-700 text-white text-sm font-bold w-8 h-8 rounded flex items-center justify-center flex-shrink-0">3</span>
-                        <p className="text-sm font-bold text-gray-800 dark:text-gray-200">
+                        <p className="text-base font-bold text-gray-800 dark:text-gray-200">
                             Resuelve problemas matemáticos. Debe escribir en la hoja para procedimiento.
                         </p>
                     </div>
