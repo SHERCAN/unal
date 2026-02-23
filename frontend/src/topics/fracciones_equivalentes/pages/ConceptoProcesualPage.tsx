@@ -76,7 +76,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                             </div>
 
                             <div className="flex flex-col items-start gap-4 text-left w-full">
-                                <p className="text-xl text-left leading-relaxed">
+                                <p className="text-base font-semibold text-left leading-relaxed">
                                     Para las tres vueltas, Luis corre 2 vueltas y Camila corre 1 vuelta, entre los dos completan la pista.
                                     Para seis vueltas: ¿Cuántas vueltas corre Luis?
                                     <span className="inline-block ml-2 align-middle">
@@ -108,7 +108,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
 
                         {/* Section 2: Figures */}
                         <div className="space-y-8 pt-8 border-t-2 border-dashed border-gray-100">
-                            <p className="text-xl text-left leading-relaxed">
+                            <p className="text-base font-semibold text-left leading-relaxed">
                                 Observamos dos figuras iguales en tamaño y forma.
                                 Ambas representan el mismo todo (cantidad), pero están divididas en diferente número de partes.
                                 <span className="inline-block ml-2 align-middle">
@@ -121,7 +121,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                             </div>
 
                             <div className="flex flex-col items-start gap-6 text-left w-full mx-auto">
-                                <p className="text-xl text-left leading-relaxed">
+                                <p className="text-base font-semibold text-left leading-relaxed">
                                     <span className="font-black text-red-600">DESAFIO:</span> Ahora el todo se divide en 12 partes. ¿Cuántas partes debe correr Luis?
                                     <span className="inline-block ml-2 align-middle">
                                         <PlayVideoButton trackingId={VIDEO_TRACKING.DESAFIO_VIDEO} title="Desafío Video" videoId="/pag24/vv-3" />

@@ -90,14 +90,14 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
 
                     <div className="space-y-6">
                         <div className="flex items-center gap-3">
-                            <p className="text-lg text-gray-800 font-semibold leading-snug">
+                            <p className="text-base text-gray-800 font-semibold leading-snug">
                                 Según las actividades anteriores, el color verde es el mismo tamaño. Cambian los números como partes, pero no cambia la cantidad.
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="" videoId="/pag25/vv-1" />
                             </p>
-                            <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="" videoId="/pag25/vv-1" />
                         </div>
 
                         <div className="flex items-center gap-3">
-                            <p className="text-lg text-gray-800 font-semibold leading-snug">
+                            <p className="text-base text-gray-800 font-semibold leading-snug">
                                 Así, en notación matemática, representan la misma cantidad:
                             </p>
                             <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOTATION} title="Notación Matemática" videoId="/pag25/vv-2" />
@@ -108,7 +108,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                         </div>
 
                         <div className="flex items-center gap-3">
-                            <p className="text-xl text-gray-800 font-semibold">
+                            <p className="text-base text-gray-800 font-semibold">
                                 Estas fracciones se llaman <span style={{ color: '#e95352' }} className="font-bold">fracciones equivalentes</span>.
                             </p>
                             <PlayVideoButton trackingId={VIDEO_TRACKING.A_EQUIV_DEF} title="" videoId="/pag25/vv-3" />
@@ -121,17 +121,17 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                             </div>
                         </div>
 
-                        <p className="text-xl text-gray-800 font-semibold pl-12">
+                        <p className="text-base text-gray-800 font-semibold pl-12">
                             Dos o más de fracciones son <span style={{ color: '#e95352' }} className="font-black">equivalentes</span> cuando representan la misma cantidad.
                         </p>
 
                         <div className="space-y-6 pt-4">
                             <div className="flex items-center gap-4">
                                 <PlayVideoButton trackingId={VIDEO_TRACKING.A_EXAMPLE} title="Ejemplo" videoId="/pag25/vv-5" />
-                                <div className="bg-green-600 text-white font-bold px-4 py-1 rounded inline-block text-lg italic shadow-sm">
+                                <div className="bg-green-600 text-white font-bold px-4 py-1 rounded inline-block text-lg shadow-sm">
                                     Ejemplo:
                                 </div>
-                                <p className="text-2xl text-gray-800 font-bold">
+                                <p className="text-base text-gray-800 font-semibold">
                                     <Fraction num="3" den="5" size="text-2xl" color="text-gray-800" /> ,
                                     <Fraction num="6" den="10" size="text-2xl" color="text-gray-800" /> y
                                     <Fraction num="12" den="20" size="text-2xl" color="text-gray-800" /> son fracciones equivalentes.
@@ -153,8 +153,8 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                         </div>
 
                         <div className="space-y-6 pt-8 border-t-2 border-dashed border-gray-100">
-                            <div className="flex items-center gap-4 justify-center">
-                                <p className="text-xl text-gray-800 font-black">
+                            <div className="flex items-center gap-4">
+                                <p className="text-base text-gray-800 font-semibold">
                                     ¿Cómo sabemos que <Fraction num="3" den="5" size="text-2xl" color="text-gray-800" /> y <Fraction num="6" den="10" size="text-2xl" color="text-gray-800" /> son equivalentes?
                                 </p>
                                 <PlayVideoButton trackingId={VIDEO_TRACKING.A_HOW_TO} title="" videoId="/pag25/vv-6" />
@@ -181,12 +181,12 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                 {/* Fixed width container for left side to align arrows */}
                                 <div className="flex items-center gap-4 min-w-[340px]">
                                     <div className="w-4 h-4 bg-[#800000] flex-shrink-0" />
-                                    <div className="flex items-center gap-4 justify-center flex-1">
-                                        <Fraction num="3" den="5" color="text-gray-800" size="text-5xl" />
-                                        <span className="text-5xl font-black text-gray-300">=</span>
-                                        <Fraction num="12" den="20" color="text-gray-800" size="text-5xl" />
+                                    <div className="flex items-center font-black gap-4 justify-center flex-1">
+                                        <Fraction num="3" den="5" color="text-gray-800" size="text-2xl" />
+                                        <span className="text-2xl font-black text-gray-300">=</span>
+                                        <Fraction num="12" den="20" color="text-gray-800" size="text-2xl" />
                                     </div>
-                                    <span className="text-4xl text-gray-300 w-12 text-center">→</span>
+                                    <span className="text-2xl text-gray-300 w-12 text-center">→</span>
                                 </div>
 
                                 {/* Right Side - Inputs Part */}
@@ -231,12 +231,12 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                 {/* Fixed width container for left side to align arrows */}
                                 <div className="flex items-center gap-4 min-w-[340px]">
                                     <div className="w-4 h-4 bg-[#800000] flex-shrink-0" />
-                                    <div className="flex items-center gap-4 justify-center flex-1">
-                                        <Fraction num="6" den="10" color="text-gray-800" size="text-5xl" />
-                                        <span className="text-5xl font-black text-gray-300">=</span>
-                                        <Fraction num="12" den="20" color="text-gray-800" size="text-5xl" />
+                                    <div className="flex items-center font-black gap-4 justify-center flex-1">
+                                        <Fraction num="6" den="10" color="text-gray-800" size="text-2xl" />
+                                        <span className="text-2xl font-black text-gray-300">=</span>
+                                        <Fraction num="12" den="20" color="text-gray-800" size="text-2xl" />
                                     </div>
-                                    <span className="text-4xl text-gray-300 w-12 text-center">→</span>
+                                    <span className="text-2xl text-gray-300 w-12 text-center">→</span>
                                 </div>
 
                                 {/* Right Side - Inputs Part */}

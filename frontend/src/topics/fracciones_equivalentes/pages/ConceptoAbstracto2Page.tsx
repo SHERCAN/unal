@@ -50,7 +50,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
     const resetAmp2 = () => { setAmp2Ans({ n: '', d: '' }); setAmp2Result(null); };
 
     // Helper components
-    const Fraction = ({ num, den, size = "text-3xl", color = "text-black" }: any) => (
+    const Fraction = ({ num, den, size = "text-base", color = "text-semibold" }: any) => (
         <div className={`inline-flex flex-col items-center align-middle ${size} font-bold px-1`}>
             <span className={color}>{num}</span>
             <div className={`w-full h-0.5 ${color === 'text-white' ? 'bg-white' : 'bg-black'} my-0.5`} />
@@ -100,77 +100,32 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                 </div>
                             </div>
 
-                            <p className="text-xl text-gray-800 font-semibold pl-12 leading-relaxed">
-                                <span className="text-[#e95352] font-black">Simplificar una fracción</span> consiste en dividir numerador y denominador por un mismo número.
+                            <p className="text-base text-gray-800 font-semibold pl-12 leading-relaxed">
+                                <span className="text-[#e95352] font-bold">Simplificar una fracción</span> consiste en dividir numerador y denominador por un mismo número.
                             </p>
 
                             {/* EXAMPLE 1 */}
                             <div className="space-y-6">
                                 <div className="flex items-center gap-4">
                                     <PlayVideoButton trackingId={VIDEO_TRACKING.SIMP_EXAMPLE} title="Ejemplo Simplificación" videoId="/pag26/vv-2" />
-                                    <div className="bg-green-600 text-white font-bold px-4 py-1 rounded inline-block text-lg italic shadow-sm">
+                                    <div className="bg-green-600 text-white font-bold px-4 py-1 rounded inline-block text-lg shadow-sm">
                                         Ejemplo:
                                     </div>
-                                    <p className="text-xl text-gray-800 font-semibold">
+                                    <p className="text-base text-gray-800 font-semibold">
                                         Observa cómo se simplificó la siguiente fracción:
                                     </p>
                                 </div>
 
-                                <div className="flex items-center justify-center gap-6 py-4 pl-6">
-                                    <div className="flex items-center gap-6 shrink-0">
-                                        <Fraction num="12" den="20" size="text-5xl" />
-                                        <span className="text-5xl font-black text-gray-300">=</span>
-                                        <Fraction num="3" den="5" size="text-5xl" />
-                                    </div>
-
-                                    <span className="text-5xl text-gray-300 shrink-0">→</span>
-
-                                    <div className="flex items-center gap-8 shrink-0">
-                                        <div className="flex items-center gap-4">
-                                            <Fraction num="12" den="20" size="text-5xl" />
-                                            <span className="text-5xl font-black text-gray-400">=</span>
-                                            <div className="inline-flex flex-col items-center align-middle text-4xl font-bold px-1">
-                                                <div className="flex items-center">
-                                                    <span>3 × </span>
-                                                    <span className="relative">
-                                                        2
-                                                        <div className="absolute top-1/2 left-0 w-full h-[2px] bg-red-500 rotate-[45deg]" />
-                                                    </span>
-                                                    <span> × </span>
-                                                    <span className="relative">
-                                                        2
-                                                        <div className="absolute top-1/2 left-0 w-full h-[2px] bg-red-500 rotate-[45deg]" />
-                                                    </span>
-                                                </div>
-                                                <div className="w-full h-0.5 bg-black my-0.5" />
-                                                <div className="flex items-center">
-                                                    <span>5 × </span>
-                                                    <span className="relative">
-                                                        2
-                                                        <div className="absolute top-1/2 left-0 w-full h-[2px] bg-red-500 rotate-[45deg]" />
-                                                    </span>
-                                                    <span> × </span>
-                                                    <span className="relative">
-                                                        2
-                                                        <div className="absolute top-1/2 left-0 w-full h-[2px] bg-red-500 rotate-[45deg]" />
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <span className="text-5xl font-black text-gray-400">=</span>
-                                            <Fraction num="3" den="5" size="text-5xl" />
-                                        </div>
-
-                                        <div className="bg-purple-600 p-2 rounded-lg shadow-md flex items-center justify-center shrink-0">
-                                            <MdLightbulbOutline className="text-white text-3xl" />
-                                        </div>
-                                    </div>
+                                <div className="flex justify-center my-8 pl-8">
+                                    <img src="/fracciones_equivalentes/img1.png" alt="Ejemplo Simplificación" className="h-20 object-containshadow-md" />
                                 </div>
 
                                 <div className="flex items-center gap-4 pl-12 w-full">
-                                    <p className="text-xl text-gray-800 font-semibold leading-relaxed flex-1">
+                                    <p className="text-base text-gray-800 font-semibold leading-relaxed flex-1">
                                         La fracción <Fraction num="3" den="5" size="text-2xl" /> no se puede simplificar más porque esos números 3 y 5 son primos y no tienen factores.
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.SIMP_EXAMPLE} title="" videoId="/pag26/vv-3" />
                                     </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.SIMP_EXAMPLE} title="" videoId="/pag26/vv-3" />
+                                    
                                 </div>
                             </div>
 
@@ -181,7 +136,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                     <div className="bg-[#800000] text-white font-bold px-6 py-1.5 rounded-sm text-lg shadow-md tracking-wider">
                                         PRÁCTICA
                                     </div>
-                                    <p className="text-xl text-gray-800 font-bold italic">
+                                    <p className="text-base font-semibold text-gray-800">
                                         Simplificar la siguiente fracción:
                                     </p>
                                 </div>
@@ -189,8 +144,8 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                 <div className="flex items-center justify-center gap-12 pl-12 bg-gray-50/50 p-8 rounded-2xl relative">
                                     <div className="flex items-center gap-8">
                                         <div className="w-4 h-4 bg-[#800000] flex-shrink-0" />
-                                        <Fraction num="4" den="10" size="text-6xl" />
-                                        <span className="text-6xl font-black text-gray-300">=</span>
+                                        <Fraction num="4" den="10" size="text-4xl" />
+                                        <span className="text-4xl font-black text-gray-300">=</span>
                                         <InputFraction
                                             value={simpAns}
                                             onChange={(val: any) => { setSimpAns(val); setSimpResult(null); }}
@@ -218,71 +173,23 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                 </div>
                             </div>
 
-                            <p className="text-xl text-gray-800 font-semibold pl-12 leading-relaxed">
-                                <span className="text-[#e95352] font-black">Amplificar una fracción</span> consiste en multiplicar numerador y denominador por un mismo número.
+                            <p className="text-base text-gray-800 font-semibold pl-12 leading-relaxed">
+                                <span className="text-[#e95352] font-extrabold">Amplificar una fracción</span> consiste en multiplicar numerador y denominador por un mismo número.
                             </p>
 
                             {/* EXAMPLE 2 */}
                             <div className="space-y-6">
                                 <div className="flex items-center gap-4">
                                     <PlayVideoButton trackingId={VIDEO_TRACKING.AMP_EXAMPLE} title="Ejemplo Amplificación" videoId="/pag26/vv-6" />
-                                    <div className="bg-green-600 text-white font-bold px-4 py-1 rounded inline-block text-lg italic shadow-sm">
+                                    <div className="bg-green-600 text-white font-bold px-4 py-1 rounded inline-block text-lg shadow-sm">
                                         Ejemplo:
                                     </div>
-                                    <p className="text-xl text-gray-800 font-semibold">
+                                    <p className="text-base text-gray-800 font-semibold">
                                         Observa cómo se amplificó la siguiente fracción:
                                     </p>
                                 </div>
-
-                                <div className="flex items-center justify-center gap-6 py-8 pl-6">
-                                    <div className="relative flex items-center gap-4 shrink-0">
-                                        {/* Arches for x4 */}
-                                        <div className="absolute -top-10 left-0 w-full flex justify-center">
-                                            <div className="relative group">
-                                                <svg className="w-16 h-8 overflow-visible" viewBox="0 0 100 50">
-                                                    <path d="M 10 40 Q 50 10 90 40" fill="none" stroke="#e95352" strokeWidth="2" />
-                                                    <path d="M 90 40 L 85 35 M 90 40 L 82 40" fill="none" stroke="#e95352" strokeWidth="2" />
-                                                </svg>
-                                                <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[#e95352] font-black text-xl italic">4</span>
-                                            </div>
-                                        </div>
-
-                                        <div className="absolute -bottom-10 left-0 w-full flex justify-center">
-                                            <div className="relative group">
-                                                <svg className="w-16 h-8 overflow-visible" viewBox="0 0 100 50">
-                                                    <path d="M 10 10 Q 50 40 90 10" fill="none" stroke="#e95352" strokeWidth="2" />
-                                                    <path d="M 90 10 L 85 15 M 90 10 L 82 10" fill="none" stroke="#e95352" strokeWidth="2" />
-                                                </svg>
-                                                <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-[#e95352] font-black text-xl italic">4</span>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-center gap-6">
-                                            <Fraction num="3" den="5" size="text-5xl" />
-                                            <span className="text-5xl font-black text-gray-300">=</span>
-                                            <Fraction num="12" den="20" size="text-5xl" />
-                                        </div>
-                                    </div>
-
-                                    <span className="text-5xl text-gray-300 shrink-0">→</span>
-
-                                    <div className="flex items-center gap-4 shrink-0">
-                                        <Fraction num="3" den="5" size="text-5xl" />
-                                        <span className="text-5xl font-black text-gray-400">=</span>
-                                        <div className="inline-flex flex-col items-center align-middle text-5xl font-bold px-1">
-                                            <div className="flex items-center gap-2">
-                                                <span>3</span>
-                                                <span className="text-[#e95352] text-4xl">4</span>
-                                            </div>
-                                            <div className="w-full h-0.5 bg-black my-1" />
-                                            <div className="flex items-center gap-2">
-                                                <span>5</span>
-                                                <span className="text-[#e95352] text-4xl">4</span>
-                                            </div>
-                                        </div>
-                                        <span className="text-5xl font-black text-gray-400">=</span>
-                                        <Fraction num="12" den="20" size="text-5xl" />
-                                    </div>
+                                <div className="flex justify-center my-8 pl-8">
+                                    <img src="/fracciones_equivalentes/img2.png" alt="Ejemplo Simplificación" className="h-32 object-containshadow-md" />
                                 </div>
                             </div>
 
@@ -293,7 +200,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                     <div className="bg-[#800000] text-white font-bold px-6 py-1.5 rounded-sm text-lg shadow-md tracking-wider">
                                         PRÁCTICA
                                     </div>
-                                    <p className="text-xl text-gray-800 font-bold italic">
+                                    <p className="text-base text-gray-800 font-semibold">
                                         Las dos siguientes fracciones se amplifiquen por 5:
                                     </p>
                                 </div>
@@ -303,8 +210,8 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                     <div className="flex items-center gap-12 bg-gray-50/50 p-8 rounded-2xl w-fit">
                                         <div className="flex items-center gap-8">
                                             <div className="w-4 h-4 bg-[#800000] flex-shrink-0" />
-                                            <Fraction num="2" den="3" size="text-6xl" />
-                                            <span className="text-6xl font-black text-gray-300">=</span>
+                                            <Fraction num="2" den="3" size="text-2xl" />
+                                            <span className="text-2xl font-black text-gray-300">=</span>
                                             <InputFraction
                                                 value={amp1Ans}
                                                 onChange={(val: any) => { setAmp1Ans(val); setAmp1Result(null); }}
@@ -325,8 +232,8 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                     <div className="flex items-center gap-12 bg-gray-50/50 p-8 rounded-2xl w-fit">
                                         <div className="flex items-center gap-8">
                                             <div className="w-4 h-4 bg-[#800000] flex-shrink-0" />
-                                            <Fraction num="5" den="7" size="text-6xl" />
-                                            <span className="text-6xl font-black text-gray-300">=</span>
+                                            <Fraction num="5" den="7" size="text-2xl" />
+                                            <span className="text-2xl font-black text-gray-300">=</span>
                                             <InputFraction
                                                 value={amp2Ans}
                                                 onChange={(val: any) => { setAmp2Ans(val); setAmp2Result(null); }}

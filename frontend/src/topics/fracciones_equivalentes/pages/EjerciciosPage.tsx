@@ -113,7 +113,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                     <div className="flex items-center gap-4">
                         <PlayVideoButton trackingId={VIDEO_TRACKING.I1} title="" videoId="/pag28/vv-1" />
                         <div className="bg-purple-700 text-white w-10 h-10 flex items-center justify-center rounded-lg font-black text-xl">1</div>
-                        <p className="text-xl font-bold text-gray-800">
+                        <p className="text-base font-bold text-gray-800">
                             Cada par de fracciones equivalentes dadas corresponden correctamente a una de tres pares de figuras.
                         </p>
                     </div>
@@ -124,12 +124,12 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                             <div className="flex items-center gap-4 w-[150px] flex-shrink-0">
                                 <div className="w-4 h-4 bg-purple-700 flex-shrink-0" />
                                 <div className="flex items-center gap-4">
-                                    <Fraction num="1" den="3" size="text-4xl" />
-                                    <span className="text-4xl font-black text-gray-300">=</span>
-                                    <Fraction num="3" den="9" size="text-4xl" />
+                                    <Fraction num="1" den="3" size="text-2xl" />
+                                    <span className="text-2xl font-black text-gray-300">=</span>
+                                    <Fraction num="3" den="9" size="text-2xl" />
                                 </div>
                             </div>
-                            <span className="text-4xl text-gray-300 w-12 text-center">→</span>
+                            <span className="text-2xl text-gray-300 w-12 text-center">→</span>
                             <div className="flex gap-3">
                                 {[circulo1, circulo2, circulo3].map((img, i) => (
                                     <button
@@ -150,12 +150,12 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                             <div className="flex items-center gap-4 w-[150px] flex-shrink-0">
                                 <div className="w-4 h-4 bg-purple-700 flex-shrink-0" />
                                 <div className="flex items-center gap-4">
-                                    <Fraction num="2" den="7" size="text-4xl" />
-                                    <span className="text-4xl font-black text-gray-300">=</span>
-                                    <Fraction num="6" den="21" size="text-4xl" />
+                                    <Fraction num="2" den="7" size="text-2xl" />
+                                    <span className="text-2xl font-black text-gray-300">=</span>
+                                    <Fraction num="6" den="21" size="text-2xl" />
                                 </div>
                             </div>
-                            <span className="text-4xl text-gray-300 w-12 text-center">→</span>
+                            <span className="text-2xl text-gray-300 w-12 text-center">→</span>
                             <div className="flex gap-3">
                                 {[cebra1, cebra2, cebra3].map((img, i) => (
                                     <button
@@ -176,14 +176,14 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                             <div className="flex items-center gap-4 w-[150px] flex-shrink-0">
                                 <div className="w-4 h-4 bg-purple-700 flex-shrink-0" />
                                 <div className="flex items-center gap-3">
-                                    <Fraction num="4" den="8" size="text-3xl" />
+                                    <Fraction num="4" den="8" size="text-2xl" />
                                     <span className="text-2xl font-black text-gray-300">=</span>
-                                    <Fraction num="2" den="4" size="text-3xl" />
+                                    <Fraction num="2" den="4" size="text-2xl" />
                                     <span className="text-2xl font-black text-gray-300">=</span>
-                                    <Fraction num="1" den="2" size="text-3xl" />
+                                    <Fraction num="1" den="2" size="text-2xl" />
                                 </div>
                             </div>
-                            <span className="text-4xl text-gray-300 w-12 text-center">→</span>
+                            <span className="text-2xl text-gray-300 w-12 text-center">→</span>
                             <div className="flex gap-3">
                                 {[linea1, linea2, linea3].map((img, i) => (
                                     <button
@@ -209,7 +209,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                     <div className="flex items-center gap-4">
                         <PlayVideoButton trackingId={VIDEO_TRACKING.I2} title="" videoId="/pag28/vv-2" />
                         <div className="bg-purple-700 text-white w-10 h-10 flex items-center justify-center rounded-lg font-black text-xl">2</div>
-                        <p className="text-xl font-bold text-gray-800">
+                        <p className="text-base font-bold text-gray-800">
                             Escribe el número que falta para que cada par de fracciones sean equivalentes, usando la amplificación.
                         </p>
                     </div>
@@ -249,7 +249,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                     <div className="flex items-center gap-4">
                         <PlayVideoButton trackingId={VIDEO_TRACKING.I3} title="" videoId="/pag28/vv-3" />
                         <div className="bg-purple-700 text-white w-10 h-10 flex items-center justify-center rounded-lg font-black text-xl">3</div>
-                        <p className="text-xl font-bold text-gray-800">
+                        <p className="text-base font-bold text-gray-800">
                             Simplifiquen las siguientes fracciones, usando factores primos:
                         </p>
                     </div>
@@ -291,7 +291,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                     <div className="flex items-center gap-4">
                         <PlayVideoButton trackingId={VIDEO_TRACKING.I4} title="" videoId="/pag28/vv-4" />
                         <div className="bg-purple-700 text-white w-10 h-10 flex items-center justify-center rounded-lg font-black text-xl">4</div>
-                        <p className="text-xl font-bold text-gray-800">
+                        <p className="text-base font-bold text-gray-800">
                             Responda V o F a las afirmaciones presentadas en la siguiente tabla:
                         </p>
                     </div>

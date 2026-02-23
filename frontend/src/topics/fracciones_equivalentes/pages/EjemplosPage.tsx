@@ -71,10 +71,10 @@ export function EjemplosPage({ zoom = 1 }: Props) {
                             <div className="flex items-start gap-4">
                                 <PlayVideoButton trackingId={VIDEO_TRACKING.INTRO} title="" videoId="/pag27/vv-1" />
                                 <div className="space-y-4">
-                                    <div className="bg-green-600 text-white font-bold px-4 py-1 rounded inline-block text-lg italic shadow-sm">
+                                    <div className="bg-green-600 text-white font-bold px-4 py-1 rounded inline-block text-lg shadow-sm">
                                         Ejemplo:
                                     </div>
-                                    <p className="text-xl text-gray-800 font-semibold leading-relaxed">
+                                    <p className="text-base text-gray-800 font-semibold leading-relaxed">
                                         Camilo comió 3 porciones de una pizza cortada en 12 partes iguales. Pedro comió 1 porciones de una pizza cortada en 4 partes iguales.
                                     </p>
                                 </div>
@@ -86,14 +86,14 @@ export function EjemplosPage({ zoom = 1 }: Props) {
                                     <div className="relative w-64 h-64 rounded-full overflow-hidden shadow-lg border-4 border-gray-100">
                                         <Image src={pizza12Img} alt="Pizza 3/12" layout="fill" objectFit="contain" />
                                     </div>
-                                    <Fraction num="3" den="12" size="text-5xl" />
+                                    <Fraction num={<span className="text-blue-700">3</span>} den="12" size="text-5xl" />
                                 </div>
 
                                 <div className="flex flex-col items-center gap-6">
                                     <div className="relative w-64 h-64 rounded-full overflow-hidden shadow-lg border-4 border-gray-100">
                                         <Image src={pizza4Img} alt="Pizza 1/4" layout="fill" objectFit="contain" />
                                     </div>
-                                    <Fraction num="1" den="4" size="text-5xl" />
+                                    <Fraction num={<span className="text-blue-700">1</span>} den="4" size="text-5xl" />
                                 </div>
                             </div>
 
@@ -106,9 +106,9 @@ export function EjemplosPage({ zoom = 1 }: Props) {
 
                             <div className="flex items-center gap-4 pl-12">
                                 <p className="text-xl text-gray-800 font-semibold leading-relaxed flex-1">
-                                    Por lo tanto, las dos fracciones <Fraction num="3" den="12" size="text-2xl" /> y <Fraction num="1" den="4" size="text-2xl" /> son equivalentes porque tenemos dos formas de solución:
+                                    Por lo tanto, las dos fracciones <Fraction num={<span className="text-blue-700">3</span>} den="12" size="text-2xl" /> y <Fraction num={<span className="text-blue-700">1</span>} den="4" size="text-2xl" /> son equivalentes porque tenemos dos formas de solución:
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.SOLUTIONS} title="" videoId="/pag27/vv-3" />
                                 </p>
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.SOLUTIONS} title="" videoId="/pag27/vv-3" />
                             </div>
                         </div>
 
@@ -119,9 +119,9 @@ export function EjemplosPage({ zoom = 1 }: Props) {
                                 <div className="flex items-center gap-6 pl-12">
                                     <div className="w-4 h-4 bg-black flex-shrink-0" />
                                     <div className="flex items-center gap-6">
-                                        <Fraction num="3" den="12" size="text-5xl" />
-                                        <span className="text-5xl font-black text-gray-300">=</span>
-                                        <Fraction num="1" den="4" size="text-5xl" />
+                                        <Fraction num="3" den="12" size="text-2xl" />
+                                        <span className="text-2xl font-black text-gray-300">=</span>
+                                        <Fraction num="1" den="4" size="text-2xl" />
                                     </div>
 
                                     <span className="text-5xl text-gray-300 mx-4">→</span>
@@ -148,17 +148,17 @@ export function EjemplosPage({ zoom = 1 }: Props) {
                                 </div>
                             </div>
 
-                            <p className="text-2xl font-bold italic pl-24 text-gray-400">ó</p>
+                            <p className="text-2xl font-bold pl-24 text-gray-400">ó</p>
 
                             {/* OPTION 2: SIMPLIFICATION */}
                             <div className="space-y-8">
                                 <div className="flex items-center gap-6 pl-12 shrink-0">
                                     <div className="w-4 h-4 bg-black flex-shrink-0" />
                                     <div className="flex items-center gap-6">
-                                        <Fraction num="3" den="12" size="text-5xl" />
-                                        <span className="text-5xl font-black text-gray-400">=</span>
+                                        <Fraction num="3" den="12" size="text-2xl" />
+                                        <span className="text-2xl font-black text-gray-400">=</span>
 
-                                        <div className="inline-flex flex-col items-center align-middle text-4xl font-bold px-1">
+                                        <div className="inline-flex flex-col items-center align-middle text-2xl font-bold px-1">
                                             <div className="flex items-center">
                                                 <span className="relative">
                                                     3
@@ -178,14 +178,14 @@ export function EjemplosPage({ zoom = 1 }: Props) {
 
                                         <span className="text-5xl font-black text-gray-400">=</span>
 
-                                        <div className="inline-flex flex-col items-center align-middle text-4xl font-bold px-1">
+                                        <div className="inline-flex flex-col items-center align-middle text-2xl font-bold px-1">
                                             <span>1</span>
                                             <div className="w-full h-0.5 bg-black my-0.5" />
                                             <span>2 × 2</span>
                                         </div>
 
-                                        <span className="text-5xl font-black text-gray-400">=</span>
-                                        <Fraction num="1" den="4" size="text-5xl" />
+                                        <span className="text-2xl font-black text-gray-400">=</span>
+                                        <Fraction num="1" den="4" size="text-2xl" />
                                     </div>
 
                                     <div className="bg-purple-600 p-2 rounded-lg shadow-md flex items-center justify-center ml-8">
