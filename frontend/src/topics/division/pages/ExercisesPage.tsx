@@ -16,10 +16,11 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
     const { isVideoWatched, markVideoWatched, submitExercise, submitGame, isExerciseCompleted } = useVideoProgress();
 
     const EXERCISE_IDS = {
-        ACT1: 'division-pag5-ej1',
-        ACT2: 'division-pag5-ej2',
-        ACT3: 'division-pag5-ej3',
-        ACT4: 'division-pag5-ej4'
+        ACT1A: 'division-pag5-ej1',
+        ACT1B: 'division-pag5-ej2',
+        ACT2: 'division-pag5-ej3',
+        ACT3: 'division-pag5-ej4',
+        ACT4: 'division-pag5-ej5'
     };
 
     const VIDEO_TRACKING_IDS = {
@@ -34,28 +35,42 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
     // --- ACTIVITY 1: SELECTION ---
     const [act1_a_selected, setAct1_a_selected] = useState<number | null>(null);
     const [act1_b_selected, setAct1_b_selected] = useState<number | null>(null);
-    const [act1Status, setAct1Status] = useState<'correct' | 'incorrect' | null>(null);
+    const [act1AStatus, setAct1AStatus] = useState<'correct' | 'incorrect' | null>(null);
+    const [act1BStatus, setAct1BStatus] = useState<'correct' | 'incorrect' | null>(null);
 
     // Load initial status
     useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.ACT1)) setAct1Status('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.ACT1A)) setAct1AStatus('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.ACT1B)) setAct1BStatus('correct');
         if (isExerciseCompleted(EXERCISE_IDS.ACT2)) setAct2Status('correct');
         if (isExerciseCompleted(EXERCISE_IDS.ACT3)) setAct3Status('correct');
         if (isExerciseCompleted(EXERCISE_IDS.ACT4)) setAct4Status('correct');
     }, [isExerciseCompleted]);
 
-    const resetAct1 = () => {
-        if (isExerciseCompleted(EXERCISE_IDS.ACT1)) return;
+    const resetAct1A = () => {
+        if (isExerciseCompleted(EXERCISE_IDS.ACT1A)) return;
         setAct1_a_selected(null);
-        setAct1_b_selected(null);
-        setAct1Status(null);
+        setAct1AStatus(null);
     };
 
-    const checkAct1 = async () => {
-        if (isExerciseCompleted(EXERCISE_IDS.ACT1)) return;
-        const isCorrect = act1_a_selected === 0 && act1_b_selected === 2;
-        setAct1Status(isCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.ACT1, isCorrect);
+    const resetAct1B = () => {
+        if (isExerciseCompleted(EXERCISE_IDS.ACT1B)) return;
+        setAct1_b_selected(null);
+        setAct1BStatus(null);
+    };
+
+    const checkAct1A = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.ACT1A)) return;
+        const isCorrect = act1_a_selected === 0;
+        setAct1AStatus(isCorrect ? 'correct' : 'incorrect');
+        await submitExercise(EXERCISE_IDS.ACT1A, isCorrect);
+    };
+
+    const checkAct1B = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.ACT1B)) return;
+        const isCorrect = act1_b_selected === 2;
+        setAct1BStatus(isCorrect ? 'correct' : 'incorrect');
+        await submitExercise(EXERCISE_IDS.ACT1B, isCorrect);
     };
 
     // --- ACTIVITY 2: MATCHING ---
@@ -171,13 +186,13 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                             <div className="flex flex-col gap-2 w-full">
                                 <p className="font-semibold text-base">El total de 56 pelotas de fútbol se reparte entre 7 bolsas de malla.</p>
                                 <div className="flex items-center gap-4">
-                                    <div className={`grid grid-cols-1 md:grid-cols-3 gap-6 w-full ${act1Status === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
+                                    <div className={`grid grid-cols-1 md:grid-cols-3 gap-6 w-full ${act1AStatus === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
                                         {[0, 1, 2].map(i => (
                                             <div
                                                 key={i}
                                                 onClick={() => {
                                                     setAct1_a_selected(i);
-                                                    setAct1Status(null);
+                                                    setAct1AStatus(null);
                                                 }}
                                                 className={`border-2 rounded-xl p-1 cursor-pointer transition-all aspect-square flex items-center justify-center bg-white dark:bg-gray-800 relative overflow-hidden shadow-sm
                                                     ${act1_a_selected === i ? 'border-purple-600 ring-2 ring-purple-100 dark:ring-purple-900 bg-purple-50 dark:bg-purple-900/20' : 'border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-500 hover:shadow-md'}
@@ -190,12 +205,12 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                                         className="w-full h-full object-contain"
                                                     />
                                                 </div>
-                                                {(act1Status === 'correct' && i === 0) && (
+                                                {(act1AStatus === 'correct' && i === 0) && (
                                                     <div className="absolute top-2 right-2 rounded-full p-1 shadow-sm bg-green-100 text-green-600">
                                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
                                                     </div>
                                                 )}
-                                                {act1Status === 'incorrect' && act1_a_selected === i && (
+                                                {act1AStatus === 'incorrect' && act1_a_selected === i && (
                                                     <div className="absolute top-2 right-2 rounded-full p-1 shadow-sm bg-red-100 text-red-500">
                                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
                                                     </div>
@@ -205,9 +220,9 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                     </div>
                                     <div className="self-center flex flex-col items-center gap-2">
                                         <FeedbackButton
-                                            onCheck={checkAct1}
-                                            onReset={resetAct1}
-                                            status={act1Status}
+                                            onCheck={checkAct1A}
+                                            onReset={resetAct1A}
+                                            status={act1AStatus}
                                         />
                                     </div>
                                 </div>
@@ -225,13 +240,13 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                             <div className="flex flex-col gap-2 w-full">
                                 <p className="font-semibold text-base">Hay 48 jugadores de baloncesto que se dividen en 4 equipos.</p>
                                 <div className="flex items-center gap-4">
-                                    <div className={`grid grid-cols-1 md:grid-cols-3 gap-6 w-full ${act1Status === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
+                                    <div className={`grid grid-cols-1 md:grid-cols-3 gap-6 w-full ${act1BStatus === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
                                         {[0, 1, 2].map(i => (
                                             <div
                                                 key={i}
                                                 onClick={() => {
                                                     setAct1_b_selected(i);
-                                                    setAct1Status(null);
+                                                    setAct1BStatus(null);
                                                 }}
                                                 className={`border-2 rounded-xl p-0 cursor-pointer transition-all aspect-square flex items-center justify-center bg-white dark:bg-gray-800 relative overflow-hidden shadow-sm
                                                     ${act1_b_selected === i ? 'border-purple-600 ring-2 ring-purple-100 dark:ring-purple-900 bg-purple-50 dark:bg-purple-900/20' : 'border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-500 hover:shadow-md'}
@@ -244,12 +259,12 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                                         className="w-full h-full object-contain"
                                                     />
                                                 </div>
-                                                {(act1Status === 'correct' && i === 2) && (
+                                                {(act1BStatus === 'correct' && i === 2) && (
                                                     <div className="absolute top-2 right-2 rounded-full p-1 shadow-sm bg-green-100 text-green-600">
                                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
                                                     </div>
                                                 )}
-                                                {act1Status === 'incorrect' && act1_b_selected === i && (
+                                                {act1BStatus === 'incorrect' && act1_b_selected === i && (
                                                     <div className="absolute top-2 right-2 rounded-full p-1 shadow-sm bg-red-100 text-red-500">
                                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
                                                     </div>
@@ -259,9 +274,9 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                     </div>
                                     <div className="self-center flex flex-col items-center gap-2">
                                         <FeedbackButton
-                                            onCheck={checkAct1}
-                                            onReset={resetAct1}
-                                            status={act1Status}
+                                            onCheck={checkAct1B}
+                                            onReset={resetAct1B}
+                                            status={act1BStatus}
                                         />
                                     </div>
                                 </div>

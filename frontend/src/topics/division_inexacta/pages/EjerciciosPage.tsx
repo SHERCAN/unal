@@ -53,7 +53,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         const userAnswer = act1Answers[index] || '';
         const correct = userAnswer === act1Items[index].correct;
         setAct1Results(prev => ({ ...prev, [index]: correct ? 'correct' : 'incorrect' }));
-        submitExercise(`division_inexacta-pag13-ej1`, correct);
+        // ej1 to ej4
+        submitExercise(`division_inexacta-pag13-ej${index + 1}`, correct);
     };
 
     const resetAct1 = (index: number) => {
@@ -85,7 +86,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
             correct = correct && userHasRemainder === 'no';
         }
         setAct2Results(prev => ({ ...prev, [index]: correct ? 'correct' : 'incorrect' }));
-        submitExercise(`division_inexacta-pag13-ej2`, correct);
+        // ej5 to ej6
+        submitExercise(`division_inexacta-pag13-ej${index + 5}`, correct);
     };
 
     const resetAct2 = (index: number) => {
@@ -144,7 +146,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
             correct = correct && userHasRemainder === 'no';
         }
         setAct3Results(prev => ({ ...prev, [index]: correct ? 'correct' : 'incorrect' }));
-        submitExercise(`division_inexacta-pag13-ej3`, correct);
+        // ej7 to ej10
+        submitExercise(`division_inexacta-pag13-ej${index + 7}`, correct);
     };
 
     const resetAct3 = (index: number) => {

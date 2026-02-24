@@ -44,13 +44,23 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
     // --- ACTIVITY 2: AMPLIFICATION ---
     const [act2, setAct2] = useState<Record<number, string>>({});
-    const [act2Result, setAct2Result] = useState<'correct' | 'incorrect' | null>(null);
+    const [act2Results, setAct2Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({ 0: null, 1: null, 2: null, 3: null, 4: null });
     const act2Answers = { 0: '28', 1: '4', 2: '18', 3: '3', 4: '25' };
 
-    const checkAct2 = async () => {
-        const correct = Object.keys(act2Answers).every(k => act2[parseInt(k)] === act2Answers[parseInt(k) as keyof typeof act2Answers]);
-        setAct2Result(correct ? 'correct' : 'incorrect');
-        await submitExercise('fracciones_equivalentes-pag28-ej2', correct);
+    const checkSubAct2 = async (idx: number) => {
+        // Correct answers mapping:
+        // ex 0: f2[1] -> act2[1] (idx=0 * 2 + 1) -> value '28'
+        // ex 1: f2[0] -> act2[2] (idx=1 * 2)     -> value '4'
+        // ex 2: f2[1] -> act2[5] (idx=2 * 2 + 1) -> value '18'
+        // ex 3: f2[0] -> act2[6] (idx=3 * 2)     -> value '3'
+        // ex 4: f2[1] -> act2[9] (idx=4 * 2 + 1) -> value '25'
+
+        const ansIndices = [1, 2, 5, 6, 9];
+        const val = act2[ansIndices[idx]] || '';
+        const isCorrect = val === act2Answers[idx as keyof typeof act2Answers];
+
+        setAct2Results(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
+        await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 2}`, isCorrect);
     };
 
     // --- ACTIVITY 3: SIMPLIFICATION ---
@@ -63,7 +73,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
             act3[idx * 2 + 1] === act3Answers[(idx * 2 + 1) as keyof typeof act3Answers];
 
         setAct3Results(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
-        await submitExercise(`fracciones_equivalentes-pag28-ej3`, isCorrect);
+        // ej7, ej8, ej9
+        await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 7}`, isCorrect);
     };
 
     // --- ACTIVITY 4: TRUE/FALSE ---
@@ -74,7 +85,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const checkSubAct4 = async (idx: number) => {
         const isCorrect = act4[idx] === act4Answers[idx as keyof typeof act4Answers];
         setAct4Results(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
-        await submitExercise(`fracciones_equivalentes-pag28-ej4`, isCorrect);
+        // ej10, ej11, ej12, ej13
+        await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 10}`, isCorrect);
     };
 
     // HELPERS
@@ -229,15 +241,23 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                     <Fraction num={ex.f1[0]} den={ex.f1[1]} size="text-3xl" />
                                     <span className="text-3xl font-black text-gray-300 mx-1">=</span>
                                     <Fraction
-                                        num={ex.f2[0] === '?' ? <InputBox value={act2[i * 2] || ''} onChange={(v: any) => setAct2({ ...act2, [i * 2]: v })} /> : ex.f2[0]}
-                                        den={ex.f2[1] === '?' ? <InputBox value={act2[i * 2 + 1] || ''} onChange={(v: any) => setAct2({ ...act2, [i * 2 + 1]: v })} /> : ex.f2[1]}
+                                        num={ex.f2[0] === '?' ? <InputBox value={act2[i * 2] || ''} onChange={(v: any) => { setAct2({ ...act2, [i * 2]: v }); setAct2Results({ ...act2Results, [i]: null }); }} /> : ex.f2[0]}
+                                        den={ex.f2[1] === '?' ? <InputBox value={act2[i * 2 + 1] || ''} onChange={(v: any) => { setAct2({ ...act2, [i * 2 + 1]: v }); setAct2Results({ ...act2Results, [i]: null }); }} /> : ex.f2[1]}
                                         size="text-3xl"
                                     />
                                 </div>
                                 <FeedbackButton
-                                    status={act2Result === 'correct' ? 'correct' : act2Result === 'incorrect' ? 'incorrect' : null}
-                                    onCheck={checkAct2}
-                                    onReset={() => { setAct2({}); setAct2Result(null); }}
+                                    status={act2Results[i]}
+                                    onCheck={() => checkSubAct2(i)}
+                                    onReset={() => {
+                                        setAct2(prev => {
+                                            const next = { ...prev };
+                                            delete next[i * 2];
+                                            delete next[i * 2 + 1];
+                                            return next;
+                                        });
+                                        setAct2Results({ ...act2Results, [i]: null });
+                                    }}
                                     className="scale-75"
                                 />
                             </div>

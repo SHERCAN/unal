@@ -47,7 +47,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         const userAnswer = parseInt(calcAnswers[index] || '');
         const correct = userAnswer === calcItems[index].answer;
         setCalcResults(prev => ({ ...prev, [index]: correct ? 'correct' : 'incorrect' }));
-        submitExercise(`division_exacta-pag10-ej1`, correct);
+        // ej1 to ej5
+        submitExercise(`division_exacta-pag10-ej${index + 1}`, correct);
     };
 
     const resetCalc = (index: number) => {
@@ -71,7 +72,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         const userAnswer = exactAnswers[index] || '';
         const correct = (userAnswer === 'exacta') === exactItems[index].isExact;
         setExactResults(prev => ({ ...prev, [index]: correct ? 'correct' : 'incorrect' }));
-        submitExercise(`division_exacta-pag10-ej2`, correct);
+        // ej6 to ej10
+        submitExercise(`division_exacta-pag10-ej${index + 6}`, correct);
     };
 
     const resetExact = (index: number) => {

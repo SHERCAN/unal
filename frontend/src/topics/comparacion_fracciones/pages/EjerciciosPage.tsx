@@ -28,13 +28,22 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const checkA = async (idx: number) => {
         const isCorrect = actA[idx] === answersA[idx as keyof typeof answersA];
         setResultsA(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
-        await submitExercise(`comparacion_fracciones-pag1-ej1`, isCorrect);
+        // ej1 to ej4
+        await submitExercise(`comparacion_fracciones-pag1-ej${idx + 1}`, isCorrect);
     };
 
     const checkB = async (idx: number) => {
         const isCorrect = actB[idx] === answersB[idx as keyof typeof answersB];
         setResultsB(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
-        await submitExercise(`comparacion_fracciones-pag1-ej2`, isCorrect);
+        // Part B starts after Part A: ej5 to ej10
+        // Map idx 0..5 to ej5..ej10
+        const ejNum = idx === 4 ? 6 : (idx === 5 ? 10 : (idx === 0 ? 5 : (idx === 1 ? 7 : (idx === 2 ? 8 : 9))));
+        // Wait, Part B has indices 0, 1, 2, 3, 4, 5 in JSX?
+        // Let's check JSX: idx 0, 4, 2, 3, 5, 1.
+        // I will use a direct mapping or just normalize the order.
+        // Current index mapping:
+        // 0 -> ej5, 1 -> ej6, 2 -> ej7, 3 -> ej8, 4 -> ej9, 5 -> ej10
+        await submitExercise(`comparacion_fracciones-pag1-ej${idx + 5}`, isCorrect);
     };
 
     const Fraction = ({ num, den }: any) => (
