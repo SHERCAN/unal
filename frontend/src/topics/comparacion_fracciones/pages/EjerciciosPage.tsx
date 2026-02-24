@@ -84,6 +84,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Comparación de Fracciones' }} pageId="comp-frac-ejercicios">
+            {/* --- MODULO B --- */}
             <div className="space-y-10 pb-20">
                 <div className="flex items-center gap-6">
                     <h1 className="text-4xl font-black text-purple-700 tracking-tight uppercase">EJERCICIOS</h1>

@@ -142,6 +142,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
             <h2 className="text-2xl font-extrabold text-purple-700 dark:text-purple-400 mb-6 tracking-wide">EJERCICIOS</h2>
 
             {/* Exercise 1 header */}
+            {/* --- MODULO A --- */}
             <div className="flex items-center gap-2 mb-6">
                 <PlayVideoButton trackingId={VIDEO_TRACKING.INTRO} title="Ejercicios de Números Primos" videoId="/pag16/vv-1" />
                 <span className="bg-purple-600 text-white font-extrabold text-xl px-3 py-1 rounded">1</span>

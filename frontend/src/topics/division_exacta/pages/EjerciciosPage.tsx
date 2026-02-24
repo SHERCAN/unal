@@ -82,6 +82,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'División Exacta' }} pageId="div-exacta-ejercicios">
+            {/* --- MODULO B --- */}
             <div className="w-full">
                 <h1 className="text-2xl font-black text-purple-700 dark:text-purple-400 mb-6 uppercase tracking-wide">Ejercicios</h1>
 

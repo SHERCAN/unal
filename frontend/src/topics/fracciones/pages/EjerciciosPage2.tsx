@@ -70,6 +70,7 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
             <div className="w-full p-4">
                 <div className="relative w-full">
                     {/* Content Container */}
+                    {/* --- MODULO A --- */}
                     <div className="relative p-8 min-h-[900px]">
                         <div className="max-w-4xl mx-auto space-y-16">
 

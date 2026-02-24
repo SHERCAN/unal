@@ -106,9 +106,10 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones Equivalentes' }} pageId="frac-equiv-ejercicios">
             <h2 className="text-3xl font-black text-purple-700 mb-8 pl-12">EJERCICIOS</h2>
-
+            {/* --- MODULO B --- */}
             <div className="space-y-16">
                 {/* 1. MATCHING MODELS */}
+                {/* --- MODULO A --- */}
                 <div className="space-y-8">
                     <div className="flex items-center gap-4">
                         <PlayVideoButton trackingId={VIDEO_TRACKING.I1} title="" videoId="/pag28/vv-1" />

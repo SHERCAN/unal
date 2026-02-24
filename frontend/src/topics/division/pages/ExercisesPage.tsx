@@ -174,6 +174,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                         </div>
 
                         {/* 1A: Balls */}
+                        {/* --- MODULO A --- */}
                         <div className="flex items-start gap-2">
                             <PlayVideoButton
                                 trackingId={VIDEO_TRACKING_IDS.PRACTICE_1}
@@ -229,6 +230,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                         </div>
 
                         {/* 1B: Players */}
+                        {/* --- MODULO A --- */}
                         <div className="flex items-start gap-2 mt-4">
                             <PlayVideoButton
                                 trackingId={VIDEO_TRACKING_IDS.PRACTICE_2}
@@ -288,6 +290,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                 </div>
 
                 {/* --- ACTIVITY 2 --- */}
+                {/* --- MODULO A --- */}
                 <div className="flex gap-4 relative">
                     <div className="w-12 h-12 bg-purple-700 text-white font-black text-2xl flex items-center justify-center rounded shrink-0 z-10">2</div>
                     <div className="flex flex-col gap-4 w-full">
@@ -379,6 +382,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                 </div>
 
                 {/* --- ACTIVITY 3 --- */}
+                {/* --- MODULO B --- */}
                 <div className="flex gap-4">
                     <div className="w-12 h-12 bg-purple-700 text-white font-black text-2xl flex items-center justify-center rounded shrink-0">3</div>
                     <div className="flex flex-col gap-4 w-full">
@@ -445,6 +449,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                 </div>
 
                 {/* --- ACTIVITY 4 --- */}
+                {/* --- MODULO A --- */}
                 <div className="flex gap-4">
                     <div className="w-12 h-12 bg-purple-700 text-white font-black text-2xl flex items-center justify-center rounded shrink-0">4</div>
                     <div className="flex flex-col gap-4 w-full">

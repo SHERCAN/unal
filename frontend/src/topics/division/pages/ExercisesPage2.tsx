@@ -166,11 +166,13 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
             }}
             pageId="division-exercises-2"
         >
+            {/* --- MODULO A --- */}
             <div className="flex flex-col gap-10 max-w-4xl mx-auto pb-32">
                 {/* Header */}
                 <h1 className="text-3xl font-black text-purple-700 dark:text-purple-400 uppercase">Ejercicios</h1>
 
                 {/* --- ACTIVITY 1 --- */}
+
                 <div className="flex bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex-col gap-6">
                     <div className="flex items-start gap-4">
                         <PlayVideoButton
