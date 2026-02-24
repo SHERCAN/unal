@@ -1,7 +1,7 @@
 'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
@@ -15,7 +15,15 @@ import pizza4Img from '../pizza4.png';
 interface Props { zoom?: number; }
 //PAGINA 5 ABSTRACTO
 export function EjemplosPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
+    const EXERCISE_IDS = {
+        SOL1: 'fracciones_equivalentes-pag27-sol1'
+    };
+
+    const STAGE_IDS = {
+        A_STAGE: 'fracciones_equivalentes-pag27-a-stage'
+    };
+
+    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         INTRO: 'fracciones_equivalentes-pag27-v1',
@@ -27,12 +35,22 @@ export function EjemplosPage({ zoom = 1 }: Props) {
     const [sol1, setSol1] = useState({ i1: '', i2: '', i3: '', i4: '', r1: '', r2: '' });
     const [sol1Result, setSol1Result] = useState<'correct' | 'incorrect' | null>(null);
 
-    const checkSol1 = () => {
+    // Initial load sync
+    useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.SOL1)) setSol1Result('correct');
+    }, [isExerciseCompleted]);
+
+    const checkSol1 = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.SOL1)) return;
         const correct = sol1.i1 === '3' && sol1.i2 === '4' && sol1.i3 === '12' && sol1.i4 === '1' && sol1.r1 === '12' && sol1.r2 === '12';
         setSol1Result(correct ? 'correct' : 'incorrect');
+        await submitGame(EXERCISE_IDS.SOL1, correct);
+        if (correct) {
+            await completeStage(STAGE_IDS.A_STAGE);
+        }
     };
 
-    const resetSol1 = () => { setSol1({ i1: '', i2: '', i3: '', i4: '', r1: '', r2: '' }); setSol1Result(null); };
+    const resetSol1 = () => { if (isExerciseCompleted(EXERCISE_IDS.SOL1)) return; setSol1({ i1: '', i2: '', i3: '', i4: '', r1: '', r2: '' }); setSol1Result(null); };
 
     // Helper components
     const Fraction = ({ num, den, size = "text-3xl", color = "text-black" }: any) => (

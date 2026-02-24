@@ -13,7 +13,7 @@ interface ExercisesPageProps {
 }
 //PAGINA 5 EJERCICIOS
 export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
-    const { isVideoWatched, markVideoWatched, submitExercise, submitGame, isExerciseCompleted } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, submitExercise, submitGame, isExerciseCompleted, completeStage } = useVideoProgress();
 
     const EXERCISE_IDS = {
         ACT1A: 'division-pag5-ej1',
@@ -21,6 +21,14 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
         ACT2: 'division-pag5-ej3',
         ACT3: 'division-pag5-ej4',
         ACT4: 'division-pag5-ej5'
+    };
+
+    const STAGE_IDS = {
+        ACT1A: 'division-pag5-stage1a',
+        ACT1B: 'division-pag5-stage1b',
+        ACT2: 'division-pag5-stage2',
+        ACT3: 'division-pag5-stage3',
+        ACT4: 'division-pag5-stage4'
     };
 
     const VIDEO_TRACKING_IDS = {
@@ -64,6 +72,9 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
         const isCorrect = act1_a_selected === 0;
         setAct1AStatus(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.ACT1A, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.ACT1A);
+        }
     };
 
     const checkAct1B = async () => {
@@ -71,6 +82,9 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
         const isCorrect = act1_b_selected === 2;
         setAct1BStatus(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.ACT1B, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.ACT1B);
+        }
     };
 
     // --- ACTIVITY 2: MATCHING ---
@@ -116,6 +130,9 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
 
         setAct2Status(allCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.ACT2, allCorrect);
+        if (allCorrect) {
+            await completeStage(STAGE_IDS.ACT2);
+        }
     };
 
     // --- ACTIVITY 3: QUOTIENTS ---
@@ -130,11 +147,15 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
 
     const checkAct3 = async () => {
         if (isExerciseCompleted(EXERCISE_IDS.ACT3)) return;
-        const answers = ['5', '6', '6', '10', '3', '4', '9', '4', '5', '5'];
+        const answers = ['5', '4', '6', '9', '6', '4', '10', '5', '3', '5'];
         const isCorrect = act3Inputs.every((val, i) => val.trim() === answers[i]);
         setAct3Status(isCorrect ? 'correct' : 'incorrect');
-        // ACT3 is MODULO B based on comments
+        // ACT3 is MODULO B based on comments, use submitGame (20 pts)
         await submitGame(EXERCISE_IDS.ACT3, isCorrect);
+        if (isCorrect) {
+            // CSV says Completar B is 0 points, but stage completion should still be marked
+            await completeStage(STAGE_IDS.ACT3);
+        }
     };
 
     // --- ACTIVITY 4: TRUE/FALSE ---
@@ -153,6 +174,9 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
         const isCorrect = selection === 'F';
         setAct4Status(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.ACT4, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.ACT4);
+        }
     };
 
     return (
@@ -191,6 +215,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                             <div
                                                 key={i}
                                                 onClick={() => {
+                                                    if (act1AStatus === 'correct') return;
                                                     setAct1_a_selected(i);
                                                     setAct1AStatus(null);
                                                 }}
@@ -245,6 +270,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                             <div
                                                 key={i}
                                                 onClick={() => {
+                                                    if (act1BStatus === 'correct') return;
                                                     setAct1_b_selected(i);
                                                     setAct1BStatus(null);
                                                 }}
@@ -393,6 +419,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                         <input
                                             value={act3Status === 'correct' ? ['5', '4', '6', '9', '6', '4', '10', '5', '3', '5'][i] : act3Inputs[i]}
                                             onChange={(e) => {
+                                                if (act3Status === 'correct') return;
                                                 const newInputs = [...act3Inputs];
                                                 newInputs[i] = e.target.value;
                                                 setAct3Inputs(newInputs);
@@ -492,6 +519,3 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
         </BookPageContainer>
     );
 }
-
-
-

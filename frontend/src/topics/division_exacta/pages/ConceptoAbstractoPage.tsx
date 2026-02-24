@@ -1,9 +1,10 @@
 'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
 
 /**
  * Frame 162 — A section (part 2)
@@ -16,7 +17,15 @@ import { useVideoProgress } from '@/hooks/useVideoProgress';
 interface Props { zoom?: number; }
 //PAGINA 3 ABSTRACTO
 export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
+    const EXERCISE_IDS = {
+        A_GAME: 'division_exacta-pag9-a-game'
+    };
+
+    const STAGE_IDS = {
+        A_STAGE: 'division_exacta-pag9-a-stage'
+    };
+
+    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         A_NOEXACT: 'division_exacta-pag9-v1',
@@ -94,6 +103,28 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
         { dividend: 64, divisor: 7, isExact: false },
     ];
     const [practicaAnswers, setPracticaAnswers] = useState<Record<number, string>>({});
+    const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
+
+    // Initial load sync
+    useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.A_GAME)) setResult('correct');
+    }, [isExerciseCompleted]);
+
+    const handleCheck = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.A_GAME)) return;
+        const allCorrect = practicaItems.every((item, i) => (practicaAnswers[i] === 'exacta') === item.isExact);
+        setResult(allCorrect ? 'correct' : 'incorrect');
+        await submitGame(EXERCISE_IDS.A_GAME, allCorrect);
+        if (allCorrect) {
+            await completeStage(STAGE_IDS.A_STAGE);
+        }
+    };
+
+    const handleReset = () => {
+        if (isExerciseCompleted(EXERCISE_IDS.A_GAME)) return;
+        setPracticaAnswers({});
+        setResult(null);
+    };
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'División Exacta' }} pageId="div-exacta-concepto-abstracto">
@@ -114,12 +145,12 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                     </p>
                                 </div>
                                 <div className="flex justify-center my-8">
-                                    <img 
+                                    <img
                                         className="h-48 object-contain"
                                         src="/division_exacta/img4.png"
                                         draggable={false}
                                     />
-                                </div>                               
+                                </div>
                             </div>
 
                             {/* Non-exact example intro */}
@@ -140,12 +171,12 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                 </div>
 
                                 <div className="flex justify-center my-8">
-                                    <img 
+                                    <img
                                         className="h-48 object-contain"
                                         src="/division_exacta/img5.png"
                                         draggable={false}
                                     />
-                                </div>  
+                                </div>
                             </div>
 
                             {/* PRÁCTICA */}
@@ -161,8 +192,16 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                             </p>
                                             <select
                                                 value={practicaAnswers[i] || ''}
-                                                onChange={(e) => setPracticaAnswers(prev => ({ ...prev, [i]: e.target.value }))}
-                                                className="border-2 rounded px-3 py-1 text-sm font-medium border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+                                                onChange={(e) => {
+                                                    setPracticaAnswers(prev => ({ ...prev, [i]: e.target.value }));
+                                                    setResult(null);
+                                                }}
+                                                className={`border-2 rounded px-3 py-1 text-sm font-medium ${result === 'correct' ? 'border-green-500 bg-green-50 dark:bg-green-900/20' :
+                                                    result === 'incorrect' && (practicaAnswers[i] === 'exacta') !== item.isExact
+                                                        ? 'border-red-500 bg-red-50 dark:bg-red-900/20' :
+                                                        'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
+                                                    } text-gray-800 dark:text-gray-200`}
+                                                disabled={result === 'correct'}
                                             >
                                                 <option value="">Selecciona</option>
                                                 <option value="exacta">es exacta</option>
@@ -170,6 +209,13 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                             </select>
                                         </div>
                                     ))}
+                                </div>
+                                <div className="flex justify-center mt-4">
+                                    <FeedbackButton
+                                        onCheck={handleCheck}
+                                        onReset={handleReset}
+                                        status={result}
+                                    />
                                 </div>
                             </div>
 

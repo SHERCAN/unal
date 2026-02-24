@@ -196,7 +196,7 @@ export const markVideoWatched = async (req: Request, res: Response) => {
       }),
       prisma.user.update({
         where: { id: userId },
-        data: { puntos: { increment: 20 } }
+        data: { puntos: { increment: 10 } }
       })
     ]);
 

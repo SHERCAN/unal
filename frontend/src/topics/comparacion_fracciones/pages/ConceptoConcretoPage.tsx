@@ -1,6 +1,6 @@
 'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
@@ -22,12 +22,20 @@ import tristeMorado from '../equipotristemorado.png';
 interface Props { zoom?: number; }
 // PAGINA 1 CONCRETO PICTORICO
 export function ConceptoConcretoPage({ zoom = 1 }: Props) {
-    const { submitExercise } = useVideoProgress();
+    const { submitGame, isExerciseCompleted, completeStage } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         C_INTRO: 'comparacion_fracciones-pag1-v1',
         P_RECT: 'comparacion_fracciones-pag1-v2',
         P_WHY: 'comparacion_fracciones-pag1-v3'
+    };
+
+    const EXERCISE_IDS = {
+        P_ACTIVITY: 'comparacion_fracciones-pag29-ej1'
+    };
+
+    const STAGE_IDS = {
+        P_STAGE: 'comparacion_fracciones-pag29-p-stage'
     };
 
     const matchData = [
@@ -42,18 +50,27 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     const [pNum2, setPNum2] = useState('');
     const [pResult, setPResult] = useState<'correct' | 'incorrect' | null>(null);
 
+    useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.P_ACTIVITY)) setPResult('correct');
+    }, [isExerciseCompleted]);
+
     const checkP = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.P_ACTIVITY)) return;
         const correct = pSign === '<' && pNum1 === '1' && pNum2 === '2';
         setPResult(correct ? 'correct' : 'incorrect');
-        await submitExercise('comparacion_fracciones-pag29-ej1', correct);
+        await submitGame(EXERCISE_IDS.P_ACTIVITY, correct);
+        if (correct) {
+            await completeStage(STAGE_IDS.P_STAGE);
+        }
     };
 
-    const InputBoxSmall = ({ value, onChange, width = "w-10" }: any) => (
+    const InputBoxSmall = ({ value, onChange, width = "w-10", disabled }: any) => (
         <input
             type="text"
             className={`${width} h-10 text-center rounded-lg text-xl font-bold bg-[#e2e2e2] outline-none border-none`}
             value={value}
             onChange={e => onChange(e.target.value)}
+            disabled={disabled}
         />
     );
 
@@ -154,9 +171,10 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                         <div className="flex flex-col items-center gap-2">
                                             <div className="relative">
                                                 <select
-                                                    value={pSign}
+                                                    value={pResult === 'correct' ? '<' : pSign}
                                                     onChange={(e) => { setPSign(e.target.value); setPResult(null); }}
                                                     className="w-20 h-20 text-4xl font-black text-purple-700 bg-gray-100 rounded-lg appearance-none text-center outline-none border-none cursor-pointer"
+                                                    disabled={pResult === 'correct'}
                                                 >
                                                     <option value=""></option>
                                                     <option value="<">&lt;</option>
@@ -177,13 +195,13 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
                                     <div className="flex items-center gap-4 text-2xl font-black">
                                         <span>¿Por qué?</span>
-                                        <InputBoxSmall value={pNum1} onChange={setPNum1} />
+                                        <InputBoxSmall value={pResult === 'correct' ? '1' : pNum1} onChange={setPNum1} disabled={pResult === 'correct'} />
                                         <span className="text-purple-400 font-black">&lt;</span>
-                                        <InputBoxSmall value={pNum2} onChange={setPNum2} />
+                                        <InputBoxSmall value={pResult === 'correct' ? '2' : pNum2} onChange={setPNum2} disabled={pResult === 'correct'} />
                                     </div>
 
                                     <div className="mt-4">
-                                        <FeedbackButton status={pResult} onCheck={checkP} onReset={() => { setPSign(''); setPNum1(''); setPNum2(''); setPResult(null); }} />
+                                        <FeedbackButton status={pResult} onCheck={checkP} onReset={() => { if (pResult === 'correct') return; setPSign(''); setPNum1(''); setPNum2(''); setPResult(null); }} />
                                     </div>
                                 </div>
                             </div>

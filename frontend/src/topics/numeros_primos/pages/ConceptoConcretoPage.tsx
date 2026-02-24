@@ -1,9 +1,10 @@
 'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
+import { FeedbackButton } from '@/components/FeedbackButton';
 
 /**
  * Números Primos: Concepto Concreto y Procesual
@@ -20,7 +21,16 @@ interface Ball {
 
 //PAGINA 1 CONCRETO PICTORICO
 export function ConceptoConcretoPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
+    const EXERCISE_IDS = {
+        C_GAME: 'numeros_primos-pag14-c-game',
+    };
+
+    const STAGE_IDS = {
+        C_STAGE: 'numeros_primos-pag14-c-stage',
+        P_STAGE: 'numeros_primos-pag14-p-stage'
+    };
+
+    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         C_INTRO: 'numeros_primos-pag14-v1',
@@ -30,19 +40,13 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         P_CONCLUSION: 'numeros_primos-pag14-v5',
     };
 
-    /* videoModal list removed */
-    /* ref removed */
-
-    /* handleVideoComplete removed */
-
-    /* openVideo removed */
-
-    /* PlayButton definition removed */
-
-    /* ---- small green square helper (P section) ---- */
-    const GreenSquare = () => (
-        <div className="w-8 h-8 bg-[#c5e384] border border-[#9ab85c] dark:bg-green-600 dark:border-green-500" />
-    );
+    // Initial load sync
+    useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.C_GAME)) {
+            setPhase1Complete(true);
+            setResultC('correct');
+        }
+    }, [isExerciseCompleted]);
 
     // ========================
     // C SECTION STATE
@@ -57,6 +61,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     const [phase1Complete, setPhase1Complete] = useState(false);
     const [draggedBallId, setDraggedBallId] = useState<number | null>(null);
     const [showCelebration, setShowCelebration] = useState(false);
+    const [resultC, setResultC] = useState<'correct' | 'incorrect' | null>(null);
 
     // Balls in bag
     const ballsInBag = balls.filter(b => b.location === 'bag');
@@ -77,7 +82,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     const areEqual = allPlaced && nonZeroCounts.length > 0 && nonZeroCounts.every(c => c === nonZeroCounts[0]) && nonZeroCounts.length === tenistaCount;
 
     // --- Phase 1 check ---
-    React.useEffect(() => {
+    useEffect(() => {
         if (!phase1Complete && allBallsInTenista0) {
             setShowCelebration(true);
             setTimeout(() => {
@@ -91,6 +96,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     // DRAG & DROP HANDLERS
     // ========================
     const handleDragStart = (e: React.DragEvent, ballId: number) => {
+        if (resultC === 'correct') return;
         setDraggedBallId(ballId);
         e.dataTransfer.effectAllowed = 'move';
         const el = e.currentTarget as HTMLElement;
@@ -104,38 +110,62 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
     const handleDropOnTenista = (e: React.DragEvent, tIdx: number) => {
         e.preventDefault();
-        if (draggedBallId === null) return;
+        if (draggedBallId === null || resultC === 'correct') return;
         setBalls(prev => prev.map(b => b.id === draggedBallId ? { ...b, location: tIdx } : b));
         setDraggedBallId(null);
+        setResultC(null);
     };
 
     const handleDropOnBag = (e: React.DragEvent) => {
         e.preventDefault();
-        if (draggedBallId === null) return;
+        if (draggedBallId === null || resultC === 'correct') return;
         setBalls(prev => prev.map(b => b.id === draggedBallId ? { ...b, location: 'bag' as const } : b));
         setDraggedBallId(null);
+        setResultC(null);
     };
 
     // Touch support (click-to-select, click-to-place)
     const [touchBallId, setTouchBallId] = useState<number | null>(null);
 
     const handleTouchSelectBall = (ballId: number) => {
+        if (resultC === 'correct') return;
         setTouchBallId(prev => prev === ballId ? null : ballId);
     };
 
     const handleTouchDropTarget = (target: 'bag' | number) => {
-        if (touchBallId === null) return;
+        if (touchBallId === null || resultC === 'correct') return;
         setBalls(prev => prev.map(b => b.id === touchBallId ? { ...b, location: target } : b));
         setTouchBallId(null);
+        setResultC(null);
     };
 
     const addTenista = () => {
-        if (tenistaCount < MAX_TENISTAS) {
+        if (tenistaCount < MAX_TENISTAS && resultC !== 'correct') {
             setTenistaCount(prev => prev + 1);
+            setResultC(null);
         }
     };
 
-    // Render a draggable tennis ball inline (not as component to avoid re-mount killing drag state)
+    const handleListoC = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.C_GAME)) return;
+        // Correct if all balls are distributed equally (1 group of 7 or 7 groups of 1)
+        const isCorrect = areEqual;
+        setResultC(isCorrect ? 'correct' : 'incorrect');
+        await submitGame(EXERCISE_IDS.C_GAME, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.C_STAGE);
+        }
+    };
+
+    const handleResetC = () => {
+        if (isExerciseCompleted(EXERCISE_IDS.C_GAME)) return;
+        setBalls(Array.from({ length: TOTAL_BALLS }, (_, i) => ({ id: i, location: 'bag' as const })));
+        setTenistaCount(1);
+        setPhase1Complete(false);
+        setResultC(null);
+    };
+
+    // Render a draggable tennis ball inline
     const renderBall = (ball: Ball, size: 'xs' | 'sm' | 'md' = 'md') => {
         const isSelected = touchBallId === ball.id;
         let sizeClass = 'w-10 h-10';
@@ -192,7 +222,6 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                     <div className="flex items-start gap-3 mb-6">
 
                         {/* Tenistas with drop boxes */}
-                        {/* Tenistas with drop boxes */}
                         {tenistaIndices.map(tIdx => {
                             const tBalls = getBallsForTenista(tIdx);
                             return (
@@ -205,7 +234,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                         draggable={false}
                                     />
 
-                                    {/* Drop box below tenista — fixed size, balls positioned absolutely */}
+                                    {/* Drop box below tenista */}
                                     <div
                                         onDragOver={handleDragOver}
                                         onDrop={(e) => handleDropOnTenista(e, tIdx)}
@@ -310,10 +339,10 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
 
                     {/* === BOTTOM: Grouping visualization area + Bag === */}
-                    <div className="flex items-end gap-4">
+                    <div className="flex items-end gap-4 overflow-x-auto pb-4">
                         {/* Large grouping outline box */}
                         <div className="flex-1 min-h-[120px] border-2 border-gray-800 dark:border-gray-400 rounded p-3 flex items-center">
-                            {/* Left Side: Tenista1 OK - Fixed width to keep divider stable */}
+                            {/* Left Side: Tenista1 OK */}
                             <div className="w-32 flex-none h-full flex items-center justify-center mr-2">
                                 {phase1Complete && (
                                     <img
@@ -328,7 +357,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                             {/* Vertical Divider */}
                             <div className="w-[2px] h-[100px] bg-gray-300 dark:bg-gray-600 flex-none"></div>
 
-                            {/* Right Side: Result (Frame 210) - Only when EQUAL */}
+                            {/* Right Side: Result */}
                             <div className="flex-1 flex justify-center h-full pl-2">
                                 {tenistaCount > 1 && allPlaced && areEqual && (
                                     <img
@@ -341,7 +370,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                             </div>
                         </div>
 
-                        {/* Bag of balls (bottom-right) */}
+                        {/* Bag of balls */}
                         <div
                             className="flex-shrink-0 flex flex-col items-center"
                             onDragOver={handleDragOver}
@@ -355,11 +384,9 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                     className="w-28 h-auto object-contain pointer-events-none"
                                     draggable={false}
                                 />
-                                {/* Balls scattered inside the bag */}
                                 {ballsInBag.length > 0 && (
                                     <div className="absolute inset-0 overflow-hidden z-10" style={{ top: '25%' }}>
                                         {ballsInBag.map(ball => {
-                                            // Pre-computed random-looking positions per ball id (deterministic)
                                             const positions = [
                                                 { top: '15%', left: '22%', rotate: '-12deg' },
                                                 { top: '35%', left: '50%', rotate: '18deg' },
@@ -385,6 +412,14 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                             </div>
                         </div>
                     </div>
+
+                    <div className="flex justify-center mt-6">
+                        <FeedbackButton
+                            onCheck={handleListoC}
+                            onReset={handleResetC}
+                            status={resultC}
+                        />
+                    </div>
                 </div>
             </div>
 
@@ -398,15 +433,21 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                     <div className="font-semibold text-base space-y-6">
                         {/* Intro text + play */}
                         <div>
-                            <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
+                            <p className="text-gray-800 dark:text-gray-200 leading-relaxed text-lg">
                                 Representa los repartos con <span className="font-bold">7</span> cuadrados. Intenta agruparlos en <span className="font-bold">2 grupos, 3 grupos o 4 grupos</span> iguales.
                             </p>
-                            <div className="mt-2">
+                            <div className="mt-2 flex items-center gap-4">
                                 <PlayVideoButton trackingId={VIDEO_TRACKING.P_INTRO} title="" videoId="/pag14/vv-2" />
+                                <button
+                                    onClick={() => completeStage(STAGE_IDS.P_STAGE)}
+                                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-bold text-sm transition-colors"
+                                >
+                                    TERMINAR SECCIÓN P
+                                </button>
                             </div>
                         </div>
 
-                        {/* Failure: No se forman 2, 3 y 4 grupos iguales */}
+                        {/* Failure */}
                         <div>
                             <div className="flex items-center gap-2 mb-3">
                                 <p className="font-semibold text-gray-800 dark:text-gray-200">
@@ -425,7 +466,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                             </div>
                         </div>
 
-                        {/* Success: 1 group or 7 groups */}
+                        {/* Success */}
                         <div>
                             <div className="flex items-center gap-2 mb-3">
                                 <p className="font-semibold text-gray-800 dark:text-gray-200">
@@ -445,7 +486,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                         </div>
 
                         {/* Conclusion text */}
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 border-t pt-4">
                             <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
                                 Se observa que el número <span className="font-bold">7</span> se puede dividir en <span className="font-bold">1</span> ó en sí mismo <span className="font-bold">7</span> partes iguales.
                             </p>

@@ -1,7 +1,7 @@
 'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
@@ -16,7 +16,16 @@ import equivalente30Img from '../../comparacion_fracciones/equivalente30.png';
 interface Props { zoom?: number; }
 //PAGINA 3 ABSTRACTO
 export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
+    const EXERCISE_IDS = {
+        ROW1: 'fracciones_equivalentes-pag25-row1',
+        ROW2: 'fracciones_equivalentes-pag25-row2'
+    };
+
+    const STAGE_IDS = {
+        A_STAGE: 'fracciones_equivalentes-pag25-a-stage'
+    };
+
+    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         A_INTRO: 'fracciones_equivalentes-pag25-v1',
@@ -51,19 +60,34 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
     const [row1Result, setRow1Result] = useState<'correct' | 'incorrect' | null>(null);
     const [row2Result, setRow2Result] = useState<'correct' | 'incorrect' | null>(null);
 
+    // Initial load sync
+    useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.ROW1)) setRow1Result('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.ROW2)) setRow2Result('correct');
+    }, [isExerciseCompleted]);
 
-    const checkRow1 = () => {
+    const checkRow1 = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.ROW1)) return;
         const correct = row1.i1 === '3' && row1.i2 === '20' && row1.i3 === '5' && row1.i4 === '12' && row1.r1 === '60' && row1.r2 === '60';
         setRow1Result(correct ? 'correct' : 'incorrect');
+        await submitGame(EXERCISE_IDS.ROW1, correct);
+        if (correct) {
+            await completeStage(STAGE_IDS.A_STAGE);
+        }
     };
 
-    const checkRow2 = () => {
+    const checkRow2 = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.ROW2)) return;
         const correct = row2.i1 === '6' && row2.i2 === '20' && row2.i3 === '10' && row2.i4 === '12' && row2.r1 === '120' && row2.r2 === '120';
         setRow2Result(correct ? 'correct' : 'incorrect');
+        await submitGame(EXERCISE_IDS.ROW2, correct);
+        if (correct) {
+            await completeStage(STAGE_IDS.A_STAGE);
+        }
     };
 
-    const resetRow1 = () => { setRow1({ i1: '', i2: '', i3: '', i4: '', r1: '', r2: '' }); setRow1Result(null); };
-    const resetRow2 = () => { setRow2({ i1: '', i2: '', i3: '', i4: '', r1: '', r2: '' }); setRow2Result(null); };
+    const resetRow1 = () => { if (isExerciseCompleted(EXERCISE_IDS.ROW1)) return; setRow1({ i1: '', i2: '', i3: '', i4: '', r1: '', r2: '' }); setRow1Result(null); };
+    const resetRow2 = () => { if (isExerciseCompleted(EXERCISE_IDS.ROW2)) return; setRow2({ i1: '', i2: '', i3: '', i4: '', r1: '', r2: '' }); setRow2Result(null); };
 
 
 

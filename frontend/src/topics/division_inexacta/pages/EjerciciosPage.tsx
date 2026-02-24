@@ -1,7 +1,7 @@
 'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
@@ -20,7 +20,7 @@ import { FeedbackButton } from '@/components/FeedbackButton';
 interface Props { zoom?: number; }
 //PAGINA 3 EJERCICIOS
 export function EjerciciosPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched, submitExercise } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, submitExercise, isExerciseCompleted, completeStage } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         EJ_1: 'division_inexacta-pag13-v1',
@@ -31,12 +31,13 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         EJ_3_4: 'div-inexacta-ej-3-4',
     };
 
-    /* videoModal list removed */
-    /* ref removed */
-
-    /* handleVideoComplete removed */
-
-    /* PlayButton definition removed */
+    const STAGE_IDS = {
+        ACT1_STAGE: 'division_inexacta-pag13-act1-stage',
+        ACT2_STAGE: 'division_inexacta-pag13-act2-stage',
+        ACT3_STAGE: 'division_inexacta-pag13-act3-stage',
+        MODULO_A: 'division_inexacta-pag13-modulo-a',
+        MODULO_B: 'division_inexacta-pag13-modulo-b'
+    };
 
     // ===== ACTIVITY 1: Determinar exacta o inexacta =====
     const act1Items = [
@@ -48,16 +49,27 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const [act1Answers, setAct1Answers] = useState<Record<number, string>>({});
     const [act1Results, setAct1Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({});
 
+    useEffect(() => {
+        act1Items.forEach((_, i) => {
+            if (isExerciseCompleted(`division_inexacta-pag13-ej${i + 1}`)) {
+                setAct1Results(prev => ({ ...prev, [i]: 'correct' }));
+            }
+        });
+    }, [isExerciseCompleted]);
 
-    const handleAct1Listo = (index: number) => {
+    const handleAct1Listo = async (index: number) => {
+        if (isExerciseCompleted(`division_inexacta-pag13-ej${index + 1}`)) return;
         const userAnswer = act1Answers[index] || '';
         const correct = userAnswer === act1Items[index].correct;
         setAct1Results(prev => ({ ...prev, [index]: correct ? 'correct' : 'incorrect' }));
-        // ej1 to ej4
-        submitExercise(`division_inexacta-pag13-ej${index + 1}`, correct);
+        await submitExercise(`division_inexacta-pag13-ej${index + 1}`, correct);
+        if (correct) {
+            await completeStage(STAGE_IDS.ACT1_STAGE);
+        }
     };
 
     const resetAct1 = (index: number) => {
+        if (isExerciseCompleted(`division_inexacta-pag13-ej${index + 1}`)) return;
         setAct1Answers(prev => ({ ...prev, [index]: '' }));
         setAct1Results(prev => ({ ...prev, [index]: null }));
     };
@@ -71,8 +83,16 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const [act2, setAct2] = useState<Record<string, string>>({});
     const [act2Results, setAct2Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({});
 
+    useEffect(() => {
+        act2Items.forEach((_, i) => {
+            if (isExerciseCompleted(`division_inexacta-pag13-ej${i + 5}`)) {
+                setAct2Results(prev => ({ ...prev, [i]: 'correct' }));
+            }
+        });
+    }, [isExerciseCompleted]);
 
-    const handleAct2Listo = (index: number) => {
+    const handleAct2Listo = async (index: number) => {
+        if (isExerciseCompleted(`division_inexacta-pag13-ej${index + 5}`)) return;
         const item = act2Items[index];
         const userQuotient = parseInt(act2[`${index}-q`] || '');
         const userHasRemainder = act2[`${index}-hasR`] || '';
@@ -86,11 +106,19 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
             correct = correct && userHasRemainder === 'no';
         }
         setAct2Results(prev => ({ ...prev, [index]: correct ? 'correct' : 'incorrect' }));
-        // ej5 to ej6
-        submitExercise(`division_inexacta-pag13-ej${index + 5}`, correct);
+        await submitExercise(`division_inexacta-pag13-ej${index + 5}`, correct);
+        if (correct) {
+            await completeStage(STAGE_IDS.ACT2_STAGE);
+            // If all 2 are correct, complete Modulo A
+            const allCorrect = act2Items.every((_, i) => i === index ? correct : act2Results[i] === 'correct');
+            if (allCorrect) {
+                await completeStage(STAGE_IDS.MODULO_A);
+            }
+        }
     };
 
     const resetAct2 = (index: number) => {
+        if (isExerciseCompleted(`division_inexacta-pag13-ej${index + 5}`)) return;
         setAct2(prev => ({
             ...prev,
             [`${index}-q`]: '',
@@ -123,7 +151,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
             trackingId: VIDEO_TRACKING.EJ_3_3,
         },
         {
-            text: 'Hay 113 dulces para repartir en 10 bolsas.',
+            text: 'Hay 113 dulces para repartir in 10 bolsas.',
             question: '¿Cuántos dulces recibe cada bolsa?',
             answer: 11, hasRemainder: true, remainder: 3, remainderUnit: 'dulces',
             trackingId: VIDEO_TRACKING.EJ_3_4,
@@ -132,8 +160,16 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const [act3, setAct3] = useState<Record<string, string>>({});
     const [act3Results, setAct3Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({});
 
+    useEffect(() => {
+        act3Items.forEach((_, i) => {
+            if (isExerciseCompleted(`division_inexacta-pag13-ej${i + 7}`)) {
+                setAct3Results(prev => ({ ...prev, [i]: 'correct' }));
+            }
+        });
+    }, [isExerciseCompleted]);
 
-    const handleAct3Listo = (index: number) => {
+    const handleAct3Listo = async (index: number) => {
+        if (isExerciseCompleted(`division_inexacta-pag13-ej${index + 7}`)) return;
         const item = act3Items[index];
         const userAnswer = parseInt(act3[`${index}-a`] || '');
         const userHasRemainder = act3[`${index}-hasR`] || '';
@@ -146,11 +182,20 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
             correct = correct && userHasRemainder === 'no';
         }
         setAct3Results(prev => ({ ...prev, [index]: correct ? 'correct' : 'incorrect' }));
-        // ej7 to ej10
-        submitExercise(`division_inexacta-pag13-ej${index + 7}`, correct);
+        await submitExercise(`division_inexacta-pag13-ej${index + 7}`, correct);
+        if (correct) {
+            await completeStage(STAGE_IDS.ACT3_STAGE);
+            // If all 4 are correct AND act1 is correct, complete Modulo B
+            const allCorrect = act3Items.every((_, i) => i === index ? correct : act3Results[i] === 'correct');
+            const act1AllCorrect = act1Items.every((_, i) => act1Results[i] === 'correct');
+            if (allCorrect && act1AllCorrect) {
+                await completeStage(STAGE_IDS.MODULO_B);
+            }
+        }
     };
 
     const resetAct3 = (index: number) => {
+        if (isExerciseCompleted(`division_inexacta-pag13-ej${index + 7}`)) return;
         setAct3(prev => ({
             ...prev,
             [`${index}-a`]: '',
@@ -199,7 +244,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                     {item.dividend} ÷ {item.divisor}
                                 </p>
                                 <select
-                                    value={act1Answers[i] || ''}
+                                    value={act1Results[i] === 'correct' ? item.correct : (act1Answers[i] || '')}
                                     onChange={(e) => setAct1Answers(prev => ({ ...prev, [i]: e.target.value }))}
                                     className={selectClass(act1Results[i] ?? null)}
                                     disabled={act1Results[i] === 'correct'}
@@ -238,7 +283,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                     </p>
                                     <input
                                         type="number"
-                                        value={act2[`${i}-q`] || ''}
+                                        value={act2Results[i] === 'correct' ? item.quotient : (act2[`${i}-q`] || '')}
                                         onChange={(e) => setAct2(prev => ({ ...prev, [`${i}-q`]: e.target.value }))}
                                         className={inputClass(act2Results[i] ?? null)}
                                         disabled={act2Results[i] === 'correct'}
@@ -250,7 +295,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                 <div className="flex flex-wrap items-center gap-3 ml-6">
                                     <span className="text-base font-semibold text-gray-700 dark:text-gray-300">¿Hay resto?</span>
                                     <select
-                                        value={act2[`${i}-hasR`] || ''}
+                                        value={act2Results[i] === 'correct' ? (item.hasRemainder ? 'si' : 'no') : (act2[`${i}-hasR`] || '')}
                                         onChange={(e) => setAct2(prev => ({ ...prev, [`${i}-hasR`]: e.target.value }))}
                                         className={selectClass(act2Results[i] ?? null)}
                                         disabled={act2Results[i] === 'correct'}
@@ -262,12 +307,12 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                     </select>
 
                                     {/* Show ¿Cuál? only if user answered "si" */}
-                                    {act2[`${i}-hasR`] === 'si' && (
+                                    {(act2Results[i] === 'correct' ? item.hasRemainder : act2[`${i}-hasR`] === 'si') && (
                                         <>
                                             <span className="text-base font-semibold text-gray-700 dark:text-gray-300">¿Cuál?</span>
                                             <input
                                                 type="number"
-                                                value={act2[`${i}-r`] || ''}
+                                                value={act2Results[i] === 'correct' ? item.remainder : (act2[`${i}-r`] || '')}
                                                 onChange={(e) => setAct2(prev => ({ ...prev, [`${i}-r`]: e.target.value }))}
                                                 className={inputClass(act2Results[i] ?? null)}
                                                 style={{ width: '48px' }}
@@ -282,7 +327,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                 <div className="flex flex-wrap items-center gap-3 ml-6">
                                     <span className="text-base font-semibold text-gray-700 dark:text-gray-300">Esta división es</span>
                                     <select
-                                        value={act2[`${i}-type`] || ''}
+                                        value={act2Results[i] === 'correct' ? item.type : (act2[`${i}-type`] || '')}
                                         onChange={(e) => setAct2(prev => ({ ...prev, [`${i}-type`]: e.target.value }))}
                                         className={selectClass(act2Results[i] ?? null)}
                                         disabled={act2Results[i] === 'correct'}
@@ -331,7 +376,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                 <div className="flex justify-center my-2">
                                     <input
                                         type="number"
-                                        value={act3[`${i}-a`] || ''}
+                                        value={act3Results[i] === 'correct' ? item.answer : (act3[`${i}-a`] || '')}
                                         onChange={(e) => setAct3(prev => ({ ...prev, [`${i}-a`]: e.target.value }))}
                                         className={inputClass(act3Results[i] ?? null)}
                                         disabled={act3Results[i] === 'correct'}
@@ -343,7 +388,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                 <div className="flex flex-wrap items-center gap-3 ml-6">
                                     <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">¿Hay resto?</span>
                                     <select
-                                        value={act3[`${i}-hasR`] || ''}
+                                        value={act3Results[i] === 'correct' ? (item.hasRemainder ? 'si' : 'no') : (act3[`${i}-hasR`] || '')}
                                         onChange={(e) => setAct3(prev => ({ ...prev, [`${i}-hasR`]: e.target.value }))}
                                         className={selectClass(act3Results[i] ?? null)}
                                         disabled={act3Results[i] === 'correct'}
@@ -354,12 +399,12 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                         <option value="no">No</option>
                                     </select>
 
-                                    {act3[`${i}-hasR`] === 'si' && (
+                                    {(act3Results[i] === 'correct' ? item.hasRemainder : act3[`${i}-hasR`] === 'si') && (
                                         <>
                                             <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">¿Cuál?</span>
                                             <input
                                                 type="number"
-                                                value={act3[`${i}-r`] || ''}
+                                                value={act3Results[i] === 'correct' ? item.remainder : (act3[`${i}-r`] || '')}
                                                 onChange={(e) => setAct3(prev => ({ ...prev, [`${i}-r`]: e.target.value }))}
                                                 className={inputClass(act3Results[i] ?? null)}
                                                 style={{ width: '48px' }}
@@ -383,8 +428,6 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                     </div>
                 </div>
             </div>
-
-            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

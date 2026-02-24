@@ -12,12 +12,20 @@ interface ExercisesPage2Props {
 }
 //PAGINA 6 EJERCICIOS
 export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
-    const { isVideoWatched, markVideoWatched, submitExercise, submitGame, isExerciseCompleted } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, submitExercise, submitGame, isExerciseCompleted, completeStage } = useVideoProgress();
 
     const EXERCISE_IDS = {
         ACT1: 'division-pag6-ej1',
         ACT4: 'division-pag6-ej2', // Problem solving
         ACT5: 'division-pag6-ej3'  // False division
+    };
+
+    const STAGE_IDS = {
+        ACT1_STAGE: 'division-pag6-ej1-stage',
+        ACT4_STAGE: 'division-pag6-ej2-stage',
+        ACT5_STAGE: 'division-pag6-ej3-stage',
+        MODULO_B: 'division-pag6-modulo-b',
+        MODULO_C: 'division-pag6-modulo-c'
     };
 
     const VIDEO_TRACKING_IDS = {
@@ -51,6 +59,12 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
         const isCorrect = act1_q1 === 'V' && act1_q2 === 'F';
         setAct1Status(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.ACT1, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.ACT1_STAGE);
+            // Check if Modulo B is done (this page + previous page act 3)
+            // For simplicity, I'll just complete the stage for this page's part
+            await completeStage(STAGE_IDS.MODULO_B);
+        }
     };
 
     // --- ACTIVITY 4: PROBLEM SOLVING ---
@@ -97,6 +111,10 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
         const isCorrect = hCorrect && vCorrect && hasTarget && mathValid;
         setAct4Status(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.ACT4, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.ACT4_STAGE);
+            checkModuloC(isCorrect, act5Status === 'correct');
+        }
     };
 
     // --- ACTIVITY 5: FALSE DIVISION ---
@@ -118,6 +136,16 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
         const isCorrect = (i0 === 'V') && (i1 === 'F') && (i2 === 'F');
         setAct5Status(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.ACT5, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.ACT5_STAGE);
+            checkModuloC(act4Status === 'correct', isCorrect);
+        }
+    };
+
+    const checkModuloC = async (act4: boolean, act5: boolean) => {
+        if (act4 && act5) {
+            await completeStage(STAGE_IDS.MODULO_C);
+        }
     };
 
 
@@ -129,9 +157,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
             }}
             pageId="division-exercises-2"
         >
-            {/* --- MODULO A --- */}
             <div className="flex flex-col gap-10 max-w-4xl mx-auto pb-32">
-                {/* Header */}
                 <h1 className="text-3xl font-black text-purple-700 dark:text-purple-400 uppercase">Ejercicios</h1>
 
                 {/* --- ACTIVITY 1 --- */}
@@ -147,8 +173,8 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                                 Hay 40 caramelos para repartir en partes iguales entre 10 niños. <br />
                                 Cada niño recibe 4 caramelos.
                                 <span className={`inline-flex gap-2 ml-4 align-middle ${act1Status === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
-                                    <SelectButton label="V" selected={act1_q1 === 'V'} onClick={() => { setAct1Status(null); setAct1_q1('V'); }} />
-                                    <SelectButton label="F" selected={act1_q1 === 'F'} onClick={() => { setAct1Status(null); setAct1_q1('F'); }} />
+                                    <SelectButton label="V" selected={act1Status === 'correct' ? true : act1_q1 === 'V'} onClick={() => { setAct1Status(null); setAct1_q1('V'); }} />
+                                    <SelectButton label="F" selected={act1Status === 'correct' ? false : act1_q1 === 'F'} onClick={() => { setAct1Status(null); setAct1_q1('F'); }} />
                                 </span>
                             </div>
                         </div>
@@ -165,8 +191,8 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                                 En una competencia participan 88 atletas. Se reparten en 10 carriles de la pista. <br />
                                 Las 8 atletas corren en cada carril.
                                 <span className={`inline-flex gap-2 ml-4 align-middle ${act1Status === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
-                                    <SelectButton label="V" selected={act1_q2 === 'V'} onClick={() => { setAct1Status(null); setAct1_q2('V'); }} />
-                                    <SelectButton label="F" selected={act1_q2 === 'F'} onClick={() => { setAct1Status(null); setAct1_q2('F'); }} />
+                                    <SelectButton label="V" selected={act1Status === 'correct' ? false : act1_q2 === 'V'} onClick={() => { setAct1Status(null); setAct1_q2('V'); }} />
+                                    <SelectButton label="F" selected={act1Status === 'correct' ? true : act1_q2 === 'F'} onClick={() => { setAct1Status(null); setAct1_q2('F'); }} />
                                 </span>
                             </div>
                         </div>
@@ -202,7 +228,6 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                             <strong>¿Cuántos nadadores hay en cada grupo?</strong>
                         </p>
 
-                        {/* Horizontal Division */}
                         <div className={`flex items-center gap-2 text-2xl font-bold justify-center md:justify-center text-gray-800 dark:text-white ${act4Status === 'correct' ? 'pointer-events-none' : ''}`}>
                             <InputBox value={act4Status === 'correct' ? '36' : act4_h_div[0]} onChange={v => { const n = [...act4_h_div]; n[0] = v; setAct4_h_div(n); setAct4Status(null); }} />
                             <span>÷</span>
@@ -214,7 +239,6 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                         <hr className="border-gray-200 dark:border-gray-700" />
 
                         <div className={`flex flex-col md:flex-row gap-12 items-start ${act4Status === 'correct' ? 'pointer-events-none' : ''}`}>
-                            {/* Vertical Algorithm */}
                             <div className="flex gap-4 font-mono text-xl items-start">
                                 <div className="flex flex-col items-end gap-1">
                                     <InputBox value={act4Status === 'correct' ? '36' : act4_v_dividend} onChange={v => { setAct4_v_dividend(v); setAct4Status(null); }} className="w-16 h-16 text-3xl" />
@@ -237,7 +261,6 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
 
                             <div className="hidden md:block w-px bg-gray-300 dark:bg-gray-600 self-stretch"></div>
 
-                            {/* Multiplication Checks */}
                             <div className="flex flex-col gap-4 text-gray-800 dark:text-white">
                                 {act4_m_rows.map((row, i) => (
                                     <div key={i} className="flex items-center gap-2">
@@ -320,10 +343,6 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
 }
 
 // --- Helpers ---
-
-
-
-
 const SelectButton = ({ label, selected, onClick }: { label: string, selected: boolean, onClick: () => void }) => (
     <button
         onClick={onClick}
@@ -343,4 +362,3 @@ const InputBox = ({ value, onChange, className = "w-16 h-12", maxLength }: { val
         maxLength={maxLength}
     />
 );
-

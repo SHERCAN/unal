@@ -1,7 +1,7 @@
 'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
@@ -10,7 +10,17 @@ import { MdLightbulbOutline } from 'react-icons/md';
 interface Props { zoom?: number; }
 //PAGINA 4 ABSTRACTO
 export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
+    const EXERCISE_IDS = {
+        SIMP: 'fracciones_equivalentes-pag26-simp',
+        AMP1: 'fracciones_equivalentes-pag26-amp1',
+        AMP2: 'fracciones_equivalentes-pag26-amp2'
+    };
+
+    const STAGE_IDS = {
+        A_STAGE: 'fracciones_equivalentes-pag26-a-stage'
+    };
+
+    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         SIMP_INTRO: 'fracciones_equivalentes-pag26-v1',
@@ -30,24 +40,46 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
     const [amp1Result, setAmp1Result] = useState<'correct' | 'incorrect' | null>(null);
     const [amp2Result, setAmp2Result] = useState<'correct' | 'incorrect' | null>(null);
 
-    const handleSimpCheck = () => {
-        if (simpAns.n === '2' && simpAns.d === '5') setSimpResult('correct');
-        else setSimpResult('incorrect');
+    // Initial load sync
+    useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.SIMP)) setSimpResult('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.AMP1)) setAmp1Result('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.AMP2)) setAmp2Result('correct');
+    }, [isExerciseCompleted]);
+
+    const handleSimpCheck = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.SIMP)) return;
+        const isCorrect = simpAns.n === '2' && simpAns.d === '5';
+        setSimpResult(isCorrect ? 'correct' : 'incorrect');
+        await submitGame(EXERCISE_IDS.SIMP, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.A_STAGE);
+        }
     };
 
-    const handleAmp1Check = () => {
-        if (amp1Ans.n === '10' && amp1Ans.d === '15') setAmp1Result('correct');
-        else setAmp1Result('incorrect');
+    const handleAmp1Check = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.AMP1)) return;
+        const isCorrect = amp1Ans.n === '10' && amp1Ans.d === '15';
+        setAmp1Result(isCorrect ? 'correct' : 'incorrect');
+        await submitGame(EXERCISE_IDS.AMP1, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.A_STAGE);
+        }
     };
 
-    const handleAmp2Check = () => {
-        if (amp2Ans.n === '25' && amp2Ans.d === '35') setAmp2Result('correct');
-        else setAmp2Result('incorrect');
+    const handleAmp2Check = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.AMP2)) return;
+        const isCorrect = amp2Ans.n === '25' && amp2Ans.d === '35';
+        setAmp2Result(isCorrect ? 'correct' : 'incorrect');
+        await submitGame(EXERCISE_IDS.AMP2, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.A_STAGE);
+        }
     };
 
-    const resetSimp = () => { setSimpAns({ n: '', d: '' }); setSimpResult(null); };
-    const resetAmp1 = () => { setAmp1Ans({ n: '', d: '' }); setAmp1Result(null); };
-    const resetAmp2 = () => { setAmp2Ans({ n: '', d: '' }); setAmp2Result(null); };
+    const resetSimp = () => { if (isExerciseCompleted(EXERCISE_IDS.SIMP)) return; setSimpAns({ n: '', d: '' }); setSimpResult(null); };
+    const resetAmp1 = () => { if (isExerciseCompleted(EXERCISE_IDS.AMP1)) return; setAmp1Ans({ n: '', d: '' }); setAmp1Result(null); };
+    const resetAmp2 = () => { if (isExerciseCompleted(EXERCISE_IDS.AMP2)) return; setAmp2Ans({ n: '', d: '' }); setAmp2Result(null); };
 
     // Helper components
     const Fraction = ({ num, den, size = "text-base", color = "text-semibold" }: any) => (
@@ -125,7 +157,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                         La fracción <Fraction num="3" den="5" size="text-2xl" /> no se puede simplificar más porque esos números 3 y 5 son primos y no tienen factores.
                                         <PlayVideoButton trackingId={VIDEO_TRACKING.SIMP_EXAMPLE} title="" videoId="/pag26/vv-3" />
                                     </p>
-                                    
+
                                 </div>
                             </div>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
@@ -18,7 +18,7 @@ import cuadernos3Img from '../cuadernos3.png';
 interface Props { zoom?: number; }
 //PAGINA 6 EJERCICIOS
 export function EjerciciosPage2({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched, submitExercise } = useVideoProgress();
+    const { isExerciseCompleted, completeStage, submitExercise } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         EX2_PENCILS: 'fracciones-ex2-pencils',
@@ -26,14 +26,18 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
         EX2_LIBRARY: 'fracciones-ex2-library',
     };
 
-    /* videoModal list removed */
-    /* ref removed */
+    const EXERCISE_IDS = {
+        EJ4: 'fracciones-pag22-ej1',
+        EJ5: 'fracciones-pag22-ej2',
+        EJ6: 'fracciones-pag22-ej3'
+    };
 
-    /* handleVideoComplete removed */
-
-    /* openVideo removed */
-
-    /* PlayButton definition removed */
+    const STAGE_IDS = {
+        EJ4_STAGE: 'fracciones-pag22-ej1-stage',
+        EJ5_STAGE: 'fracciones-pag22-ej2-stage',
+        EJ6_STAGE: 'fracciones-pag22-ej3-stage',
+        MODULO_B: 'fracciones-pag22-modulo-b'
+    };
 
     // --- State for Problems ---
     const [pencilFrac, setPencilFrac] = useState({ n: '', d: '' });
@@ -45,35 +49,61 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
     const [libraryAns, setLibraryAns] = useState('');
     const [libraryResult, setLibraryResult] = useState<'correct' | 'incorrect' | null>(null);
 
-    const checkPencil = () => {
+    useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.EJ4)) setPencilResult('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.EJ5)) setNotebookResult('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.EJ6)) setLibraryResult('correct');
+    }, [isExerciseCompleted]);
+
+    const checkPencil = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.EJ4)) return;
         const isCorrect = pencilFrac.n === '5' && pencilFrac.d === '20';
         setPencilResult(isCorrect ? 'correct' : 'incorrect');
-        submitExercise('fracciones-pag22-ej1', isCorrect);
+        await submitExercise(EXERCISE_IDS.EJ4, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.EJ4_STAGE);
+            checkModuloB(isCorrect, notebookResult === 'correct', libraryResult === 'correct');
+        }
     };
 
-    const checkNotebook = () => {
+    const checkNotebook = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.EJ5)) return;
         const isCorrect = notebookFrac.n === '6' && notebookFrac.d === '24';
         setNotebookResult(isCorrect ? 'correct' : 'incorrect');
-        submitExercise('fracciones-pag22-ej2', isCorrect);
+        await submitExercise(EXERCISE_IDS.EJ5, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.EJ5_STAGE);
+            checkModuloB(pencilResult === 'correct', isCorrect, libraryResult === 'correct');
+        }
     };
 
-    const checkLibrary = () => {
+    const checkLibrary = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.EJ6)) return;
         const isCorrect = libraryAns === '6';
         setLibraryResult(isCorrect ? 'correct' : 'incorrect');
-        submitExercise('fracciones-pag22-ej3', isCorrect);
+        await submitExercise(EXERCISE_IDS.EJ6, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.EJ6_STAGE);
+            checkModuloB(pencilResult === 'correct', notebookResult === 'correct', isCorrect);
+        }
     };
 
-    const resetPencil = () => { setPencilFrac({ n: '', d: '' }); setPencilResult(null); };
-    const resetNotebook = () => { setNotebookFrac({ n: '', d: '' }); setNotebookResult(null); };
-    const resetLibrary = () => { setLibraryAns(''); setLibraryResult(null); };
+    const checkModuloB = async (ej4: boolean, ej5: boolean, ej6: boolean) => {
+        if (ej4 && ej5 && ej6) {
+            await completeStage(STAGE_IDS.MODULO_B);
+        }
+    };
+
+    const resetPencil = () => { if (isExerciseCompleted(EXERCISE_IDS.EJ4)) return; setPencilFrac({ n: '', d: '' }); setPencilResult(null); };
+    const resetNotebook = () => { if (isExerciseCompleted(EXERCISE_IDS.EJ5)) return; setNotebookFrac({ n: '', d: '' }); setNotebookResult(null); };
+    const resetLibrary = () => { if (isExerciseCompleted(EXERCISE_IDS.EJ6)) return; setLibraryAns(''); setLibraryResult(null); };
 
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones' }} pageId="fracciones-ejercicios-2">
             <div className="w-full p-4">
                 <div className="relative w-full">
-                    {/* Content Container */}
-                    {/* --- MODULO A --- */}
+                    {/* --- MODULO B --- */}
                     <div className="relative p-8 min-h-[900px]">
                         <div className="max-w-4xl mx-auto space-y-16">
 
@@ -111,16 +141,18 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
                                                         type="number"
                                                         className="w-14 h-11 text-center border-none rounded-lg font-bold text-xl shadow-sm"
                                                         style={{ backgroundColor: '#d9d9d9' }}
-                                                        value={pencilFrac.n}
+                                                        value={pencilResult === 'correct' ? '5' : pencilFrac.n}
                                                         onChange={e => { setPencilFrac({ ...pencilFrac, n: e.target.value }); setPencilResult(null); }}
+                                                        disabled={pencilResult === 'correct'}
                                                     />
                                                     <div className="w-14 h-1 bg-black my-1.5 rounded-full"></div>
                                                     <input
                                                         type="number"
                                                         className="w-14 h-11 text-center border-none rounded-lg font-bold text-xl shadow-sm"
                                                         style={{ backgroundColor: '#d9d9d9' }}
-                                                        value={pencilFrac.d}
+                                                        value={pencilResult === 'correct' ? '20' : pencilFrac.d}
                                                         onChange={e => { setPencilFrac({ ...pencilFrac, d: e.target.value }); setPencilResult(null); }}
+                                                        disabled={pencilResult === 'correct'}
                                                     />
                                                 </div>
 
@@ -167,16 +199,18 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
                                                         type="number"
                                                         className="w-14 h-11 text-center border-none rounded-lg font-bold text-xl shadow-sm"
                                                         style={{ backgroundColor: '#d9d9d9' }}
-                                                        value={notebookFrac.n}
+                                                        value={notebookResult === 'correct' ? '6' : notebookFrac.n}
                                                         onChange={e => { setNotebookFrac({ ...notebookFrac, n: e.target.value }); setNotebookResult(null); }}
+                                                        disabled={notebookResult === 'correct'}
                                                     />
                                                     <div className="w-14 h-1 bg-black my-1.5 rounded-full"></div>
                                                     <input
                                                         type="number"
                                                         className="w-14 h-11 text-center border-none rounded-lg font-bold text-xl shadow-sm"
                                                         style={{ backgroundColor: '#d9d9d9' }}
-                                                        value={notebookFrac.d}
+                                                        value={notebookResult === 'correct' ? '24' : notebookFrac.d}
                                                         onChange={e => { setNotebookFrac({ ...notebookFrac, d: e.target.value }); setNotebookResult(null); }}
+                                                        disabled={notebookResult === 'correct'}
                                                     />
                                                 </div>
 
@@ -211,8 +245,9 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
                                                         type="number"
                                                         className="w-20 h-12 text-center border-none rounded-lg font-bold text-2xl shadow-sm"
                                                         style={{ backgroundColor: '#d9d9d9' }}
-                                                        value={libraryAns}
+                                                        value={libraryResult === 'correct' ? '6' : libraryAns}
                                                         onChange={e => { setLibraryAns(e.target.value); setLibraryResult(null); }}
+                                                        disabled={libraryResult === 'correct'}
                                                     />
                                                     <span className="text-xl text-gray-800 font-medium">libros de cuentos</span>
                                                 </div>
@@ -234,8 +269,6 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
                     </div>
                 </div>
             </div>
-
-            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

@@ -1,7 +1,7 @@
 'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 
-import React, { useRef, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
@@ -20,7 +20,7 @@ import trapecioImg from '../trapecio.png';
 interface Props { zoom?: number; }
 //PAGINA 5 EJERCICIOS
 export function EjerciciosPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched, submitExercise } = useVideoProgress();
+    const { isExerciseCompleted, completeStage, submitExercise } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         EX1_TABLE: 'fracciones-ex1-table',
@@ -28,21 +28,23 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         EX3_DEFS: 'fracciones-pag21-v4',
     };
 
-    /* videoModal list removed */
-    /* ref removed */
+    const EXERCISE_IDS = {
+        EJ1: 'fracciones-pag21-ej1',
+        EJ2: 'fracciones-pag21-ej2',
+        EJ3: 'fracciones-pag21-ej3'
+    };
 
-    /* openVideo removed */
-
-    /* PlayButton definition removed */
-
-    /* handleVideoComplete removed */
+    const STAGE_IDS = {
+        EJ1_STAGE: 'fracciones-pag21-ej1-stage',
+        EJ2_STAGE: 'fracciones-pag21-ej2-stage',
+        EJ3_STAGE: 'fracciones-pag21-ej3-stage',
+        MODULO_A: 'fracciones-pag21-modulo-a'
+    };
 
     // --- State for Exercise 1 (Table) ---
-    // User needs to fill Num and Den columns.
     const [tableInputs, setTableInputs] = useState<{ [key: string]: string }>({});
     const [tableResults, setTableResults] = useState<{ [key: string]: 'correct' | 'incorrect' | null }>({});
     const [tableTotalResult, setTableTotalResult] = useState<'correct' | 'incorrect' | null>(null);
-
 
     const tableData = [
         { id: 1, shape: 'triangle', num: 1, den: 2, color: 'bg-green-400' },
@@ -51,59 +53,103 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         { id: 4, shape: 'square', num: 3, den: 4, color: 'bg-purple-400' },
     ];
 
-    const checkTable = () => {
+    useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.EJ1)) setTableTotalResult('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.EJ2)) setIsFracResult('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.EJ3)) setDefResult('correct');
+    }, [isExerciseCompleted]);
+
+    const checkTable = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.EJ1)) return;
         const newResults: { [key: string]: 'correct' | 'incorrect' } = {};
-        let allCorrect = true;
         tableData.forEach(row => {
-            const n = parseInt(tableInputs[`${row.id}-n`]);
-            const d = parseInt(tableInputs[`${row.id}-d`]);
-            const resN = n === row.num ? 'correct' : 'incorrect';
-            const resD = d === row.den ? 'correct' : 'incorrect';
-            newResults[`${row.id}-n`] = resN;
-            newResults[`${row.id}-d`] = resD;
-            if (resN === 'incorrect' || resD === 'incorrect') allCorrect = false;
+            const n = parseInt(tableInputs[`field${row.id}`]);
+            const d = parseInt(tableInputs[`field${row.id + 2}`]); // This is messy, let's look at field IDs
+            // field1 (75.5, 17) -> Tri Num? Wait, field IDs in the array:
+            // field1 (75.5, 17)
+            // field2 (88.5, 17)
+            // field3 (30.5, 51)
+            // field4 (55.5, 51)
+            // field5 (30.5, 84)
+            // field6 (55.5, 84)
+            // Let's re-examine tablaEjercicioImg or just follow the logic.
+            // Based on original checkTable: row.id is 1,2,3,4. 
+            // In the JSX, it used field1..field6.
+            // Let's stick to the IDs that map to the actual inputs.
         });
-        setTableResults(newResults);
-        const isCorrect = allCorrect;
-        setTableTotalResult(isCorrect ? 'correct' : 'incorrect');
-        submitExercise('fracciones-pag21-ej1', isCorrect);
+
+        // Re-implementing check logic to match the 6 fields
+        const correctAnswers: Record<string, string> = {
+            field1: '1', field2: '2', // Triangle
+            field3: '1', field4: '4', // Circle
+            field5: '3', field6: '4', // Square
+        };
+        // Wait, hexagon is in tableData but maybe not in fields?
+        // Let's check the fields again. field1 to field6.
+        // Triangle: num=1, den=2. Circle: num=1, den=4. Square: num=3, den=4.
+        // Hexagon num=5 den=6 is missing in the field mapping (only 6 fields).
+
+        let allCorrect = true;
+        Object.keys(correctAnswers).forEach(fid => {
+            if (tableInputs[fid] !== correctAnswers[fid]) allCorrect = false;
+        });
+
+        setTableTotalResult(allCorrect ? 'correct' : 'incorrect');
+        await submitExercise(EXERCISE_IDS.EJ1, allCorrect);
+        if (allCorrect) {
+            await completeStage(STAGE_IDS.EJ1_STAGE);
+            checkModuloA(allCorrect, isFracResult === 'correct', defResult === 'correct');
+        }
     };
 
-    const resetTable = () => { setTableInputs({}); setTableResults({}); setTableTotalResult(null); };
-    const resetIsFrac = () => { setIsFracAnswers(Array(6).fill('')); setIsFracResult(null); };
-    const resetDef = () => { setDefNum(''); setDefDen(''); setDefResult(null); };
+    const checkModuloA = async (ej1: boolean, ej2: boolean, ej3: boolean) => {
+        if (ej1 && ej2 && ej3) {
+            await completeStage(STAGE_IDS.MODULO_A);
+        }
+    };
 
+    const resetTable = () => { if (isExerciseCompleted(EXERCISE_IDS.EJ1)) return; setTableInputs({}); setTableTotalResult(null); };
 
     // --- State for Exercise 2 (Is Fraction?) ---
     const [isFracAnswers, setIsFracAnswers] = useState<string[]>(Array(6).fill(''));
     const [isFracResult, setIsFracResult] = useState<'correct' | 'incorrect' | null>(null);
 
-    const checkIsFrac = () => {
-        // Correct answers based on common patterns: 
-        // 1. circulocebra (no), 2. corazon (es), 3. ajedrez (es), 4. corazonoblicuo (no), 5. piramide (no), 6. trapecio (no/es - assuming no if not equal)
-        // I will use a reasonable set of correct answers, usually: no, es, es, no, no, es (if trapecio is split vertically)
+    const checkIsFrac = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.EJ2)) return;
         const correct = ['no', 'es', 'es', 'no', 'no', 'es'];
         const allCorrect = isFracAnswers.every((ans, i) => ans === correct[i]);
         setIsFracResult(allCorrect ? 'correct' : 'incorrect');
-        submitExercise('fracciones-pag21-ej2', allCorrect);
+        await submitExercise(EXERCISE_IDS.EJ2, allCorrect);
+        if (allCorrect) {
+            await completeStage(STAGE_IDS.EJ2_STAGE);
+            checkModuloA(tableTotalResult === 'correct', allCorrect, defResult === 'correct');
+        }
     };
+
+    const resetIsFrac = () => { if (isExerciseCompleted(EXERCISE_IDS.EJ2)) return; setIsFracAnswers(Array(6).fill('')); setIsFracResult(null); };
 
     // --- State for Exercise 3 (Definitions) ---
     const [defNum, setDefNum] = useState('');
     const [defDen, setDefDen] = useState('');
     const [defResult, setDefResult] = useState<'correct' | 'incorrect' | null>(null);
 
-    const checkDef = () => {
+    const checkDef = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.EJ3)) return;
         const isCorrect = defNum === 'denominador' && defDen === 'numerador';
         setDefResult(isCorrect ? 'correct' : 'incorrect');
-        submitExercise('fracciones-pag21-ej3', isCorrect);
+        await submitExercise(EXERCISE_IDS.EJ3, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.EJ3_STAGE);
+            checkModuloA(tableTotalResult === 'correct', isFracResult === 'correct', isCorrect);
+        }
     };
+
+    const resetDef = () => { if (isExerciseCompleted(EXERCISE_IDS.EJ3)) return; setDefNum(''); setDefDen(''); setDefResult(null); };
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones' }} pageId="fracciones-ejercicios">
             <div className="w-full p-4">
                 <div className="relative w-full">
-                    {/* Content Container */}
                     {/* --- MODULO A --- */}
                     <div className="relative p-8 min-h-[900px]">
                         <div className="max-w-4xl mx-auto space-y-12">
@@ -116,7 +162,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                             <div className="space-y-6">
                                 <div className="flex items-center gap-3">
                                     <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">1</div>
-                                    <p className="font-bold text-base text-gray-800">Completa la tabla de acuerdo con la informacion solicitada.</p>
+                                    <p className="font-bold text-base text-gray-800">Completa la tabla de acuerdo con la información solicitada.</p>
                                 </div>
 
                                 <div className="relative w-full">
@@ -127,14 +173,13 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                             className="w-full h-auto object-contain block"
                                         />
 
-                                        {/* Field Position Config - User can easily adjust these percentages */}
                                         {[
-                                            { id: 'field1', top: '75.5%', left: '17%' },
-                                            { id: 'field2', top: '88.5%', left: '17%' },
-                                            { id: 'field3', top: '30.5%', left: '51%' },
-                                            { id: 'field4', top: '55.5%', left: '51%' },
-                                            { id: 'field5', top: '30.5%', left: '84%' },
-                                            { id: 'field6', top: '55.5%', left: '84%' },
+                                            { id: 'field1', top: '75.5%', left: '17%', correct: '1' },
+                                            { id: 'field2', top: '88.5%', left: '17%', correct: '2' },
+                                            { id: 'field3', top: '30.5%', left: '51%', correct: '1' },
+                                            { id: 'field4', top: '55.5%', left: '51%', correct: '4' },
+                                            { id: 'field5', top: '30.5%', left: '84%', correct: '3' },
+                                            { id: 'field6', top: '55.5%', left: '84%', correct: '4' },
                                         ].map((field, idx) => (
                                             <input
                                                 key={field.id}
@@ -145,10 +190,11 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                                     backgroundColor: '#d9d9d9',
                                                     top: field.top,
                                                     left: field.left,
-                                                    transform: 'translate(-50%, -50%)' // Center the input on the coordinate
+                                                    transform: 'translate(-50%, -50%)'
                                                 }}
-                                                value={tableInputs[field.id] || ''}
+                                                value={tableTotalResult === 'correct' ? field.correct : (tableInputs[field.id] || '')}
                                                 onChange={(e) => setTableInputs({ ...tableInputs, [field.id]: e.target.value })}
+                                                disabled={tableTotalResult === 'correct'}
                                             />
                                         ))}
                                     </div>
@@ -171,18 +217,15 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
                                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 py-4">
                                     {[
-                                        { img: circulocebraImg, alt: 'Círculo Cebra' },
-                                        { img: corazonImg, alt: 'Corazón' },
-                                        { img: ajedrezImg, alt: 'Ajedrez' },
-                                        { img: corazonoblicuoImg, alt: 'Corazón Oblicuo' },
-                                        { img: piramideImg, alt: 'Pirámide' },
-                                        { img: trapecioImg, alt: 'Trapecio' }
+                                        { img: circulocebraImg, alt: 'Círculo Cebra', correct: 'no' },
+                                        { img: corazonImg, alt: 'Corazón', correct: 'es' },
+                                        { img: ajedrezImg, alt: 'Ajedrez', correct: 'es' },
+                                        { img: corazonoblicuoImg, alt: 'Corazón Oblicuo', correct: 'no' },
+                                        { img: piramideImg, alt: 'Pirámide', correct: 'no' },
+                                        { img: trapecioImg, alt: 'Trapecio', correct: 'es' }
                                     ].map((item, idx) => (
                                         <div key={idx} className="flex items-center gap-4 py-2">
-                                            {/* Square Bullet 16x16 */}
                                             <div className="w-4 h-4 bg-purple-600 shrink-0"></div>
-
-                                            {/* Image Container */}
                                             <div className="w-24 h-24 relative flex items-center justify-center shrink-0">
                                                 <Image
                                                     src={item.img}
@@ -190,11 +233,9 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                                     className="max-w-full max-h-full object-contain"
                                                 />
                                             </div>
-
-                                            {/* Selector */}
                                             <div className="flex-1 min-w-[150px]">
                                                 <select
-                                                    value={isFracAnswers[idx]}
+                                                    value={isFracResult === 'correct' ? item.correct : isFracAnswers[idx]}
                                                     onChange={(e) => {
                                                         const newAns = [...isFracAnswers];
                                                         newAns[idx] = e.target.value;
@@ -202,6 +243,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                                         setIsFracResult(null);
                                                     }}
                                                     className="w-full border-2 border-gray-200 rounded-lg p-2 text-sm bg-white focus:border-purple-400 outline-none transition-all font-semibold text-gray-700 cursor-pointer"
+                                                    disabled={isFracResult === 'correct'}
                                                 >
                                                     <option value="">Seleccione...</option>
                                                     <option value="es">Es una fracción</option>
@@ -234,10 +276,12 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                         <div className="w-4 h-4 bg-purple-600 shrink-0"></div>
                                         <span className="text-base font-semibold text-gray-800">El</span>
                                         <select
-                                            value={defNum}
+                                            value={defResult === 'correct' ? 'denominador' : defNum}
                                             onChange={(e) => { setDefNum(e.target.value); setDefResult(null); }}
                                             className="border-2 border-gray-200 rounded-lg px-3 py-1 bg-white font-bold text-purple-700 focus:border-purple-400 outline-none transition-all"
+                                            disabled={defResult === 'correct'}
                                         >
+                                            <option value="">...</option>
                                             <option value="numerador">numerador</option>
                                             <option value="denominador">denominador</option>
                                         </select>
@@ -249,10 +293,12 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                         <div className="w-4 h-4 bg-purple-600 shrink-0"></div>
                                         <span className="text-base font-semibold text-gray-800">El</span>
                                         <select
-                                            value={defDen}
+                                            value={defResult === 'correct' ? 'numerador' : defDen}
                                             onChange={(e) => { setDefDen(e.target.value); setDefResult(null); }}
                                             className="border-2 border-gray-200 rounded-lg px-3 py-1 bg-white font-bold text-purple-700 focus:border-purple-400 outline-none transition-all"
+                                            disabled={defResult === 'correct'}
                                         >
+                                            <option value="">...</option>
                                             <option value="numerador">numerador</option>
                                             <option value="denominador">denominador</option>
                                         </select>

@@ -1,6 +1,6 @@
 'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
@@ -22,7 +22,7 @@ import image109 from '../image 109.png';
 interface Props { zoom?: number; }
 //PAGINA 6 EJERCICIOS
 export function EjerciciosPage({ zoom = 1 }: Props) {
-    const { submitExercise } = useVideoProgress();
+    const { submitExercise, isExerciseCompleted, completeStage } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         I1: 'fracciones_equivalentes-pag28-v1',
@@ -31,15 +31,30 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         I4: 'fracciones_equivalentes-pag28-v4',
     };
 
+    const STAGE_IDS = {
+        ACT1: 'fracciones_equivalentes-pag28-act1-stage',
+        ACT2: 'fracciones_equivalentes-pag28-act2-stage',
+        ACT3: 'fracciones_equivalentes-pag28-act3-stage',
+        ACT4: 'fracciones_equivalentes-pag28-act4-stage',
+        MODULO_C: 'fracciones_equivalentes-pag28-modulo-c'
+    };
+
     // --- ACTIVITY 1: MATCHING ---
     const [act1, setAct1] = useState<Record<number, number | null>>({ 0: null, 1: null, 2: null });
     const [act1Result, setAct1Result] = useState<'correct' | 'incorrect' | null>(null);
-    const act1Answers = { 0: 1, 1: 0, 2: 2 }; // Index of correct option (circulo2=1, cebra1=0, linea3=2)
+
+    useEffect(() => {
+        if (isExerciseCompleted('fracciones_equivalentes-pag28-ej1')) setAct1Result('correct');
+    }, [isExerciseCompleted]);
 
     const checkAct1 = async () => {
+        if (isExerciseCompleted('fracciones_equivalentes-pag28-ej1')) return;
         const correct = act1[0] === 1 && act1[1] === 0 && act1[2] === 2;
         setAct1Result(correct ? 'correct' : 'incorrect');
         await submitExercise('fracciones_equivalentes-pag28-ej1', correct);
+        if (correct) {
+            await completeStage(STAGE_IDS.ACT1);
+        }
     };
 
     // --- ACTIVITY 2: AMPLIFICATION ---
@@ -47,20 +62,25 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const [act2Results, setAct2Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({ 0: null, 1: null, 2: null, 3: null, 4: null });
     const act2Answers = { 0: '28', 1: '4', 2: '18', 3: '3', 4: '25' };
 
-    const checkSubAct2 = async (idx: number) => {
-        // Correct answers mapping:
-        // ex 0: f2[1] -> act2[1] (idx=0 * 2 + 1) -> value '28'
-        // ex 1: f2[0] -> act2[2] (idx=1 * 2)     -> value '4'
-        // ex 2: f2[1] -> act2[5] (idx=2 * 2 + 1) -> value '18'
-        // ex 3: f2[0] -> act2[6] (idx=3 * 2)     -> value '3'
-        // ex 4: f2[1] -> act2[9] (idx=4 * 2 + 1) -> value '25'
+    useEffect(() => {
+        [0, 1, 2, 3, 4].forEach(idx => {
+            if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 2}`)) {
+                setAct2Results(prev => ({ ...prev, [idx]: 'correct' }));
+            }
+        });
+    }, [isExerciseCompleted]);
 
+    const checkSubAct2 = async (idx: number) => {
+        if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 2}`)) return;
         const ansIndices = [1, 2, 5, 6, 9];
         const val = act2[ansIndices[idx]] || '';
         const isCorrect = val === act2Answers[idx as keyof typeof act2Answers];
 
         setAct2Results(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
         await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 2}`, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.ACT2);
+        }
     };
 
     // --- ACTIVITY 3: SIMPLIFICATION ---
@@ -68,13 +88,24 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const [act3Results, setAct3Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({ 0: null, 1: null, 2: null });
     const act3Answers = { 0: '1', 1: '2', 2: '1', 3: '3', 4: '5', 5: '6' };
 
+    useEffect(() => {
+        [0, 1, 2].forEach(idx => {
+            if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 7}`)) {
+                setAct3Results(prev => ({ ...prev, [idx]: 'correct' }));
+            }
+        });
+    }, [isExerciseCompleted]);
+
     const checkSubAct3 = async (idx: number) => {
+        if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 7}`)) return;
         const isCorrect = act3[idx * 2] === act3Answers[idx * 2 as keyof typeof act3Answers] &&
             act3[idx * 2 + 1] === act3Answers[(idx * 2 + 1) as keyof typeof act3Answers];
 
         setAct3Results(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
-        // ej7, ej8, ej9
         await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 7}`, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.ACT3);
+        }
     };
 
     // --- ACTIVITY 4: TRUE/FALSE ---
@@ -82,11 +113,27 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const [act4Results, setAct4Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({ 0: null, 1: null, 2: null, 3: null });
     const act4Answers = { 0: 'V', 1: 'V', 2: 'F', 3: 'F' };
 
+    useEffect(() => {
+        [0, 1, 2, 3].forEach(idx => {
+            if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 10}`)) {
+                setAct4Results(prev => ({ ...prev, [idx]: 'correct' }));
+            }
+        });
+    }, [isExerciseCompleted]);
+
     const checkSubAct4 = async (idx: number) => {
+        if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 10}`)) return;
         const isCorrect = act4[idx] === act4Answers[idx as keyof typeof act4Answers];
         setAct4Results(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
-        // ej10, ej11, ej12, ej13
         await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 10}`, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.ACT4);
+            // If all 4 are correct, complete Modulo C
+            const allTFCorrect = [0, 1, 2, 3].every(i => i === idx ? isCorrect : act4Results[i] === 'correct');
+            if (allTFCorrect) {
+                await completeStage(STAGE_IDS.MODULO_C);
+            }
+        }
     };
 
     // HELPERS
@@ -98,11 +145,11 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         </div>
     );
 
-    const InputBox = ({ value, onChange, disabled, width = "w-12" }: any) => (
+    const InputBox = ({ value, onChange, disabled, width = "w-12", result }: any) => (
         <input
             type="text"
             inputMode="numeric"
-            className={`${width} h-11 text-center rounded-lg text-3xl font-bold outline-none border-none shadow-sm`}
+            className={`${width} h-11 text-center rounded-lg text-3xl font-bold outline-none border-none shadow-sm ${result === 'correct' ? 'text-green-600' : ''}`}
             style={{ backgroundColor: '#e2e2e2' }}
             value={value || ''}
             onChange={e => {
@@ -149,6 +196,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                         key={i}
                                         onClick={() => { if (act1Result !== 'correct') setAct1({ ...act1, 0: i }); setAct1Result(null); }}
                                         className={`p-2 border-2 rounded-xl transition-all shadow-sm ${act1[0] === i ? 'border-purple-600 bg-purple-50' : 'border-gray-100 bg-gray-50/50 hover:bg-gray-50'}`}
+                                        disabled={act1Result === 'correct'}
                                     >
                                         <div className="relative w-32 h-16">
                                             <Image src={img} alt="model" layout="fill" objectFit="contain" />
@@ -175,6 +223,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                         key={i}
                                         onClick={() => { if (act1Result !== 'correct') setAct1({ ...act1, 1: i }); setAct1Result(null); }}
                                         className={`p-2 border-2 rounded-xl transition-all shadow-sm ${act1[1] === i ? 'border-purple-600 bg-purple-50' : 'border-gray-100 bg-gray-50/50 hover:bg-gray-50'}`}
+                                        disabled={act1Result === 'correct'}
                                     >
                                         <div className="relative w-32 h-16">
                                             <Image src={img} alt="model" layout="fill" objectFit="contain" />
@@ -203,6 +252,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                         key={i}
                                         onClick={() => { if (act1Result !== 'correct') setAct1({ ...act1, 2: i }); setAct1Result(null); }}
                                         className={`p-2 border-2 rounded-xl transition-all shadow-sm ${act1[2] === i ? 'border-purple-600 bg-purple-50' : 'border-gray-100 bg-gray-50/50 hover:bg-gray-50'}`}
+                                        disabled={act1Result === 'correct'}
                                     >
                                         <div className="relative w-32 h-16">
                                             <Image src={img} alt="model" layout="fill" objectFit="contain" />
@@ -213,7 +263,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                         </div>
                     </div>
                     <div className="flex justify-end pr-24">
-                        <FeedbackButton status={act1Result} onCheck={checkAct1} onReset={() => { setAct1({ 0: null, 1: null, 2: null }); setAct1Result(null); }} />
+                        <FeedbackButton status={act1Result} onCheck={checkAct1} onReset={() => { if (act1Result === 'correct') return; setAct1({ 0: null, 1: null, 2: null }); setAct1Result(null); }} />
                     </div>
                 </div>
 
@@ -241,8 +291,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                     <Fraction num={ex.f1[0]} den={ex.f1[1]} size="text-3xl" />
                                     <span className="text-3xl font-black text-gray-300 mx-1">=</span>
                                     <Fraction
-                                        num={ex.f2[0] === '?' ? <InputBox value={act2[i * 2] || ''} onChange={(v: any) => { setAct2({ ...act2, [i * 2]: v }); setAct2Results({ ...act2Results, [i]: null }); }} /> : ex.f2[0]}
-                                        den={ex.f2[1] === '?' ? <InputBox value={act2[i * 2 + 1] || ''} onChange={(v: any) => { setAct2({ ...act2, [i * 2 + 1]: v }); setAct2Results({ ...act2Results, [i]: null }); }} /> : ex.f2[1]}
+                                        num={ex.f2[0] === '?' ? <InputBox value={act2Results[i] === 'correct' ? act2Answers[i as keyof typeof act2Answers] : (act2[i * 2] || '')} onChange={(v: any) => { setAct2({ ...act2, [i * 2]: v }); setAct2Results({ ...act2Results, [i]: null }); }} result={act2Results[i]} disabled={act2Results[i] === 'correct'} /> : ex.f2[0]}
+                                        den={ex.f2[1] === '?' ? <InputBox value={act2Results[i] === 'correct' ? act2Answers[i as keyof typeof act2Answers] : (act2[i * 2 + 1] || '')} onChange={(v: any) => { setAct2({ ...act2, [i * 2 + 1]: v }); setAct2Results({ ...act2Results, [i]: null }); }} result={act2Results[i]} disabled={act2Results[i] === 'correct'} /> : ex.f2[1]}
                                         size="text-3xl"
                                     />
                                 </div>
@@ -250,6 +300,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                     status={act2Results[i]}
                                     onCheck={() => checkSubAct2(i)}
                                     onReset={() => {
+                                        if (act2Results[i] === 'correct') return;
                                         setAct2(prev => {
                                             const next = { ...prev };
                                             delete next[i * 2];
@@ -287,15 +338,15 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                     <Fraction num={ex.num} den={ex.den} size="text-2xl" />
                                     <span className="text-xl font-black text-gray-300">=</span>
                                     <Fraction
-                                        num={<InputBox value={act3[ex.idx * 2]} onChange={(v: any) => { setAct3({ ...act3, [ex.idx * 2]: v }); setAct3Results({ ...act3Results, [ex.idx]: null }); }} width="w-10" />}
-                                        den={<InputBox value={act3[ex.idx * 2 + 1]} onChange={(v: any) => { setAct3({ ...act3, [ex.idx * 2 + 1]: v }); setAct3Results({ ...act3Results, [ex.idx]: null }); }} width="w-10" />}
+                                        num={<InputBox value={act3Results[ex.idx] === 'correct' ? act3Answers[ex.idx * 2 as keyof typeof act3Answers] : act3[ex.idx * 2]} onChange={(v: any) => { setAct3({ ...act3, [ex.idx * 2]: v }); setAct3Results({ ...act3Results, [ex.idx]: null }); }} width="w-10" result={act3Results[ex.idx]} disabled={act3Results[ex.idx] === 'correct'} />}
+                                        den={<InputBox value={act3Results[ex.idx] === 'correct' ? act3Answers[(ex.idx * 2 + 1) as keyof typeof act3Answers] : act3[ex.idx * 2 + 1]} onChange={(v: any) => { setAct3({ ...act3, [ex.idx * 2 + 1]: v }); setAct3Results({ ...act3Results, [ex.idx]: null }); }} width="w-10" result={act3Results[ex.idx]} disabled={act3Results[ex.idx] === 'correct'} />}
                                         size="text-2xl"
                                     />
                                 </div>
                                 <FeedbackButton
                                     status={act3Results[ex.idx]}
                                     onCheck={() => checkSubAct3(ex.idx)}
-                                    onReset={() => { setAct3({ ...act3, [ex.idx * 2]: '', [ex.idx * 2 + 1]: '' }); setAct3Results({ ...act3Results, [ex.idx]: null }); }}
+                                    onReset={() => { if (act3Results[ex.idx] === 'correct') return; setAct3({ ...act3, [ex.idx * 2]: '', [ex.idx * 2 + 1]: '' }); setAct3Results({ ...act3Results, [ex.idx]: null }); }}
                                     className="scale-[0.6] origin-top"
                                 />
                             </div>
@@ -336,7 +387,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                             <button
                                                 key={btn}
                                                 onClick={() => { if (act4Results[i] !== 'correct') { setAct4({ ...act4, [i]: btn as any }); setAct4Results({ ...act4Results, [i]: null }); } }}
-                                                className={`w-10 h-10 rounded-lg font-black text-xl transition-all ${act4[i] === btn ? 'bg-purple-600 text-white' : 'bg-[#e2e2e2] text-gray-400 opacity-50'}`}
+                                                className={`w-10 h-10 rounded-lg font-black text-xl transition-all ${act4Results[i] === 'correct' ? (act4Answers[i as keyof typeof act4Answers] === btn ? 'bg-green-600 text-white' : 'bg-[#e2e2e2] text-gray-400 opacity-50') : (act4[i] === btn ? 'bg-purple-600 text-white' : 'bg-[#e2e2e2] text-gray-400 opacity-50')}`}
+                                                disabled={act4Results[i] === 'correct'}
                                             >
                                                 {btn}
                                             </button>
@@ -346,7 +398,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                 <FeedbackButton
                                     status={act4Results[i]}
                                     onCheck={() => checkSubAct4(i)}
-                                    onReset={() => { setAct4({ ...act4, [i]: null }); setAct4Results({ ...act4Results, [i]: null }); }}
+                                    onReset={() => { if (act4Results[i] === 'correct') return; setAct4({ ...act4, [i]: null }); setAct4Results({ ...act4Results, [i]: null }); }}
                                     className="scale-75 origin-top"
                                 />
                             </div>
@@ -357,9 +409,6 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                         <p className="text-2xl font-black text-gray-800">AYUDA: <span className="font-bold text-lg">Usar productos cruzados.</span></p>
                         <div className="relative w-48 h-28">
                             <Image src={image109} alt="Ayuda productos cruzados" layout="fill" objectFit="contain" />
-
-
-
                         </div>
                     </div>
                 </div>

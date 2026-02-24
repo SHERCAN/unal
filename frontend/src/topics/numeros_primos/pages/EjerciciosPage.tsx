@@ -6,7 +6,6 @@ import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
 
-
 /**
  * Frame 169 — Números Primos: Ejercicios
  * Drag-to-connect: numbers 2, 6, 11, 14, 15, 17
@@ -17,18 +16,15 @@ interface Props { zoom?: number; }
 
 //PAGINA 3 EJERCICIOS
 export function EjerciciosPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched, submitExercise } = useVideoProgress();
+    const EXERCISE_IDS = {
+        MODULO_A: 'numeros_primos-modulo-a'
+    };
+
+    const MODULO_ID = 'modulo-a-numeros_primos'; // Higher level completion
+
+    const { isVideoWatched, markVideoWatched, submitExercise, completeStage, isExerciseCompleted } = useVideoProgress();
 
     const VIDEO_TRACKING = { INTRO: 'numeros_primos-pag16-v1' };
-
-    /* videoModal list removed */
-    /* ref removed */
-
-    /* handleVideoComplete removed */
-
-    /* openVideo removed */
-
-    /* PlayButton definition removed */
 
     // Numbers from Frame 169
     const allNumbers = [
@@ -44,6 +40,11 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
     const [connections, setConnections] = useState<Record<number, string>>({});
     const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
+
+    // Initial load sync
+    useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.MODULO_A)) setResult('correct');
+    }, [isExerciseCompleted]);
 
     // Dragging state
     const [dragging, setDragging] = useState<number | null>(null); // which number is being dragged from
@@ -67,7 +68,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
     // Mouse down on a left dot → start drag
     const handleDotMouseDown = useCallback((num: number, e: React.MouseEvent) => {
-        if (result === 'correct') return;
+        if (result === 'correct' || isExerciseCompleted(EXERCISE_IDS.MODULO_A)) return;
         e.preventDefault();
         setDragging(num);
         setResult(null);
@@ -75,7 +76,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         // Initialize mouse position to the dot center so line doesn't jump
         const center = getDotCenter(leftDotRefs.current[num]);
         if (center) setMousePos(center);
-    }, [result, getDotCenter]);
+    }, [result, getDotCenter, isExerciseCompleted]);
 
     // Mouse move anywhere in the container
     const handleMouseMove = useCallback((e: React.MouseEvent) => {
@@ -123,14 +124,19 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     }, [dragging]);
 
     const handleCheck = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.MODULO_A)) return;
         const allCorrect = allNumbers.every(n => connections[n.num] === n.type);
         const allAnswered = allNumbers.every(n => connections[n.num]);
         const isCorrect = allCorrect && allAnswered;
         setResult(isCorrect ? 'correct' : 'incorrect');
-        await submitExercise('numeros_primos-pag16-ej1', isCorrect);
+        await submitExercise(EXERCISE_IDS.MODULO_A, isCorrect);
+        if (isCorrect) {
+            await completeStage(MODULO_ID);
+        }
     };
 
     const handleReset = () => {
+        if (isExerciseCompleted(EXERCISE_IDS.MODULO_A)) return;
         setConnections({});
         setResult(null);
         setDragging(null);
@@ -142,11 +148,10 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
             <h2 className="text-2xl font-extrabold text-purple-700 dark:text-purple-400 mb-6 tracking-wide">EJERCICIOS</h2>
 
             {/* Exercise 1 header */}
-            {/* --- MODULO A --- */}
-            <div className="flex items-center gap-2 mb-6">
+            <div className="flex items-center gap-2 mb-6 text-gray-800 dark:text-gray-200">
                 <PlayVideoButton trackingId={VIDEO_TRACKING.INTRO} title="Ejercicios de Números Primos" videoId="/pag16/vv-1" />
                 <span className="bg-purple-600 text-white font-extrabold text-xl px-3 py-1 rounded">1</span>
-                <p className="text-gray-800 font-semibold text-base dark:text-gray-200">
+                <p className="font-semibold text-base">
                     Los números dados relacionan correctamente con primos y compuestos.
                 </p>
             </div>
@@ -169,8 +174,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                             const rightCenter = getDotCenter(rightDotRefs.current[target]);
                             if (!leftCenter || !rightCenter) return null;
 
-                            const isCorrect = result === 'correct' || (result === 'incorrect' && allNumbers.find(n => n.num === numVal)?.type === target);
-                            const color = result === null ? '#7c3aed' : (isCorrect ? '#10b981' : '#ef4444');
+                            const isCorrectEntry = allNumbers.find(n => n.num === numVal)?.type === target;
+                            const color = result === null ? '#7c3aed' : (isCorrectEntry ? '#10b981' : '#ef4444');
 
                             return (
                                 <line
@@ -204,7 +209,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
                     {/* Left Side: Numbers with dots */}
                     {allNumbers.map((item, i) => {
-                        const topPct = 8 + i * 16; // 8%, 24%, 40%, 56%, 72%, 88%
+                        const topPct = 8 + i * 16;
                         const isDraggingThis = dragging === item.num;
 
                         return (
@@ -230,8 +235,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                         );
                     })}
 
-                    {/* Right Side: Categories with dots — positioned between rows 3-4 and 4-5 */}
-                    {/* "primos" at ~40%, "compuestos" at ~56% — aligned with numbers 11 and 14 */}
+                    {/* Right Side: Categories with dots */}
                     <div
                         className="absolute flex items-center gap-2 transform -translate-y-1/2 z-10"
                         style={{ top: '40%', left: '65%' }}
@@ -268,7 +272,6 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                     status={result}
                 />
             </div>
-
 
             {/* VideoModal removed */}
         </BookPageContainer>

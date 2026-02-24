@@ -15,7 +15,16 @@ import image75Img from '../image 75.png';
 interface Props { zoom?: number; }
 //PAGINA 2 PICTORICO
 export function ConceptoProcesualPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched, submitExercise } = useVideoProgress();
+    const EXERCISE_IDS = {
+        LAPS: 'fracciones_equivalentes-pag24-ej1',
+        DESAFIO: 'fracciones_equivalentes-pag24-ej2'
+    };
+
+    const STAGE_IDS = {
+        P_STAGE: 'fracciones_equivalentes-pag24-p-stage'
+    };
+
+    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         BONO_EXPLICADO: 'fracciones_equivalentes-pag1-v1',
@@ -30,16 +39,33 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
     const [desafioAns, setDesafioAns] = useState('');
     const [desafioResult, setDesafioResult] = useState<'correct' | 'incorrect' | null>(null);
 
+    // Initial load sync
+    React.useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.LAPS)) setLapsResult('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.DESAFIO)) setDesafioResult('correct');
+    }, [isExerciseCompleted]);
+
     const handleLapsCheck = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.LAPS)) return;
         const isCorrect = lapsAns === '4';
         setLapsResult(isCorrect ? 'correct' : 'incorrect');
-        await submitExercise('fracciones_equivalentes-pag24-ej1', isCorrect);
+        await submitGame(EXERCISE_IDS.LAPS, isCorrect);
+        // Maybe completeStage when both are done? Or after each.
+        // Usually for P section, we call completeStage after each activity is fine.
+        if (isCorrect) {
+            // CSV only lists complete B, but we track stages internally
+            await completeStage(STAGE_IDS.P_STAGE);
+        }
     };
 
     const handleDesafioCheck = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.DESAFIO)) return;
         const isCorrect = desafioAns === '8';
         setDesafioResult(isCorrect ? 'correct' : 'incorrect');
-        await submitExercise('fracciones_equivalentes-pag24-ej2', isCorrect);
+        await submitGame(EXERCISE_IDS.DESAFIO, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.P_STAGE);
+        }
     };
 
     const resetLaps = () => { setLapsAns(''); setLapsResult(null); };

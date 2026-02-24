@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
@@ -25,19 +25,30 @@ interface Circle {
 }
 
 interface Props { zoom?: number; }
-//PAGINA 1 CONCRETO PICTORICO
+//PAGINA 7 CONCRETO PICTORICO
 export function ConceptoConcretoPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
-
     const VIDEO_TRACKING = {
         C_INTRO: 'division_exacta-pag7-v1',
         P_INTRO: 'division_exacta-pag7-v2',
     };
 
-    /* videoModal list removed */
-    /* ref removed */
+    const EXERCISE_IDS = {
+        C_GAME: 'division_exacta-pag7-c-game',
+        P_GAME: 'division_exacta-pag7-p-game'
+    };
 
-    /* handleVideoComplete removed */
+    const STAGE_IDS = {
+        C_STAGE: 'division_exacta-pag7-c-stage',
+        P_STAGE: 'division_exacta-pag7-p-stage'
+    };
+
+    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted } = useVideoProgress();
+
+    // Initial load sync
+    useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.C_GAME)) setMedalResult('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.P_GAME)) setCircleResult('correct');
+    }, [isExerciseCompleted]);
 
     // ==================== C SECTION: Medals ====================
     const totalMedals = 18;
@@ -51,6 +62,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     const getMedalsInTeam = (teamId: number) => medals.filter(m => m.inTeam === teamId);
 
     const handleMedalDragStart = (e: React.DragEvent, medalId: number) => {
+        if (medalResult === 'correct') return;
         setDraggedMedal(medalId);
         e.dataTransfer.effectAllowed = 'move';
     };
@@ -62,7 +74,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
     const handleMedalDropOnTeam = (e: React.DragEvent, teamId: number) => {
         e.preventDefault();
-        if (draggedMedal === null) return;
+        if (draggedMedal === null || medalResult === 'correct') return;
         setMedals(prev => prev.map(m => (m.id === draggedMedal ? { ...m, inTeam: teamId } : m)));
         setDraggedMedal(null);
         setMedalResult(null);
@@ -70,26 +82,30 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
     const handleMedalDropOnBox = (e: React.DragEvent) => {
         e.preventDefault();
-        if (draggedMedal === null) return;
+        if (draggedMedal === null || medalResult === 'correct') return;
         setMedals(prev => prev.map(m => (m.id === draggedMedal ? { ...m, inTeam: null } : m)));
         setDraggedMedal(null);
         setMedalResult(null);
     };
 
     const handleMedalReset = () => {
+        if (isExerciseCompleted(EXERCISE_IDS.C_GAME)) return;
         setMedals(Array.from({ length: totalMedals }, (_, i) => ({ id: i, inTeam: null })));
         setMedalResult(null);
     };
 
-    const handleMedalListo = () => {
+    const handleMedalListo = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.C_GAME)) return;
         const t1 = getMedalsInTeam(1).length;
         const t2 = getMedalsInTeam(2).length;
         const t3 = getMedalsInTeam(3).length;
         const inBox = getMedalsInBox().length;
-        if (t1 === 6 && t2 === 6 && t3 === 6 && inBox === 0) {
-            setMedalResult('correct');
-        } else {
-            setMedalResult('incorrect');
+        const isCorrect = t1 === 6 && t2 === 6 && t3 === 6 && inBox === 0;
+
+        setMedalResult(isCorrect ? 'correct' : 'incorrect');
+        await submitGame(EXERCISE_IDS.C_GAME, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.C_STAGE);
         }
     };
 
@@ -105,13 +121,14 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     const getCirclesInGroup = (groupId: number) => circles.filter(c => c.inGroup === groupId);
 
     const handleCircleDragStart = (e: React.DragEvent, circleId: number) => {
+        if (circleResult === 'correct') return;
         setDraggedCircle(circleId);
         e.dataTransfer.effectAllowed = 'move';
     };
 
     const handleCircleDropOnGroup = (e: React.DragEvent, groupId: number) => {
         e.preventDefault();
-        if (draggedCircle === null) return;
+        if (draggedCircle === null || circleResult === 'correct') return;
         setCircles(prev => prev.map(c => (c.id === draggedCircle ? { ...c, inGroup: groupId } : c)));
         setDraggedCircle(null);
         setCircleResult(null);
@@ -119,26 +136,30 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
     const handleCircleDropOnPool = (e: React.DragEvent) => {
         e.preventDefault();
-        if (draggedCircle === null) return;
+        if (draggedCircle === null || circleResult === 'correct') return;
         setCircles(prev => prev.map(c => (c.id === draggedCircle ? { ...c, inGroup: null } : c)));
         setDraggedCircle(null);
         setCircleResult(null);
     };
 
     const handleCircleReset = () => {
+        if (isExerciseCompleted(EXERCISE_IDS.P_GAME)) return;
         setCircles(Array.from({ length: totalCircles }, (_, i) => ({ id: i, inGroup: null })));
         setCircleResult(null);
     };
 
-    const handleCircleListo = () => {
+    const handleCircleListo = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.P_GAME)) return;
         const g1 = getCirclesInGroup(1).length;
         const g2 = getCirclesInGroup(2).length;
         const g3 = getCirclesInGroup(3).length;
         const pool = getCirclesInPool().length;
-        if (g1 === 6 && g2 === 6 && g3 === 6 && pool === 0) {
-            setCircleResult('correct');
-        } else {
-            setCircleResult('incorrect');
+        const isCorrect = g1 === 6 && g2 === 6 && g3 === 6 && pool === 0;
+
+        setCircleResult(isCorrect ? 'correct' : 'incorrect');
+        await submitGame(EXERCISE_IDS.P_GAME, isCorrect);
+        if (isCorrect) {
+            await completeStage(STAGE_IDS.P_STAGE);
         }
     };
 
@@ -154,15 +175,10 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                     <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-white dark:bg-gray-800 border-[#80e8bb] dark:border-green-900">
 
                         <div className="mt-4">
-                            {/* Frame 158: two-column layout
-                                LEFT (~45%):  play button (top), coach + medal box (bottom, side by side)
-                                RIGHT (~55%): 3 rows [drop zone | team image], ¿LISTO? at bottom
-                            */}
                             <div style={{ display: 'flex', gap: '16px', minHeight: '480px' }}>
 
                                 {/* ===== LEFT COLUMN ===== */}
                                 <div style={{ width: '45%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                    {/* Play button — top left */}
                                     <div>
                                         <PlayVideoButton
                                             trackingId={VIDEO_TRACKING.C_INTRO}
@@ -171,23 +187,19 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                         />
                                     </div>
 
-                                    {/* Coach + Medal box — bottom left, side by side */}
                                     <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px' }}>
-                                        {/* Coach */}
                                         <img
                                             src="/entrenador.png"
                                             alt="Entrenador"
                                             style={{ width: '160px', height: 'auto' }}
                                             draggable={false}
                                         />
-                                        {/* Medal box with medals inside */}
                                         <div
                                             onDragOver={handleDragOver}
                                             onDrop={handleMedalDropOnBox}
                                             style={{ position: 'relative', width: '160px', flexShrink: 0 }}
                                         >
                                             <img src="/cajamedalla.png" alt="Caja de medallas" style={{ width: '100%', height: 'auto' }} draggable={false} />
-                                            {/* Medals overlaid inside the box */}
                                             <div style={{
                                                 position: 'absolute', inset: 0,
                                                 display: 'flex', flexWrap: 'wrap',
@@ -203,8 +215,8 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                                         alt="Medalla"
                                                         draggable
                                                         onDragStart={(e) => handleMedalDragStart(e, medal.id)}
-                                                        style={{ width: '22px', height: '22px', cursor: 'grab', margin: '-5px' }}
-                                                        className="hover:scale-125 transition-transform select-none"
+                                                        style={{ width: '22px', height: '22px', cursor: medalResult === 'correct' ? 'default' : 'grab', margin: '-5px' }}
+                                                        className={`transition-transform select-none ${medalResult === 'correct' ? '' : 'hover:scale-125'}`}
                                                     />
                                                 ))}
                                             </div>
@@ -215,85 +227,38 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                 {/* ===== RIGHT COLUMN ===== */}
                                 <div style={{ width: '55%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '12px' }}>
 
-                                    {/* Row 1: Drop zone 1 + Team 1 (Atletismo) */}
-                                    {(() => {
-                                        const teamMedals = getMedalsInTeam(1);
+                                    {[1, 2, 3].map(teamId => {
+                                        const teamMedals = getMedalsInTeam(teamId);
+                                        const teamImg = teamId === 1 ? '/medalla1.png' : (teamId === 2 ? '/medalla2.png' : '/medalla3.png');
                                         return (
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                            <div key={teamId} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                                 <div
                                                     onDragOver={handleDragOver}
-                                                    onDrop={(e) => handleMedalDropOnTeam(e, 1)}
+                                                    onDrop={(e) => handleMedalDropOnTeam(e, teamId)}
                                                     style={{
                                                         width: '45%', minHeight: '70px', border: '2px solid', borderRadius: '8px', padding: '6px', display: 'flex', flexWrap: 'wrap', gap: '3px', alignItems: 'center', justifyContent: 'center'
                                                     }}
                                                     className={`transition-colors ${medalResult === 'correct' && teamMedals.length === 6 ? 'border-green-400 bg-green-50 dark:bg-green-900/20' : medalResult === 'incorrect' ? 'border-red-400 bg-red-50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800'}`}
                                                 >
-                                                    {teamMedals.length > 0 ? teamMedals.map(medal => (
-                                                        <img key={medal.id} src="/medalla.png" alt="Medalla" draggable
-                                                            onDragStart={(e) => handleMedalDragStart(e, medal.id)}
-                                                            style={{ width: '24px', height: '24px', cursor: 'grab' }}
-                                                            className="hover:scale-110 transition-transform select-none" />
-                                                    )) : <p className="text-xs text-gray-400 dark:text-gray-500 italic">Arrastra aquí</p>}
+                                                    {teamMedals.length > 0 ? (
+                                                        medalResult === 'correct' ? (
+                                                            Array.from({ length: 6 }).map((_, i) => <img key={i} src="/medalla.png" alt="Medalla" style={{ width: '24px', height: '24px' }} />)
+                                                        ) : (
+                                                            teamMedals.map(medal => (
+                                                                <img key={medal.id} src="/medalla.png" alt="Medalla" draggable
+                                                                    onDragStart={(e) => handleMedalDragStart(e, medal.id)}
+                                                                    style={{ width: '24px', height: '24px', cursor: 'grab' }}
+                                                                    className="hover:scale-110 transition-transform select-none" />
+                                                            ))
+                                                        )
+                                                    ) : <p className="text-xs text-gray-400 dark:text-gray-500 italic">Arrastra aquí</p>}
                                                 </div>
-                                                <img src="/medalla1.png" alt="Atletismo"
+                                                <img src={teamImg} alt={`Team ${teamId}`}
                                                     style={{ width: '55%', height: 'auto', maxHeight: '120px', objectFit: 'contain' }} draggable={false} />
                                             </div>
                                         );
-                                    })()}
+                                    })}
 
-                                    {/* Row 2: Drop zone 2 + Team 2 (Baloncesto) */}
-                                    {(() => {
-                                        const teamMedals = getMedalsInTeam(2);
-                                        return (
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                <div
-                                                    onDragOver={handleDragOver}
-                                                    onDrop={(e) => handleMedalDropOnTeam(e, 2)}
-                                                    style={{
-                                                        width: '45%', minHeight: '70px', border: '2px solid', borderRadius: '8px', padding: '6px', display: 'flex', flexWrap: 'wrap', gap: '3px', alignItems: 'center', justifyContent: 'center'
-                                                    }}
-                                                    className={`transition-colors ${medalResult === 'correct' && teamMedals.length === 6 ? 'border-green-400 bg-green-50 dark:bg-green-900/20' : medalResult === 'incorrect' ? 'border-red-400 bg-red-50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800'}`}
-                                                >
-                                                    {teamMedals.length > 0 ? teamMedals.map(medal => (
-                                                        <img key={medal.id} src="/medalla.png" alt="Medalla" draggable
-                                                            onDragStart={(e) => handleMedalDragStart(e, medal.id)}
-                                                            style={{ width: '24px', height: '24px', cursor: 'grab' }}
-                                                            className="hover:scale-110 transition-transform select-none" />
-                                                    )) : <p className="text-xs text-gray-400 dark:text-gray-500 italic">Arrastra aquí</p>}
-                                                </div>
-                                                <img src="/medalla2.png" alt="Baloncesto"
-                                                    style={{ width: '55%', height: 'auto', maxHeight: '120px', objectFit: 'contain' }} draggable={false} />
-                                            </div>
-                                        );
-                                    })()}
-
-                                    {/* Row 3: Drop zone 3 + Team 3 (Tenis) */}
-                                    {(() => {
-                                        const teamMedals = getMedalsInTeam(3);
-                                        return (
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                <div
-                                                    onDragOver={handleDragOver}
-                                                    onDrop={(e) => handleMedalDropOnTeam(e, 3)}
-                                                    style={{
-                                                        width: '45%', minHeight: '70px', border: '2px solid', borderRadius: '8px', padding: '6px', display: 'flex', flexWrap: 'wrap', gap: '3px', alignItems: 'center', justifyContent: 'center'
-                                                    }}
-                                                    className={`transition-colors ${medalResult === 'correct' && teamMedals.length === 6 ? 'border-green-400 bg-green-50 dark:bg-green-900/20' : medalResult === 'incorrect' ? 'border-red-400 bg-red-50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800'}`}
-                                                >
-                                                    {teamMedals.length > 0 ? teamMedals.map(medal => (
-                                                        <img key={medal.id} src="/medalla.png" alt="Medalla" draggable
-                                                            onDragStart={(e) => handleMedalDragStart(e, medal.id)}
-                                                            style={{ width: '24px', height: '24px', cursor: 'grab' }}
-                                                            className="hover:scale-110 transition-transform select-none" />
-                                                    )) : <p className="text-xs text-gray-400 dark:text-gray-500 italic">Arrastra aquí</p>}
-                                                </div>
-                                                <img src="/medalla3.png" alt="Tenis"
-                                                    style={{ width: '55%', height: 'auto', maxHeight: '120px', objectFit: 'contain' }} draggable={false} />
-                                            </div>
-                                        );
-                                    })()}
-
-                                    {/* ¿LISTO? button — bottom of right column */}
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
                                         <FeedbackButton
                                             onCheck={handleMedalListo}
@@ -318,18 +283,17 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                             <div className="flex items-start gap-2 mb-4">
                                 <div className="flex-1">
                                     <p className="font-semibold text-base text-gray-800 dark:text-gray-200">
-                                        Arrastra los <span className="text-2xl font-bold text-yellow-500">{totalCircles}</span> circulos y repártelos en 3 partes iguales. Verifica que no sobre ninguno.
-                                    <PlayVideoButton
-                                        trackingId={VIDEO_TRACKING.P_INTRO}
-                                        title=""
-                                        videoId="/pag7/vv-2"
-                                    />
+                                        Arrastra los <span className="text-2xl font-bold text-yellow-500">{totalCircles}</span> círculos y repártelos en 3 partes iguales. Verifica que no sobre ninguno.
+                                        <PlayVideoButton
+                                            trackingId={VIDEO_TRACKING.P_INTRO}
+                                            title=""
+                                            videoId="/pag7/vv-2"
+                                        />
                                     </p>
-                                </div>                              
+                                </div>
                             </div>
 
                             <div className="flex flex-col md:flex-row gap-6">
-                                {/* Circle pool */}
                                 <div className="flex flex-col items-center">
                                     <div
                                         onDragOver={handleDragOver}
@@ -337,7 +301,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                         className="w-64 min-h-[140px] border-2 border-gray-400 dark:border-gray-600 rounded-lg p-3 bg-white dark:bg-gray-800/50"
                                     >
                                         <div className="grid grid-cols-6 gap-1 justify-items-center">
-                                            {getCirclesInPool().map(circle => (
+                                            {circleResult === 'correct' ? null : getCirclesInPool().map(circle => (
                                                 <div
                                                     key={circle.id}
                                                     draggable
@@ -346,11 +310,13 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                                 />
                                             ))}
                                         </div>
-                                        {getCirclesInPool().length === 0 && (
-                                            <p className="text-center text-base text-gray-400 dark:text-gray-500 italic mt-2">Arrastra aquí para devolver</p>
+                                        {(circleResult === 'correct' || getCirclesInPool().length === 0) && (
+                                            <p className="text-center text-base text-gray-400 dark:text-gray-500 italic mt-2">
+                                                {circleResult === 'correct' ? '¡Muy bien!' : 'Arrastra aquí para devolver'}
+                                            </p>
                                         )}
                                     </div>
-                                    <p className="text-4xl font-bold text-yellow-500 mt-2">{getCirclesInPool().length}</p>
+                                    <p className="text-4xl font-bold text-yellow-500 mt-2">{circleResult === 'correct' ? '0' : getCirclesInPool().length}</p>
 
                                     <div className="flex items-center gap-3 mt-3">
                                         <FeedbackButton
@@ -361,7 +327,6 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                     </div>
                                 </div>
 
-                                {/* 3 group boxes */}
                                 <div className="flex flex-col gap-4 flex-1">
                                     {[1, 2, 3].map(groupId => {
                                         const groupCircles = getCirclesInGroup(groupId);
@@ -370,22 +335,21 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                                 <div
                                                     onDragOver={handleDragOver}
                                                     onDrop={(e) => handleCircleDropOnGroup(e, groupId)}
-                                                    className={`flex-1 min-h-[60px] border-2 rounded-lg p-2 flex flex-wrap gap-1 items-center justify-center ${circleResult === 'correct' && groupCircles.length === 6
+                                                    className={`flex-1 min-h-[60px] border-2 rounded-lg p-2 flex flex-wrap gap-1 items-center justify-center ${circleResult === 'correct' && (groupCircles.length === 6 || isExerciseCompleted(EXERCISE_IDS.P_GAME))
                                                         ? 'border-green-400 bg-green-50 dark:bg-green-900/10'
                                                         : 'border-purple-300 dark:border-purple-700 bg-white dark:bg-gray-800/50'
                                                         }`}
                                                 >
-                                                    {groupCircles.length > 0 ? (
-                                                        groupCircles.map(circle => (
-                                                            <div key={circle.id} draggable onDragStart={(e) => handleCircleDragStart(e, circle.id)}
-                                                                className="w-7 h-7 rounded-full bg-yellow-400 border-2 border-yellow-500 cursor-grab active:cursor-grabbing hover:scale-110 transition-transform select-none shadow-sm" />
+                                                    {circleResult === 'correct' || groupCircles.length > 0 ? (
+                                                        (circleResult === 'correct' ? Array.from({ length: 6 }) : groupCircles).map((_, i) => (
+                                                            <div key={i} className="w-7 h-7 rounded-full bg-yellow-400 border-2 border-yellow-500 select-none shadow-sm" />
                                                         ))
                                                     ) : (
                                                         <p className="text-xs text-gray-400 dark:text-gray-500 italic">Arrastra aquí</p>
                                                     )}
                                                 </div>
                                                 <div className="w-10 h-10 border-2 border-purple-400 dark:border-purple-600 rounded flex items-center justify-center font-bold text-lg text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-800">
-                                                    {groupCircles.length}
+                                                    {circleResult === 'correct' ? '6' : groupCircles.length}
                                                 </div>
                                             </div>
                                         );
@@ -397,8 +361,6 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                 </div>
 
             </div>
-
-            {/* VideoModal removed */}
         </BookPageContainer>
     );
 }

@@ -1,7 +1,7 @@
 'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
@@ -22,7 +22,15 @@ interface Props { zoom?: number; }
 
 //PAGINA 2 ABSTRACTO
 export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched, submitExercise } = useVideoProgress();
+    const EXERCISE_IDS = {
+        A_GAME: 'numeros_primos-pag15-a-game'
+    };
+
+    const STAGE_IDS = {
+        A_STAGE: 'numeros_primos-pag15-a-stage'
+    };
+
+    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         A_DIVISION: 'numeros_primos-pag15-v1',
@@ -33,20 +41,6 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
         A_COMPUESTO_DEF: 'numeros_primos-pag15-v5',
         A_COMPUESTO_EJ: 'numeros_primos-pag15-v6',
     };
-
-    /* videoModal list removed */
-    /* ref removed */
-
-    /* handleVideoComplete removed */
-
-    /* openVideo removed */
-
-    /* PlayButton definition removed */
-
-    /* ---- small green square helper ---- */
-    const GreenSquare = () => (
-        <div className="w-7 h-7 bg-[#c5e384] border border-[#9ab85c] dark:bg-green-600 dark:border-green-500" />
-    );
 
     // Practice dropdowns - numbers from Frame 168
     const numbers = [
@@ -59,13 +53,23 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
     const [answers, setAnswers] = useState<Record<number, string>>({});
     const [listoResult, setListoResult] = useState<'correct' | 'incorrect' | null>(null);
 
+    // Initial load sync
+    useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.A_GAME)) setListoResult('correct');
+    }, [isExerciseCompleted]);
+
     const handleListo = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.A_GAME)) return;
         const allCorrect = numbers.every(n => answers[n.num] === n.answer);
         setListoResult(allCorrect ? 'correct' : 'incorrect');
-        await submitExercise('numeros_primos-pag15-ej1', allCorrect);
+        await submitGame(EXERCISE_IDS.A_GAME, allCorrect);
+        if (allCorrect) {
+            await completeStage(STAGE_IDS.A_STAGE);
+        }
     };
 
     const handleReset = () => {
+        if (isExerciseCompleted(EXERCISE_IDS.A_GAME)) return;
         setAnswers({});
         setListoResult(null);
     };
@@ -121,20 +125,20 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                 <div className="flex items-center gap-2">
                                     <div className="w-3 h-3 bg-green-600 dark:bg-gray-300 rounded-sm flex-shrink-0" />
                                     <p className="text-gray-800 text-base font-semibold dark:text-gray-200">
-                                        El número 7 es <span className="font-bold text-[#e95352] dark:text-green-400">primo</span> porque solo tiene dos divisores <span className="font-bold text-purple-700">1</span> y <span className="font-bold text-purple-700">7</span>.
+                                        El número 7 es <span className="font-bold text-[#e95352] dark:text-green-400">primo</span> porque solo tiene dos divisores <span className="font-bold text-purple-700">1</span> and <span className="font-bold text-purple-700">7</span>.
                                     </p>
                                     <PlayVideoButton trackingId={VIDEO_TRACKING.A_EJ_7} title="Ejemplo: 7 es primo" videoId="/pag15/vv-3" />
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <div className="w-3 h-3 bg-green-600 dark:bg-gray-300 rounded-sm flex-shrink-0" />
                                     <p className="text-gray-800 font-semibold dark:text-gray-200">
-                                        El número 11 es <span className="font-bold text-[#e95352] dark:text-green-400">primo</span> porque solo tiene dos divisores <span className="font-bold text-purple-700">1</span> y <span className="font-bold text-purple-700">11</span>.
+                                        El número 11 es <span className="font-bold text-[#e95352] dark:text-green-400">primo</span> porque solo tiene dos divisores <span className="font-bold text-purple-700">1</span> and <span className="font-bold text-purple-700">11</span>.
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <div className="w-3 h-3 bg-green-600 dark:bg-gray-300 rounded-sm flex-shrink-0" />
                                     <p className="text-gray-800 font-semibold dark:text-gray-200">
-                                        El número 8 NO es <span className="font-bold text-[#e95352] dark:text-green-400">primo</span> porque tiene cuatro divisores <span className="font-bold text-purple-700">1, 2, 4</span> y <span className="font-bold text-purple-700">8</span>.
+                                        El número 8 NO es <span className="font-bold text-[#e95352] dark:text-green-400">primo</span> porque tiene cuatro divisores <span className="font-bold text-purple-700">1, 2, 4</span> and <span className="font-bold text-purple-700">8</span>.
                                     </p>
                                     <PlayVideoButton trackingId={VIDEO_TRACKING.A_EJ_8} title="Ejemplo: 8 no es primo" videoId="/pag15/vv-4" />
                                 </div>

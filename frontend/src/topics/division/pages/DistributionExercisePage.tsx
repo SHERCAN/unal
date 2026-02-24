@@ -18,12 +18,17 @@ interface DistributionExercisePageProps {
 }
 //PAGINA 1 CONCRETO PICTORICO
 export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageProps) {
-    const { isVideoWatched, markVideoWatched, completeStage, watchedVideos, submitExercise, isExerciseCompleted } = useVideoProgress();
-
     const EXERCISE_IDS = {
-        STAGE_C: 'division-pag1-ej1',
-        STAGE_P: 'division-pag1-ej2'
+        C_GAME: 'division-pag1-c-game',
+        P_GAME: 'division-pag1-p-game'
     };
+
+    const STAGE_IDS = {
+        C_STAGE: 'division-pag1-c-stage',
+        P_STAGE: 'division-pag1-p-stage'
+    };
+
+    const { isVideoWatched, markVideoWatched, completeStage, watchedVideos, submitGame, isExerciseCompleted } = useVideoProgress();
 
     // ... (keep constants)
     const TOTAL_ORANGES = 24;
@@ -69,8 +74,8 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
 
     // Initial load
     useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.STAGE_C)) setCStageResult('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.STAGE_P)) setPStageResult('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.C_GAME)) setCStageResult('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.P_GAME)) setPStageResult('correct');
     }, [isExerciseCompleted]);
 
     const handleIntroDragStart = (e: React.DragEvent, id: number) => {
@@ -150,7 +155,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
     };
 
     const resetStageP = () => {
-        if (isExerciseCompleted(EXERCISE_IDS.STAGE_P)) return;
+        if (isExerciseCompleted(EXERCISE_IDS.P_GAME)) return;
         setPOranges(Array.from({ length: TOTAL_ORANGES }, (_, i) => ({ id: i, boxId: null })));
         setFinalAnswer('');
         setPStageResult(null);
@@ -193,32 +198,33 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
     };
 
     const checkStageC = async () => {
-        if (isExerciseCompleted(EXERCISE_IDS.STAGE_C)) return;
+        if (isExerciseCompleted(EXERCISE_IDS.C_GAME)) return;
         const boxes = Array.from({ length: BOX_COUNT }, (_, i) => i + 1);
         const isCorrect = boxes.every(boxId => getOrangesInBox(boxId).length === ORANGES_PER_BOX);
+
         setCStageResult(isCorrect ? 'correct' : 'incorrect');
+        await submitGame(EXERCISE_IDS.C_GAME, isCorrect);
         if (isCorrect) {
-            completeStage('division-dist-c');
+            await completeStage(STAGE_IDS.C_STAGE);
         }
-        await submitExercise(EXERCISE_IDS.STAGE_C, isCorrect);
     };
 
 
     const resetStageC = () => {
-        if (isExerciseCompleted(EXERCISE_IDS.STAGE_C)) return;
+        if (isExerciseCompleted(EXERCISE_IDS.C_GAME)) return;
         setOranges(Array.from({ length: TOTAL_ORANGES }, (_, i) => ({ id: i, inBox: null })));
         setCStageResult(null);
     };
 
 
     const checkStageP = async () => {
-        if (isExerciseCompleted(EXERCISE_IDS.STAGE_P)) return;
+        if (isExerciseCompleted(EXERCISE_IDS.P_GAME)) return;
         const isCorrect = finalAnswer.trim() === '6';
         setPStageResult(isCorrect ? 'correct' : 'incorrect');
+        await submitGame(EXERCISE_IDS.P_GAME, isCorrect);
         if (isCorrect) {
-            completeStage('division-dist-p');
+            await completeStage(STAGE_IDS.P_STAGE);
         }
-        await submitExercise(EXERCISE_IDS.STAGE_P, isCorrect);
     };
 
 
