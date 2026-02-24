@@ -18,14 +18,19 @@ interface DistributionExercisePageProps {
 }
 //PAGINA 1 CONCRETO PICTORICO
 export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageProps) {
-    const { isVideoWatched, markVideoWatched, completeStage, watchedVideos } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, completeStage, watchedVideos, submitExercise, isExerciseCompleted } = useVideoProgress();
 
-    // Configuration
+    const EXERCISE_IDS = {
+        STAGE_C: 'division-pag1-ej1',
+        STAGE_P: 'division-pag1-ej2'
+    };
+
+    // ... (keep constants)
     const TOTAL_ORANGES = 24;
     const BOX_COUNT = 4;
     const ORANGES_PER_BOX = TOTAL_ORANGES / BOX_COUNT;
 
-    // Fixed positions for oranges on the tree to look organized (groups of 6)
+    // ... (keep positions)
     const TREE_POSITIONS = [
         // Group 1 (Top Left)
         { top: '15%', left: '25%' }, { top: '15%', left: '35%' }, { top: '15%', left: '45%' },
@@ -44,7 +49,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
         { top: '50%', left: '55%' }, { top: '50%', left: '65%' }, { top: '50%', left: '75%' }
     ];
 
-    // State - Intro (Scene 1)
+    // ... (keep intro state)
     interface IntroOrange {
         id: number;
         location: 'tree' | 'basket';
@@ -60,23 +65,28 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
         }));
     });
 
-    // State - Intro (Shared Drag State could be issue, using separate)
     const [introDraggedId, setIntroDraggedId] = useState<number | null>(null);
 
-    // Handlers - Intro
+    // Initial load
+    useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.STAGE_C)) setCStageResult('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.STAGE_P)) setPStageResult('correct');
+    }, [isExerciseCompleted]);
+
     const handleIntroDragStart = (e: React.DragEvent, id: number) => {
+        if (cStageResult === 'correct') return;
         setIntroDraggedId(id);
         e.dataTransfer.effectAllowed = 'move';
     };
 
     const handleIntroDropOnBasket = () => {
-        if (introDraggedId === null) return;
+        if (introDraggedId === null || cStageResult === 'correct') return;
         setIntroOranges(prev => prev.map(o => {
             if (o.id === introDraggedId) {
                 return {
                     ...o,
                     location: 'basket',
-                    top: '0%', left: '0%' // Position handled by flex container in basket
+                    top: '0%', left: '0%'
                 };
             }
             return o;
@@ -85,10 +95,9 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
     };
 
     const handleIntroDropOnTree = () => {
-        if (introDraggedId === null) return;
+        if (introDraggedId === null || cStageResult === 'correct') return;
         setIntroOranges(prev => prev.map(o => {
             if (o.id === introDraggedId) {
-                // Return to original tree position
                 const originalPos = TREE_POSITIONS[o.id];
                 return {
                     ...o,
@@ -114,7 +123,6 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
     const [boxInputs, setBoxInputs] = useState<string[]>(Array(BOX_COUNT).fill(''));
     const [finalAnswer, setFinalAnswer] = useState('');
     const [pStageResult, setPStageResult] = useState<'correct' | 'incorrect' | null>(null);
-    const [pStageCheck, setPStageCheck] = useState<'idle' | 'correct' | 'incorrect'>('idle'); // Kept for logic if needed but we'll use result
 
 
     // State - Stage P (Pictorial - Interactive)
@@ -124,23 +132,25 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
     const [pDraggedId, setPDraggedId] = useState<number | null>(null);
 
     const handlePDragStart = (e: React.DragEvent, id: number) => {
+        if (pStageResult === 'correct') return;
         setPDraggedId(id);
         e.dataTransfer.effectAllowed = 'move';
     };
 
     const handlePDropOnPBox = (boxIndex: number) => {
-        if (pDraggedId === null) return;
+        if (pDraggedId === null || pStageResult === 'correct') return;
         setPOranges(prev => prev.map(o => o.id === pDraggedId ? { ...o, boxId: boxIndex + 1 } : o));
         setPDraggedId(null);
     };
 
     const handlePDropOnPSource = () => {
-        if (pDraggedId === null) return;
+        if (pDraggedId === null || pStageResult === 'correct') return;
         setPOranges(prev => prev.map(o => o.id === pDraggedId ? { ...o, boxId: null } : o));
         setPDraggedId(null);
     };
 
     const resetStageP = () => {
+        if (isExerciseCompleted(EXERCISE_IDS.STAGE_P)) return;
         setPOranges(Array.from({ length: TOTAL_ORANGES }, (_, i) => ({ id: i, boxId: null })));
         setFinalAnswer('');
         setPStageResult(null);
@@ -159,20 +169,8 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
     const getOrangesInPool = () => oranges.filter(o => o.inBox === null);
     const getOrangesInBox = (boxId: number) => oranges.filter(o => o.inBox === boxId);
 
-    // Check if C stage is physically correct (distribution)
-    useEffect(() => {
-        const boxes = Array.from({ length: BOX_COUNT }, (_, i) => i + 1);
-        const isDistributedCorrectly = boxes.every(boxId => getOrangesInBox(boxId).length === ORANGES_PER_BOX);
-
-        if (isDistributedCorrectly && !cStageResult) {
-            // Optional: Auto-complete or wait for button? 
-            // The image implies a check might be needed or it's interactive.
-            // Let's rely on a explicit check or just visual feedback.
-        }
-    }, [oranges, cStageResult]);
-
-
     const handleDragStart = (e: React.DragEvent, id: number) => {
+        if (cStageResult === 'correct') return;
         setCDraggedId(id);
         e.dataTransfer.effectAllowed = 'move';
     };
@@ -183,54 +181,48 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
     };
 
     const handleDropOnBox = (boxId: number) => {
-        if (cDraggedId === null) return;
+        if (cDraggedId === null || cStageResult === 'correct') return;
         setOranges(prev => prev.map(o => o.id === cDraggedId ? { ...o, inBox: boxId } : o));
         setCDraggedId(null);
     };
 
     const handleDropOnPool = () => {
-        if (cDraggedId === null) return;
+        if (cDraggedId === null || cStageResult === 'correct') return;
         setOranges(prev => prev.map(o => o.id === cDraggedId ? { ...o, inBox: null } : o));
         setCDraggedId(null);
     };
 
-    const checkStageC = () => {
+    const checkStageC = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.STAGE_C)) return;
         const boxes = Array.from({ length: BOX_COUNT }, (_, i) => i + 1);
         const isCorrect = boxes.every(boxId => getOrangesInBox(boxId).length === ORANGES_PER_BOX);
+        setCStageResult(isCorrect ? 'correct' : 'incorrect');
         if (isCorrect) {
-            setCStageResult('correct');
             completeStage('division-dist-c');
-        } else {
-            setCStageResult('incorrect');
         }
+        await submitExercise(EXERCISE_IDS.STAGE_C, isCorrect);
     };
 
 
     const resetStageC = () => {
+        if (isExerciseCompleted(EXERCISE_IDS.STAGE_C)) return;
         setOranges(Array.from({ length: TOTAL_ORANGES }, (_, i) => ({ id: i, inBox: null })));
         setCStageResult(null);
     };
 
 
-    // Stage P Logic
-    // Inputs are now read-only derived from pOranges state
-
-    const checkStageP = () => {
-        // Validation per user request: "debe dar correcto si son 6 e incorrecto si es diferente"
-        // referring to the final answer input.
+    const checkStageP = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.STAGE_P)) return;
         const isCorrect = finalAnswer.trim() === '6';
-
+        setPStageResult(isCorrect ? 'correct' : 'incorrect');
         if (isCorrect) {
-            setPStageResult('correct');
             completeStage('division-dist-p');
-        } else {
-            setPStageResult('incorrect');
         }
+        await submitExercise(EXERCISE_IDS.STAGE_P, isCorrect);
     };
 
 
     // Video Modal
-    /* videoModal list removed */
     const currentTrackingIdRef = useRef<string>();
 
     /* handleVideoComplete removed */

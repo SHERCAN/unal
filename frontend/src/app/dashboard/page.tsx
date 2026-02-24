@@ -727,7 +727,7 @@ function InfiniteBookWrapper({
     return null;
   }, [currentPage, topics]);
 
-  const totalPagesInBook = topics.reduce((acc, t) => acc + t.pages.length + t.exercisePages.length, 1);
+  const totalPagesInBook = topics.reduce((acc, t) => acc + t.pages.length + t.exercisePages.length, 0);
 
   return (
     <div className="flex-1 relative">
@@ -737,32 +737,33 @@ function InfiniteBookWrapper({
         onNavigationRequest={handleNavigationRequest}
       />
 
-      {/* Progress Navigation Footer */}
-      <div className="sticky bottom-0 z-50 w-full">
-        <ProgressNavigation
-          lessonPages={currentTopicInfo ? currentTopicInfo.topic.pages.length : 0}
-          exercisePages={currentTopicInfo ? currentTopicInfo.topic.exercisePages.length : 0}
-          currentPage={currentTopicInfo ? currentTopicInfo.relativePage : 0}
-          completedPages={completedPages}
-          completedModules={completedModules}
-          onPageChange={(relativePage) => {
-            // Convert relative page back to global page
-            if (!currentTopicInfo) return;
-            let globalOffset = 1;
-            for (const t of topics) {
-              if (t.id === currentTopicInfo.topic.id) {
-                handleNavigateToPage(globalOffset + relativePage - 1);
-                return;
+      {currentPage > 0 && (
+        <div className="sticky bottom-0 z-50 w-full animate-in slide-in-from-bottom-5 duration-300">
+          <ProgressNavigation
+            lessonPages={currentTopicInfo ? currentTopicInfo.topic.pages.length : 0}
+            exercisePages={currentTopicInfo ? currentTopicInfo.topic.exercisePages.length : 0}
+            currentPage={currentTopicInfo ? currentTopicInfo.relativePage : 0}
+            completedPages={completedPages}
+            completedModules={completedModules}
+            onPageChange={(relativePage) => {
+              // Convert relative page back to global page
+              if (!currentTopicInfo) return;
+              let globalOffset = 1;
+              for (const t of topics) {
+                if (t.id === currentTopicInfo.topic.id) {
+                  handleNavigateToPage(globalOffset + relativePage - 1);
+                  return;
+                }
+                globalOffset += (t.pages.length + t.exercisePages.length);
               }
-              globalOffset += (t.pages.length + t.exercisePages.length);
-            }
-          }}
-        />
-        {/* Global Page Indicator Overlay */}
-        <div className="absolute top-[-30px] right-4 bg-black/50 text-white px-3 py-1 rounded-t-lg text-xs font-mono backdrop-blur-sm pointer-events-none">
-          LIBRO: Pág. {currentPage + 1} / {totalPagesInBook}
+            }}
+          />
+          {/* Global Page Indicator Overlay */}
+          <div className="absolute top-[-30px] right-4 bg-black/50 text-white px-3 py-1 rounded-t-lg text-xs font-mono backdrop-blur-sm pointer-events-none">
+            LIBRO: Pág. {currentPage} / {totalPagesInBook}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

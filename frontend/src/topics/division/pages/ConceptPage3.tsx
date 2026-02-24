@@ -1,7 +1,7 @@
 'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
@@ -13,42 +13,39 @@ interface DivisionConceptPage3Props {
 }
 //PAGINA 4 ABSTRACTO
 export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, submitExercise, isExerciseCompleted } = useVideoProgress();
+
+    const EXERCISE_IDS = {
+        DIV_ALG: 'division-pag4-ej1',
+        TERMS: 'division-pag4-ej2',
+        PROBLEM1: 'division-pag4-ej3',
+        PROBLEM2: 'division-pag4-ej4'
+    };
 
     // Video Tracking IDs
     const VIDEO_TRACKING_IDS = {
         EXAMPLE_MAIN: 'division-pag4-v1',
         PRACTICE_1: 'division-pag4-v2',
-        PRACTICE_2: 'division-concept-pag4-v3', // Note: Need to see where practice 2 is
+        PRACTICE_2: 'division-concept-pag4-v3',
         PROBLEM_1: 'division-pag4-v3',
         PROBLEM_2: 'division-pag4-v4'
     };
 
-    /* videoModal list removed */
-
-    /* ref removed */
-
-    /* handleVideoComplete removed */
-
-    /* openVideo removed */
-
-    /* PlayButton definition removed */
-
-
+    // Initial load
+    useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.DIV_ALG)) setEx1Status('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.TERMS)) setEx2Status('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.PROBLEM1)) setP1Status('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.PROBLEM2)) setP2Status('correct');
+    }, [isExerciseCompleted]);
 
     // --- Exercise 1 State (21 / 7) ---
-    // Dividend: 21 (Single input)
     const ex1_dividend = useInputState();
-    // Divisor: 7 (Single input)
     const ex1_divisor = useInputState();
-    // Quotient: 3 (Single input)
     const ex1_quotient = useInputState();
-    // Subtraction: 21 (Single input)
     const ex1_subtraction = useInputState();
-    // Remainder: 0 (Single input)
     const ex1_remainder = useInputState();
 
-    // Multiplication Checks (3 rows)
     const ex1_m1_a = useInputState();
     const ex1_m1_b = useInputState();
     const ex1_m1_res = useInputState();
@@ -62,6 +59,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
     const [ex1Status, setEx1Status] = useState<'correct' | 'incorrect' | null>(null);
 
     const resetEx1 = () => {
+        if (isExerciseCompleted(EXERCISE_IDS.DIV_ALG)) return;
         ex1_dividend.reset(); ex1_divisor.reset(); ex1_quotient.reset();
         ex1_subtraction.reset(); ex1_remainder.reset();
         ex1_m1_a.reset(); ex1_m1_b.reset(); ex1_m1_res.reset();
@@ -71,8 +69,8 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
     };
 
 
-    const checkEx1 = () => {
-        // Validation Logic:
+    const checkEx1 = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.DIV_ALG)) return;
         const isDivisionCorrect =
             ex1_dividend.value === '21' &&
             ex1_divisor.value === '7' &&
@@ -80,8 +78,6 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
             ex1_subtraction.value === '21' &&
             ex1_remainder.value === '0';
 
-        // Multiplication check:
-        // Must have at least ONE correct row: 7 x 3 = 21 (or 3 x 7 = 21)
         const checkRow = (a: string, b: string, res: string) => {
             return (
                 (a === '7' && b === '3' && res === '21') ||
@@ -94,11 +90,9 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
             checkRow(ex1_m2_a.value, ex1_m2_b.value, ex1_m2_res.value) ||
             checkRow(ex1_m3_a.value, ex1_m3_b.value, ex1_m3_res.value);
 
-        if (isDivisionCorrect && isMultiplicationCorrect) {
-            setEx1Status('correct');
-        } else {
-            setEx1Status('incorrect');
-        }
+        const isCorrect = isDivisionCorrect && isMultiplicationCorrect;
+        setEx1Status(isCorrect ? 'correct' : 'incorrect');
+        await submitExercise(EXERCISE_IDS.DIV_ALG, isCorrect);
     };
 
     // --- Exercise 2 State (Term Identification) ---
@@ -108,17 +102,17 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
     const [ex2Status, setEx2Status] = useState<'correct' | 'incorrect' | null>(null);
 
     const resetEx2 = () => {
+        if (isExerciseCompleted(EXERCISE_IDS.TERMS)) return;
         setEx2_val1(''); setEx2_val2(''); setEx2_val3('');
         setEx2Status(null);
     };
 
 
-    const checkEx2 = () => {
-        if (ex2_val1 === 'dividendo' && ex2_val2 === 'divisor' && ex2_val3 === 'cociente') {
-            setEx2Status('correct');
-        } else {
-            setEx2Status('incorrect');
-        }
+    const checkEx2 = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.TERMS)) return;
+        const isCorrect = ex2_val1 === 'dividendo' && ex2_val2 === 'divisor' && ex2_val3 === 'cociente';
+        setEx2Status(isCorrect ? 'correct' : 'incorrect');
+        await submitExercise(EXERCISE_IDS.TERMS, isCorrect);
     };
 
     // --- Problem 1 State (Dolls) ---
@@ -128,17 +122,17 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
     const [p1Status, setP1Status] = useState<'correct' | 'incorrect' | null>(null);
 
     const resetP1 = () => {
+        if (isExerciseCompleted(EXERCISE_IDS.PROBLEM1)) return;
         p1_div1.reset(); p1_div2.reset(); p1_res.reset();
         setP1Status(null);
     };
 
 
-    const checkP1 = () => {
-        if (p1_div1.value === '12' && p1_div2.value === '2' && p1_res.value === '6') {
-            setP1Status('correct');
-        } else {
-            setP1Status('incorrect');
-        }
+    const checkP1 = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.PROBLEM1)) return;
+        const isCorrect = p1_div1.value === '12' && p1_div2.value === '2' && p1_res.value === '6';
+        setP1Status(isCorrect ? 'correct' : 'incorrect');
+        await submitExercise(EXERCISE_IDS.PROBLEM1, isCorrect);
     };
 
     // --- Problem 2 State (Notebooks) ---
@@ -148,17 +142,17 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
     const [p2Status, setP2Status] = useState<'correct' | 'incorrect' | null>(null);
 
     const resetP2 = () => {
+        if (isExerciseCompleted(EXERCISE_IDS.PROBLEM2)) return;
         p2_div1.reset(); p2_div2.reset(); p2_res.reset();
         setP2Status(null);
     };
 
 
-    const checkP2 = () => {
-        if (p2_div1.value === '64' && p2_div2.value === '8' && p2_res.value === '8') {
-            setP2Status('correct');
-        } else {
-            setP2Status('incorrect');
-        }
+    const checkP2 = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.PROBLEM2)) return;
+        const isCorrect = p2_div1.value === '64' && p2_div2.value === '8' && p2_res.value === '8';
+        setP2Status(isCorrect ? 'correct' : 'incorrect');
+        await submitExercise(EXERCISE_IDS.PROBLEM2, isCorrect);
     };
 
     return (
@@ -215,7 +209,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                 </p>
                             </div>
 
-                            <div className="flex flex-wrap items-start gap-8 sm:gap-16 pl-4 md:pl-12">
+                            <div className={`flex flex-wrap items-start gap-8 sm:gap-16 pl-4 md:pl-12 ${ex1Status === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
 
                                 {/* Interactive Division */}
                                 <div className="relative pt-8">
@@ -223,16 +217,14 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                         {/* Left Side: Dividend, Subtraction, Remainder */}
                                         <div className="flex flex-col items-end gap-1 relative right-2">
                                             {/* Dividend Input */}
-                                            {/* Dividend Input */}
                                             <div className="pr-[5px]">
-                                                <InputBox value={ex1_dividend.value} onChange={ex1_dividend.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
+                                                <InputBox value={ex1Status === 'correct' ? '21' : ex1_dividend.value} onChange={ex1_dividend.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
                                             </div>
 
                                             {/* Subtraction Row: Minus Sign + Input */}
-                                            {/* Subtraction Row: Minus Sign + Input */}
                                             <div className="relative pr-[5px]">
                                                 <span className="font-bold text-xl dark:text-white absolute -left-5 top-1">-</span>
-                                                <InputBox value={ex1_subtraction.value} onChange={ex1_subtraction.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
+                                                <InputBox value={ex1Status === 'correct' ? '21' : ex1_subtraction.value} onChange={ex1_subtraction.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
                                             </div>
 
                                             {/* Divider Line */}
@@ -240,7 +232,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
 
                                             {/* Remainder Input */}
                                             <div className="pr-[5px]">
-                                                <InputBox value={ex1_remainder.value} onChange={ex1_remainder.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
+                                                <InputBox value={ex1Status === 'correct' ? '0' : ex1_remainder.value} onChange={ex1_remainder.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
                                             </div>
                                         </div>
 
@@ -248,11 +240,11 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                         <div className="border-l-2 border-black dark:border-white pl-4 pb-1 -ml-2 h-[50%] flex flex-col gap-4">
                                             {/* Divisor Input (with bottom border) */}
                                             <div className="border-b-2 border-black dark:border-white pb-2 pr-2">
-                                                <InputBox value={ex1_divisor.value} onChange={ex1_divisor.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
+                                                <InputBox value={ex1Status === 'correct' ? '7' : ex1_divisor.value} onChange={ex1_divisor.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
                                             </div>
                                             {/* Quotient Input */}
                                             <div>
-                                                <InputBox value={ex1_quotient.value} onChange={ex1_quotient.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
+                                                <InputBox value={ex1Status === 'correct' ? '3' : ex1_quotient.value} onChange={ex1_quotient.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
                                             </div>
                                         </div>
                                     </div>
@@ -262,12 +254,13 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                 <div className="flex flex-col gap-4 border-l border-gray-200 dark:border-gray-700 pl-4 sm:pl-8">
                                     {/* Row 1 */}
                                     <div className="flex items-center gap-2">
-                                        <InputBox value={ex1_m1_a.value} onChange={ex1_m1_a.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
+                                        <InputBox value={ex1Status === 'correct' ? '7' : ex1_m1_a.value} onChange={ex1_m1_a.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
                                         <span className="font-bold dark:text-white">×</span>
-                                        <InputBox value={ex1_m1_b.value} onChange={ex1_m1_b.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
+                                        <InputBox value={ex1Status === 'correct' ? '3' : ex1_m1_b.value} onChange={ex1_m1_b.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
                                         <span className="font-bold dark:text-white">=</span>
-                                        <InputBox value={ex1_m1_res.value} onChange={ex1_m1_res.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
+                                        <InputBox value={ex1Status === 'correct' ? '21' : ex1_m1_res.value} onChange={ex1_m1_res.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
                                     </div>
+                                    {/* ... rest of rows could just be empty or as they are since we have pointer-events-none on parent ... */}
                                     {/* Row 2 */}
                                     <div className="flex items-center gap-2">
                                         <InputBox value={ex1_m2_a.value} onChange={ex1_m2_a.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
@@ -297,14 +290,14 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         </div>
 
                         {/* --- EXERCISE 2 (Terms) --- */}
-                        <div className="flex flex-col gap-3 pl-4 border-purple-100 py-2">
+                        <div className={`flex flex-col gap-3 pl-4 border-purple-100 py-2 ${ex2Status === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
                             <div className="grid gap-2">
                                 <div className="flex items-center flex-wrap gap-2">
                                     <span className="w-3 h-3 bg-pink-900 rounded-sm"></span>
                                     <span className="font-semibold text-gray-800 dark:text-gray-200 text-base">El número 21 es</span>
                                     <select
                                         className="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-800 dark:text-white"
-                                        value={ex2_val1}
+                                        value={ex2Status === 'correct' ? 'dividendo' : ex2_val1}
                                         onChange={(e) => setEx2_val1(e.target.value)}
                                     >
                                         <option value="">seleccionar...</option>
@@ -318,7 +311,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                     <span className="font-semibold text-gray-800 dark:text-gray-200 ml-5 text-base">El número de grupos 7 es</span>
                                     <select
                                         className="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-800 dark:text-white"
-                                        value={ex2_val2}
+                                        value={ex2Status === 'correct' ? 'divisor' : ex2_val2}
                                         onChange={(e) => setEx2_val2(e.target.value)}
                                     >
                                         <option value="">seleccionar...</option>
@@ -332,7 +325,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                     <span className="font-semibold text-gray-800 dark:text-gray-200 ml-5 text-base">El resultado de que cada grupo recibe es</span>
                                     <select
                                         className="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-800 dark:text-white"
-                                        value={ex2_val3}
+                                        value={ex2Status === 'correct' ? 'cociente' : ex2_val3}
                                         onChange={(e) => setEx2_val3(e.target.value)}
                                     >
                                         <option value="">seleccionar...</option>
@@ -353,7 +346,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         </div>
 
                         {/* --- PROBLEM 1 --- */}
-                        <div className="flex flex-col gap-2 pl-2">
+                        <div className={`flex flex-col gap-2 pl-2 ${p1Status === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
                             <div className="flex items-start gap-2">
                                 <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PROBLEM_1} title="Problema 1" videoId="/pag4/vv-3" />
                                 <div className="border border-pink-900 rounded px-2 text-pink-900 font-bold self-start whitespace-nowrap text-base">PROBLEMA 1</div>
@@ -363,11 +356,11 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                 </p>
                             </div>
                             <div className="flex items-center justify-center gap-2 ml-12 mt-1">
-                                <InputBox value={p1_div1.value} onChange={p1_div1.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
+                                <InputBox value={p1Status === 'correct' ? '12' : p1_div1.value} onChange={p1_div1.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
                                 <span className="text-xl font-bold dark:text-white">÷</span>
-                                <InputBox value={p1_div2.value} onChange={p1_div2.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
+                                <InputBox value={p1Status === 'correct' ? '2' : p1_div2.value} onChange={p1_div2.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
                                 <span className="text-xl font-bold dark:text-white">=</span>
-                                <InputBox value={p1_res.value} onChange={p1_res.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
+                                <InputBox value={p1Status === 'correct' ? '6' : p1_res.value} onChange={p1_res.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
 
                                 <div className="flex flex-col gap-1 ml-4">
                                     <FeedbackButton
@@ -380,7 +373,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         </div>
 
                         {/* --- PROBLEM 2 --- */}
-                        <div className="flex flex-col gap-2 pl-2 pb-4">
+                        <div className={`flex flex-col gap-2 pl-2 pb-4 ${p2Status === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
                             <div className="flex items-start gap-2">
                                 <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PROBLEM_2} title="Problema 2" videoId="/pag4/vv-4" />
                                 <div className="border border-pink-900 rounded px-2 text-pink-900 font-bold py-0.5 self-start whitespace-nowrap text-base">PROBLEMA 2</div>
@@ -390,11 +383,11 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                 </p>
                             </div>
                             <div className="flex items-center justify-center gap-2 ml-12 mt-1">
-                                <InputBox value={p2_div1.value} onChange={p2_div1.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
+                                <InputBox value={p2Status === 'correct' ? '64' : p2_div1.value} onChange={p2_div1.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
                                 <span className="text-xl font-bold dark:text-white">÷</span>
-                                <InputBox value={p2_div2.value} onChange={p2_div2.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
+                                <InputBox value={p2Status === 'correct' ? '8' : p2_div2.value} onChange={p2_div2.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
                                 <span className="text-xl font-bold dark:text-white">=</span>
-                                <InputBox value={p2_res.value} onChange={p2_res.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
+                                <InputBox value={p2Status === 'correct' ? '8' : p2_res.value} onChange={p2_res.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
 
                                 <div className="flex flex-col gap-1 ml-4">
                                     <FeedbackButton

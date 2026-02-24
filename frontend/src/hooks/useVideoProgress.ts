@@ -8,6 +8,7 @@ const WATCHED_VIDEOS_KEY = 'watchedVideos';
 export function useVideoProgress() {
     const [watchedVideos, setWatchedVideos] = useState<string[]>([]);
     const [completedStages, setCompletedStages] = useState<string[]>([]);
+    const [completedExercises, setCompletedExercises] = useState<Record<string, { completed: boolean; attemptCount: number }>>({});
     const [loading, setLoading] = useState(true);
     const { showToast } = useToast();
 
@@ -21,12 +22,14 @@ export function useVideoProgress() {
                 const token = localStorage.getItem('token');
                 if (token) {
                     // 2. Load from API
-                    const [progressRes, videosRes] = await Promise.all([
+                    const [progressRes, videosRes, exercisesRes] = await Promise.all([
                         axios.get('/api/users/progress', { headers: { Authorization: `Bearer ${token}` } }),
-                        axios.get('/api/users/videos', { headers: { Authorization: `Bearer ${token}` } })
+                        axios.get('/api/users/videos', { headers: { Authorization: `Bearer ${token}` } }),
+                        axios.get('/api/users/exercises', { headers: { Authorization: `Bearer ${token}` } })
                     ]);
 
                     setCompletedStages(progressRes.data);
+                    setCompletedExercises(exercisesRes.data);
 
                     // Merge local and remote videos
                     const remoteVideos = videosRes.data;
@@ -80,6 +83,10 @@ export function useVideoProgress() {
         return watchedVideos.includes(videoId);
     };
 
+    const isExerciseCompleted = (exerciseId: string) => {
+        return completedExercises[exerciseId]?.completed || false;
+    };
+
     const completeStage = async (stageId: string) => {
         if (completedStages.includes(stageId)) return;
 
@@ -118,6 +125,13 @@ export function useVideoProgress() {
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
+            if (isCorrect) {
+                setCompletedExercises(prev => ({
+                    ...prev,
+                    [exerciseId]: { completed: true, attemptCount: response.data.attemptCount || 1 }
+                }));
+            }
+
             if (response.data.pointsAdded > 0 || response.data.pointsDefinitivosAdded > 0) {
                 // Determine toast type based on attempt count
                 let toastType: ToastType = 'exercise-retry';
@@ -148,6 +162,13 @@ export function useVideoProgress() {
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
+            if (isCorrect) {
+                setCompletedExercises(prev => ({
+                    ...prev,
+                    [gameId]: { completed: true, attemptCount: response.data.attemptCount || 1 }
+                }));
+            }
+
             if (response.data.pointsAdded > 0 || response.data.pointsDefinitivosAdded > 0) {
                 // Determine toast type based on attempt count
                 let toastType: ToastType = 'game-retry';
@@ -174,6 +195,7 @@ export function useVideoProgress() {
         loading,
         markVideoWatched,
         isVideoWatched,
+        isExerciseCompleted,
         completeStage,
         submitExercise,
         submitGame

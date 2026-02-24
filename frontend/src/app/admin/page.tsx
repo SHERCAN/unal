@@ -63,9 +63,18 @@ const formatItemName = (id: string, type: 'Video' | 'Ejercicio') => {
         }
     }
 
+    if (type === 'Ejercicio' && id.includes('-pag')) {
+        const pagMatch = id.match(/-pag(\d+)-ej(\d+)/);
+        if (pagMatch) {
+            return `Ejercicio: Página ${pagMatch[1]} - Ejercicio ${pagMatch[2]}`;
+        }
+    }
+
     const parts = id.split('-');
     const nameStr = parts.slice(parts.length > 2 ? 2 : 1).join(' ');
-    return `${type}: ${nameStr.charAt(0).toUpperCase() + nameStr.slice(1)}`;
+    // Remove 'ej' prefix if exists in the last part if not already handled
+    const cleanName = nameStr.replace(/^ej\d+\s*/i, '');
+    return `${type}: ${cleanName.charAt(0).toUpperCase() + cleanName.slice(1)}`;
 };
 
 const getUserModules = (user: User): GroupedModule[] => {

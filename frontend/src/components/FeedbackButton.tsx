@@ -8,6 +8,7 @@ interface FeedbackButtonProps {
     status: 'correct' | 'incorrect' | null;
     disabled?: boolean;
     className?: string;
+    hideCheck?: boolean;
 }
 
 export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
@@ -15,19 +16,22 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
     onReset,
     status,
     disabled = false,
-    className = ""
+    className = "",
+    hideCheck = false
 }) => {
     return (
         <div className={`flex items-center justify-center min-w-[200px] h-12 ${className}`}>
             {status === null ? (
-                <button
-                    type="button"
-                    onClick={onCheck}
-                    disabled={disabled}
-                    className="px-6 py-2 rounded font-bold text-white transition-all text-lg bg-purple-700 hover:bg-purple-800 flex-shrink-0"
-                >
-                    ¿LISTO?
-                </button>
+                !hideCheck && (
+                    <button
+                        type="button"
+                        onClick={onCheck}
+                        disabled={disabled}
+                        className="px-6 py-2 rounded font-bold text-white transition-all text-lg bg-purple-700 hover:bg-purple-800 flex-shrink-0"
+                    >
+                        ¿LISTO?
+                    </button>
+                )
             ) : status === 'correct' ? (
                 <div className="relative flex items-center gap-2 flex-shrink-0 animate-in fade-in zoom-in duration-300">
                     <span className="text-green-600 font-black text-2xl celebrate-animation">

@@ -56,7 +56,7 @@ export function IndexPage({ topics, onNavigate, zoom = 1 }: IndexPageProps) {
                                                     <span className="truncate">{p.title || `Parte ${i + 1}`}</span>
                                                 </span>
                                                 <span className="font-mono bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded text-xs group-hover:bg-primary group-hover:text-white transition-colors shrink-0 ml-2">
-                                                    Pág. {pageNum + 1}
+                                                    Pág. {pageNum}
                                                 </span>
                                             </li>
                                         );
@@ -71,7 +71,7 @@ export function IndexPage({ topics, onNavigate, zoom = 1 }: IndexPageProps) {
                                                 EJERCICIOS
                                             </span>
                                             <span className="font-mono bg-purple-50 dark:bg-purple-900/30 px-2 py-0.5 rounded text-xs group-hover:bg-primary group-hover:text-white transition-colors">
-                                                Pág. {topicStartPage + topic.pages.length + 1}
+                                                Pág. {topicStartPage + topic.pages.length}
                                             </span>
                                         </li>
                                     )}
