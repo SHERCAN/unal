@@ -8,7 +8,7 @@ import { FeedbackButton } from '@/components/FeedbackButton';
 interface Props { zoom?: number; }
 //PAGINA 3 EJERCICIOS
 export function EjerciciosPage({ zoom = 1 }: Props) {
-    const { submitExercise } = useVideoProgress();
+    const { submitExercise, isExerciseCompleted, completeStage } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         EJ_INTRO: 'comparacion_fracciones-pag1-v9',
@@ -28,23 +28,39 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const checkA = async (idx: number) => {
         const isCorrect = actA[idx] === answersA[idx as keyof typeof answersA];
         setResultsA(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
-        // ej1 to ej4
         await submitExercise(`comparacion_fracciones-pag1-ej${idx + 1}`, isCorrect);
+        checkFinalCompletion();
     };
 
     const checkB = async (idx: number) => {
         const isCorrect = actB[idx] === answersB[idx as keyof typeof answersB];
         setResultsB(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
-        // Part B starts after Part A: ej5 to ej10
-        // Map idx 0..5 to ej5..ej10
-        const ejNum = idx === 4 ? 6 : (idx === 5 ? 10 : (idx === 0 ? 5 : (idx === 1 ? 7 : (idx === 2 ? 8 : 9))));
-        // Wait, Part B has indices 0, 1, 2, 3, 4, 5 in JSX?
-        // Let's check JSX: idx 0, 4, 2, 3, 5, 1.
-        // I will use a direct mapping or just normalize the order.
-        // Current index mapping:
-        // 0 -> ej5, 1 -> ej6, 2 -> ej7, 3 -> ej8, 4 -> ej9, 5 -> ej10
         await submitExercise(`comparacion_fracciones-pag1-ej${idx + 5}`, isCorrect);
+        checkFinalCompletion();
     };
+
+    const checkFinalCompletion = () => {
+        const allADone = Object.keys(answersA).every(idx => resultsA[parseInt(idx)] === 'correct' || isExerciseCompleted(`comparacion_fracciones-pag1-ej${parseInt(idx) + 1}`));
+        const allBDone = Object.keys(answersB).every(idx => resultsB[parseInt(idx)] === 'correct' || isExerciseCompleted(`comparacion_fracciones-pag1-ej${parseInt(idx) + 5}`));
+        if (allADone && allBDone) {
+            completeStage('comparacion-fracciones-final');
+        }
+    };
+
+    // Initial load and sync
+    React.useEffect(() => {
+        const nextA = { ...resultsA };
+        Object.keys(answersA).forEach(idx => {
+            if (isExerciseCompleted(`comparacion_fracciones-pag1-ej${parseInt(idx) + 1}`)) nextA[parseInt(idx)] = 'correct';
+        });
+        setResultsA(nextA);
+
+        const nextB = { ...resultsB };
+        Object.keys(answersB).forEach(idx => {
+            if (isExerciseCompleted(`comparacion_fracciones-pag1-ej${parseInt(idx) + 5}`)) nextB[parseInt(idx)] = 'correct';
+        });
+        setResultsB(nextB);
+    }, [isExerciseCompleted]);
 
     const Fraction = ({ num, den }: any) => (
         <div className="inline-flex flex-col items-center align-middle text-2xl font-black px-1">

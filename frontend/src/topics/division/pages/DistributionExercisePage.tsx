@@ -24,11 +24,11 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
     };
 
     const STAGE_IDS = {
-        C_STAGE: 'division-pag1-c-stage',
-        P_STAGE: 'division-pag1-p-stage'
+        C_STAGE: 'division-c-stage',
+        P_STAGE: 'division-p-stage'
     };
 
-    const { isVideoWatched, markVideoWatched, completeStage, watchedVideos, submitGame, isExerciseCompleted } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, completeStage, watchedVideos, completedExercises, submitGame, isExerciseCompleted, completedStages } = useVideoProgress();
 
     // ... (keep constants)
     const TOTAL_ORANGES = 24;
@@ -72,11 +72,36 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
 
     const [introDraggedId, setIntroDraggedId] = useState<number | null>(null);
 
-    // Initial load
+    // Initial load and auto-checking
     useEffect(() => {
         if (isExerciseCompleted(EXERCISE_IDS.C_GAME)) setCStageResult('correct');
         if (isExerciseCompleted(EXERCISE_IDS.P_GAME)) setPStageResult('correct');
-    }, [isExerciseCompleted]);
+
+        const C_REQUIRED = [
+            'division-pag1-v1', // C_INTRO
+            'division-pag1-v2', // C_DISTRIBUTION
+            'division-pag1-c-game'
+        ];
+        const P_REQUIRED = [
+            'division-pag1-v3', // P_INTRO
+            'division-pag1-v4', // P_DISTRIBUTION
+            'division-pag1-p-game'
+        ];
+
+        const cDone = C_REQUIRED.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (cDone) {
+            completeStage(STAGE_IDS.C_STAGE);
+        }
+
+        const pDone = P_REQUIRED.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (pDone) {
+            completeStage(STAGE_IDS.P_STAGE);
+        }
+    }, [isExerciseCompleted, watchedVideos, completedExercises]);
 
     const handleIntroDragStart = (e: React.DragEvent, id: number) => {
         if (cStageResult === 'correct') return;
@@ -204,9 +229,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
 
         setCStageResult(isCorrect ? 'correct' : 'incorrect');
         await submitGame(EXERCISE_IDS.C_GAME, isCorrect);
-        if (isCorrect) {
-            await completeStage(STAGE_IDS.C_STAGE);
-        }
+        // Stage completion handled by useEffect
     };
 
 
@@ -222,9 +245,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
         const isCorrect = finalAnswer.trim() === '6';
         setPStageResult(isCorrect ? 'correct' : 'incorrect');
         await submitGame(EXERCISE_IDS.P_GAME, isCorrect);
-        if (isCorrect) {
-            await completeStage(STAGE_IDS.P_STAGE);
-        }
+        // Stage completion handled by useEffect
     };
 
 
@@ -256,7 +277,9 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
 
                 {/* --- STAGE C: CONCRETE --- */}
                 <div className="relative ml-2 flex items-start">
-                    <div className="bg-green-300 text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center ">C</div>
+                    <div className="bg-green-300 text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center ">
+                        C {completedStages.includes(STAGE_IDS.C_STAGE) && <span className="ml-1 text-[#059669]">✓</span>}
+                    </div>
                     <div className="flex-1 relative border-2 border-green-300 p-4 rounded-r-lg -ml-0.5 rounded-tl-none">
 
                         {/* Scene 1: Intro */}
@@ -417,7 +440,9 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
 
                 {/* --- STAGE P: PICTORIAL --- */}
                 <div className="relative ml-2 flex items-start mb-8">
-                    <div className="bg-blue-300 dark:bg-blue-900 text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center">P</div>
+                    <div className="bg-blue-300 dark:bg-blue-900 text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center">
+                        P {completedStages.includes(STAGE_IDS.P_STAGE) && <span className="ml-1 text-[#2563eb]">✓</span>}
+                    </div>
                     <div className="flex-1 relative border-2 border-blue-300 dark:border-blue-900 p-4 rounded-r-lg -ml-0.5 rounded-tl-none">
 
                         <div className="flex items-center gap-2 mb-4">

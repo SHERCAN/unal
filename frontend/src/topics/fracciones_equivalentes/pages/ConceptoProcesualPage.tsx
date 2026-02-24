@@ -14,23 +14,42 @@ import image75Img from '../image 75.png';
 
 interface Props { zoom?: number; }
 //PAGINA 2 PICTORICO
-export function ConceptoProcesualPage({ zoom = 1 }: Props) {
+export function ConceptoPictoricoPage({ zoom = 1 }: Props) {
     const EXERCISE_IDS = {
         LAPS: 'fracciones_equivalentes-pag24-ej1',
         DESAFIO: 'fracciones_equivalentes-pag24-ej2'
     };
 
-    const STAGE_IDS = {
-        P_STAGE: 'fracciones_equivalentes-pag24-p-stage'
-    };
+    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted, watchedVideos, completedExercises, completedStages } = useVideoProgress();
 
-    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted } = useVideoProgress();
+    const STAGE_IDS = {
+        P_STAGE: 'fracciones-equivalentes-p-stage'
+    };
 
     const VIDEO_TRACKING = {
         BONO_EXPLICADO: 'fracciones_equivalentes-pag1-v1',
         LAPS_QUESTION: 'fracciones_equivalentes-pag24-v1',
         DESAFIO_VIDEO: 'fracciones_equivalentes-pag24-v3',
     };
+
+    // Initial load and auto-checking
+    React.useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.LAPS)) setLapsResult('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.DESAFIO)) setDesafioResult('correct');
+
+        const P_REQUIRED = [
+            'fracciones_equivalentes-pag1-v1', // BONO_EXPLICADO
+            'fracciones_equivalentes-pag24-v1', // LAPS_QUESTION
+            'fracciones_equivalentes-pag24-v3', // DESAFIO_VIDEO
+            EXERCISE_IDS.LAPS,
+            EXERCISE_IDS.DESAFIO
+        ];
+
+        const pDone = P_REQUIRED.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (pDone) completeStage(STAGE_IDS.P_STAGE);
+    }, [isExerciseCompleted, watchedVideos, completedExercises]);
 
     // --- State for Exercises ---
     const [lapsAns, setLapsAns] = useState('');
@@ -39,22 +58,14 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
     const [desafioAns, setDesafioAns] = useState('');
     const [desafioResult, setDesafioResult] = useState<'correct' | 'incorrect' | null>(null);
 
-    // Initial load sync
-    React.useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.LAPS)) setLapsResult('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.DESAFIO)) setDesafioResult('correct');
-    }, [isExerciseCompleted]);
 
     const handleLapsCheck = async () => {
         if (isExerciseCompleted(EXERCISE_IDS.LAPS)) return;
         const isCorrect = lapsAns === '4';
         setLapsResult(isCorrect ? 'correct' : 'incorrect');
         await submitGame(EXERCISE_IDS.LAPS, isCorrect);
-        // Maybe completeStage when both are done? Or after each.
-        // Usually for P section, we call completeStage after each activity is fine.
         if (isCorrect) {
-            // CSV only lists complete B, but we track stages internally
-            await completeStage(STAGE_IDS.P_STAGE);
+            // Stage auto-completed by useEffect
         }
     };
 
@@ -64,7 +75,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
         setDesafioResult(isCorrect ? 'correct' : 'incorrect');
         await submitGame(EXERCISE_IDS.DESAFIO, isCorrect);
         if (isCorrect) {
-            await completeStage(STAGE_IDS.P_STAGE);
+            // Stage auto-completed by useEffect
         }
     };
 
@@ -82,11 +93,11 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
     /* PlayButton definition removed */
 
     return (
-        <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones Equivalentes' }} pageId="frac-equiv-concepto-procesual">
-            {/* P - PROCESUAL Section */}
+        <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones Equivalentes' }} pageId="frac-equiv-concepto-pictorico">
+            {/* P - PICTORICO Section */}
             <div className="relative ml-2 flex items-start">
-                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#60a5fa' }}>
-                    P
+                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#60a5fa] dark:bg-blue-700">
+                    P {completedStages.includes(STAGE_IDS.P_STAGE) && <span className="ml-1 text-[#2563eb]">✓</span>}
                 </div>
                 <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white" style={{ borderColor: '#60a5fa' }}>
 

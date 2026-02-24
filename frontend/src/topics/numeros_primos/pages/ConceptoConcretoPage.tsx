@@ -7,7 +7,7 @@ import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
 
 /**
- * Números Primos: Concepto Concreto y Procesual
+ * Números Primos: Concepto Concreto y Pictórico
  * C section: Interactive drag-and-drop tennis ball distribution (Frame 208)
  * P section: 7 squares, grouping attempts (fail 2,3,4 groups; success 1 or 7 groups)
  */
@@ -26,11 +26,11 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     };
 
     const STAGE_IDS = {
-        C_STAGE: 'numeros_primos-pag14-c-stage',
-        P_STAGE: 'numeros_primos-pag14-p-stage'
+        C_STAGE: 'numeros-primos-c-stage',
+        P_STAGE: 'numeros-primos-p-stage'
     };
 
-    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted, watchedVideos, completedExercises, completedStages } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         C_INTRO: 'numeros_primos-pag14-v1',
@@ -40,13 +40,34 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         P_CONCLUSION: 'numeros_primos-pag14-v5',
     };
 
-    // Initial load sync
+    // Initial load and auto-checking
     useEffect(() => {
         if (isExerciseCompleted(EXERCISE_IDS.C_GAME)) {
             setPhase1Complete(true);
             setResultC('correct');
         }
-    }, [isExerciseCompleted]);
+
+        const C_REQUIRED = [
+            VIDEO_TRACKING.C_INTRO,
+            EXERCISE_IDS.C_GAME
+        ];
+        const P_REQUIRED = [
+            VIDEO_TRACKING.P_INTRO,
+            VIDEO_TRACKING.P_FAIL,
+            VIDEO_TRACKING.P_SUCCESS,
+            VIDEO_TRACKING.P_CONCLUSION
+        ];
+
+        const cDone = C_REQUIRED.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (cDone) completeStage(STAGE_IDS.C_STAGE);
+
+        const pDone = P_REQUIRED.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (pDone) completeStage(STAGE_IDS.P_STAGE);
+    }, [isExerciseCompleted, watchedVideos, completedExercises]);
 
     // ========================
     // C SECTION STATE
@@ -153,7 +174,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         setResultC(isCorrect ? 'correct' : 'incorrect');
         await submitGame(EXERCISE_IDS.C_GAME, isCorrect);
         if (isCorrect) {
-            await completeStage(STAGE_IDS.C_STAGE);
+            // Stage auto-completed by useEffect
         }
     };
 
@@ -209,7 +230,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
             {/* ============ C - CONCRETO ============ */}
             <div className="relative ml-2 flex items-start mb-8">
                 <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#4ade80] dark:bg-green-700">
-                    C
+                    C {completedStages.includes(STAGE_IDS.C_STAGE) && <span className="ml-1 text-[#059669]">✓</span>}
                 </div>
                 <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-white dark:bg-gray-800 border-[#4ade80] dark:border-green-700">
 
@@ -423,10 +444,10 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                 </div>
             </div>
 
-            {/* ============ P - PROCESUAL ============ */}
+            {/* ============ P - PICTORICO ============ */}
             <div className="relative ml-2 flex items-start">
                 <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#60a5fa] dark:bg-blue-700">
-                    P
+                    P {completedStages.includes(STAGE_IDS.P_STAGE) && <span className="ml-1 text-[#2563eb]">✓</span>}
                 </div>
                 <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white dark:bg-gray-800 border-[#60a5fa] dark:border-blue-700">
 
@@ -438,12 +459,6 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                             </p>
                             <div className="mt-2 flex items-center gap-4">
                                 <PlayVideoButton trackingId={VIDEO_TRACKING.P_INTRO} title="" videoId="/pag14/vv-2" />
-                                <button
-                                    onClick={() => completeStage(STAGE_IDS.P_STAGE)}
-                                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-bold text-sm transition-colors"
-                                >
-                                    TERMINAR SECCIÓN P
-                                </button>
                             </div>
                         </div>
 

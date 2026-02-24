@@ -27,10 +27,10 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
     };
 
     const STAGE_IDS = {
-        A_STAGE: 'numeros_primos-pag15-a-stage'
+        A_STAGE: 'numeros-primos-a-stage'
     };
 
-    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted, watchedVideos, completedExercises, completedStages } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         A_DIVISION: 'numeros_primos-pag15-v1',
@@ -53,19 +53,31 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
     const [answers, setAnswers] = useState<Record<number, string>>({});
     const [listoResult, setListoResult] = useState<'correct' | 'incorrect' | null>(null);
 
-    // Initial load sync
+    // Initial load and auto-checking
     useEffect(() => {
         if (isExerciseCompleted(EXERCISE_IDS.A_GAME)) setListoResult('correct');
-    }, [isExerciseCompleted]);
+
+        const A_REQUIRED = [
+            VIDEO_TRACKING.A_DIVISION,
+            VIDEO_TRACKING.A_PRIMO_DEF,
+            VIDEO_TRACKING.A_EJ_7,
+            VIDEO_TRACKING.A_EJ_8,
+            VIDEO_TRACKING.A_COMPUESTO_DEF,
+            VIDEO_TRACKING.A_COMPUESTO_EJ,
+            EXERCISE_IDS.A_GAME
+        ];
+
+        const aDone = A_REQUIRED.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (aDone) completeStage(STAGE_IDS.A_STAGE);
+    }, [isExerciseCompleted, watchedVideos, completedExercises]);
 
     const handleListo = async () => {
         if (isExerciseCompleted(EXERCISE_IDS.A_GAME)) return;
         const allCorrect = numbers.every(n => answers[n.num] === n.answer);
         setListoResult(allCorrect ? 'correct' : 'incorrect');
         await submitGame(EXERCISE_IDS.A_GAME, allCorrect);
-        if (allCorrect) {
-            await completeStage(STAGE_IDS.A_STAGE);
-        }
     };
 
     const handleReset = () => {
@@ -79,7 +91,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
             {/* A - ABSTRACTO Section */}
             <div className="relative ml-2 flex items-start">
                 <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de] dark:bg-purple-700">
-                    A
+                    A {completedStages.includes(STAGE_IDS.A_STAGE) && <span className="ml-1 text-[#7c3aed]">✓</span>}
                 </div>
                 <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-white dark:bg-gray-800 border-[#be90de] dark:border-purple-700">
 

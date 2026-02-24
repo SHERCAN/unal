@@ -53,6 +53,15 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
         if (isExerciseCompleted(EXERCISE_IDS.ACT2)) setAct2Status('correct');
         if (isExerciseCompleted(EXERCISE_IDS.ACT3)) setAct3Status('correct');
         if (isExerciseCompleted(EXERCISE_IDS.ACT4)) setAct4Status('correct');
+
+        // Check for final completion
+        const allDone = [
+            EXERCISE_IDS.ACT1A, EXERCISE_IDS.ACT1B, EXERCISE_IDS.ACT2, EXERCISE_IDS.ACT3, EXERCISE_IDS.ACT4
+        ].every(id => isExerciseCompleted(id));
+
+        if (allDone) {
+            completeStage('division-final');
+        }
     }, [isExerciseCompleted]);
 
     const resetAct1A = () => {

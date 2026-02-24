@@ -6,7 +6,7 @@ import { GuidePage } from '@/components/book-pages/shared/GuidePage';
 import { PresentationPage } from '@/components/book-pages/shared/PresentationPage';
 import { ExplanationPage } from '@/components/book-pages/shared/ExplanationPage';
 import { ConceptoConcretoPage } from './pages/ConceptoConcretoPage';
-import { ConceptoProcesualPage } from './pages/ConceptoProcesualPage';
+import { ConceptoPictoricoPage } from './pages/ConceptoProcesualPage';
 import { ConceptoAbstractoPage } from './pages/ConceptoAbstractoPage';
 import { EjerciciosPage } from './pages/EjerciciosPage';
 
@@ -24,7 +24,7 @@ export const divisionExactaConfig: TopicConfig = {
         // { component: PresentationPage, id: 'presentation', title: 'Presentación' },
         // { component: ExplanationPage, id: 'explanation', title: 'Explicación' },
         { component: ConceptoConcretoPage, id: 'concepto-concreto', title: 'Concepto Concreto' },
-        { component: ConceptoProcesualPage, id: 'concepto-procesual', title: 'Concepto Procesual' },
+        { component: ConceptoPictoricoPage, id: 'concepto-pictorico', title: 'Concepto Pictórico' },
         { component: ConceptoAbstractoPage, id: 'concepto-abstracto', title: 'Concepto Abstracto' },
     ],
     exercisePages: [

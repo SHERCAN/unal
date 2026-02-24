@@ -38,17 +38,36 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     };
 
     const STAGE_IDS = {
-        C_STAGE: 'division_exacta-pag7-c-stage',
-        P_STAGE: 'division_exacta-pag7-p-stage'
+        C_STAGE: 'division-exacta-c-stage',
+        P_STAGE: 'division-exacta-p-stage'
     };
 
-    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted, watchedVideos, completedExercises, completedStages } = useVideoProgress();
 
-    // Initial load sync
+    // Initial load and auto-checking
     useEffect(() => {
         if (isExerciseCompleted(EXERCISE_IDS.C_GAME)) setMedalResult('correct');
         if (isExerciseCompleted(EXERCISE_IDS.P_GAME)) setCircleResult('correct');
-    }, [isExerciseCompleted]);
+
+        const C_REQUIRED = [
+            'division_exacta-pag7-v1', // C_INTRO
+            'division_exacta-pag7-c-game'
+        ];
+        const P_REQUIRED = [
+            'division_exacta-pag7-v2', // P_INTRO
+            'division_exacta-pag7-p-game'
+        ];
+
+        const cDone = C_REQUIRED.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (cDone) completeStage(STAGE_IDS.C_STAGE);
+
+        const pDone = P_REQUIRED.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (pDone) completeStage(STAGE_IDS.P_STAGE);
+    }, [isExerciseCompleted, watchedVideos, completedExercises]);
 
     // ==================== C SECTION: Medals ====================
     const totalMedals = 18;
@@ -105,7 +124,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         setMedalResult(isCorrect ? 'correct' : 'incorrect');
         await submitGame(EXERCISE_IDS.C_GAME, isCorrect);
         if (isCorrect) {
-            await completeStage(STAGE_IDS.C_STAGE);
+            // Stage completion handled by useEffect
         }
     };
 
@@ -159,7 +178,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         setCircleResult(isCorrect ? 'correct' : 'incorrect');
         await submitGame(EXERCISE_IDS.P_GAME, isCorrect);
         if (isCorrect) {
-            await completeStage(STAGE_IDS.P_STAGE);
+            // Stage completion handled by useEffect
         }
     };
 
@@ -170,7 +189,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                 {/* ============ C - CONCRETO ============ */}
                 <div className="relative ml-2 flex items-start">
                     <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#80e8bb] dark:bg-green-900" style={{ borderColor: '#80e8bb' }}>
-                        C
+                        C {completedStages.includes(STAGE_IDS.C_STAGE) && <span className="ml-1 text-[#059669]">✓</span>}
                     </div>
                     <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-white dark:bg-gray-800 border-[#80e8bb] dark:border-green-900">
 
@@ -272,10 +291,10 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                     </div>
                 </div>
 
-                {/* ============ P - PROCESUAL ============ */}
+                {/* ============ P - PICTORICO ============ */}
                 <div className="relative ml-2 flex items-start">
                     <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#8ec2e8] dark:bg-blue-900" style={{ borderColor: '#8ec2e8' }}>
-                        P
+                        P {completedStages.includes(STAGE_IDS.P_STAGE) && <span className="ml-1 text-[#2563eb]">✓</span>}
                     </div>
                     <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-4 bg-white dark:bg-gray-800 border-[#8ec2e8] dark:border-blue-900">
 

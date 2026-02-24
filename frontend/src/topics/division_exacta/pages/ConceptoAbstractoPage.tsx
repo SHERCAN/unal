@@ -22,25 +22,26 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
     };
 
     const STAGE_IDS = {
-        A_STAGE: 'division_exacta-pag9-a-stage'
+        A_STAGE: 'division-exacta-a-stage'
     };
 
-    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted, watchedVideos, completedExercises, completedStages } = useVideoProgress();
+
+    const ABSTRACT_IDS = [
+        // Page 8 Videos
+        'division_exacta-pag8-v1', 'division_exacta-pag8-v3', 'division_exacta-pag8-v4',
+        'division_exacta-pag8-v5', 'division_exacta-pag8-v6',
+        // Page 9 Videos
+        'division_exacta-pag9-v1', 'division_exacta-pag9-v2', 'division_exacta-pag9-v3',
+        // Page 9 Exercises
+        'division_exacta-pag9-a-game'
+    ];
 
     const VIDEO_TRACKING = {
         A_NOEXACT: 'division_exacta-pag9-v1',
         A_NOEXACT2: 'division_exacta-pag9-v2',
         A_BONO: 'division_exacta-pag9-v3',
     };
-
-    /* videoModal list removed */
-    /* ref removed */
-
-    /* handleVideoComplete removed */
-
-    /* openVideo removed */
-
-    /* PlayButton definition removed */
 
     const DivisionAlgorithm = ({ dividend, divisor, quotient, subtract, remainder, multTable }: {
         dividend: number; divisor: number; quotient: number; subtract: number; remainder: number;
@@ -105,19 +106,24 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
     const [practicaAnswers, setPracticaAnswers] = useState<Record<number, string>>({});
     const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
 
-    // Initial load sync
+    // Initial load and auto-checking
     useEffect(() => {
         if (isExerciseCompleted(EXERCISE_IDS.A_GAME)) setResult('correct');
-    }, [isExerciseCompleted]);
+
+        const allDone = ABSTRACT_IDS.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (allDone) {
+            completeStage(STAGE_IDS.A_STAGE);
+        }
+    }, [isExerciseCompleted, watchedVideos, completedExercises]);
 
     const handleCheck = async () => {
         if (isExerciseCompleted(EXERCISE_IDS.A_GAME)) return;
         const allCorrect = practicaItems.every((item, i) => (practicaAnswers[i] === 'exacta') === item.isExact);
         setResult(allCorrect ? 'correct' : 'incorrect');
         await submitGame(EXERCISE_IDS.A_GAME, allCorrect);
-        if (allCorrect) {
-            await completeStage(STAGE_IDS.A_STAGE);
-        }
+        // Stage completion handled by useEffect
     };
 
     const handleReset = () => {
@@ -131,7 +137,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
             <div className="w-full">
                 <div className="relative ml-2 flex items-start">
                     <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de] dark:bg-purple-900" style={{ borderColor: '#be90de' }}>
-                        A
+                        A {completedStages.includes(STAGE_IDS.A_STAGE) && <span className="ml-1 text-[#7c3aed]">✓</span>}
                     </div>
                     <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-white dark:bg-gray-800 border-[#be90de] dark:border-purple-900">
 

@@ -1,7 +1,7 @@
 'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
@@ -19,7 +19,6 @@ interface Props { zoom?: number; }
 
 //PAGINA 3 ABSTRACTO
 export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         FIG_1: 'fracciones-fig-1',
@@ -29,8 +28,16 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
         NOTA: 'fracciones-pag19-v3',
     };
 
-    /* videoModal list removed */
-    /* ref removed */
+    const EXERCISE_IDS = {
+        EX1: 'fracciones-pag19-ex1',
+        EX2: 'fracciones-pag19-ex2',
+        EX3: 'fracciones-pag19-ex3',
+        EX4: 'fracciones-pag19-ex4',
+    };
+
+    const STAGE_IDS = {
+        A_STAGE: 'fracciones-a-stage'
+    };
 
     const [inputs, setInputs] = useState({
         ex1_n: '', ex1_d: '',
@@ -43,20 +50,45 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
     // State for validation messages
     const [results, setResults] = useState<{ [key: string]: 'correct' | 'incorrect' | null }>({});
 
+    const { isVideoWatched, markVideoWatched, completeStage, submitGame, isExerciseCompleted, watchedVideos, completedExercises, completedStages } = useVideoProgress();
 
-    /* handleVideoComplete removed */
+    // Initial load and auto-checking
+    useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.EX1)) setResults(prev => ({ ...prev, ex1: 'correct' }));
+        if (isExerciseCompleted(EXERCISE_IDS.EX2)) setResults(prev => ({ ...prev, ex2: 'correct' }));
+        if (isExerciseCompleted(EXERCISE_IDS.EX3)) setResults(prev => ({ ...prev, ex3: 'correct' }));
+        if (isExerciseCompleted(EXERCISE_IDS.EX4)) setResults(prev => ({ ...prev, ex4: 'correct' }));
 
-    /* openVideo removed */
+        const A_REQUIRED = [
+            // Page 18 Videos
+            'fracciones-pag18-v1', 'fracciones-pag18-v3', 'fracciones-pag18-v4',
+            'fracciones-pag18-v5', 'fracciones-pag18-v6', 'fracciones-pag18-v7',
+            'fracciones-pag18-v8', 'fracciones-pag18-v9',
+            // Page 19 Videos
+            'fracciones-pag19-v3', // Note
+            // Page 19 Exercises
+            EXERCISE_IDS.EX1, EXERCISE_IDS.EX2, EXERCISE_IDS.EX3, EXERCISE_IDS.EX4
+        ];
 
-    /* PlayButton definition removed */
+        const aDone = A_REQUIRED.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (aDone) completeStage(STAGE_IDS.A_STAGE);
+    }, [isExerciseCompleted, watchedVideos, completedExercises]);
 
     const validate = (id: string, correctN: string, correctD: string) => {
         const n = inputs[`${id}_n` as keyof typeof inputs];
         const d = inputs[`${id}_d` as keyof typeof inputs];
-        if (n === correctN && d === correctD) {
-            setResults({ ...results, [id]: 'correct' });
-        } else {
-            setResults({ ...results, [id]: 'incorrect' });
+        const isCorrect = n === correctN && d === correctD;
+        setResults({ ...results, [id]: isCorrect ? 'correct' : 'incorrect' });
+
+        const exerciseIdMap: Record<string, string> = {
+            ex1: EXERCISE_IDS.EX1,
+            ex2: EXERCISE_IDS.EX2,
+            ex4: EXERCISE_IDS.EX4
+        };
+        if (exerciseIdMap[id]) {
+            submitGame(exerciseIdMap[id], isCorrect);
         }
     };
 
@@ -71,12 +103,10 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
         const d1 = inputs.ex3_d1;
         const n2 = inputs.ex3_n2;
         const d2 = inputs.ex3_d2;
+        const isCorrect = n1 === "5" && d1 === "14" && n2 === "5" && d2 === "14";
 
-        if (n1 === "5" && d1 === "14" && n2 === "5" && d2 === "14") {
-            setResults({ ...results, ex3: 'correct' });
-        } else {
-            setResults({ ...results, ex3: 'incorrect' });
-        }
+        setResults({ ...results, ex3: isCorrect ? 'correct' : 'incorrect' });
+        submitGame(EXERCISE_IDS.EX3, isCorrect);
     };
 
     const resetAcordeon = () => {
@@ -166,7 +196,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
             <div className="relative ml-2 flex items-start">
                 {/* Header Tab "A" */}
                 <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de]" style={{ borderColor: '#be90de' }}>
-                    A
+                    A {completedStages.includes(STAGE_IDS.A_STAGE) && <span className="ml-1 text-[#7c3aed]">✓</span>}
                 </div>
 
                 {/* Content Container */}
@@ -264,7 +294,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                 <p className="text-base text-gray-800 font-semibold">
                                     Como se muestra la siguiente figura, <span className="font-bold text-red-600">NO</span> es realmente una forma de fracción.
                                     <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="" videoId="/pag19/vv-2" />
-                                </p>                                
+                                </p>
                             </div>
 
                             <div className="flex flex-col items-start gap-4 mt-4 w-full">
@@ -277,9 +307,9 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                 </div>
                                 <div className="flex items-center gap-3 text-gray-800">
                                     <p className="text-base font-semibold">
-                                        ¿Por qué esta figura no es una forma de fracción? Esas partes son diferentes. <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="" videoId="/pag19/vv-3"/>
+                                        ¿Por qué esta figura no es una forma de fracción? Esas partes son diferentes. <PlayVideoButton trackingId={VIDEO_TRACKING.NOTA} title="" videoId="/pag19/vv-3" />
                                     </p>
-                                    
+
                                 </div>
                             </div>
                         </div>

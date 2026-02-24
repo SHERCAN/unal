@@ -11,7 +11,7 @@ interface Props { zoom?: number; }
 
 //PAGINA 2 ABSTRACTO
 export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, completeStage, watchedVideos, completedExercises, completedStages } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         A_INTRO: 'fracciones-pag18-v1',
@@ -20,6 +20,25 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
         A_ERROR: 'fracciones-pag18-v8',
         A_EXAMPLE: 'fracciones-pag18-v9',
     };
+
+    const STAGE_IDS = {
+        A_STAGE: 'fracciones-a-stage'
+    };
+
+    const ABSTRACT_IDS = [
+        'fracciones-pag18-v1', 'fracciones-pag18-v3', 'fracciones-pag18-v4',
+        'fracciones-pag18-v5', 'fracciones-pag18-v6', 'fracciones-pag18-v7',
+        'fracciones-pag18-v8', 'fracciones-pag18-v9'
+    ];
+
+    React.useEffect(() => {
+        const allDone = ABSTRACT_IDS.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (allDone) {
+            completeStage(STAGE_IDS.A_STAGE);
+        }
+    }, [watchedVideos, completedExercises]);
 
     /* videoModal list removed */
     /* ref removed */
@@ -34,7 +53,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones' }} pageId="fracciones-concepto-abstracto-1">
             <div className="relative ml-2 flex items-start">
                 <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de]" style={{ borderColor: '#be90de' }}>
-                    A
+                    A {completedStages.includes(STAGE_IDS.A_STAGE) && <span className="ml-1 text-[#7c3aed]">✓</span>}
                 </div>
                 <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white border-[#be90de]">
 
@@ -46,7 +65,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                 <p className="text-gray-800 text-base leading-relaxed font-semibold">
                                     De acuerdo con la actividad anterior, la pizza se corta en <span className="font-extrabold text-purple-600 text-2xl">8</span> porciones. Los tres
                                     clientes comen 3 porciones. Se quedan <span className="font-extrabold text-orange-500 text-2xl">5</span> porciones. Su fracción se expresa como <span className="inline-block align-middle ml-2">
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="Introducción a la fracción" videoId="/pag18/vv-1" /></span>
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="Introducción a la fracción" videoId="/pag18/vv-1" /></span>
                                 </p>
                             </div>
 
@@ -55,7 +74,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                             </div>
 
                             <div className="flex justify-center my-8 pl-8">
-                                <img 
+                                <img
                                     className="h-32 object-contain"
                                     src="/fracciones/img1.png"
                                     draggable={false}
@@ -78,10 +97,10 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                 </p>
 
                                 <div className="flex items-center gap-8">
-                                    <p className="text-base font-semibold text-gray-800">Se escribe de la forma:</p>                                    
+                                    <p className="text-base font-semibold text-gray-800">Se escribe de la forma:</p>
                                 </div>
                                 <div className="flex justify-center">
-                                    <img 
+                                    <img
                                         className="h-24 object-contain"
                                         src="/fracciones/img2.png"
                                         draggable={false}
@@ -89,7 +108,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                 </div>
                                 <p className="text-base font-semibold text-gray-800 leading-relaxed max-w-3xl">
                                     donde <span className="font-bold text-[#3703d4] text-2xl">a</span> y <span className="font-bold text-[#9704ae] text-2xl">b</span> son números naturales, <span className="font-bold text-[#9704ae] text-2xl">b</span> es siempre diferente de cero, <span className="font-bold text-[#9704ae] text-2xl">b ≠ 0</span>. <span className="inline-block align-middle ml-2">
-                                    <PlayVideoButton trackingId="fracciones-pag18-v4" title="" videoId="/pag18/vv-4 (add)" /></span>
+                                        <PlayVideoButton trackingId="fracciones-pag18-v4" title="" videoId="/pag18/vv-4 (add)" /></span>
                                 </p>
                             </div>
                         </div>
@@ -101,13 +120,13 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                 <h3 className="text-xl font-black text-black uppercase tracking-widest">Partes de la Fracción</h3>
                             </div>
                             <div className="flex justify-center pl-24">
-                                <img 
+                                <img
                                     className="h-24 object-contain"
                                     src="/fracciones/img3.png"
                                     draggable={false}
                                 />
                             </div>
-                            
+
 
                             <div className="w-full pl-6 space-y-4 max-w-4xl">
                                 <p className="text-base font-bold text-gray-800 mb-2">¿Qué significa?</p>

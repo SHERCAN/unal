@@ -22,7 +22,7 @@ export const numerosPrimosConfig: TopicConfig = {
         // { component: GuidePage, id: 'guide', title: 'Guía' },
         // { component: PresentationPage, id: 'presentation', title: 'Presentación' },
         // { component: ExplanationPage, id: 'explanation', title: 'Explicación' },
-        { component: ConceptoConcretoPage, id: 'concepto-concreto', title: 'Concepto Concreto y Procesual' },
+        { component: ConceptoConcretoPage, id: 'concepto-concreto', title: 'Concepto Concreto y Pictórico' },
         { component: ConceptoAbstractoPage, id: 'concepto-abstracto', title: 'Concepto Abstracto' },
     ],
     exercisePages: [

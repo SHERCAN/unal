@@ -34,7 +34,6 @@ const SLICE_STYLES: React.CSSProperties[] = [
 
 //PAGINA 1 CONCRETO PICTORICO
 export function ConceptoConcretoPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         C_PIZZA: 'fracciones-pag17-v1',
@@ -47,9 +46,36 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     };
 
     const STAGE_IDS = {
-        C_STAGE: 'fracciones-pag17-c-stage',
-        P_STAGE: 'fracciones-pag17-p-stage'
+        C_STAGE: 'fracciones-c-stage',
+        P_STAGE: 'fracciones-p-stage'
     };
+
+    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted, watchedVideos, completedExercises, completedStages } = useVideoProgress();
+
+    // Initial load and auto-checking
+    useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.C_ACTIVITY)) setListoResultC('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.P_ACTIVITY)) setListoResultP('correct');
+
+        const C_REQUIRED = [
+            'fracciones-pag17-v1', // C_PIZZA
+            'fracciones-pag17-ej1' // C_ACTIVITY
+        ];
+        const P_REQUIRED = [
+            'fracciones-pag17-v2', // P_EXPLAIN
+            'fracciones-pag17-ej2' // P_ACTIVITY
+        ];
+
+        const cDone = C_REQUIRED.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (cDone) completeStage(STAGE_IDS.C_STAGE);
+
+        const pDone = P_REQUIRED.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (pDone) completeStage(STAGE_IDS.P_STAGE);
+    }, [isExerciseCompleted, watchedVideos, completedExercises]);
 
     /* ═══════════════════════ SECTION C STATE ═══════════════════════ */
     const [sliceLocations, setSliceLocations] = useState<Record<number, number>>({
@@ -58,10 +84,6 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     const [draggedSlice, setDraggedSlice] = useState<number | null>(null);
     const [listoResultC, setListoResultC] = useState<'correct' | 'incorrect' | null>(null);
 
-    useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.C_ACTIVITY)) setListoResultC('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.P_ACTIVITY)) setListoResultP('correct');
-    }, [isExerciseCompleted]);
 
     const handleDragStart = (sliceIdx: number) => {
         if (listoResultC === 'correct') return;
@@ -97,9 +119,6 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         const isCorrect = totalOnMesas === 3;
         setListoResultC(isCorrect ? 'correct' : 'incorrect');
         await submitGame(EXERCISE_IDS.C_ACTIVITY, isCorrect);
-        if (isCorrect) {
-            await completeStage(STAGE_IDS.C_STAGE);
-        }
     };
 
     const handleResetC = () => {
@@ -145,9 +164,6 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         const isCorrect = removedPortions.length === 3;
         setListoResultP(isCorrect ? 'correct' : 'incorrect');
         await submitGame(EXERCISE_IDS.P_ACTIVITY, isCorrect);
-        if (isCorrect) {
-            await completeStage(STAGE_IDS.P_STAGE);
-        }
     };
 
     const handleResetP = () => {
@@ -184,10 +200,10 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones' }} pageId="fracciones-concepto-concreto">
             {/* ═══════════════════ C - CONCRETO SECTION ═══════════════════ */}
             <div className="relative ml-2 flex items-start mb-8">
-                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#4ade80' }}>
-                    C
+                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#80e8bb] dark:bg-green-900">
+                    C {completedStages.includes(STAGE_IDS.C_STAGE) && <span className="ml-1 text-[#059669]">✓</span>}
                 </div>
-                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-4 bg-white" style={{ borderColor: '#4ade80' }}>
+                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-4 bg-white" style={{ borderColor: '#80e8bb' }}>
 
                     {/* Play button */}
                     <div className="absolute top-3 left-3 z-20">
@@ -279,7 +295,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                 </div>
             </div>
 
-            {/* ═══════════════════ P - PROCESUAL SECTION ═══════════════════ */}
+            {/* ═══════════════════ P - PICTORICO SECTION ═══════════════════ */}
             <div className="relative ml-2 flex items-start">
                 <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#60a5fa' }}>
                     P

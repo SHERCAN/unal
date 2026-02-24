@@ -22,10 +22,10 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
     };
 
     const STAGE_IDS = {
-        A_STAGE: 'fracciones_equivalentes-pag25-a-stage'
+        A_STAGE: 'fracciones-equivalentes-a-stage'
     };
 
-    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted, watchedVideos, completedExercises, completedStages } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         A_INTRO: 'fracciones_equivalentes-pag25-v1',
@@ -60,11 +60,23 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
     const [row1Result, setRow1Result] = useState<'correct' | 'incorrect' | null>(null);
     const [row2Result, setRow2Result] = useState<'correct' | 'incorrect' | null>(null);
 
-    // Initial load sync
+    // Initial load and auto-checking
     useEffect(() => {
         if (isExerciseCompleted(EXERCISE_IDS.ROW1)) setRow1Result('correct');
         if (isExerciseCompleted(EXERCISE_IDS.ROW2)) setRow2Result('correct');
-    }, [isExerciseCompleted]);
+
+        const A_REQUIRED = [
+            'fracciones_equivalentes-pag25-v1', 'fracciones_equivalentes-pag25-v2', 'fracciones_equivalentes-pag25-v3',
+            'fracciones_equivalentes-pag25-v4', 'fracciones_equivalentes-pag25-v5', 'fracciones_equivalentes-pag25-v6',
+            'fracciones_equivalentes-pag25-v7',
+            EXERCISE_IDS.ROW1, EXERCISE_IDS.ROW2
+        ];
+
+        const aDone = A_REQUIRED.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (aDone) completeStage(STAGE_IDS.A_STAGE);
+    }, [isExerciseCompleted, watchedVideos, completedExercises]);
 
     const checkRow1 = async () => {
         if (isExerciseCompleted(EXERCISE_IDS.ROW1)) return;
@@ -108,7 +120,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
             {/* Main Title Section removed */}
             <div className="relative ml-2 flex items-start">
                 <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de]" style={{ borderColor: '#be90de' }}>
-                    A
+                    A {completedStages.includes(STAGE_IDS.A_STAGE) && <span className="ml-1 text-[#7c3aed]">✓</span>}
                 </div>
                 <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white border-[#be90de]">
 

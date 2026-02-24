@@ -32,11 +32,10 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     };
 
     const STAGE_IDS = {
-        ACT1_STAGE: 'division_inexacta-pag13-act1-stage',
-        ACT2_STAGE: 'division_inexacta-pag13-act2-stage',
-        ACT3_STAGE: 'division_inexacta-pag13-act3-stage',
-        MODULO_A: 'division_inexacta-pag13-modulo-a',
-        MODULO_B: 'division_inexacta-pag13-modulo-b'
+        ACT1_STAGE: 'division-inexacta-act1',
+        ACT2_STAGE: 'division-inexacta-act2',
+        ACT3_STAGE: 'division-inexacta-act3',
+        FINAL_STAGE: 'division-inexacta-final'
     };
 
     // ===== ACTIVITY 1: Determinar exacta o inexacta =====
@@ -109,10 +108,11 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         await submitExercise(`division_inexacta-pag13-ej${index + 5}`, correct);
         if (correct) {
             await completeStage(STAGE_IDS.ACT2_STAGE);
-            // If all 2 are correct, complete Modulo A
+            // If all 2 are correct, check for final completion
             const allCorrect = act2Items.every((_, i) => i === index ? correct : act2Results[i] === 'correct');
             if (allCorrect) {
-                await completeStage(STAGE_IDS.MODULO_A);
+                // You might want to call something here but we will call FINAL_STAGE when ACT1, ACT2 and ACT3 are all done.
+                // For now, let's just make it simple.
             }
         }
     };
@@ -185,11 +185,12 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         await submitExercise(`division_inexacta-pag13-ej${index + 7}`, correct);
         if (correct) {
             await completeStage(STAGE_IDS.ACT3_STAGE);
-            // If all 4 are correct AND act1 is correct, complete Modulo B
+            // Check for final completion
             const allCorrect = act3Items.every((_, i) => i === index ? correct : act3Results[i] === 'correct');
             const act1AllCorrect = act1Items.every((_, i) => act1Results[i] === 'correct');
-            if (allCorrect && act1AllCorrect) {
-                await completeStage(STAGE_IDS.MODULO_B);
+            const act2AllCorrect = act2Items.every((_, i) => act2Results[i] === 'correct');
+            if (allCorrect && act1AllCorrect && act2AllCorrect) {
+                await completeStage(STAGE_IDS.FINAL_STAGE);
             }
         }
     };

@@ -38,7 +38,8 @@ export default function VideoModal({
   }, [isOpen]);
 
   const handleTimeUpdate = () => {
-    if (canSkip || !videoRef.current) return;
+    const isGlobalFastForwardEnabled = process.env.NEXT_PUBLIC_ALLOW_VIDEO_FAST_FORWARD === 'true';
+    if (canSkip || isGlobalFastForwardEnabled || !videoRef.current) return;
 
     const currentTime = videoRef.current.currentTime;
     // Allow small forward jumps (normal playback or minor buffering jitter)
@@ -78,7 +79,7 @@ export default function VideoModal({
               muted={false}
               className="w-full h-full object-cover"
               src={`https://unalapi.solindtec.net${videoId.startsWith('/') ? '' : '/'}${videoId}.mp4`}
-              controlsList={!canSkip ? "nodownload noplaybackrate" : "nodownload"}
+              controlsList={(!canSkip && process.env.NEXT_PUBLIC_ALLOW_VIDEO_FAST_FORWARD !== 'true') ? "nodownload noplaybackrate" : "nodownload"}
               onTimeUpdate={handleTimeUpdate}
               onEnded={handleEnded}
             ></video>

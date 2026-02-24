@@ -6,7 +6,7 @@ import { GuidePage } from '@/components/book-pages/shared/GuidePage';
 import { PresentationPage } from '@/components/book-pages/shared/PresentationPage';
 import { ExplanationPage } from '@/components/book-pages/shared/ExplanationPage';
 import { ConceptoConcretoPage } from './pages/ConceptoConcretoPage';
-import { ConceptoProcesualPage } from './pages/ConceptoProcesualPage';
+import { ConceptoPictoricoPage } from './pages/ConceptoProcesualPage';
 import { ConceptoAbstracto1Page } from './pages/ConceptoAbstracto1Page';
 import { ConceptoAbstracto2Page } from './pages/ConceptoAbstracto2Page';
 import { EjemplosPage } from './pages/EjemplosPage';
@@ -26,7 +26,7 @@ export const fraccionesEquivalentesConfig: TopicConfig = {
         // { component: PresentationPage, id: 'presentation', title: 'Presentación' },
         // { component: ExplanationPage, id: 'explanation', title: 'Explicación' },
         { component: ConceptoConcretoPage, id: 'concepto-concreto', title: 'Concepto Concreto' },
-        { component: ConceptoProcesualPage, id: 'concepto-procesual', title: 'Concepto Procesual' },
+        { component: ConceptoPictoricoPage, id: 'concepto-pictorico', title: 'Concepto Pictórico' },
         { component: ConceptoAbstracto1Page, id: 'concepto-abstracto-1', title: 'Productos Cruzados' },
         { component: ConceptoAbstracto2Page, id: 'concepto-abstracto-2', title: 'Simplificación y Amplificación' },
         { component: EjemplosPage, id: 'ejemplos', title: 'Ejemplos' },

@@ -9,6 +9,7 @@ export interface ProgressNavigationProps {
     completedPages: number[];
     completedModules?: string[];
     onPageChange?: (page: number) => void;
+    topicId?: string; // Add topicId
 }
 
 type Section = 'lesson' | 'exercise';
@@ -19,7 +20,8 @@ export function ProgressNavigation({
     currentPage,
     completedPages,
     completedModules = [],
-    onPageChange
+    onPageChange,
+    topicId = 'division' // Default to division for backward compatibility
 }: ProgressNavigationProps) {
     const currentSection: Section = currentPage <= lessonPages ? 'lesson' : 'exercise';
     const [activeSection, setActiveSection] = useState<Section>(currentSection);
@@ -42,10 +44,10 @@ export function ProgressNavigation({
         const isSectionCompleted = isPageCompleted(sectionEndPage);
 
         const steps = [
-            { label: 'C', moduleId: 'division-c', defaultColor: '#80e8bb', ring: 'ring-[#80e8bb]/50' },
-            { label: 'P', moduleId: 'division-p', defaultColor: '#8ec2e8', ring: 'ring-[#8ec2e8]/50' },
-            { label: 'A', moduleId: 'division-a', defaultColor: '#be90de', ring: 'ring-[#be90de]/50' },
-            { label: '✓', moduleId: 'final', defaultColor: 'purple', ring: 'ring-purple-300' } // Final
+            { label: 'C', moduleId: `${topicId}-c-stage`, defaultColor: '#80e8bb' },
+            { label: 'P', moduleId: `${topicId}-p-stage`, defaultColor: '#8ec2e8' },
+            { label: 'A', moduleId: `${topicId}-a-stage`, defaultColor: '#be90de' },
+            { label: '✓', moduleId: 'final', defaultColor: '#bdbdbd' }
         ];
 
         return (
@@ -58,35 +60,39 @@ export function ProgressNavigation({
 
                     let bgColor = step.defaultColor;
                     let textColor = 'text-white';
-                    let scale = 'scale-100';
+                    let scale = 'scale-110';
 
                     if (!isLast) {
                         // C, P, A Steps
-                        scale = 'scale-110';
                         if (isModuleCompleted) {
                             bgColor = '#22c55e'; // Green-500
                         }
                     } else {
                         // Final Checkmark Step
-                        // Check if all 3 exercises in DivisionExercisesPage are completed
-                        const allExercisesCompleted = [
-                            'division-exercises-activity1',
-                            'division-exercises-activity2',
-                            'division-exercises-activity3'
-                        ].every(id => completedModules.includes(id));
+                        const FINAL_EXERCISES: Record<string, string | string[]> = {
+                            'division': 'division-final',
+                            'division-exacta': 'division-exacta-final',
+                            'division-inexacta': 'division-inexacta-final',
+                            'numeros-primos': 'numeros-primos-final',
+                            'fracciones': ['fracciones-pag21-ej3-row1', 'fracciones-pag21-ej3-row2', 'fracciones-pag21-ej3-row3', 'fracciones-pag21-ej3-row4'],
+                            'fracciones-equivalentes': 'fracciones-equivalentes-final',
+                            'comparacion-fracciones': 'comparacion-fracciones-final'
+                        };
+
+                        const topicKey = topicId || 'division';
+                        const finalId = FINAL_EXERCISES[topicKey];
+                        const allExercisesCompleted = Array.isArray(finalId)
+                            ? finalId.every(id => completedModules.includes(id))
+                            : finalId ? completedModules.includes(finalId) : isSectionCompleted;
 
                         if (allExercisesCompleted) {
-                            // All exercises completed -> Green (same as CPA)
                             bgColor = '#22c55e'; // Green-500
-                            scale = 'scale-110';
                         } else if (isSectionCompleted) {
-                            // Section completed but not all exercises -> Purple
                             bgColor = '#9333ea'; // Purple-600
-                            scale = 'scale-110';
                         } else {
-                            // Not completed -> Gray
                             bgColor = '#e5e7eb'; // Gray-200
                             textColor = 'text-gray-400';
+                            scale = 'scale-100';
                         }
                     }
 
@@ -106,7 +112,7 @@ export function ProgressNavigation({
 
                             {index < steps.length - 1 && (
                                 <div
-                                    className={`h-0.5 w-4 rounded-full transition-colors duration-200 ${isSectionCompleted
+                                    className={`h-0.5 w-4 rounded-full transition-colors duration-200 ${isModuleCompleted
                                         ? 'bg-green-500'
                                         : 'bg-gray-300 dark:bg-gray-600'
                                         }`}

@@ -1,7 +1,7 @@
 'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
@@ -17,7 +17,11 @@ import { useVideoProgress } from '@/hooks/useVideoProgress';
 interface Props { zoom?: number; }
 //PAGINA 2 ABSTRACTO
 export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, completeStage, watchedVideos, completedExercises, completedStages } = useVideoProgress();
+
+    const STAGE_IDS = {
+        A_STAGE: 'division-inexacta-a-stage'
+    };
 
     const VIDEO_TRACKING = {
         A_INTRO: 'division_inexacta-pag12-v1',
@@ -26,6 +30,21 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
         A_DEF: 'division_inexacta-pag12-v4',
         A_PARTES: 'division_inexacta-pag12-v5',
     };
+
+    const ABSTRACT_IDS = [
+        'division_inexacta-pag12-v1', 'division_inexacta-pag12-v2',
+        'division_inexacta-pag12-v3', 'division_inexacta-pag12-v4',
+        'division_inexacta-pag12-v5'
+    ];
+
+    useEffect(() => {
+        const allDone = ABSTRACT_IDS.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (allDone) {
+            completeStage(STAGE_IDS.A_STAGE);
+        }
+    }, [watchedVideos, completedExercises]);
 
     /* videoModal list removed */
     /* ref removed */
@@ -90,11 +109,11 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
     );
 
     return (
-        <BookPageContainer zoom={zoom} moduleHeader={{ name: 'División Inexacta' }} pageId="div-inexacta-concepto-procesual">
+        <BookPageContainer zoom={zoom} moduleHeader={{ name: 'División Inexacta' }} pageId="div-inexacta-concepto-abstracto">
             <div className="w-full">
                 <div className="relative ml-2 flex items-start">
                     <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de] dark:bg-purple-900" style={{ borderColor: '#be90de' }}>
-                        A
+                        A {completedStages.includes(STAGE_IDS.A_STAGE) && <span className="ml-1 text-[#7c3aed]">✓</span>}
                     </div>
                     <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-white dark:bg-gray-800 border-[#be90de] dark:border-purple-900">
 
@@ -108,7 +127,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                         cada grupo recibe la misma cantidad, pero hay resto <span className="font-bold text-2xl text-[#e95352]">2</span> medallas; estas
                                         corresponden al resto de la división. <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="" videoId="/pag12/vv-1" />
                                     </p>
-                                    
+
                                 </div>
                             </div>
 
@@ -120,7 +139,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                 </div>
 
                                 <div className="flex justify-center my-8 pl-8">
-                                    <img 
+                                    <img
                                         className="h-12 object-contain"
                                         src="/division_inexacta/img1.png"
                                         draggable={false}
@@ -136,7 +155,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                 </div>
 
                                 <div className="flex justify-center my-8 pl-12">
-                                    <img 
+                                    <img
                                         className="h-48 object-contain"
                                         src="/division_inexacta/img2.png"
                                         draggable={false}
@@ -165,7 +184,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                 </div>
 
                                 <div className="flex my-8 pl-40">
-                                    <img 
+                                    <img
                                         className="h-42 object-contain"
                                         src="/division_inexacta/img3.png"
                                         draggable={false}

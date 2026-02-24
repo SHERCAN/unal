@@ -2,6 +2,7 @@
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 import React from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
+import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 interface Props { zoom?: number; }
 //PAGINA 2 ABSTRACTO
@@ -12,6 +13,23 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
         A_STRATEGY: 'comparacion_fracciones-pag1-v8',
         A_DIFF_DEN: 'comparacion_fracciones-pag1-v7'
     };
+
+    const STAGE_IDS = {
+        A_STAGE: 'comparacion-fracciones-a-stage'
+    };
+
+    const { completeStage, watchedVideos, completedStages } = useVideoProgress();
+
+    React.useEffect(() => {
+        const A_REQUIRED = [
+            VIDEO_TRACKING.A_INTRO,
+            VIDEO_TRACKING.A_SAME_DEN,
+            VIDEO_TRACKING.A_STRATEGY,
+            VIDEO_TRACKING.A_DIFF_DEN
+        ];
+        const aDone = A_REQUIRED.every(id => watchedVideos.includes(id));
+        if (aDone) completeStage(STAGE_IDS.A_STAGE);
+    }, [watchedVideos]);
 
     const Fraction = ({ num, den, size = "text-3xl", numColor = "text-black" }: any) => (
         <div className={`inline-flex flex-col items-center align-middle ${size} font-black px-1`}>
@@ -36,8 +54,8 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
             <div className="space-y-10 pb-20">
                 {/* A - ABSTRACTO Section */}
                 <div className="relative ml-2 flex items-start mb-8">
-                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#be90de' }}>
-                        A
+                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de]" style={{ borderColor: '#be90de' }}>
+                        A {completedStages.includes(STAGE_IDS.A_STAGE) && <span className="ml-1 text-[#7c3aed]">✓</span>}
                     </div>
                     <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5" style={{ borderColor: '#be90de' }}>
 
@@ -48,7 +66,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                     <p className="font-semibold text-gray-800 text-base">
                                         A continuación, la comparación de dos fracciones se expresa mediante notación matemática: <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="" videoId="/pag30/vv-1" />
                                     </p>
-                                    
+
                                 </div>
                                 <div className="flex justify-center items-center gap-8" style={{ fontSize: 'clamp(2rem, 6vmin, 3rem)' }}>
                                     <Fraction num="1" den="3" size="text-2xl" numColor="text-[#6e5be0]" />
@@ -123,7 +141,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                     <div className="space-y-8 pl-4 md:pl-12">
                                         <div className="flex items-center flex-wrap gap-4 md:gap-12 font-semibold" style={{ fontSize: 'clamp(1rem, 2.5vmin, 1.25rem)' }}>
                                             <span>1. <div className="flex justify-center my-8 pl-32">
-                                            <img src="/comparacion_fracciones/img1.png" alt="Ejemplo" className="h-14 object-containshadow-md" />
+                                                <img src="/comparacion_fracciones/img1.png" alt="Ejemplo" className="h-14 object-containshadow-md" />
                                             </div></span>
                                         </div>
                                         <p className="text-gray-800 dark:text-gray-800 font-semibold text-base">tienen el mismo denominador.</p>
@@ -145,7 +163,6 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                         </div>
                     </div>
                 </div>
-                {/* End of A - ABSTRACTO Section */}
             </div>
         </BookPageContainer>
     );

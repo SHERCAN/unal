@@ -26,20 +26,48 @@ interface Circle {
 interface Props { zoom?: number; }
 //PAGINA 1 CONCRETO PICTORICO
 export function ConceptoConcretoPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         C_INTRO: 'division_inexacta-pag11-v1',
         P_INTRO: 'division_inexacta-pag11-v2',
     };
 
-    /* videoModal list removed */
-    /* ref removed */
+    const STAGE_IDS = {
+        C_STAGE: 'division-inexacta-c-stage',
+        P_STAGE: 'division-inexacta-p-stage'
+    };
 
-    /* handleVideoComplete removed */
+    const EXERCISE_IDS = {
+        C_GAME: 'division_inexacta-pag11-c-game',
+        P_GAME: 'division_inexacta-pag11-p-game'
+    };
 
-    // ==================== C SECTION: Medals ====================
-    // En división inexacta: 17 medallas, 3 equipos. Cada uno 5. Sobran 2.
+    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted, watchedVideos, completedExercises, completedStages } = useVideoProgress();
+
+    // Initial load and auto-checking
+    React.useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.C_GAME)) setMedalResult('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.P_GAME)) setCircleResult('correct');
+
+        const C_REQUIRED = [
+            'division_inexacta-pag11-v1', // C_INTRO
+            'division_inexacta-pag11-c-game'
+        ];
+        const P_REQUIRED = [
+            'division_inexacta-pag11-v2', // P_INTRO
+            'division_inexacta-pag11-p-game'
+        ];
+
+        const cDone = C_REQUIRED.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (cDone) completeStage(STAGE_IDS.C_STAGE);
+
+        const pDone = P_REQUIRED.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (pDone) completeStage(STAGE_IDS.P_STAGE);
+    }, [isExerciseCompleted, watchedVideos, completedExercises]);
     const totalMedals = 17;
     const [medals, setMedals] = useState<Medal[]>(
         Array.from({ length: totalMedals }, (_, i) => ({ id: i, inTeam: null }))
@@ -84,6 +112,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         // 17 / 3 = 5, resto 2.
         if (t1 === 5 && t2 === 5 && t3 === 5 && inBox === 2) {
             setMedalResult('correct');
+            submitGame(EXERCISE_IDS.C_GAME, true);
         } else {
             setMedalResult('incorrect');
         }
@@ -135,6 +164,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         // 17 / 3 = 5, resto 2.
         if (g1 === 5 && g2 === 5 && g3 === 5 && pool === 2) {
             setCircleResult('correct');
+            submitGame(EXERCISE_IDS.P_GAME, true);
         } else {
             setCircleResult('incorrect');
         }
@@ -153,7 +183,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                 {/* ============ C - CONCRETO ============ */}
                 <div className="relative ml-2 flex items-start">
                     <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#80e8bb] dark:bg-green-900" style={{ borderColor: '#80e8bb' }}>
-                        C
+                        C {completedStages.includes(STAGE_IDS.C_STAGE) && <span className="ml-1 text-[#059669]">✓</span>}
                     </div>
                     <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-white dark:bg-gray-800 border-[#80e8bb] dark:border-green-900">
 
@@ -314,10 +344,10 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                     </div>
                 </div>
 
-                {/* ============ P - PROCESUAL ============ */}
+                {/* ============ P - PICTORICO ============ */}
                 <div className="relative ml-2 flex items-start">
                     <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#8ec2e8] dark:bg-blue-900" style={{ borderColor: '#8ec2e8' }}>
-                        P
+                        P {completedStages.includes(STAGE_IDS.P_STAGE) && <span className="ml-1 text-[#2563eb]">✓</span>}
                     </div>
                     <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-4 bg-white dark:bg-gray-800 border-[#8ec2e8] dark:border-blue-900">
 

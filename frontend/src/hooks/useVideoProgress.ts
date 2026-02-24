@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import { useToast, type ToastType } from '@/contexts/ToastContext';
 
@@ -79,13 +79,13 @@ export function useVideoProgress() {
         }
     };
 
-    const isVideoWatched = (videoId: string) => {
+    const isVideoWatched = useCallback((videoId: string) => {
         return watchedVideos.includes(videoId);
-    };
+    }, [watchedVideos]);
 
-    const isExerciseCompleted = (exerciseId: string) => {
+    const isExerciseCompleted = useCallback((exerciseId: string) => {
         return completedExercises[exerciseId]?.completed || false;
-    };
+    }, [completedExercises]);
 
     const completeStage = async (stageId: string) => {
         if (completedStages.includes(stageId)) return;
@@ -108,7 +108,12 @@ export function useVideoProgress() {
                 window.dispatchEvent(new Event('storage'));
             } else if (response.data.message === 'Already completed') {
                 // Update local list even if no points (for consistency)
-                setCompletedStages(prev => [...prev, stageId]);
+                setCompletedStages(prev => {
+                    if (prev.includes(stageId)) return prev;
+                    return [...prev, stageId];
+                });
+                // Ensure other tabs/components sync up even if already done
+                window.dispatchEvent(new Event('storage'));
             }
         } catch (error) {
             console.error('Error completing stage:', error);
@@ -189,9 +194,10 @@ export function useVideoProgress() {
         }
     };
 
-    return {
+    return useMemo(() => ({
         watchedVideos,
         completedStages,
+        completedExercises,
         loading,
         markVideoWatched,
         isVideoWatched,
@@ -199,5 +205,16 @@ export function useVideoProgress() {
         completeStage,
         submitExercise,
         submitGame
-    };
+    }), [
+        watchedVideos,
+        completedStages,
+        completedExercises,
+        loading,
+        markVideoWatched,
+        isVideoWatched,
+        isExerciseCompleted,
+        completeStage,
+        submitExercise,
+        submitGame
+    ]);
 }

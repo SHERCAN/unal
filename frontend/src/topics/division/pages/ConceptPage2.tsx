@@ -1,7 +1,7 @@
 'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
@@ -97,7 +97,7 @@ const KidFigure = ({ variant = 0 }: { variant?: number }) => {
 };
 //PAGINA 3 ABSTRACTO
 export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, completeStage, watchedVideos, completedExercises, isExerciseCompleted, completedStages } = useVideoProgress();
 
     // Define tracking IDs for videos
     const VIDEO_TRACKING_IDS = {
@@ -106,6 +106,27 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
         EXAMPLE: 'division-pag3-v3',
         PARTS: 'division-pag3-v4'
     };
+
+    const ABSTRACT_IDS = [
+        // Page 2 Videos
+        'division-pag2-v1', 'division-pag2-v2', 'division-pag2-v3', 'division-pag2-v4',
+        'division-pag2-v5', 'division-pag2-v6', 'division-pag2-v7',
+        // Page 3 Videos
+        'division-pag3-v1', 'division-pag3-v2', 'division-pag3-v3', 'division-pag3-v4',
+        // Page 4 Videos
+        'division-pag4-v1', 'division-pag4-v2', 'division-pag4-v3', 'division-pag4-v4',
+        // Page 4 Exercises
+        'division-pag4-ej1', 'division-pag4-ej2', 'division-pag4-ej3', 'division-pag4-ej4'
+    ];
+
+    useEffect(() => {
+        const allDone = ABSTRACT_IDS.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (allDone) {
+            completeStage('division-a-stage');
+        }
+    }, [watchedVideos, completedExercises]);
 
     /* videoModal list removed */
 
@@ -128,8 +149,8 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
         >
             {/* Main Content Box */}
             <div className="relative ml-2 flex items-start h-full">
-                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#be90de' }}>
-                    A
+                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de] dark:bg-purple-900">
+                    A {completedStages.includes('division-a-stage') && <span className="ml-1 text-[#7c3aed]">✓</span>}
                 </div>
                 <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 h-full flex flex-col" style={{ borderColor: '#be90de' }}>
 

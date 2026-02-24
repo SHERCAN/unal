@@ -1,7 +1,7 @@
 'use client';
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
@@ -17,8 +17,8 @@ import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 interface Props { zoom?: number; }
 //PAGINA 2 ABSTRACTO
-export function ConceptoProcesualPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
+export function ConceptoPictoricoPage({ zoom = 1 }: Props) {
+    const { isVideoWatched, markVideoWatched, completeStage, watchedVideos, completedExercises, completedStages } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         A_NOTA: 'division_exacta-pag8-v1',
@@ -27,6 +27,25 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
         A_DEF: 'division_exacta-pag8-v5',
         A_EXAMPLE: 'division_exacta-pag8-v6',
     };
+
+    const ABSTRACT_IDS = [
+        // Page 8 Videos
+        'division_exacta-pag8-v1', 'division_exacta-pag8-v3', 'division_exacta-pag8-v4',
+        'division_exacta-pag8-v5', 'division_exacta-pag8-v6',
+        // Page 9 Videos
+        'division_exacta-pag9-v1', 'division_exacta-pag9-v2', 'division_exacta-pag9-v3',
+        // Page 9 Exercises
+        'division_exacta-pag9-a-game'
+    ];
+
+    useEffect(() => {
+        const allDone = ABSTRACT_IDS.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (allDone) {
+            completeStage('division-exacta-a-stage');
+        }
+    }, [watchedVideos, completedExercises]);
 
     /* videoModal list removed */
     /* ref removed */
@@ -91,11 +110,11 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
     );
 
     return (
-        <BookPageContainer zoom={zoom} moduleHeader={{ name: 'División Exacta' }} pageId="div-exacta-concepto-procesual">
+        <BookPageContainer zoom={zoom} moduleHeader={{ name: 'División Exacta' }} pageId="div-exacta-concepto-pictorico">
             <div className="w-full">
                 <div className="relative ml-2 flex items-start">
                     <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de] dark:bg-purple-900" style={{ borderColor: '#be90de' }}>
-                        A
+                        A {completedStages.includes('division-exacta-a-stage') && <span className="ml-1 text-[#7c3aed]">✓</span>}
                     </div>
                     <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-white dark:bg-gray-800 border-[#be90de] dark:border-purple-900">
 
@@ -126,9 +145,9 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                                     <p className="text-base font-semibold text-gray-800 dark:text-gray-200">Vemos la notación matemática:</p>
                                     <PlayVideoButton trackingId={VIDEO_TRACKING.A_MATH} title="Notación Matemática" videoId="/pag8/vv-3" />
                                 </div>
-                                
+
                                 <div className="flex justify-center my-8 pl-12">
-                                    <img 
+                                    <img
                                         className="h-10 object-contain"
                                         src="/division_exacta/img1.png"
                                         draggable={false}
@@ -142,7 +161,7 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                                     <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMO} title="" videoId="/pag8/vv-4" />
                                 </div>
                                 <div className="flex justify-center my-8 pl-32">
-                                    <img 
+                                    <img
                                         className="h-48 object-contain"
                                         src="/division_exacta/img2.png"
                                         draggable={false}
@@ -172,13 +191,13 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
                                     </p>
                                 </div>
                                 <div className="flex justify-center my-8 pl-8">
-                                    <img 
+                                    <img
                                         className="h-48 object-contain"
                                         src="/division_exacta/img3.png"
                                         draggable={false}
                                     />
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>

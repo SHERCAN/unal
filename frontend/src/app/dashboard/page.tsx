@@ -740,6 +740,7 @@ function InfiniteBookWrapper({
       {currentPage > 0 && (
         <div className="sticky bottom-0 z-50 w-full animate-in slide-in-from-bottom-5 duration-300">
           <ProgressNavigation
+            topicId={currentTopicInfo?.topic.id}
             lessonPages={currentTopicInfo ? currentTopicInfo.topic.pages.length : 0}
             exercisePages={currentTopicInfo ? currentTopicInfo.topic.exercisePages.length : 0}
             currentPage={currentTopicInfo ? currentTopicInfo.relativePage : 0}

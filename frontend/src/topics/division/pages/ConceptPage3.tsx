@@ -13,7 +13,7 @@ interface DivisionConceptPage3Props {
 }
 //PAGINA 4 ABSTRACTO
 export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
-    const { isVideoWatched, markVideoWatched, submitExercise, isExerciseCompleted } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, submitExercise, isExerciseCompleted, completeStage, watchedVideos, completedExercises, completedStages } = useVideoProgress();
 
     const EXERCISE_IDS = {
         DIV_ALG: 'division-pag4-ej1',
@@ -22,22 +22,42 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
         PROBLEM2: 'division-pag4-ej4'
     };
 
-    // Video Tracking IDs
+    const ABSTRACT_IDS = [
+        // Page 2 Videos
+        'division-pag2-v1', 'division-pag2-v2', 'division-pag2-v3', 'division-pag2-v4',
+        'division-pag2-v5', 'division-pag2-v6', 'division-pag2-v7',
+        // Page 3 Videos
+        'division-pag3-v1', 'division-pag3-v2', 'division-pag3-v3', 'division-pag3-v4',
+        // Page 4 Videos
+        'division-pag4-v1', 'division-pag4-v2', 'division-pag4-v3', 'division-pag4-v4',
+        // Page 4 Exercises
+        'division-pag4-ej1', 'division-pag4-ej2', 'division-pag4-ej3', 'division-pag4-ej4'
+    ];
+
     const VIDEO_TRACKING_IDS = {
         EXAMPLE_MAIN: 'division-pag4-v1',
         PRACTICE_1: 'division-pag4-v2',
-        PRACTICE_2: 'division-concept-pag4-v3',
         PROBLEM_1: 'division-pag4-v3',
         PROBLEM_2: 'division-pag4-v4'
     };
 
-    // Initial load
+    const checkAbstractCompletion = (watched: string[], exercises: any) => {
+        return ABSTRACT_IDS.every(id =>
+            watched.includes(id) || exercises[id]?.completed
+        );
+    };
+
+    // Initial load and auto-checking
     useEffect(() => {
         if (isExerciseCompleted(EXERCISE_IDS.DIV_ALG)) setEx1Status('correct');
         if (isExerciseCompleted(EXERCISE_IDS.TERMS)) setEx2Status('correct');
         if (isExerciseCompleted(EXERCISE_IDS.PROBLEM1)) setP1Status('correct');
         if (isExerciseCompleted(EXERCISE_IDS.PROBLEM2)) setP2Status('correct');
-    }, [isExerciseCompleted]);
+
+        if (checkAbstractCompletion(watchedVideos, completedExercises)) {
+            completeStage('division-a-stage');
+        }
+    }, [isExerciseCompleted, watchedVideos, completedExercises]);
 
     // --- Exercise 1 State (21 / 7) ---
     const ex1_dividend = useInputState();
@@ -69,6 +89,13 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
     };
 
 
+    const checkAllAbstract = async (currentSuccess: boolean, otherStatuses: boolean[]) => {
+        // Obsolete but kept for safety, replaced by useEffect
+        if (currentSuccess && otherStatuses.every(s => s) && checkAbstractCompletion(watchedVideos, completedExercises)) {
+            await completeStage('division-a-stage');
+        }
+    };
+
     const checkEx1 = async () => {
         if (isExerciseCompleted(EXERCISE_IDS.DIV_ALG)) return;
         const isDivisionCorrect =
@@ -93,6 +120,13 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
         const isCorrect = isDivisionCorrect && isMultiplicationCorrect;
         setEx1Status(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.DIV_ALG, isCorrect);
+        if (isCorrect) {
+            checkAllAbstract(true, [
+                ex2Status === 'correct' || isExerciseCompleted(EXERCISE_IDS.TERMS),
+                p1Status === 'correct' || isExerciseCompleted(EXERCISE_IDS.PROBLEM1),
+                p2Status === 'correct' || isExerciseCompleted(EXERCISE_IDS.PROBLEM2)
+            ]);
+        }
     };
 
     // --- Exercise 2 State (Term Identification) ---
@@ -113,6 +147,13 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
         const isCorrect = ex2_val1 === 'dividendo' && ex2_val2 === 'divisor' && ex2_val3 === 'cociente';
         setEx2Status(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.TERMS, isCorrect);
+        if (isCorrect) {
+            checkAllAbstract(true, [
+                ex1Status === 'correct' || isExerciseCompleted(EXERCISE_IDS.DIV_ALG),
+                p1Status === 'correct' || isExerciseCompleted(EXERCISE_IDS.PROBLEM1),
+                p2Status === 'correct' || isExerciseCompleted(EXERCISE_IDS.PROBLEM2)
+            ]);
+        }
     };
 
     // --- Problem 1 State (Dolls) ---
@@ -133,6 +174,13 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
         const isCorrect = p1_div1.value === '12' && p1_div2.value === '2' && p1_res.value === '6';
         setP1Status(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.PROBLEM1, isCorrect);
+        if (isCorrect) {
+            checkAllAbstract(true, [
+                ex1Status === 'correct' || isExerciseCompleted(EXERCISE_IDS.DIV_ALG),
+                ex2Status === 'correct' || isExerciseCompleted(EXERCISE_IDS.TERMS),
+                p2Status === 'correct' || isExerciseCompleted(EXERCISE_IDS.PROBLEM2)
+            ]);
+        }
     };
 
     // --- Problem 2 State (Notebooks) ---
@@ -153,6 +201,13 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
         const isCorrect = p2_div1.value === '64' && p2_div2.value === '8' && p2_res.value === '8';
         setP2Status(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.PROBLEM2, isCorrect);
+        if (isCorrect) {
+            checkAllAbstract(true, [
+                ex1Status === 'correct' || isExerciseCompleted(EXERCISE_IDS.DIV_ALG),
+                ex2Status === 'correct' || isExerciseCompleted(EXERCISE_IDS.TERMS),
+                p1Status === 'correct' || isExerciseCompleted(EXERCISE_IDS.PROBLEM1)
+            ]);
+        }
     };
 
     return (
@@ -165,8 +220,8 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
             pageId="division-concept-3"
         >
             <div className="relative ml-2 flex items-start">
-                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#be90de' }}>
-                    A
+                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de] dark:bg-purple-900">
+                    A {completedStages.includes('division-a-stage') && <span className="ml-1 text-[#7c3aed]">✓</span>}
                 </div>
                 <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-4 flex flex-col" style={{ borderColor: '#be90de' }}>
 

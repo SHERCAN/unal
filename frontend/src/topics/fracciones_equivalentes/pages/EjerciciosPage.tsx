@@ -22,7 +22,7 @@ import image109 from '../image 109.png';
 interface Props { zoom?: number; }
 //PAGINA 6 EJERCICIOS
 export function EjerciciosPage({ zoom = 1 }: Props) {
-    const { submitExercise, isExerciseCompleted, completeStage } = useVideoProgress();
+    const { submitExercise, isExerciseCompleted, completeStage, watchedVideos, completedExercises } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         I1: 'fracciones_equivalentes-pag28-v1',
@@ -32,43 +32,106 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     };
 
     const STAGE_IDS = {
-        ACT1: 'fracciones_equivalentes-pag28-act1-stage',
-        ACT2: 'fracciones_equivalentes-pag28-act2-stage',
-        ACT3: 'fracciones_equivalentes-pag28-act3-stage',
-        ACT4: 'fracciones_equivalentes-pag28-act4-stage',
-        MODULO_C: 'fracciones_equivalentes-pag28-modulo-c'
+        ACT1: 'fracciones-equivalentes-act1',
+        ACT2: 'fracciones-equivalentes-act2',
+        ACT3: 'fracciones-equivalentes-act3',
+        ACT4: 'fracciones-equivalentes-act4',
+        FINAL_STAGE: 'fracciones-equivalentes-final'
     };
 
     // --- ACTIVITY 1: MATCHING ---
     const [act1, setAct1] = useState<Record<number, number | null>>({ 0: null, 1: null, 2: null });
     const [act1Result, setAct1Result] = useState<'correct' | 'incorrect' | null>(null);
 
+    // --- ACTIVITY 2: AMPLIFICATION ---
+    const [act2, setAct2] = useState<Record<number, string>>({});
+    const [act2Results, setAct2Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({ 0: null, 1: null, 2: null, 3: null, 4: null });
+    const act2Answers = { 0: '28', 1: '4', 2: '18', 3: '3', 4: '25' };
+
+    // --- ACTIVITY 3: SIMPLIFICATION ---
+    const [act3, setAct3] = useState<Record<number, string>>({});
+    const [act3Results, setAct3Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({ 0: null, 1: null, 2: null });
+    const act3Answers = { 0: '1', 1: '2', 2: '1', 3: '3', 4: '5', 5: '6' };
+
+    // --- ACTIVITY 4: TRUE/FALSE ---
+    const [act4, setAct4] = useState<Record<number, 'V' | 'F' | null>>({});
+    const [act4Results, setAct4Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({ 0: null, 1: null, 2: null, 3: null });
+    const act4Answers = { 0: 'V', 1: 'V', 2: 'F', 3: 'F' };
+
+    // Initial load and auto-checking
     useEffect(() => {
-        if (isExerciseCompleted('fracciones_equivalentes-pag28-ej1')) setAct1Result('correct');
-    }, [isExerciseCompleted]);
+        // Activity 1
+        if (isExerciseCompleted('fracciones_equivalentes-pag28-ej1')) {
+            setAct1Result('correct');
+            completeStage(STAGE_IDS.ACT1);
+        }
+
+        // Activity 2
+        const act2DoneIndices: number[] = [];
+        [0, 1, 2, 3, 4].forEach(idx => {
+            if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 2}`)) {
+                act2DoneIndices.push(idx);
+            }
+        });
+        if (act2DoneIndices.length > 0) {
+            setAct2Results(prev => {
+                const next = { ...prev };
+                act2DoneIndices.forEach(idx => { next[idx] = 'correct'; });
+                return next;
+            });
+            if (act2DoneIndices.length === 5) completeStage(STAGE_IDS.ACT2);
+        }
+
+        // Activity 3
+        const act3DoneIndices: number[] = [];
+        [0, 1, 2].forEach(idx => {
+            if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 7}`)) {
+                act3DoneIndices.push(idx);
+            }
+        });
+        if (act3DoneIndices.length > 0) {
+            setAct3Results(prev => {
+                const next = { ...prev };
+                act3DoneIndices.forEach(idx => { next[idx] = 'correct'; });
+                return next;
+            });
+            if (act3DoneIndices.length === 3) completeStage(STAGE_IDS.ACT3);
+        }
+
+        // Activity 4
+        const act4DoneIndices: number[] = [];
+        [0, 1, 2, 3].forEach(idx => {
+            if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 10}`)) {
+                act4DoneIndices.push(idx);
+            }
+        });
+        if (act4DoneIndices.length > 0) {
+            setAct4Results(prev => {
+                const next = { ...prev };
+                act4DoneIndices.forEach(idx => { next[idx] = 'correct'; });
+                return next;
+            });
+            if (act4DoneIndices.length === 4) completeStage(STAGE_IDS.ACT4);
+        }
+
+        // Check if all activities are completed to mark FINAL_STAGE
+        const allActivitiesCompleted =
+            isExerciseCompleted('fracciones_equivalentes-pag28-ej1') &&
+            [0, 1, 2, 3, 4].every(idx => isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 2}`)) &&
+            [0, 1, 2].every(idx => isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 7}`)) &&
+            [0, 1, 2, 3].every(idx => isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 10}`));
+
+        if (allActivitiesCompleted) {
+            completeStage(STAGE_IDS.FINAL_STAGE);
+        }
+    }, [isExerciseCompleted, watchedVideos, completedExercises]);
 
     const checkAct1 = async () => {
         if (isExerciseCompleted('fracciones_equivalentes-pag28-ej1')) return;
         const correct = act1[0] === 1 && act1[1] === 0 && act1[2] === 2;
         setAct1Result(correct ? 'correct' : 'incorrect');
         await submitExercise('fracciones_equivalentes-pag28-ej1', correct);
-        if (correct) {
-            await completeStage(STAGE_IDS.ACT1);
-        }
     };
-
-    // --- ACTIVITY 2: AMPLIFICATION ---
-    const [act2, setAct2] = useState<Record<number, string>>({});
-    const [act2Results, setAct2Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({ 0: null, 1: null, 2: null, 3: null, 4: null });
-    const act2Answers = { 0: '28', 1: '4', 2: '18', 3: '3', 4: '25' };
-
-    useEffect(() => {
-        [0, 1, 2, 3, 4].forEach(idx => {
-            if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 2}`)) {
-                setAct2Results(prev => ({ ...prev, [idx]: 'correct' }));
-            }
-        });
-    }, [isExerciseCompleted]);
 
     const checkSubAct2 = async (idx: number) => {
         if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 2}`)) return;
@@ -78,23 +141,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
         setAct2Results(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
         await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 2}`, isCorrect);
-        if (isCorrect) {
-            await completeStage(STAGE_IDS.ACT2);
-        }
     };
-
-    // --- ACTIVITY 3: SIMPLIFICATION ---
-    const [act3, setAct3] = useState<Record<number, string>>({});
-    const [act3Results, setAct3Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({ 0: null, 1: null, 2: null });
-    const act3Answers = { 0: '1', 1: '2', 2: '1', 3: '3', 4: '5', 5: '6' };
-
-    useEffect(() => {
-        [0, 1, 2].forEach(idx => {
-            if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 7}`)) {
-                setAct3Results(prev => ({ ...prev, [idx]: 'correct' }));
-            }
-        });
-    }, [isExerciseCompleted]);
 
     const checkSubAct3 = async (idx: number) => {
         if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 7}`)) return;
@@ -103,37 +150,13 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
         setAct3Results(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
         await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 7}`, isCorrect);
-        if (isCorrect) {
-            await completeStage(STAGE_IDS.ACT3);
-        }
     };
-
-    // --- ACTIVITY 4: TRUE/FALSE ---
-    const [act4, setAct4] = useState<Record<number, 'V' | 'F' | null>>({});
-    const [act4Results, setAct4Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({ 0: null, 1: null, 2: null, 3: null });
-    const act4Answers = { 0: 'V', 1: 'V', 2: 'F', 3: 'F' };
-
-    useEffect(() => {
-        [0, 1, 2, 3].forEach(idx => {
-            if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 10}`)) {
-                setAct4Results(prev => ({ ...prev, [idx]: 'correct' }));
-            }
-        });
-    }, [isExerciseCompleted]);
 
     const checkSubAct4 = async (idx: number) => {
         if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 10}`)) return;
         const isCorrect = act4[idx] === act4Answers[idx as keyof typeof act4Answers];
         setAct4Results(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
         await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 10}`, isCorrect);
-        if (isCorrect) {
-            await completeStage(STAGE_IDS.ACT4);
-            // If all 4 are correct, complete Modulo C
-            const allTFCorrect = [0, 1, 2, 3].every(i => i === idx ? isCorrect : act4Results[i] === 'correct');
-            if (allTFCorrect) {
-                await completeStage(STAGE_IDS.MODULO_C);
-            }
-        }
     };
 
     // HELPERS

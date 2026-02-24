@@ -18,7 +18,7 @@ import { FeedbackButton } from '@/components/FeedbackButton';
 interface Props { zoom?: number; }
 //PAGINA 4 EJERCICIOS 
 export function EjerciciosPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched, submitGame, submitExercise, completeStage, isExerciseCompleted } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, submitGame, submitExercise, completeStage, isExerciseCompleted, watchedVideos, completedExercises } = useVideoProgress();
 
     const EXERCISE_IDS = {
         CALC_BLOCK: 'division_exacta-pag10-calc-block',
@@ -31,9 +31,9 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     };
 
     const STAGE_IDS = {
-        CALC_STAGE: 'division_exacta-pag10-calc-stage',
-        EXACT_STAGE: 'division_exacta-pag10-exact-stage',
-        MODULO_B: 'division_exacta-pag10-modulo-b'
+        CALC_STAGE: 'division-exacta-calc',
+        EXACT_STAGE: 'division-exacta-exact',
+        FINAL_STAGE: 'division-exacta-final'
     };
 
     // Activity 1: Calculate divisions
@@ -47,30 +47,6 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const [calcAnswers, setCalcAnswers] = useState<Record<number, string>>({});
     const [calcStatus, setCalcStatus] = useState<'correct' | 'incorrect' | null>(null);
 
-    // Initial sync
-    useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.CALC_BLOCK)) setCalcStatus('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.EXACT_BLOCK)) setExactStatus('correct');
-    }, [isExerciseCompleted]);
-
-    const handleCalcCheck = async () => {
-        if (isExerciseCompleted(EXERCISE_IDS.CALC_BLOCK)) return;
-        const allCorrect = calcItems.every((item, i) => parseInt(calcAnswers[i] || '') === item.answer);
-        setCalcStatus(allCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.CALC_BLOCK, allCorrect);
-        if (allCorrect) {
-            await completeStage(STAGE_IDS.CALC_STAGE);
-            checkModuloB(allCorrect, exactStatus === 'correct');
-        }
-    };
-
-    const resetCalc = () => {
-        if (isExerciseCompleted(EXERCISE_IDS.CALC_BLOCK)) return;
-        setCalcAnswers({});
-        setCalcStatus(null);
-    };
-
-
     // Activity 2: Determine if exact
     const exactItems = [
         { dividend: 120, divisor: 5, isExact: true },
@@ -82,27 +58,47 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const [exactAnswers, setExactAnswers] = useState<Record<number, string>>({});
     const [exactStatus, setExactStatus] = useState<'correct' | 'incorrect' | null>(null);
 
+
+    // Initial load and auto-checking
+    useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.CALC_BLOCK)) setCalcStatus('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.EXACT_BLOCK)) setExactStatus('correct');
+
+        const calcDone = (watchedVideos.includes(VIDEO_TRACKING.EJ_1) || isExerciseCompleted(VIDEO_TRACKING.EJ_1)) && isExerciseCompleted(EXERCISE_IDS.CALC_BLOCK);
+        if (calcDone) completeStage(STAGE_IDS.CALC_STAGE);
+
+        const exactDone = (watchedVideos.includes(VIDEO_TRACKING.EJ_2) || isExerciseCompleted(VIDEO_TRACKING.EJ_2)) && isExerciseCompleted(EXERCISE_IDS.EXACT_BLOCK);
+        if (exactDone) completeStage(STAGE_IDS.EXACT_STAGE);
+
+        if (calcDone && exactDone) {
+            completeStage(STAGE_IDS.FINAL_STAGE);
+        }
+    }, [isExerciseCompleted, watchedVideos, completedExercises]);
+
+    const handleCalcCheck = async () => {
+        if (isExerciseCompleted(EXERCISE_IDS.CALC_BLOCK)) return;
+        const allCorrect = calcItems.every((item, i) => parseInt(calcAnswers[i] || '') === item.answer);
+        setCalcStatus(allCorrect ? 'correct' : 'incorrect');
+        await submitExercise(EXERCISE_IDS.CALC_BLOCK, allCorrect);
+    };
+
+    const resetCalc = () => {
+        if (isExerciseCompleted(EXERCISE_IDS.CALC_BLOCK)) return;
+        setCalcAnswers({});
+        setCalcStatus(null);
+    };
+
     const handleExactCheck = async () => {
         if (isExerciseCompleted(EXERCISE_IDS.EXACT_BLOCK)) return;
         const allCorrect = exactItems.every((item, i) => (exactAnswers[i] === 'exacta') === item.isExact);
         setExactStatus(allCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.EXACT_BLOCK, allCorrect);
-        if (allCorrect) {
-            await completeStage(STAGE_IDS.EXACT_STAGE);
-            checkModuloB(calcStatus === 'correct', allCorrect);
-        }
     };
 
     const resetExact = () => {
         if (isExerciseCompleted(EXERCISE_IDS.EXACT_BLOCK)) return;
         setExactAnswers({});
         setExactStatus(null);
-    };
-
-    const checkModuloB = async (calc: boolean, exact: boolean) => {
-        if (calc && exact) {
-            await completeStage(STAGE_IDS.MODULO_B);
-        }
     };
 
 

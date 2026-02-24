@@ -19,11 +19,25 @@ import pistas2Img from '../pistas2.png';
 interface Props { zoom?: number; }
 //PAGINA 1 CONCRETO
 export function ConceptoConcretoPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
-
     const VIDEO_TRACKING = {
         C_TRACK: 'fracciones_equivalentes-pag23-v1',
     };
+
+    const STAGE_IDS = {
+        C_STAGE: 'fracciones-equivalentes-c-stage'
+    };
+
+    const { isVideoWatched, markVideoWatched, completeStage, watchedVideos, completedStages } = useVideoProgress();
+
+    // Initial load and auto-checking
+    React.useEffect(() => {
+        const C_REQUIRED = [VIDEO_TRACKING.C_TRACK];
+
+        const cDone = C_REQUIRED.every(id =>
+            watchedVideos.includes(id)
+        );
+        if (cDone) completeStage(STAGE_IDS.C_STAGE);
+    }, [watchedVideos]);
 
     /* videoModal list removed */
     /* ref removed */
@@ -41,8 +55,8 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones Equivalentes' }} pageId="frac-equiv-concepto-concreto">
             {/* C - CONCRETO Section */}
             <div className="relative ml-2 flex items-start">
-                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#4ade80' }}>
-                    C
+                <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#4ade80] dark:bg-green-700">
+                    C {completedStages.includes(STAGE_IDS.C_STAGE) && <span className="ml-1 text-[#059669]">✓</span>}
                 </div>
                 <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white" style={{ borderColor: '#4ade80' }}>
 

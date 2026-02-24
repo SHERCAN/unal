@@ -17,10 +17,8 @@ interface Props { zoom?: number; }
 //PAGINA 3 EJERCICIOS
 export function EjerciciosPage({ zoom = 1 }: Props) {
     const EXERCISE_IDS = {
-        MODULO_A: 'numeros_primos-modulo-a'
+        FINAL_STAGE: 'numeros-primos-final'
     };
-
-    const MODULO_ID = 'modulo-a-numeros_primos'; // Higher level completion
 
     const { isVideoWatched, markVideoWatched, submitExercise, completeStage, isExerciseCompleted } = useVideoProgress();
 
@@ -43,7 +41,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
     // Initial load sync
     useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.MODULO_A)) setResult('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.FINAL_STAGE)) setResult('correct');
     }, [isExerciseCompleted]);
 
     // Dragging state
@@ -68,7 +66,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
     // Mouse down on a left dot → start drag
     const handleDotMouseDown = useCallback((num: number, e: React.MouseEvent) => {
-        if (result === 'correct' || isExerciseCompleted(EXERCISE_IDS.MODULO_A)) return;
+        if (result === 'correct' || isExerciseCompleted(EXERCISE_IDS.FINAL_STAGE)) return;
         e.preventDefault();
         setDragging(num);
         setResult(null);
@@ -124,19 +122,19 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     }, [dragging]);
 
     const handleCheck = async () => {
-        if (isExerciseCompleted(EXERCISE_IDS.MODULO_A)) return;
+        if (isExerciseCompleted(EXERCISE_IDS.FINAL_STAGE)) return;
         const allCorrect = allNumbers.every(n => connections[n.num] === n.type);
         const allAnswered = allNumbers.every(n => connections[n.num]);
         const isCorrect = allCorrect && allAnswered;
         setResult(isCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.MODULO_A, isCorrect);
+        await submitExercise(EXERCISE_IDS.FINAL_STAGE, isCorrect);
         if (isCorrect) {
-            await completeStage(MODULO_ID);
+            await completeStage(EXERCISE_IDS.FINAL_STAGE);
         }
     };
 
     const handleReset = () => {
-        if (isExerciseCompleted(EXERCISE_IDS.MODULO_A)) return;
+        if (isExerciseCompleted(EXERCISE_IDS.FINAL_STAGE)) return;
         setConnections({});
         setResult(null);
         setDragging(null);

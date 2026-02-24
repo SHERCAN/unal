@@ -22,7 +22,7 @@ import tristeMorado from '../equipotristemorado.png';
 interface Props { zoom?: number; }
 // PAGINA 1 CONCRETO PICTORICO
 export function ConceptoConcretoPage({ zoom = 1 }: Props) {
-    const { submitGame, isExerciseCompleted, completeStage } = useVideoProgress();
+    const { submitGame, isExerciseCompleted, completeStage, markVideoWatched, watchedVideos, completedExercises, completedStages } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         C_INTRO: 'comparacion_fracciones-pag1-v1',
@@ -35,8 +35,31 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     };
 
     const STAGE_IDS = {
-        P_STAGE: 'comparacion_fracciones-pag29-p-stage'
+        C_STAGE: 'comparacion-fracciones-c-stage',
+        P_STAGE: 'comparacion-fracciones-p-stage'
     };
+
+    // Initial load and auto-checking
+    useEffect(() => {
+        if (isExerciseCompleted(EXERCISE_IDS.P_ACTIVITY)) setPResult('correct');
+
+        const C_REQUIRED = [VIDEO_TRACKING.C_INTRO];
+        const P_REQUIRED = [
+            VIDEO_TRACKING.P_RECT,
+            VIDEO_TRACKING.P_WHY,
+            EXERCISE_IDS.P_ACTIVITY
+        ];
+
+        const cDone = C_REQUIRED.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (cDone) completeStage(STAGE_IDS.C_STAGE);
+
+        const pDone = P_REQUIRED.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (pDone) completeStage(STAGE_IDS.P_STAGE);
+    }, [isExerciseCompleted, watchedVideos, completedExercises]);
 
     const matchData = [
         { label: 'PARTIDO 1', redImg: felizRojo, purpleImg: tristeMorado },
@@ -50,18 +73,11 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     const [pNum2, setPNum2] = useState('');
     const [pResult, setPResult] = useState<'correct' | 'incorrect' | null>(null);
 
-    useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.P_ACTIVITY)) setPResult('correct');
-    }, [isExerciseCompleted]);
-
     const checkP = async () => {
         if (isExerciseCompleted(EXERCISE_IDS.P_ACTIVITY)) return;
         const correct = pSign === '<' && pNum1 === '1' && pNum2 === '2';
         setPResult(correct ? 'correct' : 'incorrect');
         await submitGame(EXERCISE_IDS.P_ACTIVITY, correct);
-        if (correct) {
-            await completeStage(STAGE_IDS.P_STAGE);
-        }
     };
 
     const InputBoxSmall = ({ value, onChange, width = "w-10", disabled }: any) => (
@@ -79,8 +95,8 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
             <div className="space-y-12 pb-20">
                 {/* C - CONCRETO Section */}
                 <div className="relative ml-2 flex items-start mb-12">
-                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#4ade80' }}>
-                        C
+                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#4ade80] dark:bg-green-700">
+                        C {completedStages.includes(STAGE_IDS.C_STAGE) && <span className="ml-1 text-[#059669]">✓</span>}
                     </div>
                     <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-white/50" style={{ borderColor: '#4ade80' }}>
                         <div className="w-full h-full flex flex-col mt-2" style={{ gap: 'clamp(0.75rem, 2vh, 1.5rem)', padding: 'clamp(0.5rem, 2vmin, 1rem)' }}>
@@ -119,8 +135,8 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
                 {/* P - PICTORICO Section */}
                 <div className="relative ml-2 flex items-start">
-                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#60a5fa' }}>
-                        P
+                    <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#60a5fa] dark:bg-blue-700">
+                        P {completedStages.includes(STAGE_IDS.P_STAGE) && <span className="ml-1 text-[#2563eb]">✓</span>}
                     </div>
                     <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-blue-50/20" style={{ borderColor: '#60a5fa' }}>
                         <div className="w-full h-full flex flex-col mt-2" style={{ gap: 'clamp(0.75rem, 2vh, 1.5rem)', padding: 'clamp(0.5rem, 2vmin, 1rem)' }}>

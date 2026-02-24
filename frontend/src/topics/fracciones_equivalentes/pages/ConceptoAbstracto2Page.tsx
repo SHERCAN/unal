@@ -17,10 +17,10 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
     };
 
     const STAGE_IDS = {
-        A_STAGE: 'fracciones_equivalentes-pag26-a-stage'
+        A_STAGE: 'fracciones-equivalentes-a-stage'
     };
 
-    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted, watchedVideos, completedExercises, completedStages } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         SIMP_INTRO: 'fracciones_equivalentes-pag26-v1',
@@ -40,21 +40,37 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
     const [amp1Result, setAmp1Result] = useState<'correct' | 'incorrect' | null>(null);
     const [amp2Result, setAmp2Result] = useState<'correct' | 'incorrect' | null>(null);
 
-    // Initial load sync
+    // Initial load and auto-checking
     useEffect(() => {
         if (isExerciseCompleted(EXERCISE_IDS.SIMP)) setSimpResult('correct');
         if (isExerciseCompleted(EXERCISE_IDS.AMP1)) setAmp1Result('correct');
         if (isExerciseCompleted(EXERCISE_IDS.AMP2)) setAmp2Result('correct');
-    }, [isExerciseCompleted]);
+
+        const A_REQUIRED = [
+            // Page 25 Videos
+            'fracciones_equivalentes-pag25-v1', 'fracciones_equivalentes-pag25-v2', 'fracciones_equivalentes-pag25-v3',
+            'fracciones_equivalentes-pag25-v4', 'fracciones_equivalentes-pag25-v5', 'fracciones_equivalentes-pag25-v6',
+            'fracciones_equivalentes-pag25-v7',
+            // Page 25 Exercises
+            'fracciones_equivalentes-pag25-row1', 'fracciones_equivalentes-pag25-row2',
+            // Page 26 Videos
+            'fracciones_equivalentes-pag26-v1', 'fracciones_equivalentes-pag26-v3', 'fracciones_equivalentes-pag26-v4',
+            'fracciones_equivalentes-pag26-v5', 'fracciones_equivalentes-pag26-v6', 'fracciones_equivalentes-pag26-v7',
+            // Page 26 Exercises
+            EXERCISE_IDS.SIMP, EXERCISE_IDS.AMP1, EXERCISE_IDS.AMP2
+        ];
+
+        const aDone = A_REQUIRED.every(id =>
+            watchedVideos.includes(id) || completedExercises[id]?.completed
+        );
+        if (aDone) completeStage(STAGE_IDS.A_STAGE);
+    }, [isExerciseCompleted, watchedVideos, completedExercises]);
 
     const handleSimpCheck = async () => {
         if (isExerciseCompleted(EXERCISE_IDS.SIMP)) return;
         const isCorrect = simpAns.n === '2' && simpAns.d === '5';
         setSimpResult(isCorrect ? 'correct' : 'incorrect');
         await submitGame(EXERCISE_IDS.SIMP, isCorrect);
-        if (isCorrect) {
-            await completeStage(STAGE_IDS.A_STAGE);
-        }
     };
 
     const handleAmp1Check = async () => {
@@ -62,9 +78,6 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
         const isCorrect = amp1Ans.n === '10' && amp1Ans.d === '15';
         setAmp1Result(isCorrect ? 'correct' : 'incorrect');
         await submitGame(EXERCISE_IDS.AMP1, isCorrect);
-        if (isCorrect) {
-            await completeStage(STAGE_IDS.A_STAGE);
-        }
     };
 
     const handleAmp2Check = async () => {
@@ -72,9 +85,6 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
         const isCorrect = amp2Ans.n === '25' && amp2Ans.d === '35';
         setAmp2Result(isCorrect ? 'correct' : 'incorrect');
         await submitGame(EXERCISE_IDS.AMP2, isCorrect);
-        if (isCorrect) {
-            await completeStage(STAGE_IDS.A_STAGE);
-        }
     };
 
     const resetSimp = () => { if (isExerciseCompleted(EXERCISE_IDS.SIMP)) return; setSimpAns({ n: '', d: '' }); setSimpResult(null); };
@@ -117,7 +127,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
             <div className="relative ml-2 flex items-start">
                 {/* CPA Indicator "A" */}
                 <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de]">
-                    A
+                    A {completedStages.includes(STAGE_IDS.A_STAGE) && <span className="ml-1 text-[#7c3aed]">✓</span>}
                 </div>
 
                 {/* Content Container */}
