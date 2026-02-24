@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
+import { notifyProgressUpdate } from '../socket';
 
 const prisma = new PrismaClient();
 
@@ -137,6 +138,9 @@ export const updateProgress = async (req: Request, res: Response) => {
       ]);
     }
 
+    // Notify admin panel
+    notifyProgressUpdate(userId);
+
     res.json({ message: 'Progress updated', pointsAdded: 20, newTotal: result[1].puntos });
 
   } catch (error) {
@@ -195,6 +199,9 @@ export const markVideoWatched = async (req: Request, res: Response) => {
         data: { puntos: { increment: 20 } }
       })
     ]);
+
+    // Notify admin panel
+    notifyProgressUpdate(userId);
 
     res.json({
       message: 'Video marked as watched',

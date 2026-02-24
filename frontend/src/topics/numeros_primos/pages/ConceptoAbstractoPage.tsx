@@ -22,7 +22,7 @@ interface Props { zoom?: number; }
 
 //PAGINA 2 ABSTRACTO
 export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, submitExercise } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         A_DIVISION: 'numeros_primos-pag15-v1',
@@ -59,9 +59,10 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
     const [answers, setAnswers] = useState<Record<number, string>>({});
     const [listoResult, setListoResult] = useState<'correct' | 'incorrect' | null>(null);
 
-    const handleListo = () => {
+    const handleListo = async () => {
         const allCorrect = numbers.every(n => answers[n.num] === n.answer);
         setListoResult(allCorrect ? 'correct' : 'incorrect');
+        await submitExercise('numeros_primos-pag15-ej1', allCorrect);
     };
 
     const handleReset = () => {
@@ -84,10 +85,10 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                         <div>
                             <div className="font-semibold text-base flex items-start gap-2">
                                 <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
-                                    El número <span className="font-bold text-base">7</span> tiene solo dos divisores <span className="font-extrabold text-2xl text-purple-700">1</span> y <span className="font-extrabold text-2xl text-purple-700">7</span>, pero no hay más divisores para que siempre forman partes iguales. 
+                                    El número <span className="font-bold text-base">7</span> tiene solo dos divisores <span className="font-extrabold text-2xl text-purple-700">1</span> y <span className="font-extrabold text-2xl text-purple-700">7</span>, pero no hay más divisores para que siempre forman partes iguales.
                                     <PlayVideoButton trackingId={VIDEO_TRACKING.A_DIVISION} title="" videoId="/pag15/vv-1" />
                                 </p>
-                                
+
                             </div>
                         </div>
 

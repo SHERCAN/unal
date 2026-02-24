@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
+import { notifyProgressUpdate } from '../socket';
 
 const prisma = new PrismaClient();
 
@@ -139,6 +140,9 @@ export const submitExercise = async (req: Request, res: Response) => {
             select: { puntos: true, puntosDefinitivos: true }
         });
 
+        // Notify admin panel
+        notifyProgressUpdate(userId);
+
         res.json({
             pointsAdded,
             pointsDefinitivosAdded,
@@ -258,6 +262,9 @@ export const submitGame = async (req: Request, res: Response) => {
             where: { id: userId },
             select: { puntos: true, puntosDefinitivos: true }
         });
+
+        // Notify admin panel
+        notifyProgressUpdate(userId);
 
         res.json({
             pointsAdded,

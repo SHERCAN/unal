@@ -15,7 +15,7 @@ import image75Img from '../image 75.png';
 interface Props { zoom?: number; }
 //PAGINA 2 PICTORICO
 export function ConceptoProcesualPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, submitExercise } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         BONO_EXPLICADO: 'fracciones_equivalentes-pag1-v1',
@@ -30,14 +30,16 @@ export function ConceptoProcesualPage({ zoom = 1 }: Props) {
     const [desafioAns, setDesafioAns] = useState('');
     const [desafioResult, setDesafioResult] = useState<'correct' | 'incorrect' | null>(null);
 
-    const handleLapsCheck = () => {
-        if (lapsAns === '4') setLapsResult('correct');
-        else setLapsResult('incorrect');
+    const handleLapsCheck = async () => {
+        const isCorrect = lapsAns === '4';
+        setLapsResult(isCorrect ? 'correct' : 'incorrect');
+        await submitExercise('fracciones_equivalentes-pag24-ej1', isCorrect);
     };
 
-    const handleDesafioCheck = () => {
-        if (desafioAns === '8') setDesafioResult('correct');
-        else setDesafioResult('incorrect');
+    const handleDesafioCheck = async () => {
+        const isCorrect = desafioAns === '8';
+        setDesafioResult(isCorrect ? 'correct' : 'incorrect');
+        await submitExercise('fracciones_equivalentes-pag24-ej2', isCorrect);
     };
 
     const resetLaps = () => { setLapsAns(''); setLapsResult(null); };

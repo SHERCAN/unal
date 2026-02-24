@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { io, Socket } from 'socket.io-client';
 
 interface User {
     id: string;
@@ -22,7 +23,7 @@ interface User {
 
 interface ModuleActivity {
     id: string;
-    type: 'Video' | 'Ejercicio';
+    type: 'Video' | 'Ejercicio' | 'Actividad';
     name: string;
     date: string;
     flexPoints: number;
@@ -38,54 +39,74 @@ interface GroupedModule {
 }
 
 const formatModuleName = (id: string) => {
-    // Primero, revisamos de modo descendente para que no detecte mal "division" en "division-exacta"
-    if (id.startsWith('division-exacta')) return 'DIVISIÓN EXACTA';
-    if (id.startsWith('division-inexacta')) return 'DIVISIÓN INEXACTA';
-    if (id.startsWith('division')) return 'DIVISIÓN';
-    if (id.startsWith('numeros-primos')) return 'NÚMEROS PRIMOS';
-    if (id.startsWith('comparacion-fracciones')) return 'COMPARACIÓN DE FRACCIONES';
-    if (id.startsWith('fracciones-equivalentes')) return 'FRACCIONES EQUIVALENTES';
-    if (id.startsWith('fracciones')) return 'FRACCIONES';
+    const lowerId = id.toLowerCase().replace(/_/g, '-');
 
-    // Fallback if it doesn't match directly
-    const parts = id.split('-');
-    if (parts.length > 1) {
-        return parts[0].charAt(0).toUpperCase() + parts[0].slice(1) + ' ' + parts.slice(1).join(' ');
-    }
-    return id.charAt(0).toUpperCase() + id.slice(1);
+    // Explicit mappings for common prefixes used in different pages
+    if (lowerId.includes('division-exacta') || lowerId.includes('div-exacta')) return 'DIVISIÓN EXACTA';
+    if (lowerId.includes('division-inexacta') || lowerId.includes('div-inexacta')) return 'DIVISIÓN INEXACTA';
+    if (lowerId.includes('division')) return 'DIVISIÓN'; // Catch general division topic
+
+    if (lowerId.includes('numeros-primos') || lowerId.includes('num-primos')) return 'NÚMEROS PRIMOS';
+
+    if (lowerId.includes('comparacion-fracciones') || lowerId.includes('comp-frac')) return 'COMPARACIÓN DE FRACCIONES';
+    if (lowerId.includes('fracciones-equivalentes') || lowerId.includes('frac-equiv')) return 'FRACCIONES EQUIVALENTES';
+    if (lowerId.includes('fracciones') || lowerId.includes('frac-')) return 'FRACCIONES';
+
+    // Fallback: cleaning up the ID and capitalizing
+    const parts = lowerId.split('-');
+    const label = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
+    // If it was just "div", "frac", etc. try to recover some sense
+    if (label.length <= 4) return label.toUpperCase();
+    return label;
 };
 
-const formatItemName = (id: string, type: 'Video' | 'Ejercicio') => {
-    if (type === 'Video' && id.includes('-pag')) {
-        const pagMatch = id.match(/-pag(\d+)-v(\d+)/);
-        if (pagMatch) {
-            return `Video: Página ${pagMatch[1]} - Video ${pagMatch[2]}`;
-        }
+const formatItemName = (id: string, type: 'Video' | 'Ejercicio' | 'Actividad') => {
+    const labelPrefix = type === 'Video' ? 'Video' : (type === 'Actividad' ? 'Actividad' : 'Ejercicio');
+
+    // Standard Pattern: [topic]-pag[N]-(ej|v|act|game)[M]
+    // Regex matches topic-pag13-ej2, div-inexacta-pag13-ej2, etc.
+    const standardMatch = id.match(/-pag(\d+)-(?:ej|v|act|game|calc|prob|actividad|ejercicio)(\d+)/i);
+    if (standardMatch) {
+        const pag = standardMatch[1];
+        const num = standardMatch[2];
+        return `${labelPrefix}: Página ${pag} - ${labelPrefix} ${num}`;
     }
 
-    if (type === 'Ejercicio' && id.includes('-pag')) {
-        const pagMatch = id.match(/-pag(\d+)-ej(\d+)/);
-        if (pagMatch) {
-            return `Ejercicio: Página ${pagMatch[1]} - Ejercicio ${pagMatch[2]}`;
-        }
+    // Older patterns or specific naming
+    if (id.includes('calc')) {
+        const numMatch = id.match(/calc\D*(\d+)/i);
+        const n = numMatch ? parseInt(numMatch[1]) + 1 : '1';
+        return `${labelPrefix}: Cálculo ${n}`;
     }
 
+    if (id.includes('prob')) {
+        const numMatch = id.match(/prob\D*(\d+)/i);
+        const n = numMatch ? parseInt(numMatch[1]) + 1 : '1';
+        return `${labelPrefix}: Problema ${n}`;
+    }
+
+    // Generic fallback: take the last part of the ID
     const parts = id.split('-');
-    const nameStr = parts.slice(parts.length > 2 ? 2 : 1).join(' ');
-    // Remove 'ej' prefix if exists in the last part if not already handled
-    const cleanName = nameStr.replace(/^ej\d+\s*/i, '');
-    return `${type}: ${cleanName.charAt(0).toUpperCase() + cleanName.slice(1)}`;
+    const lastPart = parts[parts.length - 1];
+
+    // If it's something like "act1", "ej2", extract the number
+    const techMatch = lastPart.match(/^(?:v|ej|game|calc|prob|act|interact|actividad|ejercicio)(\d+)$/i);
+    if (techMatch) {
+        return `${labelPrefix}: ${labelPrefix} ${techMatch[1]}`;
+    }
+
+    return `${labelPrefix}: ${lastPart.charAt(0).toUpperCase() + lastPart.slice(1).replace(/_/g, ' ')}`;
 };
 
 const getUserModules = (user: User): GroupedModule[] => {
     const map: Record<string, GroupedModule> = {};
 
     user.watchedVideos?.forEach(v => {
-        const mod = formatModuleName(v.videoId);
-        if (!map[mod]) map[mod] = { moduleName: mod, totalFlex: 0, totalDef: 0, activities: [] };
+        const modName = formatModuleName(v.videoId);
+        if (!map[modName]) map[modName] = { moduleName: modName, totalFlex: 0, totalDef: 0, activities: [] };
 
-        map[mod].totalFlex += 20;
-        map[mod].activities.push({
+        map[modName].totalFlex += 20;
+        map[modName].activities.push({
             id: v.videoId,
             type: 'Video',
             name: formatItemName(v.videoId, 'Video'),
@@ -97,10 +118,37 @@ const getUserModules = (user: User): GroupedModule[] => {
     });
 
     user.exerciseAttempts?.forEach(ex => {
-        const mod = formatModuleName(ex.exerciseId);
-        if (!map[mod]) map[mod] = { moduleName: mod, totalFlex: 0, totalDef: 0, activities: [] };
+        const modName = formatModuleName(ex.exerciseId);
+        if (!map[modName]) map[modName] = { moduleName: modName, totalFlex: 0, totalDef: 0, activities: [] };
 
         const isGame = ex.exerciseId.includes('-game-');
+        const lowerId = ex.exerciseId.toLowerCase();
+
+        // Categorización general
+        let activityType: 'Ejercicio' | 'Actividad' = 'Actividad';
+
+        // Criterios para Ejercicio (Práctica formal)
+        if (lowerId.includes('calc') ||
+            lowerId.includes('prob') ||
+            lowerId.includes('ejercic') ||
+            lowerId.includes('-ej') ||
+            lowerId.includes('division-pag5-ej') ||
+            lowerId.includes('division-pag6-ej') ||
+            lowerId.includes('div-exacta-') ||
+            lowerId.includes('div-inexacta-') ||
+            lowerId.includes('frac-') ||
+            lowerId.includes('comp-frac-') ||
+            lowerId.includes('num-primo-')
+        ) {
+            activityType = 'Ejercicio';
+        } else if (lowerId.includes('game') || lowerId.includes('act') || lowerId.includes('interact')) {
+            activityType = 'Actividad';
+        }
+        // If it's an exercise attempt and not explicitly an 'Ejercicio' by the above rules,
+        // and it contains 'act' or 'game', it's an 'Actividad'. Otherwise, default to 'Actividad'
+        // if it's not clearly an 'Ejercicio'. The initial assignment to 'Actividad' handles the default.
+
+
         let f = 0, d = 0;
         let text = ex.completed ? 'Completado' : 'Intentado, sin pasar';
 
@@ -118,13 +166,13 @@ const getUserModules = (user: User): GroupedModule[] => {
             }
         }
 
-        map[mod].totalFlex += f;
-        map[mod].totalDef += d;
+        map[modName].totalFlex += f;
+        map[modName].totalDef += d;
 
-        map[mod].activities.push({
+        map[modName].activities.push({
             id: ex.exerciseId,
-            type: 'Ejercicio',
-            name: formatItemName(ex.exerciseId, 'Ejercicio'),
+            type: activityType,
+            name: formatItemName(ex.exerciseId, activityType),
             date: ex.updatedAt,
             flexPoints: f,
             defPoints: d,
@@ -148,8 +196,42 @@ export default function AdminDashboard() {
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [expandedModule, setExpandedModule] = useState<string | null>(null);
     const [expandedSubModule, setExpandedSubModule] = useState<string | null>(null);
+    const [authToken, setAuthToken] = useState<string | null>(null);
 
     const groupedModules = selectedUser ? getUserModules(selectedUser) : [];
+
+    const fetchUsers = useCallback(async () => {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        try {
+            console.log('🔄 Fetching users data...');
+            const res = await fetch(`/api/admin/data`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (!res.ok) throw new Error('Error al cargar datos');
+
+            const data = await res.json();
+            setUsers([...data]); // New array reference
+
+            // Re-sync selected user's data to trigger re-renders
+            setSelectedUser(prev => {
+                if (!prev) return null;
+                const updated = data.find((u: User) => u.id === prev.id);
+                if (updated) {
+                    console.log(`✅ Data updated for selected user: ${updated.nombre}`);
+                    return { ...updated }; // New object reference
+                }
+                return prev;
+            });
+        } catch (err) {
+            console.error(err);
+            setError('No se pudieron cargar los datos de los estudiantes.');
+        } finally {
+            setLoading(false);
+        }
+    }, []);
 
     useEffect(() => {
         const userStr = localStorage.getItem('user');
@@ -166,29 +248,39 @@ export default function AdminDashboard() {
             return;
         }
 
-        fetchUsers(token);
-    }, []);
+        setAuthToken(token);
+        fetchUsers();
+    }, [fetchUsers, router]);
 
-    const fetchUsers = async (token: string) => {
-        try {
-            console.log('Fetching users...');
-            const res = await fetch(`/api/admin/data`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+    useEffect(() => {
+        const socketUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:4000'
+            : window.location.origin.replace(':3000', ':4000');
 
-            if (!res.ok) throw new Error('Error al cargar datos');
+        console.log('📡 Admin Panel: Connecting to real-time updates at', socketUrl);
+        const socket = io(socketUrl, {
+            transports: ['websocket', 'polling'],
+            reconnectionAttempts: 5
+        });
 
-            const data = await res.json();
-            setUsers(data);
-        } catch (err) {
-            console.error(err);
-            setError('No se pudieron cargar los datos de los estudiantes.');
-        } finally {
-            setLoading(false);
-        }
-    };
+        socket.on('connect', () => {
+            console.log('✅ Real-time updates active');
+        });
+
+        socket.on('progressUpdate', (data) => {
+            console.log('⚡ Change detected in student progress, refreshing data...', data);
+            fetchUsers();
+        });
+
+        socket.on('connect_error', (err) => {
+            console.warn('❌ Socket connection error:', err.message);
+        });
+
+        return () => {
+            socket.disconnect();
+            console.log('🔌 Socket disconnected');
+        };
+    }, [fetchUsers]);
 
     if (loading) {
         return (
@@ -323,24 +415,24 @@ export default function AdminDashboard() {
                                                     </button>
                                                     {expandedModule === mod.moduleName && (
                                                         <div className="p-4 bg-background-secondary/40 border-t dark:border-gray-700 space-y-3">
-                                                            {['Actividad interactiva', 'Videos', 'Ejercicio'].map(category => {
-                                                                const categoryActivities = mod.activities.filter(act => {
-                                                                    if (category === 'Videos') return act.type === 'Video';
-                                                                    if (category === 'Ejercicio') return act.type === 'Ejercicio' && (act.id.includes('ej') || act.id.includes('ejercicio'));
-                                                                    return act.type === 'Ejercicio' && !act.id.includes('ej') && !act.id.includes('ejercicio');
-                                                                });
+                                                            {[
+                                                                { label: 'Videos', type: 'Video' },
+                                                                { label: 'Actividad interactiva', type: 'Actividad' },
+                                                                { label: 'Ejercicio', type: 'Ejercicio' }
+                                                            ].map(category => {
+                                                                const categoryActivities = mod.activities.filter(act => act.type === category.type);
 
                                                                 if (categoryActivities.length === 0) return null;
 
-                                                                const isSubExpanded = expandedSubModule === `${mod.moduleName}-${category}`;
+                                                                const isSubExpanded = expandedSubModule === `${mod.moduleName}-${category.type}`;
 
                                                                 return (
-                                                                    <div key={category} className="bg-background rounded-xl border dark:border-gray-800 overflow-hidden shadow-sm">
+                                                                    <div key={category.type} className="bg-background rounded-xl border dark:border-gray-800 overflow-hidden shadow-sm">
                                                                         <button
-                                                                            onClick={() => setExpandedSubModule(isSubExpanded ? null : `${mod.moduleName}-${category}`)}
+                                                                            onClick={() => setExpandedSubModule(isSubExpanded ? null : `${mod.moduleName}-${category.type}`)}
                                                                             className="w-full text-left p-3 flex justify-between items-center hover:bg-background-secondary transition-colors"
                                                                         >
-                                                                            <span className="font-semibold text-md">{category}</span>
+                                                                            <span className="font-semibold text-md">{category.label}</span>
                                                                             <div className="flex items-center space-x-3">
                                                                                 <span className="text-xs font-semibold bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300 px-2 py-1 rounded-full">
                                                                                     {categoryActivities.length} items
@@ -357,8 +449,8 @@ export default function AdminDashboard() {
                                                                                         <div>
                                                                                             <p className="font-medium text-sm">{act.name}</p>
                                                                                             <div className="flex items-center gap-2 mt-1">
-                                                                                                <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${act.type === 'Video' ? 'bg-blue-100 text-blue-800' : (act.details.includes('Aprobado') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800')}`}>
-                                                                                                    {act.type}
+                                                                                                <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${act.type === 'Video' ? 'bg-blue-100 text-blue-800' : (act.type === 'Actividad' ? 'bg-purple-100 text-purple-800' : 'bg-orange-100 text-orange-800')}`}>
+                                                                                                    {act.type === 'Actividad' ? 'Actividad' : act.type}
                                                                                                 </span>
                                                                                                 <span className="text-text-secondary text-xs">{act.details}</span>
                                                                                             </div>

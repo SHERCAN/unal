@@ -127,7 +127,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         const allAnswered = allNumbers.every(n => connections[n.num]);
         const isCorrect = allCorrect && allAnswered;
         setResult(isCorrect ? 'correct' : 'incorrect');
-        await submitExercise('numeros-primos-classify', isCorrect);
+        await submitExercise('numeros_primos-pag16-ej1', isCorrect);
     };
 
     const handleReset = () => {

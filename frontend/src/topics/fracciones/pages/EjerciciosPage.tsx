@@ -20,7 +20,7 @@ import trapecioImg from '../trapecio.png';
 interface Props { zoom?: number; }
 //PAGINA 5 EJERCICIOS
 export function EjerciciosPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, submitExercise } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         EX1_TABLE: 'fracciones-ex1-table',
@@ -64,7 +64,9 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
             if (resN === 'incorrect' || resD === 'incorrect') allCorrect = false;
         });
         setTableResults(newResults);
-        setTableTotalResult(allCorrect ? 'correct' : 'incorrect');
+        const isCorrect = allCorrect;
+        setTableTotalResult(isCorrect ? 'correct' : 'incorrect');
+        submitExercise('fracciones-pag21-ej1', isCorrect);
     };
 
     const resetTable = () => { setTableInputs({}); setTableResults({}); setTableTotalResult(null); };
@@ -83,6 +85,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         const correct = ['no', 'es', 'es', 'no', 'no', 'es'];
         const allCorrect = isFracAnswers.every((ans, i) => ans === correct[i]);
         setIsFracResult(allCorrect ? 'correct' : 'incorrect');
+        submitExercise('fracciones-pag21-ej2', allCorrect);
     };
 
     // --- State for Exercise 3 (Definitions) ---
@@ -91,11 +94,9 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const [defResult, setDefResult] = useState<'correct' | 'incorrect' | null>(null);
 
     const checkDef = () => {
-        if (defNum === 'denominador' && defDen === 'numerador') {
-            setDefResult('correct');
-        } else {
-            setDefResult('incorrect');
-        }
+        const isCorrect = defNum === 'denominador' && defDen === 'numerador';
+        setDefResult(isCorrect ? 'correct' : 'incorrect');
+        submitExercise('fracciones-pag21-ej3', isCorrect);
     };
 
     return (

@@ -57,7 +57,7 @@ const SLICE_STYLES: React.CSSProperties[] = [
 ];
 //PAGINA 1 CONCRETO PICTORICO
 export function ConceptoConcretoPage({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, submitExercise } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         C_PIZZA: 'fracciones-pag17-v1',
@@ -107,9 +107,11 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
     const slicesOnPlate = slicesOnMesa(0);
 
-    const handleListoC = () => {
+    const handleListoC = async () => {
         const totalOnMesas = Object.values(sliceLocations).filter(loc => loc > 0).length;
-        setListoResultC(totalOnMesas === 3 ? 'correct' : 'incorrect');
+        const isCorrect = totalOnMesas === 3;
+        setListoResultC(isCorrect ? 'correct' : 'incorrect');
+        await submitExercise('fracciones-pag17-ej1', isCorrect);
     };
 
     const handleResetC = () => {
@@ -146,8 +148,10 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         setListoResultP(null);
     };
 
-    const handleListoP = () => {
-        setListoResultP(removedPortions.length === 3 ? 'correct' : 'incorrect');
+    const handleListoP = async () => {
+        const isCorrect = removedPortions.length === 3;
+        setListoResultP(isCorrect ? 'correct' : 'incorrect');
+        await submitExercise('fracciones-pag17-ej2', isCorrect);
     };
 
     const handleResetP = () => {
@@ -333,7 +337,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                 <PlayVideoButton trackingId={VIDEO_TRACKING.P_EXPLAIN} title="" videoId="/pag17/vv-2" />
                             </p>
                         </div>
-                        
+
                     </div>
 
                     {/* Labels */}

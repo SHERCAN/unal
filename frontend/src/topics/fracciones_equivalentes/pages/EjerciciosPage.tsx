@@ -39,7 +39,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const checkAct1 = async () => {
         const correct = act1[0] === 1 && act1[1] === 0 && act1[2] === 2;
         setAct1Result(correct ? 'correct' : 'incorrect');
-        await submitExercise('frac-equiv-match', correct);
+        await submitExercise('fracciones_equivalentes-pag28-ej1', correct);
     };
 
     // --- ACTIVITY 2: AMPLIFICATION ---
@@ -50,7 +50,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const checkAct2 = async () => {
         const correct = Object.keys(act2Answers).every(k => act2[parseInt(k)] === act2Answers[parseInt(k) as keyof typeof act2Answers]);
         setAct2Result(correct ? 'correct' : 'incorrect');
-        await submitExercise('frac-equiv-amp-exercises', correct);
+        await submitExercise('fracciones_equivalentes-pag28-ej2', correct);
     };
 
     // --- ACTIVITY 3: SIMPLIFICATION ---
@@ -63,7 +63,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
             act3[idx * 2 + 1] === act3Answers[(idx * 2 + 1) as keyof typeof act3Answers];
 
         setAct3Results(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
-        await submitExercise(`frac-equiv-simp-prime-${idx}`, isCorrect);
+        await submitExercise(`fracciones_equivalentes-pag28-ej3`, isCorrect);
     };
 
     // --- ACTIVITY 4: TRUE/FALSE ---
@@ -74,7 +74,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const checkSubAct4 = async (idx: number) => {
         const isCorrect = act4[idx] === act4Answers[idx as keyof typeof act4Answers];
         setAct4Results(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
-        await submitExercise(`frac-equiv-vf-${idx}`, isCorrect);
+        await submitExercise(`fracciones_equivalentes-pag28-ej4`, isCorrect);
     };
 
     // HELPERS

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
+import { notifyProgressUpdate } from '../socket';
 
 const prisma = new PrismaClient();
 
@@ -33,6 +34,9 @@ export const submitRating = async (req: Request, res: Response) => {
                 rating
             }
         });
+
+        // Notify admin panel
+        notifyProgressUpdate(userId);
 
         res.status(201).json(newRating);
     } catch (error) {

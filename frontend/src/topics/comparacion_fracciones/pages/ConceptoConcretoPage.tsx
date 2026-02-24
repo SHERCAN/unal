@@ -45,7 +45,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     const checkP = async () => {
         const correct = pSign === '<' && pNum1 === '1' && pNum2 === '2';
         setPResult(correct ? 'correct' : 'incorrect');
-        await submitExercise('comp-frac-p-interaction', correct);
+        await submitExercise('comparacion_fracciones-pag29-ej1', correct);
     };
 
     const InputBoxSmall = ({ value, onChange, width = "w-10" }: any) => (
@@ -133,7 +133,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                     <p className="text-base font-semibold text-gray-800 leading-tight">
                                         De acuerdo con la actividad anterior, observamos dos figuras rectangulares que representan fracciones.
                                         <PlayVideoButton trackingId={VIDEO_TRACKING.P_RECT} title="" videoId="/pag29/vv-2" />
-                                    </p>                                    
+                                    </p>
                                 </div>
 
                                 <div className="flex items-center gap-4">

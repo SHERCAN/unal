@@ -192,7 +192,13 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   });
 });
 
-app.listen(PORT, () => {
+import { createServer } from 'http';
+import { initSocket } from './socket';
+
+const server = createServer(app);
+const io = initSocket(server);
+
+server.listen(PORT, () => {
   console.log(`\n${'='.repeat(50)}`);
   console.log(`🚀 Math Learning Backend Server`);
   console.log(`${'='.repeat(50)}`);

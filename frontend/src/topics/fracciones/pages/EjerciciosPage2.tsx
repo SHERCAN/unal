@@ -18,7 +18,7 @@ import cuadernos3Img from '../cuadernos3.png';
 interface Props { zoom?: number; }
 //PAGINA 6 EJERCICIOS
 export function EjerciciosPage2({ zoom = 1 }: Props) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, submitExercise } = useVideoProgress();
 
     const VIDEO_TRACKING = {
         EX2_PENCILS: 'fracciones-ex2-pencils',
@@ -46,18 +46,21 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
     const [libraryResult, setLibraryResult] = useState<'correct' | 'incorrect' | null>(null);
 
     const checkPencil = () => {
-        if (pencilFrac.n === '5' && pencilFrac.d === '20') setPencilResult('correct');
-        else setPencilResult('incorrect');
+        const isCorrect = pencilFrac.n === '5' && pencilFrac.d === '20';
+        setPencilResult(isCorrect ? 'correct' : 'incorrect');
+        submitExercise('fracciones-pag22-ej1', isCorrect);
     };
 
     const checkNotebook = () => {
-        if (notebookFrac.n === '6' && notebookFrac.d === '24') setNotebookResult('correct');
-        else setNotebookResult('incorrect');
+        const isCorrect = notebookFrac.n === '6' && notebookFrac.d === '24';
+        setNotebookResult(isCorrect ? 'correct' : 'incorrect');
+        submitExercise('fracciones-pag22-ej2', isCorrect);
     };
 
     const checkLibrary = () => {
-        if (libraryAns === '6') setLibraryResult('correct');
-        else setLibraryResult('incorrect');
+        const isCorrect = libraryAns === '6';
+        setLibraryResult(isCorrect ? 'correct' : 'incorrect');
+        submitExercise('fracciones-pag22-ej3', isCorrect);
     };
 
     const resetPencil = () => { setPencilFrac({ n: '', d: '' }); setPencilResult(null); };
