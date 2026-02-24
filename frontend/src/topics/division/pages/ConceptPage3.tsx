@@ -164,24 +164,24 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
             }}
             pageId="division-concept-3"
         >
-            <div className="relative ml-2 flex items-start h-full">
+            <div className="relative ml-2 flex items-start">
                 <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#be90de' }}>
                     A
                 </div>
-                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 h-full flex flex-col" style={{ borderColor: '#be90de' }}>
+                <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-4 flex flex-col" style={{ borderColor: '#be90de' }}>
 
-                    <div className="w-full flex-1 flex flex-col overflow-y-auto gap-6 px-1 mt-2">
+                    <div className="w-full flex flex-col gap-4 px-1 mt-2">
 
                         {/* --- EXAMPLE SECTION --- */}
-                        <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800 shadow-sm">
-                            <div className="flex items-center gap-2 mb-4">
+                        <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-3 bg-white dark:bg-gray-800 shadow-sm">
+                            <div className="flex items-center gap-2 mb-2">
                                 <div className="bg-green-600 text-white px-3 py-1 rounded font-bold text-base">Ejemplo:</div>
                                 <span className="font-semibold text-gray-800 dark:text-gray-200 text-base">Calcule 25 ÷ 5:</span>
                             </div>
                             <div className='flex justify-center'>
                                 <img
                                     src="/division/img5.png"
-                                    className="h-40 object-contain"
+                                    className="h-32 object-contain"
                                     draggable={false}
                                 />
                             </div>
@@ -290,8 +290,8 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         </div>
 
                         {/* --- EXERCISE 2 (Terms) --- */}
-                        <div className={`flex flex-col gap-3 pl-4 border-purple-100 py-2 ${ex2Status === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
-                            <div className="grid gap-2">
+                        <div className="flex flex-col gap-3 pl-4 border-purple-100 py-1">
+                            <div className={`grid gap-2 ${ex2Status === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
                                 <div className="flex items-center flex-wrap gap-2">
                                     <span className="w-3 h-3 bg-pink-900 rounded-sm"></span>
                                     <span className="font-semibold text-gray-800 dark:text-gray-200 text-base">El número 21 es</span>
@@ -346,7 +346,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         </div>
 
                         {/* --- PROBLEM 1 --- */}
-                        <div className={`flex flex-col gap-2 pl-2 ${p1Status === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
+                        <div className="flex flex-col gap-2 pl-2">
                             <div className="flex items-start gap-2">
                                 <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PROBLEM_1} title="Problema 1" videoId="/pag4/vv-3" />
                                 <div className="border border-pink-900 rounded px-2 text-pink-900 font-bold self-start whitespace-nowrap text-base">PROBLEMA 1</div>
@@ -355,7 +355,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                     ¿Cuántas muñecas tendrán <span className="text-red-500 font-bold">cada una</span>?
                                 </p>
                             </div>
-                            <div className="flex items-center justify-center gap-2 ml-12 mt-1">
+                            <div className={`flex items-center justify-center gap-2 ml-12 mt-1 ${p1Status === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
                                 <InputBox value={p1Status === 'correct' ? '12' : p1_div1.value} onChange={p1_div1.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
                                 <span className="text-xl font-bold dark:text-white">÷</span>
                                 <InputBox value={p1Status === 'correct' ? '2' : p1_div2.value} onChange={p1_div2.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
@@ -373,7 +373,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                         </div>
 
                         {/* --- PROBLEM 2 --- */}
-                        <div className={`flex flex-col gap-2 pl-2 pb-4 ${p2Status === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
+                        <div className="flex flex-col gap-2 pl-2 pb-4">
                             <div className="flex items-start gap-2">
                                 <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.PROBLEM_2} title="Problema 2" videoId="/pag4/vv-4" />
                                 <div className="border border-pink-900 rounded px-2 text-pink-900 font-bold py-0.5 self-start whitespace-nowrap text-base">PROBLEMA 2</div>
@@ -382,7 +382,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                     ¿Cuántos <span className="text-red-500 font-bold">paquetes completos</span> se pueden armar?
                                 </p>
                             </div>
-                            <div className="flex items-center justify-center gap-2 ml-12 mt-1">
+                            <div className={`flex items-center justify-center gap-2 ml-12 mt-1 ${p2Status === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
                                 <InputBox value={p2Status === 'correct' ? '64' : p2_div1.value} onChange={p2_div1.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
                                 <span className="text-xl font-bold dark:text-white">÷</span>
                                 <InputBox value={p2Status === 'correct' ? '8' : p2_div2.value} onChange={p2_div2.onChange} className="w-10 h-10 text-center bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 dark:text-white rounded" />
