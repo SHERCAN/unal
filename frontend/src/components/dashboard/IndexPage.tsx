@@ -31,7 +31,7 @@ export function IndexPage({ topics, onNavigate, zoom = 1 }: IndexPageProps) {
                         const element = (
                             <div key={topic.id} className="relative">
                                 <div className="flex items-center gap-4 mb-4">
-                                    <div className="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center font-black text-xl shadow-md shrink-0">
+                                    <div className="w-10 h-10 bg-purple-700 text-white rounded-xl flex items-center justify-center font-black text-xl shadow-md shrink-0">
                                         {topicIdx + 1}
                                     </div>
                                     <h2
