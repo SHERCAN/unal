@@ -155,7 +155,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
             moduleHeader={{
                 name: 'División'
             }}
-            pageId="division-exercises-2"
+            pageId="division-pag13"
         >
             <div className="flex flex-col gap-10 max-w-4xl mx-auto pb-32">
                 <h1 className="text-3xl font-black text-purple-700 dark:text-purple-400 uppercase">Ejercicios</h1>

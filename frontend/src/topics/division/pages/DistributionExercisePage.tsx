@@ -261,7 +261,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                 //icon: '/division-icon.png', 
                 name: 'División'
             }}
-            pageId="division-distribution"
+            pageId="division-pag8"
         >
             <style jsx>{`
                 @keyframes celebrate {

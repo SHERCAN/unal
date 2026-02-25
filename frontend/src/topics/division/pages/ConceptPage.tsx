@@ -62,7 +62,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                 // icon: '/division-icon.png',
                 name: 'División'
             }}
-            pageId="division-concept-new"
+            pageId="division-pag9"
         >
             <div className="relative ml-2 flex items-start h-full">
                 <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de] dark:bg-purple-900">

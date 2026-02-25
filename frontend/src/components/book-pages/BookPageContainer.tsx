@@ -1,5 +1,6 @@
 import React from 'react';
 import { PageRating } from '../PageRating';
+import { useBookContext } from '@/contexts/BookContext';
 
 interface ModuleHeader {
     icon?: string;
@@ -67,10 +68,16 @@ export const BookPageContainer: React.FC<BookPageContainerProps> = ({ children, 
                 {/* Fold effect gradient - book-like appearance */}
                 <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-gray-200/50 dark:from-black/40 to-transparent pointer-events-none" />
 
-                {/* Rating Widget - Only for Division module */}
-                {moduleHeader?.name === 'División' && pageId && (
-                    <PageRating pageId={pageId} />
-                )}
+                {/* Rating Widget */}
+                {(() => {
+                    // Use BookContext if available to generate a standardized pageId
+                    const bookContext = useBookContext();
+                    const finalPageId = bookContext
+                        ? `${bookContext.topicId}-pag${bookContext.globalPageNumber}`
+                        : pageId;
+
+                    return finalPageId ? <PageRating pageId={finalPageId} /> : null;
+                })()}
             </div>
         </div>
     );

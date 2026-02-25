@@ -145,7 +145,7 @@ export function ConceptPage2({ zoom = 1 }: DivisionConceptPage2Props) {
                 // icon: '/division-icon.png',
                 name: 'División'
             }}
-            pageId="division-concept-2"
+            pageId="division-pag10"
         >
             {/* Main Content Box */}
             <div className="relative ml-2 flex items-start h-full">

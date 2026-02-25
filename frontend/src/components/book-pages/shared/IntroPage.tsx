@@ -7,7 +7,7 @@ interface IntroPageProps {
 
 export const IntroPage = ({ zoom = 1 }: IntroPageProps) => {
     return (
-        <BookPageContainer zoom={zoom}>
+        <BookPageContainer zoom={zoom} pageId="shared-pag2-intro">
             <header className="mb-12 border-b-2 border-gray-100 dark:border-gray-700 pb-4">
                 <h2 className="text-3xl font-serif font-bold text-gray-900 dark:text-white">Introducción</h2>
             </header>

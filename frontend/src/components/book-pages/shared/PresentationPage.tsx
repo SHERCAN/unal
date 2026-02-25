@@ -7,7 +7,7 @@ interface PresentationPageProps {
 
 export const PresentationPage = ({ zoom = 1 }: PresentationPageProps) => {
     return (
-        <BookPageContainer zoom={zoom}>
+        <BookPageContainer zoom={zoom} pageId="shared-pag1-presentation">
             <header className="mb-8 border-b-2 border-gray-100 dark:border-gray-700 pb-4">
                 <h2 className="text-3xl font-serif font-bold text-gray-900 dark:text-white">Presentación</h2>
             </header>

@@ -197,6 +197,7 @@ export function ExercisesPage({ zoom = 1 }: DivisionExercisesPageProps) {
                 icon: '/division-icon.png',
                 name: 'División' // Keeping module name
             }}
+            pageId="division-pag12"
         >
             <style jsx>{`
                 @keyframes celebrate {

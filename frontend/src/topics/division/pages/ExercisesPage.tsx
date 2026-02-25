@@ -194,7 +194,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
             moduleHeader={{
                 name: 'División'
             }}
-            pageId="division-exercises"
+            pageId="division-pag12"
         >
             <div className="flex flex-col gap-8">
                 {/* Header */}

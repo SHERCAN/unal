@@ -7,7 +7,7 @@ interface GuidePageProps {
 
 export const GuidePage = ({ zoom = 1 }: GuidePageProps) => {
     return (
-        <BookPageContainer zoom={zoom}>
+        <BookPageContainer zoom={zoom} pageId="shared-pag3-guide">
             <header className="mb-12 border-b-2 border-gray-100 dark:border-gray-700 pb-4">
                 <h2 className="text-3xl font-serif font-bold text-gray-900 dark:text-white">Guía de Usuario</h2>
                 <p className="text-gray-600 dark:text-gray-400 mt-2">Cómo aprovechar al máximo este recurso</p>

@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import React from 'react';
 import { TopicConfig } from '@/types/topic';
 import { IndexPage } from './IndexPage';
+import { BookProvider } from '@/contexts/BookContext';
 
 interface InfiniteBookProps {
     topics: TopicConfig[];
@@ -90,13 +91,14 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
     const allPages = [
         {
             id: 'index-page',
+            topicId: 'shared',
             component: ({ zoom }: { zoom?: number }) => (
                 <IndexPage topics={topics} onNavigate={navigateToPage} zoom={zoom} />
             )
         },
         ...topics.flatMap(topic => [
-            ...topic.pages,
-            ...topic.exercisePages.map(ep => ({ ...ep, isExercise: true }))
+            ...topic.pages.map(p => ({ ...p, topicId: topic.id })),
+            ...topic.exercisePages.map(ep => ({ ...ep, isExercise: true, topicId: topic.id }))
         ]),
     ];
 
@@ -151,7 +153,9 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
                             className="snap-start snap-always mb-16"
                             style={{ scrollMarginTop: '1rem' }}
                         >
-                            <PageComponent zoom={globalZoom} />
+                            <BookProvider value={{ topicId: (pageDef as any).topicId || 'shared', globalPageNumber: index }}>
+                                <PageComponent zoom={globalZoom} />
+                            </BookProvider>
                         </motion.div>
                     );
                 })}

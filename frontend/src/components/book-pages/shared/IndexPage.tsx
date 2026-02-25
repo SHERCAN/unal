@@ -16,7 +16,7 @@ export const IndexPage = ({ zoom = 1 }: IndexPageProps) => {
     ];
 
     return (
-        <BookPageContainer zoom={zoom}>
+        <BookPageContainer zoom={zoom} pageId="shared-pag4-index">
             <header className="mb-16 text-center">
                 <h2 className="text-3xl font-serif font-bold text-gray-900 dark:text-white uppercase tracking-widest border-b border-gray-200 dark:border-gray-700 pb-4 inline-block">
                     Tabla de Contenido

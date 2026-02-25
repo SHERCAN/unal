@@ -15,6 +15,7 @@ export function ExercisePage1({ zoom = 1 }: ExercisePage1Props) {
                 icon: '/division-icon.png',
                 name: 'Ejercicios'
             }}
+            pageId="shared-exercises-1"
         >
             <div className="space-y-8">
                 <div className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 p-8 rounded-2xl">

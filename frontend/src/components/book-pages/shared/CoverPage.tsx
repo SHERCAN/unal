@@ -7,7 +7,7 @@ interface CoverPageProps {
 
 export const CoverPage = ({ zoom = 1 }: CoverPageProps) => {
     return (
-        <BookPageContainer className="flex items-center justify-center text-center" zoom={zoom}>
+        <BookPageContainer className="flex items-center justify-center text-center" zoom={zoom} pageId="shared-pag0-cover">
             <div className="space-y-12">
                 <div className="w-32 h-32 mx-auto bg-gray-100 rounded-full flex items-center justify-center border-4 border-primary/20">
                     {/* Logo Placeholder */}

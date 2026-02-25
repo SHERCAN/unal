@@ -23,7 +23,7 @@ interface User {
 
 interface ModuleActivity {
     id: string;
-    type: 'Video' | 'Ejercicio' | 'Actividad';
+    type: 'Video' | 'Ejercicio' | 'Actividad' | 'Calificación';
     name: string;
     date: string;
     flexPoints: number;
@@ -42,6 +42,7 @@ const formatModuleName = (id: string) => {
     const lowerId = id.toLowerCase().replace(/_/g, '-');
 
     // Explicit mappings for common prefixes used in different pages
+    if (lowerId.includes('shared')) return 'LIBRO - GENERAL';
     if (lowerId.includes('division-exacta') || lowerId.includes('div-exacta')) return 'DIVISIÓN EXACTA';
     if (lowerId.includes('division-inexacta') || lowerId.includes('div-inexacta')) return 'DIVISIÓN INEXACTA';
     if (lowerId.includes('division')) return 'DIVISIÓN'; // Catch general division topic
@@ -177,6 +178,37 @@ const getUserModules = (user: User): GroupedModule[] => {
             flexPoints: f,
             defPoints: d,
             details: text
+        });
+    });
+
+    user.pageRatings?.forEach(pr => {
+        const modName = formatModuleName(pr.pageId);
+        if (!map[modName]) map[modName] = { moduleName: modName, totalFlex: 0, totalDef: 0, activities: [] };
+
+        // Standard Pattern: [topic]-pag[N] or older known IDs
+        const pagMatch = pr.pageId.match(/-pag(\d+)/i);
+        let pagName = pagMatch ? `Calificación: Página ${pagMatch[1]}` : `Calificación: ${pr.pageId}`;
+
+        // Manual mapping for transitions or special IDs
+        if (!pagMatch) {
+            if (pr.pageId === 'division-distribution') pagName = 'Calificación: Página 8';
+            else if (pr.pageId === 'division-concept') pagName = 'Calificación: Página 9';
+            else if (pr.pageId === 'division-concept-new') pagName = 'Calificación: Página 9';
+            else if (pr.pageId === 'division-concept-2') pagName = 'Calificación: Página 10';
+            else if (pr.pageId === 'division-concept-3') pagName = 'Calificación: Página 11';
+            else if (pr.pageId === 'division-exercises') pagName = 'Calificación: Página 12';
+            else if (pr.pageId === 'division-exercises-old') pagName = 'Calificación: Página 12';
+            else if (pr.pageId === 'division-exercises-2') pagName = 'Calificación: Página 13';
+        }
+
+        map[modName].activities.push({
+            id: pr.pageId,
+            type: 'Calificación' as any,
+            name: pagName,
+            date: pr.createdAt,
+            flexPoints: 0,
+            defPoints: 0,
+            details: pr.rating === 3 ? '¡Le gustó! (Bueno)' : (pr.rating === 2 ? 'Regular' : 'No le gustó (Malo)')
         });
     });
 
@@ -418,9 +450,10 @@ export default function AdminDashboard() {
                                                             {[
                                                                 { label: 'Videos', type: 'Video' },
                                                                 { label: 'Actividad interactiva', type: 'Actividad' },
-                                                                { label: 'Ejercicio', type: 'Ejercicio' }
+                                                                { label: 'Ejercicio', type: 'Ejercicio' },
+                                                                { label: 'Calificaciones de página', type: 'Calificación' }
                                                             ].map(category => {
-                                                                const categoryActivities = mod.activities.filter(act => act.type === category.type);
+                                                                const categoryActivities = mod.activities.filter(act => act.type === (category.type as any));
 
                                                                 if (categoryActivities.length === 0) return null;
 
@@ -449,8 +482,16 @@ export default function AdminDashboard() {
                                                                                         <div>
                                                                                             <p className="font-medium text-sm">{act.name}</p>
                                                                                             <div className="flex items-center gap-2 mt-1">
-                                                                                                <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${act.type === 'Video' ? 'bg-blue-100 text-blue-800' : (act.type === 'Actividad' ? 'bg-purple-100 text-purple-800' : 'bg-orange-100 text-orange-800')}`}>
-                                                                                                    {act.type === 'Actividad' ? 'Actividad' : act.type}
+                                                                                                <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${act.type === 'Video' ? 'bg-blue-100 text-blue-800' :
+                                                                                                    (act.type === 'Actividad' ? 'bg-purple-100 text-purple-800' :
+                                                                                                        (act.type === 'Ejercicio' ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800'))
+                                                                                                    }`}>
+                                                                                                    {act.type === 'Calificación' ? (
+                                                                                                        <span className="flex items-center gap-1">
+                                                                                                            {act.details.includes('Bueno') ? '🤩' : (act.details.includes('Malo') ? '☹️' : '😐')}
+                                                                                                            Página
+                                                                                                        </span>
+                                                                                                    ) : (act.type === 'Actividad' ? 'Actividad' : act.type)}
                                                                                                 </span>
                                                                                                 <span className="text-text-secondary text-xs">{act.details}</span>
                                                                                             </div>
@@ -462,7 +503,7 @@ export default function AdminDashboard() {
                                                                                                     {act.flexPoints > 0 && <span className="text-purple-700 dark:text-purple-400 font-bold">+{act.flexPoints} pts flex</span>}
                                                                                                     {act.defPoints > 0 && <span className="text-red-600 dark:text-red-400 font-bold">+{act.defPoints} pts def</span>}
                                                                                                 </div>
-                                                                                            ) : (
+                                                                                            ) : act.type !== 'Calificación' && (
                                                                                                 <span className="text-gray-400 font-medium text-xs">0 pts asignados</span>
                                                                                             )}
                                                                                         </div>
