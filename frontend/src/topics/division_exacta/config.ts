@@ -23,9 +23,9 @@ export const divisionExactaConfig: TopicConfig = {
         // { component: GuidePage, id: 'guide', title: 'Guía' },
         // { component: PresentationPage, id: 'presentation', title: 'Presentación' },
         // { component: ExplanationPage, id: 'explanation', title: 'Explicación' },
-        { component: ConceptoConcretoPage, id: 'concepto-concreto', title: 'Concepto Concreto' },
-        { component: ConceptoPictoricoPage, id: 'concepto-pictorico', title: 'Concepto Pictórico' },
-        { component: ConceptoAbstractoPage, id: 'concepto-abstracto', title: 'Concepto Abstracto' },
+        { component: ConceptoConcretoPage, id: 'concepto-concreto', title: 'Concreto y pictórico' },
+        { component: ConceptoPictoricoPage, id: 'concepto-pictorico', title: 'Explicación teórica' },
+        { component: ConceptoAbstractoPage, id: 'concepto-abstracto', title: 'Ejemplos, practicas y algoritmo de división' },
     ],
     exercisePages: [
         { component: EjerciciosPage, id: 'ejercicios', title: 'Ejercicios' },
