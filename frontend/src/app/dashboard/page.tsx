@@ -401,9 +401,23 @@ export default function DashboardPage() {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    const sessionId = localStorage.getItem('sessionId');
+    const token = localStorage.getItem('token');
+
+    if (sessionId && token) {
+      try {
+        await axios.post('/api/auth/logout', { sessionId }, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+      } catch (e) {
+        console.error("Logout failed", e);
+      }
+    }
+
     // Clear all user-related data from localStorage
     localStorage.removeItem('token');
+    localStorage.removeItem('sessionId');
     localStorage.removeItem('user');
     localStorage.removeItem('userAvatar');
     localStorage.removeItem('watchedVideos');

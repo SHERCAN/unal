@@ -65,8 +65,16 @@ export const login = async (req: Request, res: Response) => {
 
     const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET!, { expiresIn: '7d' });
 
+    // Create session
+    const session = await prisma.userSession.create({
+      data: {
+        userId: user.id
+      }
+    });
+
     res.json({
       token,
+      sessionId: session.id,
       user: {
         id: user.id,
         nickname: user.nickname,
@@ -81,6 +89,53 @@ export const login = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error en login:', error);
     res.status(500).json({ error: 'Error al iniciar sesión' });
+  }
+};
+
+export const logout = async (req: Request, res: Response) => {
+  try {
+    const { sessionId } = req.body;
+    const userId = (req as any).userId;
+
+    if (!sessionId) {
+      return res.status(400).json({ error: 'Session ID es requerido' });
+    }
+
+    await prisma.userSession.update({
+      where: { id: sessionId, userId },
+      data: {
+        endTime: new Date(),
+        lastActive: new Date()
+      }
+    });
+
+    res.json({ message: 'Sesión cerrada correctamente' });
+  } catch (error) {
+    console.error('Error en logout:', error);
+    res.status(500).json({ error: 'Error al cerrar sesión' });
+  }
+};
+
+export const pulse = async (req: Request, res: Response) => {
+  try {
+    const { sessionId } = req.body;
+    const userId = (req as any).userId;
+
+    if (!sessionId) {
+      return res.status(400).json({ error: 'Session ID es requerido' });
+    }
+
+    await prisma.userSession.update({
+      where: { id: sessionId, userId },
+      data: {
+        lastActive: new Date()
+      }
+    });
+
+    res.json({ status: 'ok' });
+  } catch (error) {
+    console.error('Error en pulse:', error);
+    res.status(500).json({ error: 'Error en pulso de sesión' });
   }
 };
 

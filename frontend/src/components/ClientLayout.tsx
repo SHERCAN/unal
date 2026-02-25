@@ -5,6 +5,7 @@ import MathBackground from '@/components/MathBackground';
 import ThemeToggle from '@/components/ThemeToggle';
 
 import { ToastProvider } from '@/contexts/ToastContext';
+import SessionTracker from '@/components/SessionTracker';
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
@@ -19,6 +20,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   return (
     <ToastProvider>
+      <SessionTracker />
       <MathBackground />
       {mounted && <ThemeToggle />}
       {children}

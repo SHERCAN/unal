@@ -23,6 +23,7 @@ export default function LoginPage() {
     try {
       const response = await axios.post('/api/auth/login', formData);
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('sessionId', response.data.sessionId);
       localStorage.setItem('user', JSON.stringify(response.data.user));
 
       // Guardar avatar personalizado si existe

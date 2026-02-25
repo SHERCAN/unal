@@ -18,6 +18,11 @@ export const getAllData = async (req: Request, res: Response) => {
                     },
                 },
                 pageRatings: true,
+                sessions: {
+                    orderBy: {
+                        startTime: 'desc',
+                    },
+                },
             },
             orderBy: {
                 createdAt: 'desc',

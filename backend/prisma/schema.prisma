@@ -26,8 +26,21 @@ model User {
   watchedVideos WatchedVideo[]
   exerciseAttempts ExerciseAttempt[]
   pageRatings PageRating[]
+  sessions UserSession[]
   
   @@map("users")
+}
+
+model UserSession {
+  id        String   @id @default(uuid())
+  userId    String
+  startTime DateTime @default(now())
+  endTime   DateTime?
+  lastActive DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_sessions")
 }
 
 model Progreso {

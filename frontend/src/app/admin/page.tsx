@@ -19,6 +19,7 @@ interface User {
     watchedVideos: any[];
     exerciseAttempts: any[];
     pageRatings: any[];
+    sessions: any[];
 }
 
 interface ModuleActivity {
@@ -229,6 +230,7 @@ export default function AdminDashboard() {
     const [expandedModule, setExpandedModule] = useState<string | null>(null);
     const [expandedSubModule, setExpandedSubModule] = useState<string | null>(null);
     const [authToken, setAuthToken] = useState<string | null>(null);
+    const [viewMode, setViewMode] = useState<'lessons' | 'sessions'>('lessons');
 
     const groupedModules = selectedUser ? getUserModules(selectedUser) : [];
 
@@ -338,6 +340,7 @@ export default function AdminDashboard() {
                     <button
                         onClick={() => {
                             localStorage.removeItem('token');
+                            localStorage.removeItem('sessionId');
                             localStorage.removeItem('user');
                             router.push('/login');
                         }}
@@ -422,107 +425,198 @@ export default function AdminDashboard() {
                                     </div>
                                 </div>
 
-                                {/* Historial de Ejercicios y Lecciones Plegables */}
-                                <div>
-                                    <h3 className="text-2xl font-bold mb-4 text-text border-b pb-2 dark:border-gray-700">Historial Detallado por Lección</h3>
-                                    {groupedModules.length > 0 ? (
-                                        <div className="space-y-4">
-                                            {groupedModules.map(mod => (
-                                                <div key={mod.moduleName} className="bg-background rounded-xl border dark:border-gray-700 overflow-hidden shadow-sm">
-                                                    <button
-                                                        onClick={() => setExpandedModule(expandedModule === mod.moduleName ? null : mod.moduleName)}
-                                                        className="w-full text-left p-4 flex justify-between items-center hover:bg-background-secondary transition-colors"
-                                                    >
-                                                        <span className="font-bold text-lg">{mod.moduleName}</span>
-                                                        <div className="flex items-center space-x-3">
-                                                            <span className="text-sm font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 px-3 py-1 rounded-full">
-                                                                {mod.activities.length} Interacciones
-                                                            </span>
-                                                            <span className="text-sm font-bold bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 px-2 py-1 rounded"> +{mod.totalFlex} flex </span>
-                                                            <span className="text-sm font-bold bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300 px-2 py-1 rounded"> +{mod.totalDef} def </span>
-                                                            <svg className={`w-5 h-5 transition-transform ${expandedModule === mod.moduleName ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                                            </svg>
-                                                        </div>
-                                                    </button>
-                                                    {expandedModule === mod.moduleName && (
-                                                        <div className="p-4 bg-background-secondary/40 border-t dark:border-gray-700 space-y-3">
-                                                            {[
-                                                                { label: 'Videos', type: 'Video' },
-                                                                { label: 'Actividad interactiva', type: 'Actividad' },
-                                                                { label: 'Ejercicio', type: 'Ejercicio' },
-                                                                { label: 'Calificaciones de página', type: 'Calificación' }
-                                                            ].map(category => {
-                                                                const categoryActivities = mod.activities.filter(act => act.type === (category.type as any));
+                                {/* Selector de Vista */}
+                                <div className="flex border-b dark:border-gray-700">
+                                    <button
+                                        onClick={() => setViewMode('lessons')}
+                                        className={`px-6 py-3 font-bold transition-all border-b-2 ${viewMode === 'lessons' ? 'border-primary text-primary' : 'border-transparent text-text-secondary hover:text-text'}`}
+                                    >
+                                        📚 Lecciones y Progreso
+                                    </button>
+                                    <button
+                                        onClick={() => setViewMode('sessions')}
+                                        className={`px-6 py-3 font-bold transition-all border-b-2 ${viewMode === 'sessions' ? 'border-primary text-primary' : 'border-transparent text-text-secondary hover:text-text'}`}
+                                    >
+                                        🕒 Historial de Sesiones
+                                    </button>
+                                </div>
 
-                                                                if (categoryActivities.length === 0) return null;
+                                {viewMode === 'lessons' ? (
+                                    <div>
+                                        <h3 className="text-2xl font-bold mb-4 text-text border-b pb-2 dark:border-gray-700">Historial Detallado por Lección</h3>
+                                        {groupedModules.length > 0 ? (
+                                            <div className="space-y-4">
+                                                {groupedModules.map(mod => (
+                                                    <div key={mod.moduleName} className="bg-background rounded-xl border dark:border-gray-700 overflow-hidden shadow-sm">
+                                                        <button
+                                                            onClick={() => setExpandedModule(expandedModule === mod.moduleName ? null : mod.moduleName)}
+                                                            className="w-full text-left p-4 flex justify-between items-center hover:bg-background-secondary transition-colors"
+                                                        >
+                                                            <span className="font-bold text-lg">{mod.moduleName}</span>
+                                                            <div className="flex items-center space-x-3">
+                                                                <span className="text-sm font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 px-3 py-1 rounded-full">
+                                                                    {mod.activities.length} Interacciones
+                                                                </span>
+                                                                <span className="text-sm font-bold bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 px-2 py-1 rounded"> +{mod.totalFlex} flex </span>
+                                                                <span className="text-sm font-bold bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300 px-2 py-1 rounded"> +{mod.totalDef} def </span>
+                                                                <svg className={`w-5 h-5 transition-transform ${expandedModule === mod.moduleName ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                                </svg>
+                                                            </div>
+                                                        </button>
+                                                        {expandedModule === mod.moduleName && (
+                                                            <div className="p-4 bg-background-secondary/40 border-t dark:border-gray-700 space-y-3">
+                                                                {[
+                                                                    { label: 'Videos', type: 'Video' },
+                                                                    { label: 'Actividad interactiva', type: 'Actividad' },
+                                                                    { label: 'Ejercicio', type: 'Ejercicio' },
+                                                                    { label: 'Calificaciones de página', type: 'Calificación' }
+                                                                ].map(category => {
+                                                                    const categoryActivities = mod.activities.filter(act => act.type === (category.type as any));
 
-                                                                const isSubExpanded = expandedSubModule === `${mod.moduleName}-${category.type}`;
+                                                                    if (categoryActivities.length === 0) return null;
 
-                                                                return (
-                                                                    <div key={category.type} className="bg-background rounded-xl border dark:border-gray-800 overflow-hidden shadow-sm">
-                                                                        <button
-                                                                            onClick={() => setExpandedSubModule(isSubExpanded ? null : `${mod.moduleName}-${category.type}`)}
-                                                                            className="w-full text-left p-3 flex justify-between items-center hover:bg-background-secondary transition-colors"
-                                                                        >
-                                                                            <span className="font-semibold text-md">{category.label}</span>
-                                                                            <div className="flex items-center space-x-3">
-                                                                                <span className="text-xs font-semibold bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300 px-2 py-1 rounded-full">
-                                                                                    {categoryActivities.length} items
-                                                                                </span>
-                                                                                <svg className={`w-4 h-4 transition-transform ${isSubExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                                                                </svg>
-                                                                            </div>
-                                                                        </button>
-                                                                        {isSubExpanded && (
-                                                                            <div className="p-3 bg-background-secondary/20 border-t dark:border-gray-800 space-y-2">
-                                                                                {categoryActivities.map((act, i) => (
-                                                                                    <div key={i} className="bg-background p-3 rounded-lg border dark:border-gray-700 flex flex-col md:flex-row justify-between items-start md:items-center text-sm shadow-sm gap-2">
-                                                                                        <div>
-                                                                                            <p className="font-medium text-sm">{act.name}</p>
-                                                                                            <div className="flex items-center gap-2 mt-1">
-                                                                                                <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${act.type === 'Video' ? 'bg-blue-100 text-blue-800' :
-                                                                                                    (act.type === 'Actividad' ? 'bg-purple-100 text-purple-800' :
-                                                                                                        (act.type === 'Ejercicio' ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800'))
-                                                                                                    }`}>
-                                                                                                    {act.type === 'Calificación' ? (
-                                                                                                        <span className="flex items-center gap-1">
-                                                                                                            {act.details.includes('Bueno') ? '🤩' : (act.details.includes('Malo') ? '☹️' : '😐')}
-                                                                                                            Página
-                                                                                                        </span>
-                                                                                                    ) : (act.type === 'Actividad' ? 'Actividad' : act.type)}
-                                                                                                </span>
-                                                                                                <span className="text-text-secondary text-xs">{act.details}</span>
+                                                                    const isSubExpanded = expandedSubModule === `${mod.moduleName}-${category.type}`;
+
+                                                                    return (
+                                                                        <div key={category.type} className="bg-background rounded-xl border dark:border-gray-800 overflow-hidden shadow-sm">
+                                                                            <button
+                                                                                onClick={() => setExpandedSubModule(isSubExpanded ? null : `${mod.moduleName}-${category.type}`)}
+                                                                                className="w-full text-left p-3 flex justify-between items-center hover:bg-background-secondary transition-colors"
+                                                                            >
+                                                                                <span className="font-semibold text-md">{category.label}</span>
+                                                                                <div className="flex items-center space-x-3">
+                                                                                    <span className="text-xs font-semibold bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300 px-2 py-1 rounded-full">
+                                                                                        {categoryActivities.length} items
+                                                                                    </span>
+                                                                                    <svg className={`w-4 h-4 transition-transform ${isSubExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                                                    </svg>
+                                                                                </div>
+                                                                            </button>
+                                                                            {isSubExpanded && (
+                                                                                <div className="p-3 bg-background-secondary/20 border-t dark:border-gray-800 space-y-2">
+                                                                                    {categoryActivities.map((act, i) => (
+                                                                                        <div key={i} className="bg-background p-3 rounded-lg border dark:border-gray-700 flex flex-col md:flex-row justify-between items-start md:items-center text-sm shadow-sm gap-2">
+                                                                                            <div>
+                                                                                                <p className="font-medium text-sm">{act.name}</p>
+                                                                                                <div className="flex items-center gap-2 mt-1">
+                                                                                                    <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${act.type === 'Video' ? 'bg-blue-100 text-blue-800' :
+                                                                                                        (act.type === 'Actividad' ? 'bg-purple-100 text-purple-800' :
+                                                                                                            (act.type === 'Ejercicio' ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800'))
+                                                                                                        }`}>
+                                                                                                        {act.type === 'Calificación' ? (
+                                                                                                            <span className="flex items-center gap-1">
+                                                                                                                {act.details.includes('Bueno') ? '🤩' : (act.details.includes('Malo') ? '☹️' : '😐')}
+                                                                                                                Página
+                                                                                                            </span>
+                                                                                                        ) : (act.type === 'Actividad' ? 'Actividad' : act.type)}
+                                                                                                    </span>
+                                                                                                    <span className="text-text-secondary text-xs">{act.details}</span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div className="text-right flex flex-col items-end">
+                                                                                                <p className="text-xs text-text-secondary mb-1">{new Date(act.date).toLocaleString()}</p>
+                                                                                                {(act.flexPoints > 0 || act.defPoints > 0) ? (
+                                                                                                    <div className="flex space-x-2 text-xs">
+                                                                                                        {act.flexPoints > 0 && <span className="text-purple-700 dark:text-purple-400 font-bold">+{act.flexPoints} pts flex</span>}
+                                                                                                        {act.defPoints > 0 && <span className="text-red-600 dark:text-red-400 font-bold">+{act.defPoints} pts def</span>}
+                                                                                                    </div>
+                                                                                                ) : act.type !== 'Calificación' && (
+                                                                                                    <span className="text-gray-400 font-medium text-xs">0 pts asignados</span>
+                                                                                                )}
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div className="text-right flex flex-col items-end">
-                                                                                            <p className="text-xs text-text-secondary mb-1">{new Date(act.date).toLocaleString()}</p>
-                                                                                            {(act.flexPoints > 0 || act.defPoints > 0) ? (
-                                                                                                <div className="flex space-x-2 text-xs">
-                                                                                                    {act.flexPoints > 0 && <span className="text-purple-700 dark:text-purple-400 font-bold">+{act.flexPoints} pts flex</span>}
-                                                                                                    {act.defPoints > 0 && <span className="text-red-600 dark:text-red-400 font-bold">+{act.defPoints} pts def</span>}
-                                                                                                </div>
-                                                                                            ) : act.type !== 'Calificación' && (
-                                                                                                <span className="text-gray-400 font-medium text-xs">0 pts asignados</span>
-                                                                                            )}
-                                                                                        </div>
-                                                                                    </div>
-                                                                                ))}
+                                                                                    ))}
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    );
+                                                                })}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <p className="text-text-secondary italic">No se ha registrado actividad reciente.</p>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div className="space-y-6">
+                                        <div className="flex justify-between items-center">
+                                            <h3 className="text-2xl font-bold text-text">Historial de Conexión</h3>
+                                            <p className="text-sm text-text-secondary">{selectedUser.sessions?.length || 0} sesiones registradas</p>
+                                        </div>
+
+                                        {selectedUser.sessions && selectedUser.sessions.length > 0 ? (
+                                            <div className="overflow-x-auto rounded-xl border dark:border-gray-700">
+                                                <table className="w-full text-left bg-background">
+                                                    <thead className="bg-background-secondary text-text-secondary text-sm uppercase">
+                                                        <tr>
+                                                            <th className="px-4 py-3">Ingreso</th>
+                                                            <th className="px-4 py-3">Permanencia</th>
+                                                            <th className="px-4 py-3">Cierre / Última Actividad</th>
+                                                            <th className="px-4 py-3">Estado</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody className="divide-y dark:divide-gray-700">
+                                                        {selectedUser.sessions.map((session: any) => {
+                                                            const start = new Date(session.startTime);
+                                                            const end = session.endTime ? new Date(session.endTime) : null;
+                                                            const last = new Date(session.lastActive);
+
+                                                            // Calcular duración
+                                                            const durationMs = (end || last).getTime() - start.getTime();
+                                                            const minutes = Math.floor(durationMs / 60000);
+                                                            const hours = Math.floor(minutes / 60);
+                                                            const displayMinutes = minutes % 60;
+                                                            const displayDuration = hours > 0 ? `${hours}h ${displayMinutes}m` : `${displayMinutes}m`;
+
+                                                            const isActive = !session.endTime && (Date.now() - last.getTime()) < 5 * 60 * 1000;
+
+                                                            return (
+                                                                <tr key={session.id} className="hover:bg-background-secondary/30 transition-colors">
+                                                                    <td className="px-4 py-4">
+                                                                        <div className="font-medium">{start.toLocaleDateString()}</div>
+                                                                        <div className="text-xs text-text-secondary">{start.toLocaleTimeString()}</div>
+                                                                    </td>
+                                                                    <td className="px-4 py-4">
+                                                                        <span className="font-bold text-primary">{displayDuration}</span>
+                                                                    </td>
+                                                                    <td className="px-4 py-4 text-sm">
+                                                                        {end ? (
+                                                                            <div>
+                                                                                <div>{end.toLocaleTimeString()}</div>
+                                                                                <div className="text-[10px] text-gray-400">Cierre Manual</div>
+                                                                            </div>
+                                                                        ) : (
+                                                                            <div>
+                                                                                <div>{last.toLocaleTimeString()}</div>
+                                                                                <div className="text-[10px] text-orange-400">Inactividad</div>
                                                                             </div>
                                                                         )}
-                                                                    </div>
-                                                                );
-                                                            })}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <p className="text-text-secondary italic">No se ha registrado actividad reciente.</p>
-                                    )}
-                                </div>
+                                                                    </td>
+                                                                    <td className="px-4 py-4">
+                                                                        {isActive ? (
+                                                                            <span className="px-2 py-1 bg-green-100 text-green-700 text-[10px] font-bold rounded-full animate-pulse">ACTIVO</span>
+                                                                        ) : (
+                                                                            <span className="px-2 py-1 bg-gray-100 text-gray-500 text-[10px] font-bold rounded-full">FINALIZADO</span>
+                                                                        )}
+                                                                    </td>
+                                                                </tr>
+                                                            );
+                                                        })}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        ) : (
+                                            <div className="bg-background rounded-xl p-8 text-center border dark:border-gray-700 italic text-text-secondary">
+                                                No hay registros de sesiones para este estudiante.
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
 
                             </div>
                         ) : (
