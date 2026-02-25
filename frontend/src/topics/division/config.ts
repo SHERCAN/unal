@@ -26,10 +26,10 @@ export const divisionConfig: TopicConfig = {
         // { component: GuidePage, id: 'guide', title: 'Guía' },
         // { component: PresentationPage, id: 'presentation', title: 'Presentación' },
         // { component: ExplanationPage, id: 'explanation', title: 'Explicación' },
-        { component: DistributionExercisePage, id: 'division-distribution-exercise', title: 'Ejercicio de Distribución' },
-        { component: ConceptPage, id: 'concept', title: 'Concepto' },
-        { component: ConceptPage2, id: 'concept-2', title: 'Concepto 2' },
-        { component: ConceptPage3, id: 'concept-3', title: 'Concepto 3' },
+        { component: DistributionExercisePage, id: 'division-distribution-exercise', title: 'Concreto y pictórico' },
+        { component: ConceptPage, id: 'concept', title: 'Explicación teórica' },
+        { component: ConceptPage2, id: 'concept-2', title: 'Ejemplos y partes de la división' },
+        { component: ConceptPage3, id: 'concept-3', title: 'Problemas con división' },
     ],
     // Páginas de ejercicios (sección "EJERCICIOS")
     exercisePages: [
