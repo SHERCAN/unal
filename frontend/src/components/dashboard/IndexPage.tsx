@@ -19,7 +19,7 @@ export function IndexPage({ topics, onNavigate, zoom = 1 }: IndexPageProps) {
 
             <h1 className="text-4xl md:text-5xl font-black text-center mb-12 text-gray-800 dark:text-white uppercase tracking-wider relative inline-block self-center">
                 Índice de Contenidos
-                <div className="absolute -bottom-4 left-0 w-full h-1.5 bg-primary rounded-full"></div>
+                <div className="absolute -bottom-4 left-0 w-full h-1.5 bg-purple-700 rounded-full"></div>
             </h1>
 
             <div className="flex-1 overflow-auto pr-4 custom-scrollbar">
