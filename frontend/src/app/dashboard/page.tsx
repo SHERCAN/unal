@@ -729,6 +729,44 @@ function InfiniteBookWrapper({
 
   const totalPagesInBook = topics.reduce((acc, t) => acc + t.pages.length + t.exercisePages.length, 0);
 
+  const goToNextTopic = useCallback(() => {
+    let offset = 1;
+    for (let i = 0; i < topics.length; i++) {
+      const topic = topics[i];
+      const count = topic.pages.length + topic.exercisePages.length;
+      if (currentPage < offset) {
+        handleNavigateToPage(offset);
+        return;
+      }
+      if (currentPage >= offset && currentPage < offset + count) {
+        if (i + 1 < topics.length) {
+          handleNavigateToPage(offset + count);
+        }
+        return;
+      }
+      offset += count;
+    }
+  }, [currentPage, topics, handleNavigateToPage]);
+
+  const goToPrevTopic = useCallback(() => {
+    if (currentPage === 0) return;
+    let offset = 1;
+    let prevOffset = 0; // Index page
+    for (let i = 0; i < topics.length; i++) {
+      const topic = topics[i];
+      const count = topic.pages.length + topic.exercisePages.length;
+      if (currentPage >= offset && currentPage < offset + count) {
+        handleNavigateToPage(prevOffset);
+        return;
+      }
+      prevOffset = offset;
+      offset += count;
+    }
+    if (currentPage >= offset) {
+      handleNavigateToPage(prevOffset);
+    }
+  }, [currentPage, topics, handleNavigateToPage]);
+
   return (
     <div className="flex-1 relative">
       <InfiniteBook
@@ -736,6 +774,33 @@ function InfiniteBookWrapper({
         onPageChange={handlePageChange}
         onNavigationRequest={handleNavigationRequest}
       />
+
+      {/* Navigation Jump Buttons */}
+      <div className="fixed top-1/2 -translate-y-1/2 left-80 ml-6 z-[100] pointer-events-none hidden lg:block">
+        <button
+          onClick={goToPrevTopic}
+          disabled={currentPage === 0}
+          className={`p-4 rounded-full bg-white dark:bg-gray-800 border-2 border-primary/20 shadow-[0_10px_40px_rgba(126,34,206,0.3)] transition-all duration-500 pointer-events-auto ${currentPage === 0 ? 'opacity-0 scale-50' : 'opacity-100 scale-100 hover:scale-115 hover:border-primary/50 hover:shadow-[0_20px_60px_rgba(126,34,206,0.4)] hover:-translate-y-2 active:scale-95'}`}
+          title="Lección Anterior"
+        >
+          <svg className="w-8 h-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+      </div>
+
+      <div className="fixed top-1/2 -translate-y-1/2 right-6 z-[100] pointer-events-none hidden lg:block">
+        <button
+          onClick={goToNextTopic}
+          disabled={currentPage >= totalPagesInBook}
+          className={`p-4 rounded-full bg-white dark:bg-gray-800 border-2 border-primary/20 shadow-[0_10px_40px_rgba(126,34,206,0.3)] transition-all duration-500 pointer-events-auto ${currentPage >= totalPagesInBook ? 'opacity-0 scale-50' : 'opacity-100 scale-100 hover:scale-115 hover:border-primary/50 hover:shadow-[0_20px_60px_rgba(126,34,206,0.4)] hover:-translate-y-2 active:scale-95'}`}
+          title="Siguiente Lección"
+        >
+          <svg className="w-8 h-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
 
       {currentPage > 0 && (
         <div className="sticky bottom-0 z-50 w-full animate-in slide-in-from-bottom-5 duration-300">
