@@ -2,6 +2,7 @@
 // Force rebuild
 
 import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
@@ -239,7 +240,26 @@ export default function DashboardPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [completedModules, setCompletedModules] = useState<string[]>([]);
   const [currentTopicConfig, setCurrentTopicConfig] = useState<TopicConfig>(divisionConfig);
+  const [currentPage, setCurrentPage] = useState(0);
   const nextLevelStarRef = useRef<HTMLDivElement>(null);
+
+  // Determine current topic based on page index
+  const currentTopicInfo = React.useMemo(() => {
+    if (currentPage === 0) return { topic: { name: 'Índice de Contenidos' }, relativePage: 0 };
+    let offset = 1;
+    for (const topic of ORDERED_TOPICS) {
+      const count = topic.pages.length + topic.exercisePages.length;
+      if (currentPage < offset + count) {
+        return {
+          topic,
+          relativePage: currentPage - offset + 1,
+          totalTopicPages: count
+        };
+      }
+      offset += count;
+    }
+    return null;
+  }, [currentPage]);
 
   // Estados para el perfil de usuario
   const [showProfile, setShowProfile] = useState(false);
@@ -638,6 +658,22 @@ export default function DashboardPage() {
             />
           </div>
 
+          {/* Centered Lesson Title */}
+          <div className="absolute left-1/2 -translate-x-1/2 pointer-events-none hidden md:block">
+            <AnimatePresence mode="wait">
+              <motion.h2
+                key={activeView === 'glossary' ? 'glosario' : currentTopicInfo?.topic.name}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="text-lg font-black text-[#7e22ce] uppercase tracking-[0.2em] whitespace-nowrap drop-shadow-sm"
+              >
+                {activeView === 'glossary' ? 'Glosario Interactivo' : currentTopicInfo?.topic.name}
+              </motion.h2>
+            </AnimatePresence>
+          </div>
+
           <div className="flex items-center gap-3 mr-16">
             <button
               onClick={() => setActiveView(activeView === 'book' ? 'glossary' : 'book')}
@@ -665,6 +701,9 @@ export default function DashboardPage() {
             topics={ORDERED_TOPICS}
             setNavigateToPage={setNavigateToPage}
             completedModules={completedModules}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            currentTopicInfo={currentTopicInfo}
           />
         </div>
 
@@ -682,15 +721,20 @@ function InfiniteBookWrapper({
   setCompletedPages,
   topics,
   setNavigateToPage,
-  completedModules
+  completedModules,
+  currentPage,
+  setCurrentPage,
+  currentTopicInfo
 }: {
   completedPages: number[];
   setCompletedPages: React.Dispatch<React.SetStateAction<number[]>>;
   topics: TopicConfig[];
   setNavigateToPage: React.Dispatch<React.SetStateAction<((page: number) => void) | null>>;
   completedModules: string[];
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
+  currentTopicInfo: any;
 }) {
-  const [currentPage, setCurrentPage] = useState(0);
   const navigateCallbackRef = useRef<((page: number) => void) | null>(null);
 
   const handlePageChange = useCallback((page: number, completed: number[]) => {
@@ -708,24 +752,6 @@ function InfiniteBookWrapper({
       navigateCallbackRef.current(page);
     }
   }, []);
-
-  // Determine current topic based on page index
-  const currentTopicInfo = React.useMemo(() => {
-    if (currentPage === 0) return null;
-    let offset = 1;
-    for (const topic of topics) {
-      const count = topic.pages.length + topic.exercisePages.length;
-      if (currentPage < offset + count) {
-        return {
-          topic,
-          relativePage: currentPage - offset + 1,
-          totalTopicPages: count
-        };
-      }
-      offset += count;
-    }
-    return null;
-  }, [currentPage, topics]);
 
   const totalPagesInBook = topics.reduce((acc, t) => acc + t.pages.length + t.exercisePages.length, 0);
 
