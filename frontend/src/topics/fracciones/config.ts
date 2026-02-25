@@ -25,9 +25,9 @@ export const fraccionesConfig: TopicConfig = {
         // { component: GuidePage, id: 'guide', title: 'Guía' },
         // { component: PresentationPage, id: 'presentation', title: 'Presentación' },
         // { component: ExplanationPage, id: 'explanation', title: 'Explicación' },
-        { component: ConceptoConcretoPage, id: 'concepto-concreto', title: 'Concepto Concreto' },
-        { component: ConceptoAbstracto1Page, id: 'concepto-abstracto-1', title: 'Definición de Fracción' },
-        { component: ConceptoAbstracto2Page, id: 'concepto-abstracto-2', title: 'Práctica Visual' },
+        { component: ConceptoConcretoPage, id: 'concepto-concreto', title: 'Concreto y pictórico' },
+        { component: ConceptoAbstracto1Page, id: 'concepto-abstracto-1', title: 'Explicación teórica' },
+        { component: ConceptoAbstracto2Page, id: 'concepto-abstracto-2', title: 'Representación de fracciones' },
         { component: EjemplosPage, id: 'ejemplos', title: 'Ejemplos' },
     ],
     exercisePages: [
