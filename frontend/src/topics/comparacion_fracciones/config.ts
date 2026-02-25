@@ -22,8 +22,8 @@ export const comparacionFraccionesConfig: TopicConfig = {
         // { component: GuidePage, id: 'guide', title: 'Guía' },
         // { component: PresentationPage, id: 'presentation', title: 'Presentación' },
         // { component: ExplanationPage, id: 'explanation', title: 'Explicación' },
-        { component: ConceptoConcretoPage, id: 'concepto-concreto', title: 'Concepto Concreto' },
-        { component: ConceptoAbstractoPage, id: 'concepto-abstracto', title: 'Concepto Abstracto' },
+        { component: ConceptoConcretoPage, id: 'concepto-concreto', title: 'Concreto y pictórico' },
+        { component: ConceptoAbstractoPage, id: 'concepto-abstracto', title: 'Explicación teórica' },
     ],
     exercisePages: [
         { component: EjerciciosPage, id: 'ejercicios', title: 'Ejercicios' },
