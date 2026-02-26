@@ -122,7 +122,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
         if (isExerciseCompleted(EXERCISE_IDS.A_GAME)) return;
         const allCorrect = practicaItems.every((item, i) => (practicaAnswers[i] === 'exacta') === item.isExact);
         setResult(allCorrect ? 'correct' : 'incorrect');
-        await submitGame(EXERCISE_IDS.A_GAME, allCorrect);
+        await submitGame(EXERCISE_IDS.A_GAME, allCorrect, 'juego_cpa');
         // Stage completion handled by useEffect
     };
 

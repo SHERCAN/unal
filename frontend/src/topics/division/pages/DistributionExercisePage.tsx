@@ -228,7 +228,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
         const isCorrect = boxes.every(boxId => getOrangesInBox(boxId).length === ORANGES_PER_BOX);
 
         setCStageResult(isCorrect ? 'correct' : 'incorrect');
-        await submitGame(EXERCISE_IDS.C_GAME, isCorrect);
+        await submitGame(EXERCISE_IDS.C_GAME, isCorrect, 'juego_cpa');
         // Stage completion handled by useEffect
     };
 
@@ -244,7 +244,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
         if (isExerciseCompleted(EXERCISE_IDS.P_GAME)) return;
         const isCorrect = finalAnswer.trim() === '6';
         setPStageResult(isCorrect ? 'correct' : 'incorrect');
-        await submitGame(EXERCISE_IDS.P_GAME, isCorrect);
+        await submitGame(EXERCISE_IDS.P_GAME, isCorrect, 'juego_cpa');
         // Stage completion handled by useEffect
     };
 

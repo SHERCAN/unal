@@ -58,7 +58,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
         if (isExerciseCompleted(EXERCISE_IDS.ACT1)) return;
         const isCorrect = act1_q1 === 'V' && act1_q2 === 'F';
         setAct1Status(isCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.ACT1, isCorrect);
+        await submitExercise(EXERCISE_IDS.ACT1, isCorrect, 'modulo_b');
         if (isCorrect) {
             await completeStage(STAGE_IDS.ACT1_STAGE);
             // Check if Modulo B is done (this page + previous page act 3)
@@ -110,7 +110,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
 
         const isCorrect = hCorrect && vCorrect && hasTarget && mathValid;
         setAct4Status(isCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.ACT4, isCorrect);
+        await submitExercise(EXERCISE_IDS.ACT4, isCorrect, 'modulo_a');
         if (isCorrect) {
             await completeStage(STAGE_IDS.ACT4_STAGE);
             checkModuloC(isCorrect, act5Status === 'correct');
@@ -135,7 +135,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
 
         const isCorrect = (i0 === 'V') && (i1 === 'F') && (i2 === 'F');
         setAct5Status(isCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.ACT5, isCorrect);
+        await submitExercise(EXERCISE_IDS.ACT5, isCorrect, 'modulo_a');
         if (isCorrect) {
             await completeStage(STAGE_IDS.ACT5_STAGE);
             checkModuloC(act4Status === 'correct', isCorrect);

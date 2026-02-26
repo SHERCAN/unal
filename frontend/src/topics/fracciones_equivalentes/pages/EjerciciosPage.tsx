@@ -130,7 +130,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         if (isExerciseCompleted('fracciones_equivalentes-pag28-ej1')) return;
         const correct = act1[0] === 1 && act1[1] === 0 && act1[2] === 2;
         setAct1Result(correct ? 'correct' : 'incorrect');
-        await submitExercise('fracciones_equivalentes-pag28-ej1', correct);
+        await submitExercise('fracciones_equivalentes-pag28-ej1', correct, 'modulo_a');
     };
 
     const checkSubAct2 = async (idx: number) => {
@@ -140,7 +140,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         const isCorrect = val === act2Answers[idx as keyof typeof act2Answers];
 
         setAct2Results(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
-        await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 2}`, isCorrect);
+        await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 2}`, isCorrect, 'modulo_b');
     };
 
     const checkSubAct3 = async (idx: number) => {
@@ -149,14 +149,14 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
             act3[idx * 2 + 1] === act3Answers[(idx * 2 + 1) as keyof typeof act3Answers];
 
         setAct3Results(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
-        await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 7}`, isCorrect);
+        await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 7}`, isCorrect, 'modulo_b');
     };
 
     const checkSubAct4 = async (idx: number) => {
         if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 10}`)) return;
         const isCorrect = act4[idx] === act4Answers[idx as keyof typeof act4Answers];
         setAct4Results(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
-        await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 10}`, isCorrect);
+        await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 10}`, isCorrect, 'modulo_b');
     };
 
     // HELPERS

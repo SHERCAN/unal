@@ -76,7 +76,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
         if (aDone) completeStage(STAGE_IDS.A_STAGE);
     }, [isExerciseCompleted, watchedVideos, completedExercises]);
 
-    const validate = (id: string, correctN: string, correctD: string) => {
+    const validate = async (id: string, correctN: string, correctD: string) => {
         const n = inputs[`${id}_n` as keyof typeof inputs];
         const d = inputs[`${id}_d` as keyof typeof inputs];
         const isCorrect = n === correctN && d === correctD;
@@ -88,7 +88,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
             ex4: EXERCISE_IDS.EX4
         };
         if (exerciseIdMap[id]) {
-            submitGame(exerciseIdMap[id], isCorrect);
+            await submitGame(exerciseIdMap[id], isCorrect, 'juego_cpa');
         }
     };
 
@@ -106,7 +106,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
         const isCorrect = n1 === "5" && d1 === "14" && n2 === "5" && d2 === "14";
 
         setResults({ ...results, ex3: isCorrect ? 'correct' : 'incorrect' });
-        submitGame(EXERCISE_IDS.EX3, isCorrect);
+        submitGame(EXERCISE_IDS.EX3, isCorrect, 'completar_a');
     };
 
     const resetAcordeon = () => {

@@ -70,21 +70,21 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
         if (isExerciseCompleted(EXERCISE_IDS.SIMP)) return;
         const isCorrect = simpAns.n === '2' && simpAns.d === '5';
         setSimpResult(isCorrect ? 'correct' : 'incorrect');
-        await submitGame(EXERCISE_IDS.SIMP, isCorrect);
+        await submitGame(EXERCISE_IDS.SIMP, isCorrect, 'juego_cpa');
     };
 
     const handleAmp1Check = async () => {
         if (isExerciseCompleted(EXERCISE_IDS.AMP1)) return;
         const isCorrect = amp1Ans.n === '10' && amp1Ans.d === '15';
         setAmp1Result(isCorrect ? 'correct' : 'incorrect');
-        await submitGame(EXERCISE_IDS.AMP1, isCorrect);
+        await submitGame(EXERCISE_IDS.AMP1, isCorrect, 'juego_cpa');
     };
 
     const handleAmp2Check = async () => {
         if (isExerciseCompleted(EXERCISE_IDS.AMP2)) return;
         const isCorrect = amp2Ans.n === '25' && amp2Ans.d === '35';
         setAmp2Result(isCorrect ? 'correct' : 'incorrect');
-        await submitGame(EXERCISE_IDS.AMP2, isCorrect);
+        await submitGame(EXERCISE_IDS.AMP2, isCorrect, 'juego_cpa');
     };
 
     const resetSimp = () => { if (isExerciseCompleted(EXERCISE_IDS.SIMP)) return; setSimpAns({ n: '', d: '' }); setSimpResult(null); };

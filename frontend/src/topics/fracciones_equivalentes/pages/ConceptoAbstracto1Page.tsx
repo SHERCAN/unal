@@ -82,7 +82,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
         if (isExerciseCompleted(EXERCISE_IDS.ROW1)) return;
         const correct = row1.i1 === '3' && row1.i2 === '20' && row1.i3 === '5' && row1.i4 === '12' && row1.r1 === '60' && row1.r2 === '60';
         setRow1Result(correct ? 'correct' : 'incorrect');
-        await submitGame(EXERCISE_IDS.ROW1, correct);
+        await submitGame(EXERCISE_IDS.ROW1, correct, 'juego_cpa');
         if (correct) {
             await completeStage(STAGE_IDS.A_STAGE);
         }
@@ -92,7 +92,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
         if (isExerciseCompleted(EXERCISE_IDS.ROW2)) return;
         const correct = row2.i1 === '6' && row2.i2 === '20' && row2.i3 === '10' && row2.i4 === '12' && row2.r1 === '120' && row2.r2 === '120';
         setRow2Result(correct ? 'correct' : 'incorrect');
-        await submitGame(EXERCISE_IDS.ROW2, correct);
+        await submitGame(EXERCISE_IDS.ROW2, correct, 'juego_cpa');
         if (correct) {
             await completeStage(STAGE_IDS.A_STAGE);
         }

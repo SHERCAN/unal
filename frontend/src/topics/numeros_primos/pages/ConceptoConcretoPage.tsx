@@ -172,7 +172,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         // Correct if all balls are distributed equally (1 group of 7 or 7 groups of 1)
         const isCorrect = areEqual;
         setResultC(isCorrect ? 'correct' : 'incorrect');
-        await submitGame(EXERCISE_IDS.C_GAME, isCorrect);
+        await submitGame(EXERCISE_IDS.C_GAME, isCorrect, 'juego_cpa');
         if (isCorrect) {
             // Stage auto-completed by useEffect
         }

@@ -104,7 +104,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         setMedalResult(null);
     };
 
-    const handleMedalListo = () => {
+    const handleMedalListo = async () => {
         const t1 = getMedalsInTeam(1).length;
         const t2 = getMedalsInTeam(2).length;
         const t3 = getMedalsInTeam(3).length;
@@ -112,7 +112,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         // 17 / 3 = 5, resto 2.
         if (t1 === 5 && t2 === 5 && t3 === 5 && inBox === 2) {
             setMedalResult('correct');
-            submitGame(EXERCISE_IDS.C_GAME, true);
+            await submitGame(EXERCISE_IDS.C_GAME, true, 'juego_cpa');
         } else {
             setMedalResult('incorrect');
         }
@@ -156,7 +156,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         setCircleResult(null);
     };
 
-    const handleCircleListo = () => {
+    const handleCircleListo = async () => {
         const g1 = getCirclesInGroup(1).length;
         const g2 = getCirclesInGroup(2).length;
         const g3 = getCirclesInGroup(3).length;
@@ -164,7 +164,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         // 17 / 3 = 5, resto 2.
         if (g1 === 5 && g2 === 5 && g3 === 5 && pool === 2) {
             setCircleResult('correct');
-            submitGame(EXERCISE_IDS.P_GAME, true);
+            await submitGame(EXERCISE_IDS.P_GAME, true, 'juego_cpa');
         } else {
             setCircleResult('incorrect');
         }

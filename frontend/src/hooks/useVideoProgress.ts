@@ -120,13 +120,13 @@ export function useVideoProgress() {
         }
     };
 
-    const submitExercise = async (exerciseId: string, isCorrect: boolean) => {
+    const submitExercise = async (exerciseId: string, isCorrect: boolean, type?: string) => {
         try {
             const token = localStorage.getItem('token');
             if (!token) return;
 
             const response = await axios.post('/api/users/exercises',
-                { exerciseId, isCorrect },
+                { exerciseId, isCorrect, type },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
@@ -157,13 +157,13 @@ export function useVideoProgress() {
         }
     };
 
-    const submitGame = async (gameId: string, isCorrect: boolean) => {
+    const submitGame = async (gameId: string, isCorrect: boolean, type?: string) => {
         try {
             const token = localStorage.getItem('token');
             if (!token) return;
 
             const response = await axios.post('/api/users/games',
-                { gameId, isCorrect },
+                { exerciseId: gameId, isCorrect, type },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 

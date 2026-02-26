@@ -28,14 +28,14 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const checkA = async (idx: number) => {
         const isCorrect = actA[idx] === answersA[idx as keyof typeof answersA];
         setResultsA(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
-        await submitExercise(`comparacion_fracciones-pag1-ej${idx + 1}`, isCorrect);
+        await submitExercise(`comparacion_fracciones-pag1-ej${idx + 1}`, isCorrect, 'modulo_b');
         checkFinalCompletion();
     };
 
     const checkB = async (idx: number) => {
         const isCorrect = actB[idx] === answersB[idx as keyof typeof answersB];
         setResultsB(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
-        await submitExercise(`comparacion_fracciones-pag1-ej${idx + 5}`, isCorrect);
+        await submitExercise(`comparacion_fracciones-pag1-ej${idx + 5}`, isCorrect, 'modulo_b');
         checkFinalCompletion();
     };
 

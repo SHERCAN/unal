@@ -127,7 +127,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         const allAnswered = allNumbers.every(n => connections[n.num]);
         const isCorrect = allCorrect && allAnswered;
         setResult(isCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.FINAL_STAGE, isCorrect);
+        await submitExercise(EXERCISE_IDS.FINAL_STAGE, isCorrect, 'modulo_a');
         if (isCorrect) {
             await completeStage(EXERCISE_IDS.FINAL_STAGE);
         }

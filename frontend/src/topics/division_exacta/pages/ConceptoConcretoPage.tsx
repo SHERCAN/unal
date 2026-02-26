@@ -122,7 +122,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         const isCorrect = t1 === 6 && t2 === 6 && t3 === 6 && inBox === 0;
 
         setMedalResult(isCorrect ? 'correct' : 'incorrect');
-        await submitGame(EXERCISE_IDS.C_GAME, isCorrect);
+        await submitGame(EXERCISE_IDS.C_GAME, isCorrect, 'juego_cpa');
         if (isCorrect) {
             // Stage completion handled by useEffect
         }
@@ -176,7 +176,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         const isCorrect = g1 === 6 && g2 === 6 && g3 === 6 && pool === 0;
 
         setCircleResult(isCorrect ? 'correct' : 'incorrect');
-        await submitGame(EXERCISE_IDS.P_GAME, isCorrect);
+        await submitGame(EXERCISE_IDS.P_GAME, isCorrect, 'juego_cpa');
         if (isCorrect) {
             // Stage completion handled by useEffect
         }

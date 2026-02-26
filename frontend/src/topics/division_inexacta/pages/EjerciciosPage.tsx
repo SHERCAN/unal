@@ -61,7 +61,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         const userAnswer = act1Answers[index] || '';
         const correct = userAnswer === act1Items[index].correct;
         setAct1Results(prev => ({ ...prev, [index]: correct ? 'correct' : 'incorrect' }));
-        await submitExercise(`division_inexacta-pag13-ej${index + 1}`, correct);
+        await submitExercise(`division_inexacta-pag13-ej${index + 1}`, correct, 'modulo_b');
         if (correct) {
             await completeStage(STAGE_IDS.ACT1_STAGE);
         }
@@ -105,7 +105,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
             correct = correct && userHasRemainder === 'no';
         }
         setAct2Results(prev => ({ ...prev, [index]: correct ? 'correct' : 'incorrect' }));
-        await submitExercise(`division_inexacta-pag13-ej${index + 5}`, correct);
+        await submitExercise(`division_inexacta-pag13-ej${index + 5}`, correct, 'modulo_a');
         if (correct) {
             await completeStage(STAGE_IDS.ACT2_STAGE);
             // If all 2 are correct, check for final completion
@@ -182,7 +182,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
             correct = correct && userHasRemainder === 'no';
         }
         setAct3Results(prev => ({ ...prev, [index]: correct ? 'correct' : 'incorrect' }));
-        await submitExercise(`division_inexacta-pag13-ej${index + 7}`, correct);
+        await submitExercise(`division_inexacta-pag13-ej${index + 7}`, correct, 'modulo_b');
         if (correct) {
             await completeStage(STAGE_IDS.ACT3_STAGE);
             // Check for final completion

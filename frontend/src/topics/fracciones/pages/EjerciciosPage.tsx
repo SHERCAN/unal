@@ -95,7 +95,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         });
 
         setTableTotalResult(allCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.EJ1, allCorrect);
+        await submitExercise(EXERCISE_IDS.EJ1, allCorrect, 'modulo_a');
         if (allCorrect) {
             await completeStage(STAGE_IDS.EJ1_STAGE);
             checkModuloA(allCorrect, isFracResult === 'correct', defResult === 'correct');
@@ -119,7 +119,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         const correct = ['no', 'es', 'es', 'no', 'no', 'es'];
         const allCorrect = isFracAnswers.every((ans, i) => ans === correct[i]);
         setIsFracResult(allCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.EJ2, allCorrect);
+        await submitExercise(EXERCISE_IDS.EJ2, allCorrect, 'modulo_a');
         if (allCorrect) {
             await completeStage(STAGE_IDS.EJ2_STAGE);
             checkModuloA(tableTotalResult === 'correct', allCorrect, defResult === 'correct');
@@ -137,7 +137,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         if (isExerciseCompleted(EXERCISE_IDS.EJ3)) return;
         const isCorrect = defNum === 'denominador' && defDen === 'numerador';
         setDefResult(isCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.EJ3, isCorrect);
+        await submitExercise(EXERCISE_IDS.EJ3, isCorrect, 'modulo_a');
         if (isCorrect) {
             await completeStage(STAGE_IDS.EJ3_STAGE);
             checkModuloA(tableTotalResult === 'correct', isFracResult === 'correct', isCorrect);

@@ -79,7 +79,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         if (isExerciseCompleted(EXERCISE_IDS.CALC_BLOCK)) return;
         const allCorrect = calcItems.every((item, i) => parseInt(calcAnswers[i] || '') === item.answer);
         setCalcStatus(allCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.CALC_BLOCK, allCorrect);
+        await submitExercise(EXERCISE_IDS.CALC_BLOCK, allCorrect, 'modulo_b');
     };
 
     const resetCalc = () => {
@@ -92,7 +92,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         if (isExerciseCompleted(EXERCISE_IDS.EXACT_BLOCK)) return;
         const allCorrect = exactItems.every((item, i) => (exactAnswers[i] === 'exacta') === item.isExact);
         setExactStatus(allCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.EXACT_BLOCK, allCorrect);
+        await submitExercise(EXERCISE_IDS.EXACT_BLOCK, allCorrect, 'modulo_b');
     };
 
     const resetExact = () => {

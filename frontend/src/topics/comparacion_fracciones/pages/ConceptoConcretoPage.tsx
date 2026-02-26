@@ -77,7 +77,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         if (isExerciseCompleted(EXERCISE_IDS.P_ACTIVITY)) return;
         const correct = pSign === '<' && pNum1 === '1' && pNum2 === '2';
         setPResult(correct ? 'correct' : 'incorrect');
-        await submitGame(EXERCISE_IDS.P_ACTIVITY, correct);
+        await submitGame(EXERCISE_IDS.P_ACTIVITY, correct, 'juego_cpa');
     };
 
     const InputBoxSmall = ({ value, onChange, width = "w-10", disabled }: any) => (

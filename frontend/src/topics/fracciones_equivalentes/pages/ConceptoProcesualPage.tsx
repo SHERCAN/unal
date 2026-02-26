@@ -63,17 +63,13 @@ export function ConceptoPictoricoPage({ zoom = 1 }: Props) {
         if (isExerciseCompleted(EXERCISE_IDS.LAPS)) return;
         const isCorrect = lapsAns === '4';
         setLapsResult(isCorrect ? 'correct' : 'incorrect');
-        await submitGame(EXERCISE_IDS.LAPS, isCorrect);
-        if (isCorrect) {
-            // Stage auto-completed by useEffect
-        }
+        await submitGame(EXERCISE_IDS.LAPS, isCorrect, 'juego_cpa');
     };
-
     const handleDesafioCheck = async () => {
         if (isExerciseCompleted(EXERCISE_IDS.DESAFIO)) return;
         const isCorrect = desafioAns === '8';
         setDesafioResult(isCorrect ? 'correct' : 'incorrect');
-        await submitGame(EXERCISE_IDS.DESAFIO, isCorrect);
+        await submitGame(EXERCISE_IDS.DESAFIO, isCorrect, 'juego_cpa');
         if (isCorrect) {
             // Stage auto-completed by useEffect
         }

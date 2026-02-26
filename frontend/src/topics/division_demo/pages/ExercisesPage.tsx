@@ -13,7 +13,7 @@ interface DivisionExercisesPageProps {
 }
 
 export function ExercisesPage({ zoom = 1 }: DivisionExercisesPageProps) {
-    const { isVideoWatched, markVideoWatched } = useVideoProgress();
+    const { isVideoWatched, markVideoWatched, submitExercise } = useVideoProgress();
 
     // Define tracking IDs for activity videos
     const VIDEO_TRACKING_IDS = {
@@ -89,29 +89,7 @@ export function ExercisesPage({ zoom = 1 }: DivisionExercisesPageProps) {
         }
 
         // ALWAYS submit to backend (both correct and incorrect attempts)
-        try {
-            const token = localStorage.getItem('token');
-            const response = await fetch('/api/users/exercises', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    exerciseId: VIDEO_TRACKING_IDS.ACTIVITY_1,
-                    isCorrect
-                })
-            });
-
-            const data = await response.json();
-            if (data.pointsAdded > 0) {
-                console.log(`¡Ganaste ${data.pointsAdded} puntos ${data.pointType === 'definitive' ? 'definitivos' : 'flexibles'}!`);
-                // Trigger storage event to refresh dashboard
-                window.dispatchEvent(new Event('storage'));
-            }
-        } catch (error) {
-            console.error('Error submitting exercise:', error);
-        }
+        await submitExercise(VIDEO_TRACKING_IDS.ACTIVITY_1, isCorrect, 'modulo_a');
     };
 
     const handleAct2Check = async () => {
@@ -124,28 +102,7 @@ export function ExercisesPage({ zoom = 1 }: DivisionExercisesPageProps) {
         }
 
         // ALWAYS submit to backend (both correct and incorrect attempts)
-        try {
-            const token = localStorage.getItem('token');
-            const response = await fetch('/api/users/exercises', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    exerciseId: 'division-exercises-activity2',
-                    isCorrect
-                })
-            });
-
-            const data = await response.json();
-            if (data.pointsAdded > 0) {
-                console.log(`¡Ganaste ${data.pointsAdded} puntos ${data.pointType === 'definitive' ? 'definitivos' : 'flexibles'}!`);
-                window.dispatchEvent(new Event('storage'));
-            }
-        } catch (error) {
-            console.error('Error submitting exercise:', error);
-        }
+        await submitExercise('division-exercises-activity2', isCorrect, 'modulo_a');
     };
 
     const handleAct3Check = async () => {
@@ -161,28 +118,7 @@ export function ExercisesPage({ zoom = 1 }: DivisionExercisesPageProps) {
         }
 
         // ALWAYS submit to backend (both correct and incorrect attempts)
-        try {
-            const token = localStorage.getItem('token');
-            const response = await fetch('/api/users/exercises', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    exerciseId: VIDEO_TRACKING_IDS.ACTIVITY_3,
-                    isCorrect
-                })
-            });
-
-            const data = await response.json();
-            if (data.pointsAdded > 0) {
-                console.log(`¡Ganaste ${data.pointsAdded} puntos ${data.pointType === 'definitive' ? 'definitivos' : 'flexibles'}!`);
-                window.dispatchEvent(new Event('storage'));
-            }
-        } catch (error) {
-            console.error('Error submitting exercise:', error);
-        }
+        await submitExercise(VIDEO_TRACKING_IDS.ACTIVITY_3, isCorrect, 'modulo_a');
     };
 
     // Reset handlers

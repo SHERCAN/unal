@@ -77,7 +77,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
         if (isExerciseCompleted(EXERCISE_IDS.A_GAME)) return;
         const allCorrect = numbers.every(n => answers[n.num] === n.answer);
         setListoResult(allCorrect ? 'correct' : 'incorrect');
-        await submitGame(EXERCISE_IDS.A_GAME, allCorrect);
+        await submitGame(EXERCISE_IDS.A_GAME, allCorrect, 'juego_cpa');
     };
 
     const handleReset = () => {

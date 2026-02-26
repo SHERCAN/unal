@@ -119,7 +119,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
 
         const isCorrect = isDivisionCorrect && isMultiplicationCorrect;
         setEx1Status(isCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.DIV_ALG, isCorrect);
+        await submitExercise(EXERCISE_IDS.DIV_ALG, isCorrect, 'completar_a');
         if (isCorrect) {
             checkAllAbstract(true, [
                 ex2Status === 'correct' || isExerciseCompleted(EXERCISE_IDS.TERMS),
@@ -146,7 +146,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
         if (isExerciseCompleted(EXERCISE_IDS.TERMS)) return;
         const isCorrect = ex2_val1 === 'dividendo' && ex2_val2 === 'divisor' && ex2_val3 === 'cociente';
         setEx2Status(isCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.TERMS, isCorrect);
+        await submitExercise(EXERCISE_IDS.TERMS, isCorrect, 'completar_a');
         if (isCorrect) {
             checkAllAbstract(true, [
                 ex1Status === 'correct' || isExerciseCompleted(EXERCISE_IDS.DIV_ALG),
@@ -173,7 +173,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
         if (isExerciseCompleted(EXERCISE_IDS.PROBLEM1)) return;
         const isCorrect = p1_div1.value === '12' && p1_div2.value === '2' && p1_res.value === '6';
         setP1Status(isCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.PROBLEM1, isCorrect);
+        await submitExercise(EXERCISE_IDS.PROBLEM1, isCorrect, 'completar_a');
         if (isCorrect) {
             checkAllAbstract(true, [
                 ex1Status === 'correct' || isExerciseCompleted(EXERCISE_IDS.DIV_ALG),
@@ -200,7 +200,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
         if (isExerciseCompleted(EXERCISE_IDS.PROBLEM2)) return;
         const isCorrect = p2_div1.value === '64' && p2_div2.value === '8' && p2_res.value === '8';
         setP2Status(isCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.PROBLEM2, isCorrect);
+        await submitExercise(EXERCISE_IDS.PROBLEM2, isCorrect, 'completar_a');
         if (isCorrect) {
             checkAllAbstract(true, [
                 ex1Status === 'correct' || isExerciseCompleted(EXERCISE_IDS.DIV_ALG),

@@ -80,7 +80,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
         if (isExerciseCompleted(EXERCISE_IDS.ACT1A)) return;
         const isCorrect = act1_a_selected === 0;
         setAct1AStatus(isCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.ACT1A, isCorrect);
+        await submitExercise(EXERCISE_IDS.ACT1A, isCorrect, 'modulo_a');
         if (isCorrect) {
             await completeStage(STAGE_IDS.ACT1A);
         }
@@ -90,7 +90,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
         if (isExerciseCompleted(EXERCISE_IDS.ACT1B)) return;
         const isCorrect = act1_b_selected === 2;
         setAct1BStatus(isCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.ACT1B, isCorrect);
+        await submitExercise(EXERCISE_IDS.ACT1B, isCorrect, 'modulo_a');
         if (isCorrect) {
             await completeStage(STAGE_IDS.ACT1B);
         }
@@ -138,7 +138,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
         ) && connections.length === 5;
 
         setAct2Status(allCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.ACT2, allCorrect);
+        await submitExercise(EXERCISE_IDS.ACT2, allCorrect, 'modulo_a');
         if (allCorrect) {
             await completeStage(STAGE_IDS.ACT2);
         }
@@ -160,7 +160,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
         const isCorrect = act3Inputs.every((val, i) => val.trim() === answers[i]);
         setAct3Status(isCorrect ? 'correct' : 'incorrect');
         // ACT3 is MODULO B based on comments, use submitGame (20 pts)
-        await submitGame(EXERCISE_IDS.ACT3, isCorrect);
+        await submitGame(EXERCISE_IDS.ACT3, isCorrect, 'modulo_b');
         if (isCorrect) {
             // CSV says Completar B is 0 points, but stage completion should still be marked
             await completeStage(STAGE_IDS.ACT3);
@@ -182,7 +182,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
         setAct4Selected(selection);
         const isCorrect = selection === 'F';
         setAct4Status(isCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.ACT4, isCorrect);
+        await submitExercise(EXERCISE_IDS.ACT4, isCorrect, 'modulo_a');
         if (isCorrect) {
             await completeStage(STAGE_IDS.ACT4);
         }

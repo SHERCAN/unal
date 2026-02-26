@@ -118,7 +118,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         const totalOnMesas = Object.values(sliceLocations).filter(loc => loc > 0).length;
         const isCorrect = totalOnMesas === 3;
         setListoResultC(isCorrect ? 'correct' : 'incorrect');
-        await submitGame(EXERCISE_IDS.C_ACTIVITY, isCorrect);
+        await submitGame(EXERCISE_IDS.C_ACTIVITY, isCorrect, 'juego_cpa');
     };
 
     const handleResetC = () => {
@@ -163,7 +163,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         if (isExerciseCompleted(EXERCISE_IDS.P_ACTIVITY)) return;
         const isCorrect = removedPortions.length === 3;
         setListoResultP(isCorrect ? 'correct' : 'incorrect');
-        await submitGame(EXERCISE_IDS.P_ACTIVITY, isCorrect);
+        await submitGame(EXERCISE_IDS.P_ACTIVITY, isCorrect, 'juego_cpa');
     };
 
     const handleResetP = () => {
