@@ -155,7 +155,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
     const [pStageResult, setPStageResult] = useState<'correct' | 'incorrect' | null>(null);
 
 
-    // State - Stage P (Pictorial - Interactive)
+    // State - Stage P (PICTORICO - Interactive)
     const [pOranges, setPOranges] = useState<{ id: number; boxId: number | null }[]>(
         Array.from({ length: TOTAL_ORANGES }, (_, i) => ({ id: i, boxId: null }))
     );
@@ -275,7 +275,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
 
             <div className="w-full max-w-5xl mx-auto space-y-6">
 
-                {/* --- STAGE C: CONCRETE --- */}
+                {/* --- STAGE C: CONCRETO --- */}
                 <div className="relative ml-2 flex items-start">
                     <div className="bg-green-300 text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center ">
                         C {completedStages.includes(STAGE_IDS.C_STAGE) && <span className="ml-1 text-[#059669]">✓</span>}
@@ -438,7 +438,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                         </div>
                     </div></div>
 
-                {/* --- STAGE P: PICTORIAL --- */}
+                {/* --- STAGE P: PICTORICO --- */}
                 <div className="relative ml-2 flex items-start mb-8">
                     <div className="bg-blue-300 dark:bg-blue-900 text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center">
                         P {completedStages.includes(STAGE_IDS.P_STAGE) && <span className="ml-1 text-[#2563eb]">✓</span>}

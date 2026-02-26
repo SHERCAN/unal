@@ -198,11 +198,11 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones' }} pageId="fracciones-concepto-concreto">
-            {/* ═══════════════════ C - CONCRETO SECTION ═══════════════════ */}
             <div className="relative ml-2 flex items-start mb-8">
                 <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#80e8bb] dark:bg-green-900">
                     C {completedStages.includes(STAGE_IDS.C_STAGE) && <span className="ml-1 text-[#059669]">✓</span>}
                 </div>
+                {/* --- STAGE C: CONCRETO --- */}
                 <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-4 bg-white" style={{ borderColor: '#80e8bb' }}>
 
                     {/* Play button */}
@@ -295,7 +295,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                 </div>
             </div>
 
-            {/* ═══════════════════ P - PICTORICO SECTION ═══════════════════ */}
+            {/* --- STAGE P: PICTORICO --- */}
             <div className="relative ml-2 flex items-start">
                 <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center" style={{ backgroundColor: '#60a5fa' }}>
                     P

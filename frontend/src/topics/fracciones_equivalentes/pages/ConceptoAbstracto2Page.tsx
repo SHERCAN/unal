@@ -132,6 +132,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
 
                 {/* Content Container */}
                 <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-10 bg-white border-[#be90de]">
+                    {/* --- STAGE A: ABSTRACTO --- */}
                     <div className="space-y-16">
                         {/* 1. SIMPLIFICACIÓN */}
                         <div className="space-y-8">

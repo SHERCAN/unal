@@ -56,7 +56,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                     A {completedStages.includes(STAGE_IDS.A_STAGE) && <span className="ml-1 text-[#7c3aed]">✓</span>}
                 </div>
                 <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white border-[#be90de]">
-
+                    {/* --- STAGE A: ABSTRACTO --- */}
                     <div className="space-y-6 pb-8">
 
                         {/* 1. Connection to previous activity */}

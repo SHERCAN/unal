@@ -68,6 +68,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                 <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de] dark:bg-purple-900">
                     A {completedStages.includes('division-a-stage') && <span className="ml-1 text-[#7c3aed]">✓</span>}
                 </div>
+                {/* --- STAGE A: ABSTRACTO --- */}
                 <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 h-full flex flex-col" style={{ borderColor: '#be90de' }}>
                     <div className="w-full flex-1 flex flex-col overflow-y-auto gap-6 px-2">
 

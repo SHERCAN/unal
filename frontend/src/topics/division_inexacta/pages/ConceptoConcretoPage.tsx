@@ -180,7 +180,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'División Inexacta' }} pageId="div-inexacta-concepto-concreto">
             <div className="w-full space-y-6">
 
-                {/* ============ C - CONCRETO ============ */}
+                {/* --- STAGE C: CONCRETO --- */}
                 <div className="relative ml-2 flex items-start">
                     <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#80e8bb] dark:bg-green-900" style={{ borderColor: '#80e8bb' }}>
                         C {completedStages.includes(STAGE_IDS.C_STAGE) && <span className="ml-1 text-[#059669]">✓</span>}
@@ -344,7 +344,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                     </div>
                 </div>
 
-                {/* ============ P - PICTORICO ============ */}
+                {/* --- STAGE P: PICTORICO --- */}
                 <div className="relative ml-2 flex items-start">
                     <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#8ec2e8] dark:bg-blue-900" style={{ borderColor: '#8ec2e8' }}>
                         P {completedStages.includes(STAGE_IDS.P_STAGE) && <span className="ml-1 text-[#2563eb]">✓</span>}

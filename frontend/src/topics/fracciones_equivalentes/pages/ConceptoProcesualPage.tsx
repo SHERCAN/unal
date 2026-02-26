@@ -100,7 +100,7 @@ export function ConceptoPictoricoPage({ zoom = 1 }: Props) {
                     P {completedStages.includes(STAGE_IDS.P_STAGE) && <span className="ml-1 text-[#2563eb]">✓</span>}
                 </div>
                 <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white" style={{ borderColor: '#60a5fa' }}>
-
+                    {/* --- STAGE P: PICTORICO --- */}
                     <div className="mt-4 space-y-12 text-gray-800">
 
                         {/* Section 1: Laps */}

@@ -140,7 +140,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                         A {completedStages.includes(STAGE_IDS.A_STAGE) && <span className="ml-1 text-[#7c3aed]">✓</span>}
                     </div>
                     <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5 bg-white dark:bg-gray-800 border-[#be90de] dark:border-purple-900">
-
+                        {/* --- STAGE A: ABSTRACTO --- */}
                         <div className="mt-4 space-y-6">
                             {/* Example: 48 ÷ 12 = 4 */}
                             <div>

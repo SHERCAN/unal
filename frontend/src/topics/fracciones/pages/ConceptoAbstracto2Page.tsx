@@ -198,11 +198,8 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                 <div className="text-white font-bold text-xl px-3 py-4 rounded-l-lg shadow-sm z-10 flex items-center bg-[#be90de]" style={{ borderColor: '#be90de' }}>
                     A {completedStages.includes(STAGE_IDS.A_STAGE) && <span className="ml-1 text-[#7c3aed]">✓</span>}
                 </div>
-
-                {/* Content Container */}
+                {/* --- STAGE A: ABSTRACTO --- */}
                 <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-6 bg-white border-[#be90de]">
-
-                    {/* NEW Header Section */}
                     <div className="mb-10 space-y-4">
                         <p className="text-base text-gray-800 font-semibold ml-4">
                             donde <strong className='text-blue-700 text-2xl'>4</strong> es el numerador y <strong className='text-2xl'>6</strong> es el denominador.

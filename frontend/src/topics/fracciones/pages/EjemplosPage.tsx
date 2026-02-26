@@ -40,6 +40,7 @@ export function EjemplosPage({ zoom = 1 }: Props) {
 
                 {/* Content Container */}
                 <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-8 bg-white border-[#be90de] min-h-[900px]">
+                    {/* --- STAGE A: ABSTRACTO --- */}
                     <div className="max-w-4xl mx-auto space-y-16">
 
                         {/* EXAMPLE 1: Balls */}
@@ -53,12 +54,12 @@ export function EjemplosPage({ zoom = 1 }: Props) {
                                 Se tienen en una bolsa <span className="text-red-600 font-bold">doce pelotas rojas</span> y <span className="text-blue-600 font-bold">ocho azules</span>. La fracción que representa el número de pelotas azules:
                             </p>
                             <div className="flex justify-center my-8">
-                                <img 
+                                <img
                                     className="h-64 object-contain"
                                     src="/fracciones/img4.png"
                                     draggable={false}
                                 />
-                            </div>                            
+                            </div>
                         </div>
 
                         {/* EXAMPLE 2: Books */}
@@ -96,20 +97,20 @@ export function EjemplosPage({ zoom = 1 }: Props) {
                                     </div>
                                 </div>
 
-                            <div> 
-                                <p className="text-base text-gray-800 font-semibold">Para saber cuántos libros son de matemáticas, se divide:</p>
-                                <div className="flex justify-center">
-                                    <img 
-                                        className="h-12 object-contain"
-                                        src="/fracciones/img5.png"
-                                        draggable={false}
-                                    />
-                                </div>  
-                            </div>
+                                <div>
+                                    <p className="text-base text-gray-800 font-semibold">Para saber cuántos libros son de matemáticas, se divide:</p>
+                                    <div className="flex justify-center">
+                                        <img
+                                            className="h-12 object-contain"
+                                            src="/fracciones/img5.png"
+                                            draggable={false}
+                                        />
+                                    </div>
+                                </div>
 
                                 {/* Calculation & Response */}
                                 <div className="w-full flex flex-col items-start space-y-8">
-                                    
+
 
                                     <p className="text-base text-gray-800 font-semibold">
                                         <span className="text-[#e95352] font-bold">RESPUESTA:</span> Hay 9 libros de matemáticas.

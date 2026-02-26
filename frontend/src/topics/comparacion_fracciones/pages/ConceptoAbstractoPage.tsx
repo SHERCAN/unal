@@ -58,7 +58,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                         A {completedStages.includes(STAGE_IDS.A_STAGE) && <span className="ml-1 text-[#7c3aed]">✓</span>}
                     </div>
                     <div className="flex-1 relative border-2 rounded-r-lg -ml-0.5 rounded-tl-none p-5" style={{ borderColor: '#be90de' }}>
-
+                        {/* --- STAGE A: ABSTRACTO --- */}
                         <div className="w-full h-full flex flex-col overflow-y-auto mt-2" style={{ gap: 'clamp(0.75rem, 2vh, 1.5rem)', padding: 'clamp(0.5rem, 2vmin, 1rem)' }}>
                             {/* Intro */}
                             <div className="space-y-6">

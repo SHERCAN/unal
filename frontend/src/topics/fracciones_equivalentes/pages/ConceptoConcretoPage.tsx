@@ -65,8 +65,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                         <div className="mb-12">
                             <PlayVideoButton trackingId={VIDEO_TRACKING.C_TRACK} title="" videoId="/pag23/vv-1" />
                         </div>
-
-                        {/* Images aligned to the sides and bottom */}
+                        {/* --- STAGE C: CONCRETO --- */}
                         <div className="w-full flex items-end justify-between mt-auto">
                             <div className="w-[45%]">
                                 <Image
