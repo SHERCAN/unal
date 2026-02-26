@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import VideoModal from '@/components/VideoModal';
-import { VIDEO_IDS} from '@/config/videos';
+import { VIDEO_IDS } from '@/config/videos';
 
 interface WelcomeModalProps {
   onClose: () => void;
@@ -83,9 +83,8 @@ export default function WelcomeModal({ onClose }: WelcomeModalProps) {
                   autoPlay
                   muted
                   className="w-full h-full object-cover"
-                  src={`api/videos/${VIDEO_IDS.WELCOME}.mp4`}
+                  src={`https://unalapi.solindtec.net/${VIDEO_IDS.WELCOME}.mp4`}
                   controlsList="nodownload"
-                  crossOrigin="anonymous"
                 >
                   Tu navegador no soporta la reproducción de videos.
                 </video>

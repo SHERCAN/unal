@@ -12,10 +12,10 @@
 
 export const VIDEO_IDS = {
   // Página de inicio
-  HOME_INTRO: 'test', // Video de introducción al proyecto
+  HOME_INTRO: 'regUsuario/intro', // Video de introducción al proyecto
 
   // Modal de bienvenida
-  WELCOME: 'test', // Video de bienvenida
+  WELCOME: 'regUsuario/intro', // Video de bienvenida
 
   // Página de registro
   REGISTER_GENERAL: 'test', // Cómo crear tu perfil

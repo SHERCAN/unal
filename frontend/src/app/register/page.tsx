@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import VideoModal from '@/components/VideoModal';
 import AvatarSelector from '@/components/AvatarSelector';
-import { PlayVideoButton } from '@/components/PlayVideoButton';
 import { VIDEO_IDS } from '@/config/videos';
 
 export const dynamic = 'force-dynamic';
@@ -111,22 +110,34 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
             {/* Botón de video general */}
             <div className="flex justify-end">
-              <PlayVideoButton
-                trackingId="register-general"
-                title="Cómo crear tu perfil"
-                videoId="/regUsuario/vv - 01a"
-              />
+              <button
+                type="button"
+                onMouseEnter={() => setVideoModal({ isOpen: true, title: "Cómo crear tu perfil", videoId: "/regUsuario/vv - 01a" })}
+                onClick={() => setVideoModal({ isOpen: true, title: "Cómo crear tu perfil", videoId: "/regUsuario/vv - 01a" })}
+                className="p-1.5 text-white rounded-full transition-all flex-shrink-0 inline-flex items-center justify-center align-middle mx-1 bg-purple-600 hover:bg-purple-700"
+                style={{ width: 'clamp(1.5rem, 4vmin, 2rem)', height: 'clamp(1.5rem, 4vmin, 2rem)' }}
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </button>
             </div>
 
             {/* Nombre y Apellido */}
             <div className="space-y-1 md:space-y-2">
               <label className="flex items-center gap-2 text-text font-medium text-sm md:text-base">
                 ¿Cómo te llamas? (Nombre y apellido)
-                <PlayVideoButton
-                  trackingId="register-name"
-                  title="¿Cómo te llamas?"
-                  videoId="/regUsuario/vv - 02a"
-                />
+                <button
+                  type="button"
+                  onMouseEnter={() => setVideoModal({ isOpen: true, title: "¿Cómo te llamas?", videoId: "/regUsuario/vv - 02a" })}
+                  onClick={() => setVideoModal({ isOpen: true, title: "¿Cómo te llamas?", videoId: "/regUsuario/vv - 02a" })}
+                  className="p-1.5 text-white rounded-full transition-all flex-shrink-0 inline-flex items-center justify-center align-middle mx-1 bg-purple-600 hover:bg-purple-700"
+                  style={{ width: 'clamp(1.5rem, 4vmin, 2rem)', height: 'clamp(1.5rem, 4vmin, 2rem)' }}
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </button>
               </label>
               <input
                 type="text"
@@ -142,11 +153,17 @@ export default function RegisterPage() {
             <div className="space-y-1 md:space-y-2">
               <label className="flex items-center gap-2 text-text font-medium text-sm md:text-base">
                 ¿Cuántos años cumples tú?
-                <PlayVideoButton
-                  trackingId="register-age"
-                  title="¿Cuántos años tienes?"
-                  videoId="/regUsuario/vv - 03a"
-                />
+                <button
+                  type="button"
+                  onMouseEnter={() => setVideoModal({ isOpen: true, title: "¿Cuántos años tienes?", videoId: "/regUsuario/vv - 03a" })}
+                  onClick={() => setVideoModal({ isOpen: true, title: "¿Cuántos años tienes?", videoId: "/regUsuario/vv - 03a" })}
+                  className="p-1.5 text-white rounded-full transition-all flex-shrink-0 inline-flex items-center justify-center align-middle mx-1 bg-purple-600 hover:bg-purple-700"
+                  style={{ width: 'clamp(1.5rem, 4vmin, 2rem)', height: 'clamp(1.5rem, 4vmin, 2rem)' }}
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </button>
               </label>
               <input
                 type="number"
@@ -164,11 +181,17 @@ export default function RegisterPage() {
             <div className="space-y-1 md:space-y-2">
               <label className="flex items-center gap-2 text-text font-medium text-sm md:text-base">
                 ¿En qué grado estas tú?
-                <PlayVideoButton
-                  trackingId="register-grade"
-                  title="¿En qué grado estás?"
-                  videoId="/regUsuario/vv - 04a"
-                />
+                <button
+                  type="button"
+                  onMouseEnter={() => setVideoModal({ isOpen: true, title: "¿En qué grado estás?", videoId: "/regUsuario/vv - 04a" })}
+                  onClick={() => setVideoModal({ isOpen: true, title: "¿En qué grado estás?", videoId: "/regUsuario/vv - 04a" })}
+                  className="p-1.5 text-white rounded-full transition-all flex-shrink-0 inline-flex items-center justify-center align-middle mx-1 bg-purple-600 hover:bg-purple-700"
+                  style={{ width: 'clamp(1.5rem, 4vmin, 2rem)', height: 'clamp(1.5rem, 4vmin, 2rem)' }}
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </button>
               </label>
               <div className="grid grid-cols-3 md:flex gap-1 md:gap-2">
                 {GRADOS.map((grado) => (
@@ -177,8 +200,8 @@ export default function RegisterPage() {
                     type="button"
                     onClick={() => setFormData({ ...formData, grado })}
                     className={`py-2 px-2 md:px-3 rounded-lg font-medium text-xs md:text-sm transition-all ${formData.grado === grado
-                        ? 'bg-primary text-white'
-                        : 'bg-background border-2 border-gray-300 dark:border-gray-600 text-text hover:border-primary'
+                      ? 'bg-primary text-white'
+                      : 'bg-background border-2 border-gray-300 dark:border-gray-600 text-text hover:border-primary'
                       }`}
                   >
                     {grado}
@@ -191,11 +214,17 @@ export default function RegisterPage() {
             <div className="space-y-4 md:space-y-8 py-2 md:py-4">
               <label className="flex items-center justify-center gap-2 text-text font-medium text-base md:text-lg">
                 Selecciona tu personaje histórico o sube tu foto
-                <PlayVideoButton
-                  trackingId="register-avatar"
-                  title="Selecciona tu avatar"
-                  videoId="/regUsuario/vv - 05a"
-                />
+                <button
+                  type="button"
+                  onMouseEnter={() => setVideoModal({ isOpen: true, title: "Selecciona tu avatar", videoId: "/regUsuario/vv - 05a" })}
+                  onClick={() => setVideoModal({ isOpen: true, title: "Selecciona tu avatar", videoId: "/regUsuario/vv - 05a" })}
+                  className="p-1.5 text-white rounded-full transition-all flex-shrink-0 inline-flex items-center justify-center align-middle mx-1 bg-purple-600 hover:bg-purple-700"
+                  style={{ width: 'clamp(1.5rem, 4vmin, 2rem)', height: 'clamp(1.5rem, 4vmin, 2rem)' }}
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </button>
               </label>
 
               <AvatarSelector
@@ -217,11 +246,17 @@ export default function RegisterPage() {
             <div className="space-y-1 md:space-y-2">
               <label className="flex items-center gap-2 text-text font-medium text-sm md:text-base">
                 Crea tu clave secreta de 4 cifras
-                <PlayVideoButton
-                  trackingId="register-password"
-                  title="Crea tu clave secreta"
-                  videoId="/regUsuario/vv - 06a"
-                />
+                <button
+                  type="button"
+                  onMouseEnter={() => setVideoModal({ isOpen: true, title: "Crea tu clave secreta", videoId: "/regUsuario/vv - 06a" })}
+                  onClick={() => setVideoModal({ isOpen: true, title: "Crea tu clave secreta", videoId: "/regUsuario/vv - 06a" })}
+                  className="p-1.5 text-white rounded-full transition-all flex-shrink-0 inline-flex items-center justify-center align-middle mx-1 bg-purple-600 hover:bg-purple-700"
+                  style={{ width: 'clamp(1.5rem, 4vmin, 2rem)', height: 'clamp(1.5rem, 4vmin, 2rem)' }}
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </button>
               </label>
               <input
                 type="password"
@@ -238,11 +273,17 @@ export default function RegisterPage() {
             <div className="space-y-1 md:space-y-2">
               <label className="flex items-center gap-2 text-text font-medium text-sm md:text-base">
                 Escribe la misma clave
-                <PlayVideoButton
-                  trackingId="register-confirm"
-                  title="Confirma tu clave"
-                  videoId="/regUsuario/vv - 07a"
-                />
+                <button
+                  type="button"
+                  onMouseEnter={() => setVideoModal({ isOpen: true, title: "Confirma tu clave", videoId: "/regUsuario/vv - 07a" })}
+                  onClick={() => setVideoModal({ isOpen: true, title: "Confirma tu clave", videoId: "/regUsuario/vv - 07a" })}
+                  className="p-1.5 text-white rounded-full transition-all flex-shrink-0 inline-flex items-center justify-center align-middle mx-1 bg-purple-600 hover:bg-purple-700"
+                  style={{ width: 'clamp(1.5rem, 4vmin, 2rem)', height: 'clamp(1.5rem, 4vmin, 2rem)' }}
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </button>
               </label>
               <input
                 type="password"
@@ -259,11 +300,17 @@ export default function RegisterPage() {
             <div className="space-y-1 md:space-y-2">
               <label className="flex items-center gap-2 text-text font-medium text-sm md:text-base">
                 Elige un nombre genial como usuario
-                <PlayVideoButton
-                  trackingId="register-nickname"
-                  title="Elige tu nombre de usuario"
-                  videoId="/regUsuario/vv - 08a"
-                />
+                <button
+                  type="button"
+                  onMouseEnter={() => setVideoModal({ isOpen: true, title: "Elige tu nombre de usuario", videoId: "/regUsuario/vv - 08a" })}
+                  onClick={() => setVideoModal({ isOpen: true, title: "Elige tu nombre de usuario", videoId: "/regUsuario/vv - 08a" })}
+                  className="p-1.5 text-white rounded-full transition-all flex-shrink-0 inline-flex items-center justify-center align-middle mx-1 bg-purple-600 hover:bg-purple-700"
+                  style={{ width: 'clamp(1.5rem, 4vmin, 2rem)', height: 'clamp(1.5rem, 4vmin, 2rem)' }}
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </button>
               </label>
               <input
                 type="text"
