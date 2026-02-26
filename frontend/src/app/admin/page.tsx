@@ -107,15 +107,15 @@ const getUserModules = (user: User): GroupedModule[] => {
         const modName = formatModuleName(v.videoId);
         if (!map[modName]) map[modName] = { moduleName: modName, totalFlex: 0, totalDef: 0, activities: [] };
 
-        map[modName].totalFlex += 20;
+        map[modName].totalFlex += 10;
         map[modName].activities.push({
             id: v.videoId,
             type: 'Video',
             name: formatItemName(v.videoId, 'Video'),
             date: v.watchedAt || new Date().toISOString(),
-            flexPoints: 20,
+            flexPoints: 10,
             defPoints: 0,
-            details: 'Visto por primera vez (+20 flex)'
+            details: 'Visto por primera vez (+10 flex)'
         });
     });
 

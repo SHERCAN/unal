@@ -186,7 +186,7 @@ export const markVideoWatched = async (req: Request, res: Response) => {
       });
     }
 
-    // First time watching: create record and award 20 points
+    // First time watching: create record and award 10 points
     const result = await prisma.$transaction([
       prisma.watchedVideo.create({
         data: {
@@ -205,7 +205,7 @@ export const markVideoWatched = async (req: Request, res: Response) => {
 
     res.json({
       message: 'Video marked as watched',
-      pointsAdded: 20,
+      pointsAdded: 10,
       newTotal: result[1].puntos
     });
   } catch (error) {
