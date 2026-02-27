@@ -61,7 +61,6 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
         setPencilResult(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.EJ4, isCorrect, 'modulo_b');
         if (isCorrect) {
-            await completeStage(STAGE_IDS.EJ4_STAGE);
             checkModuloB(isCorrect, notebookResult === 'correct', libraryResult === 'correct');
         }
     };
@@ -72,7 +71,6 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
         setNotebookResult(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.EJ5, isCorrect, 'modulo_b');
         if (isCorrect) {
-            await completeStage(STAGE_IDS.EJ5_STAGE);
             checkModuloB(pencilResult === 'correct', isCorrect, libraryResult === 'correct');
         }
     };
@@ -83,7 +81,6 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
         setLibraryResult(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.EJ6, isCorrect, 'modulo_b');
         if (isCorrect) {
-            await completeStage(STAGE_IDS.EJ6_STAGE);
             checkModuloB(pencilResult === 'correct', notebookResult === 'correct', isCorrect);
         }
     };

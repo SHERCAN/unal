@@ -97,7 +97,6 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         setTableTotalResult(allCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.EJ1, allCorrect, 'modulo_a');
         if (allCorrect) {
-            await completeStage(STAGE_IDS.EJ1_STAGE);
             checkModuloA(allCorrect, isFracResult === 'correct', defResult === 'correct');
         }
     };
@@ -121,7 +120,6 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         setIsFracResult(allCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.EJ2, allCorrect, 'modulo_a');
         if (allCorrect) {
-            await completeStage(STAGE_IDS.EJ2_STAGE);
             checkModuloA(tableTotalResult === 'correct', allCorrect, defResult === 'correct');
         }
     };
@@ -139,7 +137,6 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         setDefResult(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.EJ3, isCorrect, 'modulo_a');
         if (isCorrect) {
-            await completeStage(STAGE_IDS.EJ3_STAGE);
             checkModuloA(tableTotalResult === 'correct', isFracResult === 'correct', isCorrect);
         }
     };

@@ -62,55 +62,46 @@ const formatModuleName = (id: string) => {
     return label;
 };
 
-const formatItemName = (id: string, type: 'Video' | 'Ejercicio' | 'Actividad') => {
+// Extraer el número de página de un ID
+const extractPageNumber = (id: string): string | null => {
+    const pagMatch = id.match(/-pag(\d+)-/i);
+    return pagMatch ? pagMatch[1] : null;
+};
+
+// Extraer un "sort key" para ordenar actividades dentro de una misma página
+const extractSortKey = (id: string): string => {
+    const pagMatch = id.match(/-pag\d+-(.+)$/i);
+    if (!pagMatch) return id;
+    return pagMatch[1];
+};
+
+// Generar nombre con formato: "Tipo: Página X1 - Tipo X2"
+const buildItemName = (type: 'Video' | 'Ejercicio' | 'Actividad', pageNum: string, seqNum: number): string => {
     const labelPrefix = type === 'Video' ? 'Video' : (type === 'Actividad' ? 'Actividad' : 'Ejercicio');
-    const lowerId = id.toLowerCase();
+    return `${labelPrefix}: Página ${pageNum} - ${labelPrefix} ${seqNum}`;
+};
 
-    // Standard Pattern: [topic]-pag[N]-(ej|v|act|game)[M]
-    // Regex matches topic-pag13-ej2, div-inexacta-pag13-ej2, etc.
-    const standardMatch = id.match(/-pag(\d+)-(?:ej|v|act|game|calc|prob|actividad|ejercicio)(\d+)/i);
-    if (standardMatch) {
-        const pag = standardMatch[1];
-        const num = standardMatch[2];
-        const pNum = parseInt(pag);
+// Asignar nombres secuenciales a las actividades de un módulo
+const assignSequentialNames = (activities: ModuleActivity[]): void => {
+    // Agrupar por (página + tipo)
+    const groups: Record<string, ModuleActivity[]> = {};
+    activities.forEach(act => {
+        const pag = extractPageNumber(act.id);
+        if (!pag) return; // IDs sin página mantienen su nombre
+        const key = `${pag}-${act.type}`;
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(act);
+    });
 
-        // Especial adjustment for CPA labels
-        if (type === 'Actividad') {
-            let detail = "";
-            if (lowerId.includes('-c-') || lowerId.includes('-game-c') || pNum === 1 || (lowerId.includes('exacta') && pNum === 2)) detail = " - Concreta";
-            else if (lowerId.includes('-p-') || lowerId.includes('-game-p') || pNum === 2 || (lowerId.includes('exacta') && pNum === 3)) detail = " - Pictórica";
-            else if (lowerId.includes('-a-') || lowerId.includes('-game-a') || pNum === 3 || (lowerId.includes('primo') && pNum === 14)) detail = " - Abstracta";
-
-            return `${labelPrefix}: Página ${pag}${detail}`;
-        }
-
-        return `${labelPrefix}: Página ${pag} - ${labelPrefix} ${num}`;
-    }
-
-    // Older patterns or specific naming
-    if (id.includes('calc')) {
-        const numMatch = id.match(/calc\D*(\d+)/i);
-        const n = numMatch ? parseInt(numMatch[1]) + 1 : '1';
-        return `${labelPrefix}: Cálculo ${n}`;
-    }
-
-    if (id.includes('prob')) {
-        const numMatch = id.match(/prob\D*(\d+)/i);
-        const n = numMatch ? parseInt(numMatch[1]) + 1 : '1';
-        return `${labelPrefix}: Problema ${n}`;
-    }
-
-    // Generic fallback: take the last part of the ID
-    const parts = id.split('-');
-    const lastPart = parts[parts.length - 1];
-
-    // If it's something like "act1", "ej2", extract the number
-    const techMatch = lastPart.match(/^(?:v|ej|game|calc|prob|act|interact|actividad|ejercicio)(\d+)$/i);
-    if (techMatch) {
-        return `${labelPrefix}: ${labelPrefix} ${techMatch[1]}`;
-    }
-
-    return `${labelPrefix}: ${lastPart.charAt(0).toUpperCase() + lastPart.slice(1).replace(/_/g, ' ')}`;
+    // Para cada grupo, ordenar y asignar números secuenciales
+    Object.entries(groups).forEach(([key, items]) => {
+        const [pag, type] = [key.split('-')[0], key.substring(key.indexOf('-') + 1) as 'Video' | 'Ejercicio' | 'Actividad'];
+        // Ordenar por el sufijo del ID para mantener orden consistente
+        items.sort((a, b) => extractSortKey(a.id).localeCompare(extractSortKey(b.id)));
+        items.forEach((item, index) => {
+            item.name = buildItemName(type, pag, index + 1);
+        });
+    });
 };
 
 const getUserModules = (user: User): GroupedModule[] => {
@@ -124,7 +115,7 @@ const getUserModules = (user: User): GroupedModule[] => {
         map[modName].activities.push({
             id: v.videoId,
             type: 'Video',
-            name: formatItemName(v.videoId, 'Video'),
+            name: '', // Se asigna después con assignSequentialNames
             date: v.watchedAt || new Date().toISOString(),
             flexPoints: 10,
             defPoints: 0,
@@ -221,7 +212,7 @@ const getUserModules = (user: User): GroupedModule[] => {
         map[modName].activities.push({
             id: ex.exerciseId,
             type: activityType,
-            name: formatItemName(ex.exerciseId, activityType),
+            name: '', // Se asigna después con assignSequentialNames
             date: ex.updatedAt,
             flexPoints: f,
             defPoints: d,
@@ -262,6 +253,17 @@ const getUserModules = (user: User): GroupedModule[] => {
 
     return Object.values(map)
         .map(m => {
+            // Asignar nombres secuenciales por (página + tipo)
+            assignSequentialNames(m.activities);
+            // Fallback para items sin nombre (IDs sin -pag[N]-)
+            m.activities.forEach(act => {
+                if (!act.name) {
+                    const labelPrefix = act.type === 'Video' ? 'Video' : (act.type === 'Actividad' ? 'Actividad' : act.type);
+                    const parts = act.id.split('-');
+                    const lastPart = parts[parts.length - 1];
+                    act.name = `${labelPrefix}: ${lastPart.charAt(0).toUpperCase() + lastPart.slice(1).replace(/_/g, ' ')}`;
+                }
+            });
             m.activities.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
             return m;
         })

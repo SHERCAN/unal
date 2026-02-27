@@ -62,9 +62,6 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         const correct = userAnswer === act1Items[index].correct;
         setAct1Results(prev => ({ ...prev, [index]: correct ? 'correct' : 'incorrect' }));
         await submitExercise(`division_inexacta-pag13-ej${index + 1}`, correct, 'modulo_b');
-        if (correct) {
-            await completeStage(STAGE_IDS.ACT1_STAGE);
-        }
     };
 
     const resetAct1 = (index: number) => {
@@ -106,15 +103,6 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         }
         setAct2Results(prev => ({ ...prev, [index]: correct ? 'correct' : 'incorrect' }));
         await submitExercise(`division_inexacta-pag13-ej${index + 5}`, correct, 'modulo_a');
-        if (correct) {
-            await completeStage(STAGE_IDS.ACT2_STAGE);
-            // If all 2 are correct, check for final completion
-            const allCorrect = act2Items.every((_, i) => i === index ? correct : act2Results[i] === 'correct');
-            if (allCorrect) {
-                // You might want to call something here but we will call FINAL_STAGE when ACT1, ACT2 and ACT3 are all done.
-                // For now, let's just make it simple.
-            }
-        }
     };
 
     const resetAct2 = (index: number) => {
@@ -183,16 +171,6 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         }
         setAct3Results(prev => ({ ...prev, [index]: correct ? 'correct' : 'incorrect' }));
         await submitExercise(`division_inexacta-pag13-ej${index + 7}`, correct, 'modulo_b');
-        if (correct) {
-            await completeStage(STAGE_IDS.ACT3_STAGE);
-            // Check for final completion
-            const allCorrect = act3Items.every((_, i) => i === index ? correct : act3Results[i] === 'correct');
-            const act1AllCorrect = act1Items.every((_, i) => act1Results[i] === 'correct');
-            const act2AllCorrect = act2Items.every((_, i) => act2Results[i] === 'correct');
-            if (allCorrect && act1AllCorrect && act2AllCorrect) {
-                await completeStage(STAGE_IDS.FINAL_STAGE);
-            }
-        }
     };
 
     const resetAct3 = (index: number) => {

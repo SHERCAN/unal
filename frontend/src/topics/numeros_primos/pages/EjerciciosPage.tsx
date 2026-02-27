@@ -128,9 +128,6 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         const isCorrect = allCorrect && allAnswered;
         setResult(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.FINAL_STAGE, isCorrect, 'modulo_a');
-        if (isCorrect) {
-            await completeStage(EXERCISE_IDS.FINAL_STAGE);
-        }
     };
 
     const handleReset = () => {
@@ -139,7 +136,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         setResult(null);
         setDragging(null);
     };
-
+    {/* --- MODULO A --- */ }
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Números Primos' }} pageId="numeros-primos-ejercicios">
             {/* Title */}
