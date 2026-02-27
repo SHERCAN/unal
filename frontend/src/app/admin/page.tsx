@@ -64,6 +64,7 @@ const formatModuleName = (id: string) => {
 
 const formatItemName = (id: string, type: 'Video' | 'Ejercicio' | 'Actividad') => {
     const labelPrefix = type === 'Video' ? 'Video' : (type === 'Actividad' ? 'Actividad' : 'Ejercicio');
+    const lowerId = id.toLowerCase();
 
     // Standard Pattern: [topic]-pag[N]-(ej|v|act|game)[M]
     // Regex matches topic-pag13-ej2, div-inexacta-pag13-ej2, etc.
@@ -71,6 +72,18 @@ const formatItemName = (id: string, type: 'Video' | 'Ejercicio' | 'Actividad') =
     if (standardMatch) {
         const pag = standardMatch[1];
         const num = standardMatch[2];
+        const pNum = parseInt(pag);
+
+        // Especial adjustment for CPA labels
+        if (type === 'Actividad') {
+            let detail = "";
+            if (lowerId.includes('-c-') || lowerId.includes('-game-c') || pNum === 1 || (lowerId.includes('exacta') && pNum === 2)) detail = " - Concreta";
+            else if (lowerId.includes('-p-') || lowerId.includes('-game-p') || pNum === 2 || (lowerId.includes('exacta') && pNum === 3)) detail = " - Pictórica";
+            else if (lowerId.includes('-a-') || lowerId.includes('-game-a') || pNum === 3 || (lowerId.includes('primo') && pNum === 14)) detail = " - Abstracta";
+
+            return `${labelPrefix}: Página ${pag}${detail}`;
+        }
+
         return `${labelPrefix}: Página ${pag} - ${labelPrefix} ${num}`;
     }
 
@@ -123,48 +136,82 @@ const getUserModules = (user: User): GroupedModule[] => {
         const modName = formatModuleName(ex.exerciseId);
         if (!map[modName]) map[modName] = { moduleName: modName, totalFlex: 0, totalDef: 0, activities: [] };
 
-        const isGame = ex.exerciseId.includes('-game-');
         const lowerId = ex.exerciseId.toLowerCase();
 
-        // Categorización general
-        let activityType: 'Ejercicio' | 'Actividad' = 'Actividad';
+        // Heurística de Categorización Mejorada basada en mapeo de páginas
+        // Lecciones/CPA: 1-4, 7-9, 11-12, 14-15, 17-20, 22-26, 29-30
+        // Ejercicios Formales: 5-6, 10, 13, 16, 21, 27-28, 31
+        const isCPA = lowerId.includes('game') ||
+            lowerId.includes('cpa') ||
+            lowerId.includes('interact') ||
+            lowerId.includes('completar') ||
+            lowerId.includes('juego') ||
+            lowerId.includes('-pag1-') ||
+            lowerId.includes('-pag2-') ||
+            lowerId.includes('-pag3-') ||
+            lowerId.includes('-pag4-') || // Division CPA
+            lowerId.includes('-pag7-') || // Exacta CPA
+            lowerId.includes('-pag8-') ||
+            lowerId.includes('-pag9-') ||
+            lowerId.includes('-pag11-') || // Inexacta CPA
+            lowerId.includes('-pag12-') ||
+            lowerId.includes('-pag14-') || // Primos CPA
+            lowerId.includes('-pag15-') ||
+            lowerId.includes('-pag17-') || // Fracciones CPA
+            lowerId.includes('-pag18-') ||
+            lowerId.includes('-pag19-') ||
+            lowerId.includes('-pag20-') ||
+            lowerId.includes('-pag22-') || // Equiv CPA
+            lowerId.includes('-pag23-') ||
+            lowerId.includes('-pag24-') ||
+            lowerId.includes('-pag25-') ||
+            lowerId.includes('-pag26-') ||
+            lowerId.includes('-pag29-') || // Comp CPA
+            lowerId.includes('-pag30-');
 
-        // Criterios para Ejercicio (Práctica formal)
-        if (lowerId.includes('calc') ||
+        const isFormalExercise = lowerId.includes('calc') ||
             lowerId.includes('prob') ||
-            lowerId.includes('ejercic') ||
-            lowerId.includes('-ej') ||
-            lowerId.includes('division-pag5-ej') ||
-            lowerId.includes('division-pag6-ej') ||
-            lowerId.includes('div-exacta-') ||
-            lowerId.includes('div-inexacta-') ||
-            lowerId.includes('frac-') ||
-            lowerId.includes('comp-frac-') ||
-            lowerId.includes('num-primo-')
-        ) {
-            activityType = 'Ejercicio';
-        } else if (lowerId.includes('game') || lowerId.includes('act') || lowerId.includes('interact')) {
+            lowerId.includes('ejercici') ||
+            lowerId.includes('modulo_a') ||
+            lowerId.includes('modulo_b') ||
+            lowerId.includes('pag5-') || // Exercises Division
+            lowerId.includes('pag6-') ||
+            lowerId.includes('pag10-') || // Exercises Exacta
+            lowerId.includes('pag13-') || // Exercises Inexacta
+            lowerId.includes('pag16-') || // Exercises Primos
+            lowerId.includes('pag21-') || // Exercises Fracciones
+            lowerId.includes('pag27-') || // Exercises Equiv
+            lowerId.includes('pag28-') ||
+            lowerId.includes('pag31-'); // Exercises Comp
+
+        let activityType: 'Ejercicio' | 'Actividad';
+        if (isCPA) {
             activityType = 'Actividad';
+        } else if (isFormalExercise) {
+            activityType = 'Ejercicio';
+        } else if (lowerId.includes('-ej')) {
+            activityType = 'Ejercicio';
+        } else {
+            activityType = 'Actividad'; // Default
         }
-        // If it's an exercise attempt and not explicitly an 'Ejercicio' by the above rules,
-        // and it contains 'act' or 'game', it's an 'Actividad'. Otherwise, default to 'Actividad'
-        // if it's not clearly an 'Ejercicio'. The initial assignment to 'Actividad' handles the default.
 
 
         let f = 0, d = 0;
         let text = ex.completed ? 'Completado' : 'Intentado, sin pasar';
 
+        const is20PtType = isCPA || lowerId.includes('modulo_b');
+
         if (ex.completed) {
             if (ex.attemptCount === 1) {
-                f = isGame ? 20 : 50;
-                d = isGame ? 20 : 50;
+                f = is20PtType ? 20 : 50;
+                d = is20PtType ? 20 : 50;
                 text = 'Aprobado a la primera';
             } else if (ex.attemptCount === 2) {
-                f = isGame ? 10 : 25;
-                text = 'Aprobado en 2do intento';
+                f = is20PtType ? 10 : 25;
+                text = 'Aprobado al segundo intento';
             } else {
-                f = isGame ? 5 : 10;
-                text = `Aprobado en intento ${ex.attemptCount}`;
+                f = is20PtType ? 5 : 10;
+                text = `Aprobado al intento ${ex.attemptCount}`;
             }
         }
 
