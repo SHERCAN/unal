@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { TOPICS_DATA } from '@/lib/topicsList';
+
 import { divisionConfig } from '@/topics/division/config';
 import { divisionDemoConfig } from '@/topics/division_demo/config';
 import { divisionExactaConfig } from '@/topics/division_exacta/config';
@@ -37,6 +37,7 @@ import { ProgressNavigation } from '@/components/navigation/ProgressNavigation';
 import { UserProfile } from '@/components/dashboard/UserProfile';
 import { ToastProvider } from '@/contexts/ToastContext';
 import { GlosarioView } from '@/components/dashboard/GlosarioView';
+import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 export const dynamic = 'force-dynamic';
 
@@ -242,6 +243,9 @@ export default function DashboardPage() {
   const [currentTopicConfig, setCurrentTopicConfig] = useState<TopicConfig>(divisionConfig);
   const [currentPage, setCurrentPage] = useState(0);
   const nextLevelStarRef = useRef<HTMLDivElement>(null);
+
+  // Progress data for TopicDropdown
+  const { watchedVideos, completedExercises, completedStages } = useVideoProgress();
 
   // Determine current topic based on page index
   const currentTopicInfo = React.useMemo(() => {
@@ -452,18 +456,7 @@ export default function DashboardPage() {
     setSelectedUser(null);
   };
 
-  const handleSelectTopic = (topicId: string) => {
-    setActiveView('book');
-    // Find the starting page of the selected topic
-    let globalPageOffset = 1; // Index 0 is the IndexPage
-    for (const topic of ORDERED_TOPICS) {
-      if (topic.id === topicId) {
-        if (navigateToPage) navigateToPage(globalPageOffset);
-        return;
-      }
-      globalPageOffset += (topic.pages.length + topic.exercisePages.length);
-    }
-  };
+
 
   if (loading || !user) {
     return <div className="min-h-screen flex items-center justify-center text-text">Cargando...</div>;
@@ -661,14 +654,12 @@ export default function DashboardPage() {
               </button>
             </div>
             <TopicDropdown
-              key={TOPICS_DATA.length} // Force re-render if topics change
-              topics={TOPICS_DATA}
-              onSelectTopic={handleSelectTopic}
-              exerciseProgress={{
-                completed: completedPages.filter(p => p > 10).length, // Solo páginas de ejercicios (> 10)
-                total: 1 // Tenemos 1 página de ejercicios
-              }}
+              topicConfigs={ORDERED_TOPICS}
               onNavigateToPage={navigateToPage || undefined}
+              currentPage={currentPage}
+              watchedVideos={watchedVideos}
+              completedExercises={completedExercises}
+              completedStages={completedStages}
             />
           </div>
 

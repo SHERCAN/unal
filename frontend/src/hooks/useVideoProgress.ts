@@ -52,6 +52,35 @@ export function useVideoProgress() {
         loadInitialData();
     }, []);
 
+    // Re-sync when other hook instances dispatch 'storage' event (e.g. after completing an exercise)
+    useEffect(() => {
+        const handleStorageSync = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) return;
+
+                const [progressRes, videosRes, exercisesRes] = await Promise.all([
+                    axios.get('/api/users/progress', { headers: { Authorization: `Bearer ${token}` } }),
+                    axios.get('/api/users/videos', { headers: { Authorization: `Bearer ${token}` } }),
+                    axios.get('/api/users/exercises', { headers: { Authorization: `Bearer ${token}` } })
+                ]);
+
+                setCompletedStages(progressRes.data);
+                setCompletedExercises(exercisesRes.data);
+
+                const localVideos = JSON.parse(localStorage.getItem(WATCHED_VIDEOS_KEY) || '[]');
+                const remoteVideos = videosRes.data;
+                const mergedVideos = Array.from(new Set([...localVideos, ...remoteVideos]));
+                setWatchedVideos(mergedVideos);
+            } catch (error) {
+                console.error('Error re-syncing progress:', error);
+            }
+        };
+
+        window.addEventListener('storage', handleStorageSync);
+        return () => window.removeEventListener('storage', handleStorageSync);
+    }, []);
+
     const markVideoWatched = async (videoId: string) => {
         if (!watchedVideos.includes(videoId)) {
             const newWatched = [...watchedVideos, videoId];
