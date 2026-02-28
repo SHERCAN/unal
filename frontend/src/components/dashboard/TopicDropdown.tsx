@@ -189,6 +189,23 @@ export function TopicDropdown({
                         className="absolute top-full left-0 mt-2 w-full bg-[#7e22ce] rounded-xl overflow-hidden shadow-2xl border border-purple-500/30"
                     >
                         <div className="flex flex-col max-h-[70vh] overflow-y-auto">
+                            {/* Indices Item */}
+                            <div className="border-b border-purple-500/20">
+                                <button
+                                    onClick={() => handleNavigate(0)}
+                                    className={`w-full text-left px-4 py-3 flex items-center justify-between hover:bg-white/5 transition-colors ${currentPage === 0 ? 'border-l-4 border-green-400 bg-white/10' : ''}`}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <svg className="w-5 h-5 text-purple-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                        </svg>
+                                        <span className="font-bold text-base text-white">
+                                            Indices
+                                        </span>
+                                    </div>
+                                </button>
+                            </div>
+
                             {topicConfigs.map((topic, index) => {
                                 const progress = getTopicProgress(topic.id);
                                 const offsets = topicOffsets[topic.id];
