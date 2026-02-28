@@ -236,6 +236,8 @@ export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
   const [ranking, setRanking] = useState<RankingUser[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingRanking, setLoadingRanking] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(true);
   const [completedPages, setCompletedPages] = useState<number[]>([]);
   const [navigateToPage, setNavigateToPage] = useState<((page: number) => void) | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -293,7 +295,6 @@ export default function DashboardPage() {
   useEffect(() => {
     const loadUserData = async () => {
       const token = localStorage.getItem('token');
-      // Initial load from local storage for speed
       const localUserData = localStorage.getItem('user');
 
       if (!token) {
@@ -301,22 +302,30 @@ export default function DashboardPage() {
         return;
       }
 
+      // 1. Immediate load from local storage
       if (localUserData) {
-        const parsedUser = JSON.parse(localUserData);
-        if (parsedUser.role === 'ADMIN') {
-          router.push('/admin');
-          return;
+        try {
+          const parsedUser = JSON.parse(localUserData);
+          const savedAvatar = localStorage.getItem('userAvatar');
+          if (savedAvatar) parsedUser.photoUrl = savedAvatar;
+          setUser(parsedUser);
+          setLoading(false); // UI shell can show now
+        } catch (e) {
+          console.error("Local storage parse error", e);
         }
-
-        // Cargar avatar personalizado si existe
-        const savedAvatar = localStorage.getItem('userAvatar');
-        if (savedAvatar) {
-          parsedUser.photoUrl = savedAvatar;
-        }
-        setUser(parsedUser);
       }
 
-      // Always fetch fresh data from API to get latest points
+      // 2. Fetch all fresh data in parallel
+      Promise.all([
+        fetchProfile(token),
+        loadRanking(),
+        loadProgress(token)
+      ]).finally(() => {
+        setLoading(false);
+      });
+    };
+
+    const fetchProfile = async (token: string) => {
       try {
         const response = await fetch('/api/users/profile', {
           headers: { 'Authorization': `Bearer ${token}` }
@@ -327,83 +336,72 @@ export default function DashboardPage() {
             router.push('/admin');
             return;
           }
-          // Preserve locally saved avatar if exists and not in fresh data (or merge logic)
           const savedAvatar = localStorage.getItem('userAvatar');
           if (savedAvatar) freshUser.photoUrl = savedAvatar;
-
           setUser(freshUser);
-          // Update local storage to keep it fresh
           localStorage.setItem('user', JSON.stringify(freshUser));
         }
       } catch (e) {
-        console.error("Failed to refresh user data", e);
+        console.error("Failed to refresh profile", e);
       }
-
-      loadRanking();
-      loadProgress(); // Load module progress
-      setLoading(false);
     };
 
-    const loadProgress = async () => {
+    const loadRanking = async () => {
+      setLoadingRanking(true);
       try {
-        const token = localStorage.getItem('token');
-        if (token) {
-          // Fetch completed progress modules (C, P, A)
-          const progressRes = await fetch('/api/users/progress', {
-            headers: { 'Authorization': `Bearer ${token}` }
-          });
-
-          // Fetch completed exercises
-          const exercisesRes = await fetch('/api/users/exercises', {
-            headers: { 'Authorization': `Bearer ${token}` }
-          });
-
-          let modules: string[] = [];
-
-          if (progressRes.ok) {
-            const progressModules = await progressRes.json();
-            modules = [...progressModules];
-          }
-
-          if (exercisesRes.ok) {
-            const completedExercises = await exercisesRes.json();
-            // Add exercise IDs to completed modules array
-            const exerciseIds = Object.keys(completedExercises).filter(
-              id => completedExercises[id]?.completed
-            );
-            modules = [...modules, ...exerciseIds];
-          }
-
-          setCompletedModules(modules);
-        }
-      } catch (e) {
-        console.error(e);
+        const response = await axios.get('/api/users/ranking');
+        setRanking(response.data);
+      } catch (error) {
+        console.error('Error al cargar ranking:', error);
+        setRanking([
+          { nickname: 'Luis', nombre: 'Luis', avatar: '👨', puntos: 625 },
+          { nickname: 'Juan', nombre: 'Juan', avatar: '🧑', puntos: 525 },
+          { nickname: 'Maria', nombre: 'Maria', avatar: '👩', puntos: 420 },
+          { nickname: 'Carlos', nombre: 'Carlos', avatar: '👦', puntos: 300 },
+          { nickname: 'Mariana', nombre: 'Mariana', avatar: '👧', puntos: 220 },
+        ]);
+      } finally {
+        setLoadingRanking(false);
       }
-    }
+    };
+
+    const loadProgress = async (token: string) => {
+      setLoadingProgress(true);
+      try {
+        const [progressRes, exercisesRes] = await Promise.all([
+          fetch('/api/users/progress', { headers: { 'Authorization': `Bearer ${token}` } }),
+          fetch('/api/users/exercises', { headers: { 'Authorization': `Bearer ${token}` } })
+        ]);
+
+        let modules: string[] = [];
+
+        if (progressRes.ok) {
+          const progressModules = await progressRes.json();
+          modules = [...progressModules];
+        }
+
+        if (exercisesRes.ok) {
+          const completedExercisesData = await exercisesRes.json();
+          const exerciseIds = Object.keys(completedExercisesData).filter(
+            id => completedExercisesData[id]?.completed
+          );
+          modules = [...modules, ...exerciseIds];
+        }
+
+        setCompletedModules(modules);
+      } catch (e) {
+        console.error("Progress load failed", e);
+      } finally {
+        setLoadingProgress(false);
+      }
+    };
 
     loadUserData();
-
-    // Listen for storage events to update points in real-time
     window.addEventListener('storage', loadUserData);
     return () => window.removeEventListener('storage', loadUserData);
   }, [router]);
 
-  const loadRanking = async () => {
-    try {
-      const response = await axios.get('/api/users/ranking');
-      setRanking(response.data);
-    } catch (error) {
-      console.error('Error al cargar ranking:', error);
-      // Datos de ejemplo
-      setRanking([
-        { nickname: 'Luis', nombre: 'Luis', avatar: '👨', puntos: 625 },
-        { nickname: 'Juan', nombre: 'Juan', avatar: '🧑', puntos: 525 },
-        { nickname: 'Maria', nombre: 'Maria', avatar: '👩', puntos: 420 },
-        { nickname: 'Carlos', nombre: 'Carlos', avatar: '👦', puntos: 300 },
-        { nickname: 'Mariana', nombre: 'Mariana', avatar: '👧', puntos: 220 },
-      ]);
-    }
-  };
+
 
   const handleLogout = async () => {
     const sessionId = localStorage.getItem('sessionId');
@@ -458,8 +456,13 @@ export default function DashboardPage() {
 
 
 
-  if (loading || !user) {
-    return <div className="min-h-screen flex items-center justify-center text-text">Cargando...</div>;
+  if (loading && !user) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-secondary text-text gap-4">
+        <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-xl font-black animate-pulse uppercase tracking-widest">Cargando Plataforma...</p>
+      </div>
+    );
   }
 
   // Mostrar perfil de usuario si está activo
@@ -495,14 +498,14 @@ export default function DashboardPage() {
             <div className="relative inline-block">
               <div className="w-28 h-28 mx-auto bg-gradient-to-tr from-primary to-blue-400 rounded-full p-[4px] shadow-xl">
                 <div className="w-full h-full bg-secondary rounded-full flex items-center justify-center text-6xl overflow-hidden relative">
-                  {user.photoUrl ? (
+                  {user?.photoUrl ? (
                     <img
                       src={user.photoUrl}
                       alt={user.nombre}
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <span>{user.avatar}</span>
+                    <span>{user?.avatar || '👤'}</span>
                   )}
                 </div>
               </div>
@@ -510,7 +513,7 @@ export default function DashboardPage() {
             </div>
             <div>
               <h2 className="text-2xl font-black text-text tracking-tight">
-                {user.nombre.split(' ')[0]}
+                {user?.nombre?.split(' ')[0] || 'Usuario'}
               </h2>
             </div>
           </button>
@@ -608,28 +611,39 @@ export default function DashboardPage() {
             })()}
           </div>
 
-          {/* Ranking */}
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm mb-2">
               <span className="font-bold text-[#7e22ce]">RANKING SEMANAL</span>
             </div>
             <div className="space-y-2">
-              {ranking.slice(0, 5).map((rankUser, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleRankingUserClick(rankUser)}
-                  className="w-full flex items-center gap-3 p-2 rounded-xl bg-white/40 backdrop-blur-sm transition-colors hover:bg-white/60 cursor-pointer"
-                >
-                  <span className="w-8 h-8 flex items-center justify-center font-black text-3xl text-[#7e22ce]">
-                    {index + 1}
-                  </span>
-                  <span className="text-4xl filter drop-shadow-sm">{rankUser.avatar}</span>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xl font-black text-[#1f2937] truncate tracking-tight">{rankUser.nombre}</p>
+              {loadingRanking ? (
+                // Ranking Skeletons
+                Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className="w-full flex items-center gap-3 p-2 rounded-xl bg-white/20 backdrop-blur-sm animate-pulse">
+                    <div className="w-8 h-8 rounded-lg bg-white/20"></div>
+                    <div className="w-10 h-10 rounded-full bg-white/20"></div>
+                    <div className="flex-1 h-6 bg-white/20 rounded-lg"></div>
+                    <div className="w-16 h-6 bg-white/20 rounded-full"></div>
                   </div>
-                  <span className="text-sm font-bold text-[#7e22ce] bg-[#7e22ce]/10 px-2 py-1 rounded-full whitespace-nowrap">{rankUser.puntos} XP</span>
-                </button>
-              ))}
+                ))
+              ) : (
+                ranking.slice(0, 5).map((rankUser, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleRankingUserClick(rankUser)}
+                    className="w-full flex items-center gap-3 p-2 rounded-xl bg-white/40 backdrop-blur-sm transition-colors hover:bg-white/60 cursor-pointer"
+                  >
+                    <span className="w-8 h-8 flex items-center justify-center font-black text-3xl text-[#7e22ce]">
+                      {index + 1}
+                    </span>
+                    <span className="text-4xl filter drop-shadow-sm">{rankUser.avatar}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xl font-black text-[#1f2937] truncate tracking-tight">{rankUser.nombre}</p>
+                    </div>
+                    <span className="text-sm font-bold text-[#7e22ce] bg-[#7e22ce]/10 px-2 py-1 rounded-full whitespace-nowrap">{rankUser.puntos} XP</span>
+                  </button>
+                ))
+              )}
             </div>
           </div>
 

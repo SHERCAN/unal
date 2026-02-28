@@ -102,6 +102,23 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
         ]),
     ];
 
+    const [loadedLimit, setLoadedLimit] = useState(2); // Start with Index + buffer
+    const allPagesCount = allPages.length;
+
+    // Progressive loading in the background
+    useEffect(() => {
+        if (loadedLimit < allPagesCount) {
+            const timer = setTimeout(() => {
+                setRenderedLimit(prev => Math.min(prev + 5, allPagesCount));
+            }, 300);
+            return () => clearTimeout(timer);
+        }
+    }, [loadedLimit, allPagesCount]);
+
+    // Rename for clarity
+    const renderedLimit = loadedLimit;
+    const setRenderedLimit = setLoadedLimit;
+
     return (
         <div className="max-w-5xl mx-auto bg-transparent min-h-screen px-4 md:px-8 pb-40">
             {/* Global Zoom Controls */}
@@ -133,7 +150,7 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
                     title="Zoom Out"
                 >
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0113 0H7" />
                     </svg>
                     <span className="text-sm font-medium">Zoom -</span>
                 </button>
@@ -142,20 +159,31 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
             <div className="relative z-10">
                 {allPages.map((pageDef, index) => {
                     const PageComponent = pageDef.component;
+                    // Lazy load condition:
+                    // 1. Within current progressive load limit
+                    // 2. Currently visible or near visible (3 pages buffer)
+                    const shouldRender = index < renderedLimit || Math.abs(index - currentPage) < 3;
+
                     return (
                         <motion.div
                             key={`${pageDef.id}-${index}`}
                             ref={(el) => { pageRefs.current[index] = el; }}
-                            initial={{ opacity: 0, y: 50 }}
+                            initial={index === 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 0.6, delay: 0.1 }}
                             className="snap-start snap-always mb-16"
-                            style={{ scrollMarginTop: '1rem' }}
+                            style={{ scrollMarginTop: '1rem', minHeight: shouldRender ? 'auto' : '800px' }}
                         >
-                            <BookProvider value={{ topicId: (pageDef as any).topicId || 'shared', globalPageNumber: index }}>
-                                <PageComponent zoom={globalZoom} />
-                            </BookProvider>
+                            {shouldRender ? (
+                                <BookProvider value={{ topicId: (pageDef as any).topicId || 'shared', globalPageNumber: index }}>
+                                    <PageComponent zoom={globalZoom} />
+                                </BookProvider>
+                            ) : (
+                                <div className="bg-white/30 dark:bg-gray-800/20 backdrop-blur rounded-2xl h-[800px] flex items-center justify-center border border-gray-200 dark:border-gray-800 animate-pulse">
+                                    <div className="text-gray-400 dark:text-gray-600 font-bold">Cargando Página {index + 1}...</div>
+                                </div>
+                            )}
                         </motion.div>
                     );
                 })}
