@@ -5,6 +5,7 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
+import { useTouchDragDrop } from '@/hooks/useTouchDragDrop';
 
 /**
  * Números Primos: Concepto Concreto y Pictórico
@@ -186,6 +187,27 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         setResultC(null);
     };
 
+    // Touch drag-and-drop support for tablets
+    const { touchHandlers: ballTouchHandlers } = useTouchDragDrop({
+        onDragStart: (itemId) => {
+            if (resultC === 'correct') return;
+            setDraggedBallId(Number(itemId));
+        },
+        onDrop: (itemId, dropZoneId) => {
+            if (resultC === 'correct') return;
+            const ballId = Number(itemId);
+            if (dropZoneId === 'bag') {
+                setBalls(prev => prev.map(b => b.id === ballId ? { ...b, location: 'bag' as const } : b));
+            } else if (dropZoneId.startsWith('tenista-')) {
+                const tIdx = Number(dropZoneId.replace('tenista-', ''));
+                setBalls(prev => prev.map(b => b.id === ballId ? { ...b, location: tIdx } : b));
+            }
+            setDraggedBallId(null);
+        },
+        onDragEnd: () => setDraggedBallId(null),
+        disabled: resultC === 'correct',
+    });
+
     // Render a draggable tennis ball inline
     const renderBall = (ball: Ball, size: 'xs' | 'sm' | 'md' = 'md') => {
         const isSelected = touchBallId === ball.id;
@@ -199,6 +221,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                 alt={`Pelota ${ball.id + 1}`}
                 draggable
                 onDragStart={(e) => handleDragStart(e, ball.id)}
+                {...ballTouchHandlers(String(ball.id))}
                 onClick={(e) => { e.stopPropagation(); handleTouchSelectBall(ball.id); }}
                 className={`${sizeClass} object-contain cursor-grab active:cursor-grabbing hover:scale-125 transition-transform select-none relative z-20 ${isSelected ? 'ring-3 ring-purple-500 rounded-full scale-125' : ''}`}
                 style={{ touchAction: 'none' }}
@@ -260,6 +283,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                         onDragOver={handleDragOver}
                                         onDrop={(e) => handleDropOnTenista(e, tIdx)}
                                         onClick={() => { if (touchBallId !== null) handleTouchDropTarget(tIdx); }}
+                                        data-drop-zone={`tenista-${tIdx}`}
                                         className={`relative w-16 h-16 border-2 rounded overflow-hidden transition-colors ${touchBallId !== null
                                             ? 'border-purple-400 bg-purple-50 dark:bg-purple-900/20'
                                             : 'border-gray-800 dark:border-gray-400 bg-white dark:bg-gray-700'
@@ -397,6 +421,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                             onDragOver={handleDragOver}
                             onDrop={handleDropOnBag}
                             onClick={() => { if (touchBallId !== null) handleTouchDropTarget('bag'); }}
+                            data-drop-zone="bag"
                         >
                             <div className="relative">
                                 <img

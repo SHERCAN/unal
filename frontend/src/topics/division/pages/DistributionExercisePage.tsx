@@ -6,6 +6,7 @@ import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
+import { useTouchDragDrop } from '@/hooks/useTouchDragDrop';
 
 
 interface Orange {
@@ -148,6 +149,32 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
     const [cDraggedId, setCDraggedId] = useState<number | null>(null);
     const [cStageResult, setCStageResult] = useState<'correct' | 'incorrect' | null>(null);
 
+    // Touch drag-and-drop for intro section (must be after cStageResult is declared)
+    const { touchHandlers: introTouchHandlers } = useTouchDragDrop({
+        onDragStart: (itemId) => {
+            if (cStageResult === 'correct') return;
+            setIntroDraggedId(Number(itemId));
+        },
+        onDrop: (itemId, dropZoneId) => {
+            const id = Number(itemId);
+            if (cStageResult === 'correct') return;
+            if (dropZoneId === 'intro-basket') {
+                setIntroOranges(prev => prev.map(o => o.id === id ? { ...o, location: 'basket', top: '0%', left: '0%' } : o));
+            } else if (dropZoneId === 'intro-tree') {
+                setIntroOranges(prev => prev.map(o => {
+                    if (o.id === id) {
+                        const originalPos = TREE_POSITIONS[o.id];
+                        return { ...o, location: 'tree', top: originalPos?.top || '50%', left: originalPos?.left || '50%' };
+                    }
+                    return o;
+                }));
+            }
+            setIntroDraggedId(null);
+        },
+        onDragEnd: () => setIntroDraggedId(null),
+        disabled: cStageResult === 'correct',
+    });
+
 
     // State - Stage P
     const [boxInputs, setBoxInputs] = useState<string[]>(Array(BOX_COUNT).fill(''));
@@ -185,6 +212,27 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
         setFinalAnswer('');
         setPStageResult(null);
     };
+
+    // Touch drag-and-drop for stage P
+    const { touchHandlers: pTouchHandlers } = useTouchDragDrop({
+        onDragStart: (itemId) => {
+            if (pStageResult === 'correct') return;
+            setPDraggedId(Number(itemId));
+        },
+        onDrop: (itemId, dropZoneId) => {
+            const id = Number(itemId);
+            if (pStageResult === 'correct') return;
+            if (dropZoneId === 'p-source') {
+                setPOranges(prev => prev.map(o => o.id === id ? { ...o, boxId: null } : o));
+            } else if (dropZoneId.startsWith('p-box-')) {
+                const boxIndex = Number(dropZoneId.replace('p-box-', ''));
+                setPOranges(prev => prev.map(o => o.id === id ? { ...o, boxId: boxIndex + 1 } : o));
+            }
+            setPDraggedId(null);
+        },
+        onDragEnd: () => setPDraggedId(null),
+        disabled: pStageResult === 'correct',
+    });
 
 
     // Video Tracking
@@ -238,6 +286,27 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
         setOranges(Array.from({ length: TOTAL_ORANGES }, (_, i) => ({ id: i, inBox: null })));
         setCStageResult(null);
     };
+
+    // Touch drag-and-drop for stage C
+    const { touchHandlers: cTouchHandlers } = useTouchDragDrop({
+        onDragStart: (itemId) => {
+            if (cStageResult === 'correct') return;
+            setCDraggedId(Number(itemId));
+        },
+        onDrop: (itemId, dropZoneId) => {
+            const id = Number(itemId);
+            if (cStageResult === 'correct') return;
+            if (dropZoneId === 'c-pool') {
+                setOranges(prev => prev.map(o => o.id === id ? { ...o, inBox: null } : o));
+            } else if (dropZoneId.startsWith('c-box-')) {
+                const boxId = Number(dropZoneId.replace('c-box-', ''));
+                setOranges(prev => prev.map(o => o.id === id ? { ...o, inBox: boxId } : o));
+            }
+            setCDraggedId(null);
+        },
+        onDragEnd: () => setCDraggedId(null),
+        disabled: cStageResult === 'correct',
+    });
 
 
     const checkStageP = async () => {
@@ -297,6 +366,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                 className="relative flex items-end"
                                 onDragOver={handleDragOver}
                                 onDrop={handleIntroDropOnBasket}
+                                data-drop-zone="intro-basket"
                             >
                                 <div className="relative w-48 h-64">
                                     <img src="/division/oranges-page/girl-basket.png" alt="Girl with Basket" className="w-full h-full object-contain" />
@@ -307,7 +377,9 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                                 key={o.id}
                                                 draggable
                                                 onDragStart={(e) => handleIntroDragStart(e, o.id)}
+                                                {...introTouchHandlers(String(o.id))}
                                                 className="w-8 h-8 -ml-2 -mb-2 pointer-events-auto cursor-grab hover:scale-110 transition z-10"
+                                                style={{ touchAction: 'none' }}
                                             // Removing absolute positioning for basket to make them pile up naturally
                                             >
                                                 <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain" />
@@ -329,6 +401,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                 className="relative w-80 h-80 flex-shrink-0"
                                 onDragOver={handleDragOver}
                                 onDrop={handleIntroDropOnTree}
+                                data-drop-zone="intro-tree"
                             >
                                 <img src="/division/oranges-page/tree.png" alt="Tree" className="w-full h-full object-contain" />
                                 {/* Oranges on Tree */}
@@ -338,8 +411,9 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                             key={o.id}
                                             draggable
                                             onDragStart={(e) => handleIntroDragStart(e, o.id)}
+                                            {...introTouchHandlers(String(o.id))}
                                             className="absolute w-12 h-12 pointer-events-auto cursor-grab hover:scale-110 transition z-10"
-                                            style={{ top: o.top, left: o.left }}
+                                            style={{ top: o.top, left: o.left, touchAction: 'none' }}
                                         >
                                             <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain drop-shadow-md" />
                                         </div>
@@ -385,6 +459,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                                     key={i + 1}
                                                     onDragOver={handleDragOver}
                                                     onDrop={() => handleDropOnBox(i + 1)}
+                                                    data-drop-zone={`c-box-${i + 1}`}
                                                     className="relative w-20 h-20 md:w-24 md:h-24 p-1"
                                                 >
                                                     <img src="/division/oranges-page/caja-abierta%2017.png" alt="Box" className="w-full h-full object-contain drop-shadow-sm" />
@@ -395,7 +470,9 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                                                 key={o.id}
                                                                 draggable
                                                                 onDragStart={(e) => handleDragStart(e, o.id)}
+                                                                {...cTouchHandlers(String(o.id))}
                                                                 className="w-8 h-8 cursor-grab hover:scale-110 transition"
+                                                                style={{ touchAction: 'none' }}
                                                             >
                                                                 <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain" />
                                                             </div>
@@ -414,6 +491,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                         className="relative"
                                         onDragOver={handleDragOver}
                                         onDrop={handleDropOnPool}
+                                        data-drop-zone="c-pool"
                                     >
                                         <img src="/division/oranges-page/girl-basket.png" alt="Girl" className="h-48 object-contain" />
                                         <div className="absolute top-[40%] left-[20%] w-[60%] h-[30%] flex flex-wrap justify-center items-center overflow-hidden">
@@ -422,7 +500,9 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                                     key={o.id}
                                                     draggable
                                                     onDragStart={(e) => handleDragStart(e, o.id)}
+                                                    {...cTouchHandlers(String(o.id))}
                                                     className="w-8 h-8 cursor-grab hover:scale-110 transition"
+                                                    style={{ touchAction: 'none' }}
                                                 >
                                                     <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain" />
                                                 </div>
@@ -460,6 +540,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                             className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-800 mb-6 min-h-[100px]"
                             onDragOver={handleDragOver}
                             onDrop={handlePDropOnPSource}
+                            data-drop-zone="p-source"
                         >
                             <div className="grid grid-cols-8 gap-y-2 place-items-center">
                                 {pOranges.filter(o => o.boxId === null).map((orange) => (
@@ -467,7 +548,9 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                         key={orange.id}
                                         draggable
                                         onDragStart={(e) => handlePDragStart(e, orange.id)}
+                                        {...pTouchHandlers(String(orange.id))}
                                         className="cursor-grab hover:scale-110 transition"
+                                        style={{ touchAction: 'none' }}
                                     >
                                         <img src="/division/oranges-page/orange.png" alt="Orange" className="w-8 h-8 object-contain" />
                                     </div>
@@ -496,6 +579,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                             className="w-full h-24 border-2 border-green-200 dark:border-green-800 rounded-lg flex items-center justify-center bg-gray-50 dark:bg-gray-700"
                                             onDragOver={handleDragOver}
                                             onDrop={() => handlePDropOnPBox(i)}
+                                            data-drop-zone={`p-box-${i}`}
                                         >
                                             <div className="flex flex-wrap justify-center content-center w-full h-full p-1 gap-1 overflow-hidden">
                                                 {orangesInThisBox.map((orange) => (
@@ -503,7 +587,9 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                                         key={orange.id}
                                                         draggable
                                                         onDragStart={(e) => handlePDragStart(e, orange.id)}
+                                                        {...pTouchHandlers(String(orange.id))}
                                                         className="w-8 h-8 cursor-grab hover:scale-110 transition flex-shrink-0"
+                                                        style={{ touchAction: 'none' }}
                                                     >
                                                         <img src="/division/oranges-page/orange.png" alt="Orange" className="w-full h-full object-contain" />
                                                     </div>

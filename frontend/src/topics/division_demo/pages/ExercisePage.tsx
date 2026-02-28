@@ -6,6 +6,7 @@ import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
+import { useTouchDragDrop } from '@/hooks/useTouchDragDrop';
 
 
 interface Apple {
@@ -109,6 +110,22 @@ export function ExercisePage({ zoom = 1 }: DivisionExercisePageProps) {
         }
     };
 
+    // Touch drag-and-drop support for tablets
+    const { touchHandlers: appleTouchHandlers } = useTouchDragDrop({
+        onDragStart: (itemId) => setDraggedApple(Number(itemId)),
+        onDrop: (itemId, dropZoneId) => {
+            const appleId = Number(itemId);
+            if (dropZoneId === 'pool') {
+                setApples(prev => prev.map(a => (a.id === appleId ? { ...a, inBox: null } : a)));
+            } else if (dropZoneId.startsWith('box-')) {
+                const boxId = Number(dropZoneId.replace('box-', ''));
+                setApples(prev => prev.map(a => (a.id === appleId ? { ...a, inBox: boxId } : a)));
+            }
+            setDraggedApple(null);
+        },
+        onDragEnd: () => setDraggedApple(null),
+    });
+
 
     /* videoModal list removed */
     /* ref removed */
@@ -208,6 +225,7 @@ export function ExercisePage({ zoom = 1 }: DivisionExercisePageProps) {
                         <div
                             onDragOver={handleDragOver}
                             onDrop={handleDropOnPool}
+                            data-drop-zone="pool"
                             className="w-full lg:w-48 min-h-[120px] border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-4 bg-gray-50 dark:bg-gray-800/50"
                         >
                             <p className="text-center text-sm font-medium text-gray-600 dark:text-gray-400 mb-3">
@@ -219,7 +237,9 @@ export function ExercisePage({ zoom = 1 }: DivisionExercisePageProps) {
                                         key={apple.id}
                                         draggable
                                         onDragStart={(e) => handleDragStart(e, apple.id)}
+                                        {...appleTouchHandlers(String(apple.id))}
                                         className="w-10 h-10 text-2xl flex items-center justify-center cursor-grab active:cursor-grabbing hover:scale-110 transition-transform select-none"
+                                        style={{ touchAction: 'none' }}
                                     >
                                         🍎
                                     </div>
@@ -241,6 +261,7 @@ export function ExercisePage({ zoom = 1 }: DivisionExercisePageProps) {
                                         key={child.id}
                                         onDragOver={handleDragOver}
                                         onDrop={(e) => handleDropOnBox(e, child.id)}
+                                        data-drop-zone={`box-${child.id}`}
                                         className="w-full sm:w-36 min-h-[140px] border-2 border-blue-300 dark:border-blue-700 rounded-xl p-2 bg-blue-50 dark:bg-blue-900/20 flex flex-col items-center"
                                     >
                                         {/* Child Icon */}
@@ -267,7 +288,9 @@ export function ExercisePage({ zoom = 1 }: DivisionExercisePageProps) {
                                                     key={apple.id}
                                                     draggable
                                                     onDragStart={(e) => handleDragStart(e, apple.id)}
+                                                    {...appleTouchHandlers(String(apple.id))}
                                                     className="w-6 h-6 text-lg flex items-center justify-center cursor-grab active:cursor-grabbing hover:scale-110 transition-transform select-none"
+                                                    style={{ touchAction: 'none' }}
                                                 >
                                                     🍎
                                                 </div>

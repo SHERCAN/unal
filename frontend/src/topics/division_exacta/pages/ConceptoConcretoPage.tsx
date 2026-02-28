@@ -5,6 +5,7 @@ import { PlayVideoButton } from '@/components/PlayVideoButton';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
+import { useTouchDragDrop } from '@/hooks/useTouchDragDrop';
 
 
 /**
@@ -182,6 +183,50 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         }
     };
 
+    // Touch drag-and-drop for medals (C section)
+    const { touchHandlers: medalTouchHandlers } = useTouchDragDrop({
+        onDragStart: (itemId) => {
+            if (medalResult === 'correct') return;
+            setDraggedMedal(Number(itemId));
+        },
+        onDrop: (itemId, dropZoneId) => {
+            const id = Number(itemId);
+            if (medalResult === 'correct') return;
+            if (dropZoneId === 'medal-box') {
+                setMedals(prev => prev.map(m => (m.id === id ? { ...m, inTeam: null } : m)));
+            } else if (dropZoneId.startsWith('medal-team-')) {
+                const teamId = Number(dropZoneId.replace('medal-team-', ''));
+                setMedals(prev => prev.map(m => (m.id === id ? { ...m, inTeam: teamId } : m)));
+            }
+            setDraggedMedal(null);
+            setMedalResult(null);
+        },
+        onDragEnd: () => setDraggedMedal(null),
+        disabled: medalResult === 'correct',
+    });
+
+    // Touch drag-and-drop for circles (P section)
+    const { touchHandlers: circleTouchHandlers } = useTouchDragDrop({
+        onDragStart: (itemId) => {
+            if (circleResult === 'correct') return;
+            setDraggedCircle(Number(itemId));
+        },
+        onDrop: (itemId, dropZoneId) => {
+            const id = Number(itemId);
+            if (circleResult === 'correct') return;
+            if (dropZoneId === 'circle-pool') {
+                setCircles(prev => prev.map(c => (c.id === id ? { ...c, inGroup: null } : c)));
+            } else if (dropZoneId.startsWith('circle-group-')) {
+                const groupId = Number(dropZoneId.replace('circle-group-', ''));
+                setCircles(prev => prev.map(c => (c.id === id ? { ...c, inGroup: groupId } : c)));
+            }
+            setDraggedCircle(null);
+            setCircleResult(null);
+        },
+        onDragEnd: () => setDraggedCircle(null),
+        disabled: circleResult === 'correct',
+    });
+
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'División Exacta' }} pageId="div-exacta-concepto-concreto">
             <div className="w-full space-y-6">
@@ -216,6 +261,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                         <div
                                             onDragOver={handleDragOver}
                                             onDrop={handleMedalDropOnBox}
+                                            data-drop-zone="medal-box"
                                             style={{ position: 'relative', width: '160px', flexShrink: 0 }}
                                         >
                                             <img src="/cajamedalla.png" alt="Caja de medallas" style={{ width: '100%', height: 'auto' }} draggable={false} />
@@ -234,7 +280,8 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                                         alt="Medalla"
                                                         draggable
                                                         onDragStart={(e) => handleMedalDragStart(e, medal.id)}
-                                                        style={{ width: '22px', height: '22px', cursor: medalResult === 'correct' ? 'default' : 'grab', margin: '-5px' }}
+                                                        {...medalTouchHandlers(String(medal.id))}
+                                                        style={{ width: '22px', height: '22px', cursor: medalResult === 'correct' ? 'default' : 'grab', margin: '-5px', touchAction: 'none' }}
                                                         className={`transition-transform select-none ${medalResult === 'correct' ? '' : 'hover:scale-125'}`}
                                                     />
                                                 ))}
@@ -254,6 +301,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                                 <div
                                                     onDragOver={handleDragOver}
                                                     onDrop={(e) => handleMedalDropOnTeam(e, teamId)}
+                                                    data-drop-zone={`medal-team-${teamId}`}
                                                     style={{
                                                         width: '45%', minHeight: '70px', border: '2px solid', borderRadius: '8px', padding: '6px', display: 'flex', flexWrap: 'wrap', gap: '3px', alignItems: 'center', justifyContent: 'center'
                                                     }}
@@ -266,7 +314,8 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                                             teamMedals.map(medal => (
                                                                 <img key={medal.id} src="/medalla.png" alt="Medalla" draggable
                                                                     onDragStart={(e) => handleMedalDragStart(e, medal.id)}
-                                                                    style={{ width: '24px', height: '24px', cursor: 'grab' }}
+                                                                    {...medalTouchHandlers(String(medal.id))}
+                                                                    style={{ width: '24px', height: '24px', cursor: 'grab', touchAction: 'none' }}
                                                                     className="hover:scale-110 transition-transform select-none" />
                                                             ))
                                                         )
@@ -316,6 +365,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                     <div
                                         onDragOver={handleDragOver}
                                         onDrop={handleCircleDropOnPool}
+                                        data-drop-zone="circle-pool"
                                         className="w-64 min-h-[140px] border-2 border-gray-400 dark:border-gray-600 rounded-lg p-3 bg-white dark:bg-gray-800/50"
                                     >
                                         <div className="grid grid-cols-6 gap-1 justify-items-center">
@@ -324,7 +374,9 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                                     key={circle.id}
                                                     draggable
                                                     onDragStart={(e) => handleCircleDragStart(e, circle.id)}
+                                                    {...circleTouchHandlers(String(circle.id))}
                                                     className="w-8 h-8 rounded-full bg-yellow-400 border-2 border-yellow-500 cursor-grab active:cursor-grabbing hover:scale-110 transition-transform select-none shadow-sm"
+                                                    style={{ touchAction: 'none' }}
                                                 />
                                             ))}
                                         </div>
@@ -353,6 +405,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                                 <div
                                                     onDragOver={handleDragOver}
                                                     onDrop={(e) => handleCircleDropOnGroup(e, groupId)}
+                                                    data-drop-zone={`circle-group-${groupId}`}
                                                     className={`flex-1 min-h-[60px] border-2 rounded-lg p-2 flex flex-wrap gap-1 items-center justify-center ${circleResult === 'correct' && (groupCircles.length === 6 || isExerciseCompleted(EXERCISE_IDS.P_GAME))
                                                         ? 'border-green-400 bg-green-50 dark:bg-green-900/10'
                                                         : 'border-purple-300 dark:border-purple-700 bg-white dark:bg-gray-800/50'

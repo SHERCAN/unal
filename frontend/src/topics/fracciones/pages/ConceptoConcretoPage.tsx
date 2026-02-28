@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
+import { useTouchDragDrop } from '@/hooks/useTouchDragDrop';
 
 
 interface Props { zoom?: number; }
@@ -127,6 +128,28 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         setListoResultC(null);
     };
 
+    // Touch drag-and-drop support for tablets
+    const { touchHandlers: sliceTouchHandlers } = useTouchDragDrop({
+        onDragStart: (itemId) => {
+            if (listoResultC === 'correct') return;
+            setDraggedSlice(Number(itemId));
+        },
+        onDrop: (itemId, dropZoneId) => {
+            if (listoResultC === 'correct') return;
+            const sliceIdx = Number(itemId);
+            if (dropZoneId === 'plate') {
+                setSliceLocations(prev => ({ ...prev, [sliceIdx]: 0 }));
+            } else if (dropZoneId.startsWith('mesa-')) {
+                const mesaIdx = Number(dropZoneId.replace('mesa-', ''));
+                setSliceLocations(prev => ({ ...prev, [sliceIdx]: mesaIdx }));
+            }
+            setDraggedSlice(null);
+            setListoResultC(null);
+        },
+        onDragEnd: () => setDraggedSlice(null),
+        disabled: listoResultC === 'correct',
+    });
+
     /* ═══════════════════════ SECTION P STATE ═══════════════════════ */
     const [cuts, setCuts] = useState(0);
     const maxCuts = 4;
@@ -218,6 +241,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                 className={`relative flex flex-col items-center transition-all ${draggedSlice !== null ? 'ring-2 ring-purple-400 ring-offset-1 rounded-lg' : ''}`}
                                 onDragOver={handleDragOver}
                                 onDrop={() => handleDropOnMesa(mesaIdx)}
+                                data-drop-zone={`mesa-${mesaIdx}`}
                                 style={{ width: '160px' }}
                             >
                                 <div className="relative w-full">
@@ -236,6 +260,8 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                                 alt={`Porción ${sIdx + 1}`}
                                                 draggable={listoResultC !== 'correct'}
                                                 onDragStart={() => handleDragStart(sIdx)}
+                                                {...sliceTouchHandlers(String(sIdx))}
+                                                style={{ touchAction: 'none' }}
                                                 className={`object-contain ${listoResultC !== 'correct' ? 'cursor-grab active:cursor-grabbing drop-shadow-md hover:scale-110 transition-transform' : ''}`}
                                             />
                                         ))}
@@ -257,6 +283,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                 className={`absolute ${draggedSlice !== null ? 'ring-2 ring-orange-400 ring-offset-2 rounded-xl' : ''}`}
                                 onDragOver={handleDragOver}
                                 onDrop={handleDropOnPlate}
+                                data-drop-zone="plate"
                                 style={{ width: '280px', height: '280px', top: '-30px', left: '48px', zIndex: 10 }}
                             >
                                 <img
@@ -277,8 +304,9 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                         alt={`Porción ${sIdx + 1}`}
                                         draggable={listoResultC !== 'correct'}
                                         onDragStart={() => handleDragStart(sIdx)}
+                                        {...sliceTouchHandlers(String(sIdx))}
+                                        style={{ ...SLICE_STYLES[sIdx], touchAction: 'none' }}
                                         className={`object-contain ${listoResultC !== 'correct' ? 'cursor-grab active:cursor-grabbing z-10 hover:scale-110 transition-transform drop-shadow-lg' : ''}`}
-                                        style={SLICE_STYLES[sIdx]}
                                     />
                                 ))}
                             </div>

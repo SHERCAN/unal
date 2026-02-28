@@ -64,7 +64,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         };
     }, []);
 
-    // Mouse down on a left dot → start drag
+    // Mouse/Touch down on a left dot → start drag
     const handleDotMouseDown = useCallback((num: number, e: React.MouseEvent) => {
         if (result === 'correct' || isExerciseCompleted(EXERCISE_IDS.FINAL_STAGE)) return;
         e.preventDefault();
@@ -72,6 +72,15 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         setResult(null);
 
         // Initialize mouse position to the dot center so line doesn't jump
+        const center = getDotCenter(leftDotRefs.current[num]);
+        if (center) setMousePos(center);
+    }, [result, getDotCenter, isExerciseCompleted]);
+
+    const handleDotTouchStart = useCallback((num: number, e: React.TouchEvent) => {
+        if (result === 'correct' || isExerciseCompleted(EXERCISE_IDS.FINAL_STAGE)) return;
+        if (e.cancelable) e.preventDefault();
+        setDragging(num);
+        setResult(null);
         const center = getDotCenter(leftDotRefs.current[num]);
         if (center) setMousePos(center);
     }, [result, getDotCenter, isExerciseCompleted]);
@@ -87,11 +96,23 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         });
     }, [dragging]);
 
-    // Mouse up → check if we're over a right dot, if so connect
-    const handleMouseUp = useCallback(() => {
+    const handleTouchMove = useCallback((e: React.TouchEvent) => {
+        if (dragging === null) return;
+        if (e.cancelable) e.preventDefault(); // Prevent scrolling
+        const touch = e.touches[0];
+        const rect = containerRef.current?.getBoundingClientRect();
+        if (!rect) return;
+        setMousePos({
+            x: touch.clientX - rect.left,
+            y: touch.clientY - rect.top,
+        });
+    }, [dragging]);
+
+    // Mouse/Touch up → check if we're over a right dot, if so connect
+    const checkDropAndConnect = useCallback(() => {
         if (dragging === null) return;
 
-        // Check if mouse is near one of the right dots
+        // Check if pointer is near one of the right dots
         for (const cat of categories) {
             const dotEl = rightDotRefs.current[cat];
             if (!dotEl || !containerRef.current) continue;
@@ -112,13 +133,54 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         setDragging(null);
     }, [dragging, mousePos, categories]);
 
-    // Also listen for mouseup on window in case the mouse goes outside
+    const handleMouseUp = useCallback(() => {
+        checkDropAndConnect();
+    }, [checkDropAndConnect]);
+
+    // Manual non-passive listeners for the container to avoid the passive listener error
     useEffect(() => {
-        const handleGlobalMouseUp = () => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const handleTouchMoveNonPassive = (e: TouchEvent) => {
+            if (dragging === null) return;
+            // Prevent scrolling on the container while dragging connection lines
+            if (e.cancelable) e.preventDefault();
+
+            const touch = e.touches[0];
+            const rect = container.getBoundingClientRect();
+            setMousePos({
+                x: touch.clientX - rect.left,
+                y: touch.clientY - rect.top,
+            });
+        };
+
+        const handleTouchEndNonPassive = (e: TouchEvent) => {
+            if (dragging === null) return;
+            if (e.cancelable) e.preventDefault();
+            checkDropAndConnect();
+        };
+
+        container.addEventListener('touchmove', handleTouchMoveNonPassive, { passive: false });
+        container.addEventListener('touchend', handleTouchEndNonPassive, { passive: false });
+        container.addEventListener('touchcancel', handleTouchEndNonPassive, { passive: false });
+
+        return () => {
+            container.removeEventListener('touchmove', handleTouchMoveNonPassive);
+            container.removeEventListener('touchend', handleTouchEndNonPassive);
+            container.removeEventListener('touchcancel', handleTouchEndNonPassive);
+        };
+    }, [dragging, checkDropAndConnect]);
+
+    // Global cleanup for mouse up
+    useEffect(() => {
+        const handleGlobalEnd = () => {
             if (dragging !== null) setDragging(null);
         };
-        window.addEventListener('mouseup', handleGlobalMouseUp);
-        return () => window.removeEventListener('mouseup', handleGlobalMouseUp);
+        window.addEventListener('mouseup', handleGlobalEnd);
+        return () => {
+            window.removeEventListener('mouseup', handleGlobalEnd);
+        };
     }, [dragging]);
 
     const handleCheck = async () => {
@@ -158,7 +220,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                     onMouseMove={handleMouseMove}
                     onMouseUp={handleMouseUp}
                     className="relative w-full max-w-xl h-[420px] select-none"
-                    style={{ cursor: dragging !== null ? 'grabbing' : 'default' }}
+                    style={{ cursor: dragging !== null ? 'grabbing' : 'default', touchAction: dragging !== null ? 'none' : 'auto' }}
                 >
                     {/* SVG Lines Layer */}
                     <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
@@ -219,6 +281,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                 <div
                                     ref={el => { leftDotRefs.current[item.num] = el; }}
                                     onMouseDown={(e) => handleDotMouseDown(item.num, e)}
+                                    onTouchStart={(e) => handleDotTouchStart(item.num, e)}
                                     className={`w-4 h-4 rounded-sm cursor-grab active:cursor-grabbing transition-all
                                         ${isDraggingThis
                                             ? 'bg-purple-500 border-purple-500 scale-125 ring-2 ring-purple-300'
