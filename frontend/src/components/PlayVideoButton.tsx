@@ -26,7 +26,6 @@ export function PlayVideoButton({
         <>
             <button
                 type="button"
-                onMouseEnter={() => setIsOpen(true)}
                 onClick={() => setIsOpen(true)}
                 className={`p-1.5 text-white rounded-full transition-all flex-shrink-0 inline-flex items-center justify-center align-middle mx-1 ${isVideoWatched(trackingId)
                     ? 'bg-green-600 hover:bg-green-700'

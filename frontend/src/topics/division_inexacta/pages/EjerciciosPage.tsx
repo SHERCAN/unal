@@ -331,7 +331,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                 {/* --- MODULO B --- */}
                 <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div className="flex items-center gap-3 mb-4">
-                        <PlayVideoButton trackingId={VIDEO_TRACKING.EJ_3} title="" videoId="/pag13/vv-2" />
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.EJ_3} title="Problemas de división inexacta" videoId="/pag13/vv-2" />
                         <span className="bg-purple-700 text-white text-sm font-bold w-8 h-8 rounded flex items-center justify-center flex-shrink-0">3</span>
                         <p className="text-base font-bold text-gray-800 dark:text-gray-200">
                             Resuelve problemas matemáticos. Debe escribir en la hoja para procedimiento.

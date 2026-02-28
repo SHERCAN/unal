@@ -236,7 +236,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
                     {/* Play button top-left */}
                     <div className="mb-4">
-                        <PlayVideoButton trackingId={VIDEO_TRACKING.C_INTRO} title="" videoId="/pag14/vv-1" />
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.C_INTRO} title="Introducción al reparto de pelotas" videoId="/pag14/vv-1" />
                     </div>
 
                     {/* === TOP ROW: Tenistas + "+" button + ¿IGUALES? === */}
@@ -458,7 +458,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                                 Representa los repartos con <span className="font-bold">7</span> cuadrados. Intenta agruparlos en <span className="font-bold">2 grupos, 3 grupos o 4 grupos</span> iguales.
                             </p>
                             <div className="mt-2 flex items-center gap-4">
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.P_INTRO} title="" videoId="/pag14/vv-2" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.P_INTRO} title="Reparto con cuadrados" videoId="/pag14/vv-2" />
                             </div>
                         </div>
 
@@ -505,7 +505,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                             <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
                                 Se observa que el número <span className="font-bold">7</span> se puede dividir en <span className="font-bold">1</span> ó en sí mismo <span className="font-bold">7</span> partes iguales.
                             </p>
-                            <PlayVideoButton trackingId={VIDEO_TRACKING.P_CONCLUSION} title="" videoId="/pag14/vv-5" />
+                            <PlayVideoButton trackingId={VIDEO_TRACKING.P_CONCLUSION} title="Conclusión sobre el número 7" videoId="/pag14/vv-5" />
                         </div>
                     </div>
                 </div>

@@ -128,7 +128,7 @@ export function ConceptoPictoricoPage({ zoom = 1 }: Props) {
                                 </p>
                                 <div className="mt-4 flex items-center gap-4">
                                     <div className="shrink-0">
-                                        <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOTA} title="" videoId="/pag8/vv-1" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOTA} title="Significado del resto (sobre)" videoId="/pag8/vv-1" />
                                     </div>
                                     <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 border-l-4 border-purple-500 flex-1">
                                         <p className="text-base font-semibold text-gray-700 dark:text-gray-300">
@@ -158,7 +158,7 @@ export function ConceptoPictoricoPage({ zoom = 1 }: Props) {
                                     <p className="text-base font-bold text-gray-700 dark:text-gray-300">
                                         &quot;<span className="text-[#e95352] text-lg">resto 0</span>&quot; significa que no hay resto. ¿Cómo sabemos esto?
                                     </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMO} title="" videoId="/pag8/vv-4" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMO} title="¿Cómo saber si el resto es 0?" videoId="/pag8/vv-4" />
                                 </div>
                                 <div className="flex justify-center my-8 pl-32">
                                     <img

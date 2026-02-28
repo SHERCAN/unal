@@ -125,7 +125,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                     <p className="text-base font-semibold text-gray-800 dark:text-gray-200 leading-relaxed">
                                         Según la actividad anterior, las <span className="font-extrabold text-2xl">17</span> medallas en <span className="font-extrabold text-2xl text-purple-700">3</span> grupos de deportistas,
                                         cada grupo recibe la misma cantidad, pero hay resto <span className="font-bold text-2xl text-[#e95352]">2</span> medallas; estas
-                                        corresponden al resto de la división. <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="" videoId="/pag12/vv-1" />
+                                        corresponden al resto de la división. <PlayVideoButton trackingId={VIDEO_TRACKING.A_INTRO} title="Introducción al resto de la división" videoId="/pag12/vv-1" />
                                     </p>
 
                                 </div>
@@ -151,7 +151,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                             <div>
                                 <div className="flex items-center gap-2 mb-2">
                                     <p className="text-base font-semibold text-gray-800 dark:text-gray-200">Señala &quot;<span className="text-red-500">resto 2</span>&quot; como:</p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMO} title="" videoId="/pag12/vv-3" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_COMO} title="Representación del resto" videoId="/pag12/vv-3" />
                                 </div>
 
                                 <div className="flex justify-center my-8 pl-12">
@@ -177,7 +177,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                             {/* PARTES DE LA DIVISIÓN */}
                             <div className="mt-8 pt-6 border-t-2 border-gray-200 dark:border-gray-700">
                                 <div className="flex items-center justify-center gap-4 mb-6">
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_PARTES} title="" videoId="/pag12/vv-5" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_PARTES} title="Partes de la división inexacta" videoId="/pag12/vv-5" />
                                     <h3 className="text-xl font-black text-gray-900 dark:text-white tracking-wide uppercase">
                                         Partes de la División
                                     </h3>

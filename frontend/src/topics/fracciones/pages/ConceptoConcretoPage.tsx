@@ -207,7 +207,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
                     {/* Play button */}
                     <div className="absolute top-3 left-3 z-20">
-                        <PlayVideoButton trackingId={VIDEO_TRACKING.C_PIZZA} title="" videoId="/pag17/vv-1" />
+                        <PlayVideoButton trackingId={VIDEO_TRACKING.C_PIZZA} title="Reparto de pizza" videoId="/pag17/vv-1" />
                     </div>
 
                     {/* ── ROW 1: 3 MESAS ── */}
@@ -307,7 +307,7 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
                             <p className="text-gray-800 font-semibold dark:text-gray-200 text-base leading-relaxed">
                                 De acuerdo con la actividad anterior, divide el círculo en 8 porciones iguales
                                 utilizando únicamente tres cortes. Luego, retira 3 de esas porciones.
-                                <PlayVideoButton trackingId={VIDEO_TRACKING.P_EXPLAIN} title="" videoId="/pag17/vv-2" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.P_EXPLAIN} title="Cortes en el círculo" videoId="/pag17/vv-2" />
                             </p>
                         </div>
                     </div>

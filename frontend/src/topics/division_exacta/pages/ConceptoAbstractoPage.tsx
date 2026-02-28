@@ -165,7 +165,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                     <p className="text-base font-semibold text-gray-800 dark:text-gray-200">
                                         ¿Qué pasa si alguna división <span className="text-[#e95352] font-bold">NO</span> es exacta? Veamos un ejemplo.
                                     </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOEXACT} title="" videoId="/pag9/vv-1" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOEXACT} title="Ejemplo de división no exacta" videoId="/pag9/vv-1" />
                                 </div>
 
                                 <div className="flex items-center gap-2">
@@ -173,7 +173,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                     <p className="text-base font-semibold text-gray-800 dark:text-gray-200">
                                         La división 14 ÷ 3 <span className="text-[#e95352] font-bold">NO</span> es exacta porque tiene resto.
                                     </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOEXACT2} title="" videoId="/pag9/vv-2" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_NOEXACT2} title="Concepto de resto" videoId="/pag9/vv-2" />
                                 </div>
 
                                 <div className="flex justify-center my-8">

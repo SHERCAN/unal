@@ -77,7 +77,7 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                             <p>
                                 El total de <span className="font-bold text-orange-500" style={{ fontSize: '20px' }}>24</span> naranjas se reparte en <span className="font-bold text-green-600" style={{ fontSize: '20px' }}>4</span> cajas. Entonces, cada caja tiene <span className="font-bold text-purple-600" style={{ fontSize: '20px' }}>6</span> naranjas.
 
-                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.INTRO} title="" videoId="/pag2/vv-1" />
+                                <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.INTRO} title="Reparto de naranjas" videoId="/pag2/vv-1" />
                             </p>
                         </div>
 
