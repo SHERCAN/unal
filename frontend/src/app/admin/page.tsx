@@ -280,8 +280,41 @@ export default function AdminDashboard() {
     const [expandedSubModule, setExpandedSubModule] = useState<string | null>(null);
     const [authToken, setAuthToken] = useState<string | null>(null);
     const [viewMode, setViewMode] = useState<'lessons' | 'sessions'>('lessons');
+    const [allowRegistration, setAllowRegistration] = useState<boolean>(true);
+    const [updatingSetting, setUpdatingSetting] = useState(false);
 
     const groupedModules = selectedUser ? getUserModules(selectedUser) : [];
+
+    const fetchSettings = useCallback(async () => {
+        try {
+            const res = await fetch('/api/settings/allow_registration');
+            if (res.ok) {
+                const data = await res.json();
+                setAllowRegistration(data.value === 'true');
+            }
+        } catch (err) {
+            console.error('Error fetching settings:', err);
+        }
+    }, []);
+
+    const toggleRegistration = async () => {
+        setUpdatingSetting(true);
+        try {
+            const newValue = !allowRegistration;
+            const res = await fetch('/api/settings/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ key: 'allow_registration', value: newValue.toString() })
+            });
+            if (res.ok) {
+                setAllowRegistration(newValue);
+            }
+        } catch (err) {
+            console.error('Error updating setting:', err);
+        } finally {
+            setUpdatingSetting(false);
+        }
+    };
 
     const fetchUsers = useCallback(async () => {
         const token = localStorage.getItem('token');
@@ -315,6 +348,10 @@ export default function AdminDashboard() {
             setLoading(false);
         }
     }, []);
+
+    useEffect(() => {
+        fetchSettings();
+    }, [fetchSettings]);
 
     useEffect(() => {
         const userStr = localStorage.getItem('user');
@@ -386,17 +423,31 @@ export default function AdminDashboard() {
             <div className="max-w-7xl mx-auto space-y-8">
                 <div className="flex items-center justify-between">
                     <h1 className="text-4xl font-bold text-primary">Panel de Administrador</h1>
-                    <button
-                        onClick={() => {
-                            localStorage.removeItem('token');
-                            localStorage.removeItem('sessionId');
-                            localStorage.removeItem('user');
-                            router.push('/login');
-                        }}
-                        className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl transition-colors font-bold shadow"
-                    >
-                        Cerrar Sesión
-                    </button>
+                    <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2 bg-background-secondary p-2 px-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                            <span className="text-sm font-bold text-text-secondary">Permitir nuevos registros:</span>
+                            <button
+                                onClick={toggleRegistration}
+                                disabled={updatingSetting}
+                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${allowRegistration ? 'bg-primary' : 'bg-gray-300'} ${updatingSetting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                            >
+                                <span
+                                    className={`${allowRegistration ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                                />
+                            </button>
+                        </div>
+                        <button
+                            onClick={() => {
+                                localStorage.removeItem('token');
+                                localStorage.removeItem('sessionId');
+                                localStorage.removeItem('user');
+                                router.push('/login');
+                            }}
+                            className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl transition-colors font-bold shadow"
+                        >
+                            Cerrar Sesión
+                        </button>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

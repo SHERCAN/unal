@@ -65,7 +65,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/ratings', ratingRoutes);
 import adminRoutes from './routes/admin.routes';
+import settingsRoutes from './routes/settings.routes';
 app.use('/api/admin', adminRoutes);
+app.use('/api/settings', settingsRoutes);
 
 // Video streaming endpoint with improved error handling
 app.get('/api/videos/:filename', (req, res) => {

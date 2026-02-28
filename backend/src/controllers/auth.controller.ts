@@ -9,6 +9,14 @@ export const register = async (req: Request, res: Response) => {
   try {
     const { nickname, password, nombre, edad, grado, avatar, photoUrl } = req.body;
 
+    const allowRegistration = await prisma.systemSetting.findUnique({
+      where: { key: 'allow_registration' }
+    });
+
+    if (allowRegistration && allowRegistration.value === 'false') {
+      return res.status(403).json({ error: 'El registro de nuevos usuarios está desactivado temporalmente.' });
+    }
+
     const existingUser = await prisma.user.findUnique({ where: { nickname } });
     if (existingUser) {
       return res.status(400).json({ error: 'El nickname ya está en uso' });
