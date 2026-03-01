@@ -5,10 +5,11 @@ interface IndexPageProps {
     topics: TopicConfig[];
     onNavigate: (pageIndex: number) => void;
     zoom?: number;
+    startPageIndex?: number;
 }
 
-export function IndexPage({ topics, onNavigate, zoom = 1 }: IndexPageProps) {
-    let globalPageIndex = 1; // Index 0 is THIS page (IndexPage), so first content page is 1.
+export function IndexPage({ topics, onNavigate, zoom = 1, startPageIndex = 1 }: IndexPageProps) {
+    let globalPageIndex = startPageIndex; // Use provided startPageIndex or default to 1
 
     return (
         <div

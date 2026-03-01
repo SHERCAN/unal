@@ -251,8 +251,17 @@ export default function DashboardPage() {
 
   // Determine current topic based on page index
   const currentTopicInfo = React.useMemo(() => {
-    if (currentPage === 0) return { topic: { name: 'Índice de Contenidos' }, relativePage: 0 };
-    let offset = 1;
+    // Handling of the first 4 special pages (indices 0, 1, 2, 3)
+    if (currentPage < 3) return {
+      topic: { id: 'shared', name: '', pages: [], exercisePages: [] },
+      relativePage: 0
+    };
+    if (currentPage === 3) return {
+      topic: { id: 'shared', name: 'Índice de Contenidos', pages: [], exercisePages: [] },
+      relativePage: 0
+    };
+
+    let offset = 4; // Topics start at index 4
     for (const topic of ORDERED_TOPICS) {
       const count = topic.pages.length + topic.exercisePages.length;
       if (currentPage < offset + count) {
@@ -505,7 +514,11 @@ export default function DashboardPage() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <span>{user?.avatar || '👤'}</span>
+                    user?.avatar?.startsWith('/') ? (
+                      <img src={user.avatar} alt={user.nombre} className="w-full h-full object-cover" />
+                    ) : (
+                      <span>{user?.avatar || '👤'}</span>
+                    )
                   )}
                 </div>
               </div>
@@ -636,7 +649,13 @@ export default function DashboardPage() {
                     <span className="w-8 h-8 flex items-center justify-center font-black text-3xl text-[#7e22ce]">
                       {index + 1}
                     </span>
-                    <span className="text-4xl filter drop-shadow-sm">{rankUser.avatar}</span>
+                    {rankUser.avatar?.startsWith('/') ? (
+                      <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                        <img src={rankUser.avatar} alt={rankUser.nombre} className="w-full h-full object-cover" />
+                      </div>
+                    ) : (
+                      <span className="text-4xl filter drop-shadow-sm">{rankUser.avatar}</span>
+                    )}
                     <div className="flex-1 min-w-0">
                       <p className="text-xl font-black text-[#1f2937] truncate tracking-tight">{rankUser.nombre}</p>
                     </div>
@@ -772,10 +791,10 @@ function InfiniteBookWrapper({
     }
   }, []);
 
-  const totalPagesInBook = topics.reduce((acc, t) => acc + t.pages.length + t.exercisePages.length, 0);
+  const totalPagesInBook = topics.reduce((acc, t) => acc + t.pages.length + t.exercisePages.length, 0) + 3;
 
   const goToNextTopic = useCallback(() => {
-    let offset = 1;
+    let offset = 4;
     for (let i = 0; i < topics.length; i++) {
       const topic = topics[i];
       const count = topic.pages.length + topic.exercisePages.length;
@@ -795,8 +814,8 @@ function InfiniteBookWrapper({
 
   const goToPrevTopic = useCallback(() => {
     if (currentPage === 0) return;
-    let offset = 1;
-    let prevOffset = 0; // Index page
+    let offset = 4;
+    let prevOffset = 3; // Index page
     for (let i = 0; i < topics.length; i++) {
       const topic = topics[i];
       const count = topic.pages.length + topic.exercisePages.length;
@@ -859,7 +878,7 @@ function InfiniteBookWrapper({
             onPageChange={(relativePage) => {
               // Convert relative page back to global page
               if (!currentTopicInfo) return;
-              let globalOffset = 1;
+              let globalOffset = 4;
               for (const t of topics) {
                 if (t.id === currentTopicInfo.topic.id) {
                   handleNavigateToPage(globalOffset + relativePage - 1);

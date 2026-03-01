@@ -58,7 +58,11 @@ export function UserProfile({ user, ranking, onBack }: UserProfileProps) {
                                     {user.photoUrl ? (
                                         <img src={user.photoUrl} alt={user.nombre} className="w-full h-full object-cover" />
                                     ) : (
-                                        <span>{user.avatar}</span>
+                                        user.avatar?.startsWith('/') ? (
+                                            <img src={user.avatar} alt={user.nombre} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <span>{user.avatar}</span>
+                                        )
                                     )}
                                 </div>
                             </div>
@@ -191,7 +195,13 @@ export function UserProfile({ user, ranking, onBack }: UserProfileProps) {
                                         <span className="w-8 h-8 flex items-center justify-center font-black text-2xl">
                                             {index + 1}
                                         </span>
-                                        <span className="text-3xl">{rankUser.avatar}</span>
+                                        {rankUser.avatar?.startsWith('/') ? (
+                                            <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                                                <img src={rankUser.avatar} alt={rankUser.nombre} className="w-full h-full object-cover" />
+                                            </div>
+                                        ) : (
+                                            <span className="text-3xl">{rankUser.avatar}</span>
+                                        )}
                                         <div className="flex-1 min-w-0">
                                             <p className={`font-black text-lg truncate ${rankUser.nickname === user.nickname ? 'text-white' : 'text-[#7e22ce]'
                                                 }`}>

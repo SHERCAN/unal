@@ -13,9 +13,10 @@ interface BookPageContainerProps {
     zoom: number; // Zoom controlled by parent
     moduleHeader?: ModuleHeader; // Optional module header
     pageId?: string; // Unique identifier for the page (for ratings)
+    showRating?: boolean; // Whether to show the rating widget
 }
 
-export const BookPageContainer: React.FC<BookPageContainerProps> = ({ children, className = '', zoom, moduleHeader, pageId }) => {
+export const BookPageContainer: React.FC<BookPageContainerProps> = ({ children, className = '', zoom, moduleHeader, pageId, showRating = true }) => {
     return (
         <div className="relative w-full flex flex-col items-center py-8">
             {/* A4 Page Container */}
@@ -69,7 +70,7 @@ export const BookPageContainer: React.FC<BookPageContainerProps> = ({ children, 
                 <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-gray-200/50 dark:from-black/40 to-transparent pointer-events-none" />
 
                 {/* Rating Widget */}
-                {(() => {
+                {showRating && (() => {
                     // Use BookContext if available to generate a standardized pageId
                     const bookContext = useBookContext();
                     const finalPageId = bookContext

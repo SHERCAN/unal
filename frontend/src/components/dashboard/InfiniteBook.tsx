@@ -4,6 +4,9 @@ import React from 'react';
 import { TopicConfig } from '@/types/topic';
 import { IndexPage } from './IndexPage';
 import { BookProvider } from '@/contexts/BookContext';
+import { CoverPage } from '../book-pages/shared/CoverPage';
+import { SinopsisPage } from '../book-pages/shared/SinopsisPage';
+import { ExplicacionPage } from '../book-pages/shared/ExplicacionPage';
 
 interface InfiniteBookProps {
     topics: TopicConfig[];
@@ -13,7 +16,7 @@ interface InfiniteBookProps {
 
 export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: InfiniteBookProps) {
     const [globalZoom, setGlobalZoom] = useState(1);
-    const [currentPage, setCurrentPage] = useState(0); // 0 is Index
+    const [currentPage, setCurrentPage] = useState(0); // 0 is Portada
     const [completedPages, setCompletedPages] = useState<number[]>([]);
     const pageRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -87,13 +90,34 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
         }
     }, [onNavigationRequest, navigateToPage]);
 
-    // Combine index + all lesson pages and exercise pages from all topics
+    // Combine special pages + index + all lesson pages and exercise pages from all topics
     const allPages = [
+        {
+            id: 'portada',
+            topicId: 'shared',
+            component: ({ zoom }: { zoom?: number }) => (
+                <CoverPage zoom={zoom} />
+            )
+        },
+        {
+            id: 'sinopsis',
+            topicId: 'shared',
+            component: ({ zoom }: { zoom?: number }) => (
+                <SinopsisPage zoom={zoom} />
+            )
+        },
+        {
+            id: 'explicacion',
+            topicId: 'shared',
+            component: ({ zoom }: { zoom?: number }) => (
+                <ExplicacionPage zoom={zoom} />
+            )
+        },
         {
             id: 'index-page',
             topicId: 'shared',
             component: ({ zoom }: { zoom?: number }) => (
-                <IndexPage topics={topics} onNavigate={navigateToPage} zoom={zoom} />
+                <IndexPage topics={topics} onNavigate={navigateToPage} zoom={zoom} startPageIndex={4} />
             )
         },
         ...topics.flatMap(topic => [

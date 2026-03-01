@@ -264,7 +264,7 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                 </p>
                             </div>
 
-                            <div className={`flex flex-wrap items-start gap-8 sm:gap-16 pl-4 md:pl-12 ${ex1Status === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
+                            <div className={`flex flex-wrap items-center justify-center gap-8 sm:gap-16 ${ex1Status === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
 
                                 {/* Interactive Division */}
                                 <div className="relative pt-8">

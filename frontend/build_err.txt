@@ -1,7 +1,0 @@
-﻿
-> math-learning-frontend@1.0.1 build C:\Users\Yesid Farfan\Documents\Proyectos\Externos\unal\frontend
-> next build
-
-   Γû▓ Next.js 14.0.4
-
-   Creating an optimized production build ...

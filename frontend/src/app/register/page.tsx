@@ -8,20 +8,36 @@ import AvatarSelector from '@/components/AvatarSelector';
 
 export const dynamic = 'force-dynamic';
 
-// Avatares de personajes históricos famosos
+// Avatares de la carpeta public/avatars
 const AVATARS = [
-  { emoji: '👨‍🔬', name: 'Einstein', color: 'bg-gradient-to-br from-purple-300 to-purple-400' },
-  { emoji: '🧙‍♂️', name: 'Mago Matemático', color: 'bg-gradient-to-br from-blue-300 to-blue-400' },
-  { emoji: '🤴', name: 'Rey Sabio', color: 'bg-gradient-to-br from-yellow-300 to-yellow-400' },
-  { emoji: '👸', name: 'Reina Científica', color: 'bg-gradient-to-br from-pink-300 to-pink-400' },
-  { emoji: '🧔', name: 'Pitágoras', color: 'bg-gradient-to-br from-green-300 to-green-400' },
-  { emoji: '👨‍🎓', name: 'Arquímedes', color: 'bg-gradient-to-br from-indigo-300 to-indigo-400' },
-  { emoji: '👩‍🔬', name: 'Marie Curie', color: 'bg-gradient-to-br from-red-300 to-red-400' },
-  { emoji: '🧑‍🚀', name: 'Astronauta', color: 'bg-gradient-to-br from-cyan-300 to-cyan-400' },
-  { emoji: '🥷', name: 'Ninja Matemático', color: 'bg-gradient-to-br from-gray-400 to-gray-500' },
-  { emoji: '🤠', name: 'Explorador', color: 'bg-gradient-to-br from-orange-300 to-orange-400' },
-  { emoji: '👨‍🏫', name: 'Maestro', color: 'bg-gradient-to-br from-teal-300 to-teal-400' },
-  { emoji: '👩‍💻', name: 'Programadora', color: 'bg-gradient-to-br from-violet-300 to-violet-400' },
+  { emoji: '/avatars/avatar1-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar2-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar3-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar4-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar5-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar6-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar7-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar8-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar9-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar10-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar11-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar12-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar13-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar14-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar15-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar16-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar17-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar18-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar19-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar20-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar21-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar22-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar23-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar24-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar25-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar26-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar27-Photoroom.png', name: '', color: 'bg-white' },
+  { emoji: '/avatars/avatar28-Photoroom.png', name: '', color: 'bg-white' },
 ];
 
 const GRADOS = [

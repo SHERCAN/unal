@@ -34,3 +34,7 @@ dist/
 
 # Docker volumes (optional, if you map them locally)
 postgres_data/
+
+# Guide and Obsolete project files
+guiaObsoleta/
+

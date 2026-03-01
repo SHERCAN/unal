@@ -63,12 +63,16 @@ export default function AvatarSelector({
                 />
               </div>
             ) : (
-              <div className="w-32 h-32 md:w-48 md:h-48 rounded-full text-5xl md:text-9xl flex items-center justify-center transition-all shadow-2xl ring-4 md:ring-8 ring-primary border-2 md:border-4 border-white bg-gradient-to-br from-primary to-primary-dark">
-                {selectedAvatar}
+              <div className="w-32 h-32 md:w-48 md:h-48 rounded-full flex items-center justify-center transition-all shadow-2xl ring-4 md:ring-8 ring-primary border-2 md:border-4 border-white bg-gradient-to-br from-primary to-primary-dark overflow-hidden">
+                {selectedAvatar.startsWith('/') ? (
+                  <img src={selectedAvatar} alt="Avatar" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-5xl md:text-9xl">{selectedAvatar}</span>
+                )}
               </div>
             )}
             <h2 className="text-xl md:text-3xl font-bold text-primary text-center">
-              {uploadedImage ? 'Tu Foto' : selectedAvatarData?.name}
+              {uploadedImage ? 'Tu Foto' : ''}
             </h2>
             <p className="text-base md:text-lg text-text-secondary text-center">
               {uploadedImage ? '¡Tu foto ha sido seleccionada!' : '¡Excelente selección!'}
@@ -97,7 +101,7 @@ export default function AvatarSelector({
                   <div className="absolute top-16 left-24 text-2xl text-blue-400 font-bold -rotate-6">
                     3.14159...
                   </div>
-                  
+
                   {/* Esquina superior derecha */}
                   <div className="absolute top-8 right-16 text-3xl text-blue-500 font-bold -rotate-12 animate-float-slow">
                     E=mc²
@@ -105,7 +109,7 @@ export default function AvatarSelector({
                   <div className="absolute top-24 right-8 text-4xl text-indigo-500 font-bold rotate-6">
                     ∫
                   </div>
-                  
+
                   {/* Esquina inferior izquierda */}
                   <div className="absolute bottom-24 left-12 text-5xl text-pink-500 font-bold rotate-6 animate-float-slow">
                     ∑
@@ -113,7 +117,7 @@ export default function AvatarSelector({
                   <div className="absolute bottom-12 left-28 text-3xl text-red-400 font-bold -rotate-12">
                     Σ(1→n)
                   </div>
-                  
+
                   {/* Esquina inferior derecha */}
                   <div className="absolute bottom-28 right-16 text-4xl text-green-500 font-bold -rotate-12 animate-float-slow">
                     √
@@ -121,7 +125,7 @@ export default function AvatarSelector({
                   <div className="absolute bottom-16 right-32 text-2xl text-teal-400 font-bold rotate-6">
                     √(x²+y²)
                   </div>
-                  
+
                   {/* Centro izquierda */}
                   <div className="absolute top-1/3 left-6 text-4xl text-orange-500 font-bold rotate-45 animate-float-slow">
                     ∞
@@ -129,7 +133,7 @@ export default function AvatarSelector({
                   <div className="absolute top-1/2 left-12 text-2xl text-yellow-500 font-bold -rotate-12">
                     lim x→∞
                   </div>
-                  
+
                   {/* Centro derecha */}
                   <div className="absolute top-1/3 right-12 text-3xl text-cyan-500 font-bold -rotate-12 animate-float-slow">
                     a²+b²=c²
@@ -137,12 +141,12 @@ export default function AvatarSelector({
                   <div className="absolute top-1/2 right-6 text-4xl text-violet-500 font-bold rotate-12">
                     θ
                   </div>
-                  
+
                   {/* Centro superior */}
                   <div className="absolute top-20 left-1/2 -translate-x-1/2 text-2xl text-amber-500 font-bold -rotate-6">
                     y=mx+b
                   </div>
-                  
+
                   {/* Centro inferior */}
                   <div className="absolute bottom-20 left-1/2 -translate-x-1/2 text-3xl text-rose-500 font-bold rotate-6">
                     ∂f/∂x
@@ -150,20 +154,19 @@ export default function AvatarSelector({
                 </div>
 
                 <h3 className="text-xl md:text-2xl font-bold text-primary text-center mb-6 md:mb-8 relative z-10">
-                  🎭 Elige tu personaje histórico
+                  🎭 Elige tu personaje
                 </h3>
-                
+
                 <div className="grid grid-cols-3 md:grid-cols-4 gap-3 md:gap-6 max-h-[500px] overflow-y-auto pr-2 md:pr-4 custom-scrollbar relative z-10">
                   {/* Botón de subir imagen en el modal */}
                   <div className="flex flex-col items-center gap-2 md:gap-3">
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className={`w-16 h-16 md:w-24 md:h-24 rounded-full flex flex-col items-center justify-center transition-all border-2 md:border-4 shadow-lg hover:scale-110 text-sm md:text-base ${
-                        uploadedImage
+                      className={`w-16 h-16 md:w-24 md:h-24 rounded-full flex flex-col items-center justify-center transition-all border-2 md:border-4 shadow-lg hover:scale-110 text-sm md:text-base ${uploadedImage
                           ? 'bg-primary ring-2 md:ring-4 ring-primary-light border-white'
                           : 'bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 border-white'
-                      }`}
+                        }`}
                     >
                       {uploadedImage ? (
                         <img
@@ -194,17 +197,17 @@ export default function AvatarSelector({
                           onSelectAvatar(avatar.emoji);
                           setIsExpanded(false);
                         }}
-                        className={`w-16 h-16 md:w-24 md:h-24 rounded-full text-3xl md:text-5xl flex items-center justify-center transition-all transform hover:scale-110 shadow-lg border-2 md:border-4 border-white ${
-                          selectedAvatar === avatar.emoji && !uploadedImage
+                        className={`w-16 h-16 md:w-24 md:h-24 rounded-full flex items-center justify-center transition-all transform hover:scale-110 shadow-lg border-2 md:border-4 border-white overflow-hidden ${selectedAvatar === avatar.emoji && !uploadedImage
                             ? 'ring-2 md:ring-4 ring-primary'
                             : `${avatar.color} hover:shadow-xl`
-                        }`}
+                          }`}
                       >
-                        {avatar.emoji}
+                        {avatar.emoji.startsWith('/') ? (
+                          <img src={avatar.emoji} alt="Avatar" className="w-full h-full object-cover" />
+                        ) : (
+                          <span className="text-3xl md:text-5xl">{avatar.emoji}</span>
+                        )}
                       </button>
-                      <span className="text-xs md:text-sm text-text-secondary font-medium text-center leading-tight">
-                        {avatar.name}
-                      </span>
                     </div>
                   ))}
                 </div>
@@ -226,7 +229,7 @@ export default function AvatarSelector({
   // Si no hay selección, mostrar los primeros 3 avatares
   return (
     <div className="flex justify-center items-center min-h-[200px] md:min-h-[250px] py-4 md:py-8 px-2">
-      <div 
+      <div
         className="relative w-full"
         onMouseEnter={() => setIsExpanded(true)}
         onMouseLeave={() => setIsExpanded(false)}
@@ -237,11 +240,10 @@ export default function AvatarSelector({
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className={`flex-shrink-0 w-16 h-16 md:w-24 md:h-24 rounded-full flex flex-col items-center justify-center transition-all border-2 md:border-4 shadow-xl hover:scale-110 text-xs md:text-sm ${
-              uploadedImage
+            className={`flex-shrink-0 w-16 h-16 md:w-24 md:h-24 rounded-full flex flex-col items-center justify-center transition-all border-2 md:border-4 shadow-xl hover:scale-110 text-xs md:text-sm ${uploadedImage
                 ? 'bg-primary ring-2 md:ring-4 ring-primary-light border-white'
                 : 'bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 border-white'
-            }`}
+              }`}
           >
             {uploadedImage ? (
               <img
@@ -272,14 +274,16 @@ export default function AvatarSelector({
               key={index}
               type="button"
               onClick={() => onSelectAvatar(avatar.emoji)}
-              className={`flex-shrink-0 w-16 h-16 md:w-24 md:h-24 rounded-full text-3xl md:text-5xl flex items-center justify-center transition-all transform hover:scale-110 shadow-xl border-2 md:border-4 border-white ${
-                selectedAvatar === avatar.emoji && !uploadedImage
+              className={`flex-shrink-0 w-16 h-16 md:w-24 md:h-24 rounded-full flex items-center justify-center transition-all transform hover:scale-110 shadow-xl border-2 md:border-4 border-white overflow-hidden ${selectedAvatar === avatar.emoji && !uploadedImage
                   ? 'ring-2 md:ring-4 ring-primary'
                   : `${avatar.color} hover:shadow-2xl`
-              }`}
-              title={avatar.name}
+                }`}
             >
-              {avatar.emoji}
+              {avatar.emoji.startsWith('/') ? (
+                <img src={avatar.emoji} alt="Avatar" className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-3xl md:text-5xl">{avatar.emoji}</span>
+              )}
             </button>
           ))}
         </div>
@@ -297,7 +301,7 @@ export default function AvatarSelector({
                 <div className="absolute top-16 left-24 text-2xl text-blue-400 font-bold -rotate-6">
                   3.14159...
                 </div>
-                
+
                 {/* Esquina superior derecha */}
                 <div className="absolute top-8 right-16 text-3xl text-blue-500 font-bold -rotate-12 animate-float-slow">
                   E=mc²
@@ -305,7 +309,7 @@ export default function AvatarSelector({
                 <div className="absolute top-24 right-8 text-4xl text-indigo-500 font-bold rotate-6">
                   ∫
                 </div>
-                
+
                 {/* Esquina inferior izquierda */}
                 <div className="absolute bottom-24 left-12 text-5xl text-pink-500 font-bold rotate-6 animate-float-slow">
                   ∑
@@ -313,7 +317,7 @@ export default function AvatarSelector({
                 <div className="absolute bottom-12 left-28 text-3xl text-red-400 font-bold -rotate-12">
                   Σ(1→n)
                 </div>
-                
+
                 {/* Esquina inferior derecha */}
                 <div className="absolute bottom-28 right-16 text-4xl text-green-500 font-bold -rotate-12 animate-float-slow">
                   √
@@ -321,7 +325,7 @@ export default function AvatarSelector({
                 <div className="absolute bottom-16 right-32 text-2xl text-teal-400 font-bold rotate-6">
                   √(x²+y²)
                 </div>
-                
+
                 {/* Centro izquierda */}
                 <div className="absolute top-1/3 left-6 text-4xl text-orange-500 font-bold rotate-45 animate-float-slow">
                   ∞
@@ -329,7 +333,7 @@ export default function AvatarSelector({
                 <div className="absolute top-1/2 left-12 text-2xl text-yellow-500 font-bold -rotate-12">
                   lim x→∞
                 </div>
-                
+
                 {/* Centro derecha */}
                 <div className="absolute top-1/3 right-12 text-3xl text-cyan-500 font-bold -rotate-12 animate-float-slow">
                   a²+b²=c²
@@ -337,80 +341,79 @@ export default function AvatarSelector({
                 <div className="absolute top-1/2 right-6 text-4xl text-violet-500 font-bold rotate-12">
                   θ
                 </div>
-                
+
                 {/* Centro superior */}
                 <div className="absolute top-20 left-1/2 -translate-x-1/2 text-2xl text-amber-500 font-bold -rotate-6">
                   y=mx+b
                 </div>
-                
+
                 {/* Centro inferior */}
                 <div className="absolute bottom-20 left-1/2 -translate-x-1/2 text-3xl text-rose-500 font-bold rotate-6">
                   ∂f/∂x
                 </div>
-                
+
                 {/* Gráfica parabólica - Superior derecha */}
                 <svg className="absolute top-12 right-1/4 w-28 h-28 text-indigo-400 opacity-60" viewBox="0 0 100 100">
-                  <path d="M 10 90 Q 30 10, 50 50 T 90 10" stroke="currentColor" strokeWidth="2.5" fill="none"/>
-                  <circle cx="10" cy="90" r="3" fill="currentColor"/>
-                  <circle cx="50" cy="50" r="3" fill="currentColor"/>
-                  <circle cx="90" cy="10" r="3" fill="currentColor"/>
+                  <path d="M 10 90 Q 30 10, 50 50 T 90 10" stroke="currentColor" strokeWidth="2.5" fill="none" />
+                  <circle cx="10" cy="90" r="3" fill="currentColor" />
+                  <circle cx="50" cy="50" r="3" fill="currentColor" />
+                  <circle cx="90" cy="10" r="3" fill="currentColor" />
                   {/* Ejes */}
-                  <line x1="5" y1="95" x2="95" y2="95" stroke="currentColor" strokeWidth="1" opacity="0.5"/>
-                  <line x1="5" y1="5" x2="5" y2="95" stroke="currentColor" strokeWidth="1" opacity="0.5"/>
+                  <line x1="5" y1="95" x2="95" y2="95" stroke="currentColor" strokeWidth="1" opacity="0.5" />
+                  <line x1="5" y1="5" x2="5" y2="95" stroke="currentColor" strokeWidth="1" opacity="0.5" />
                 </svg>
-                
+
                 {/* Gráfica lineal - Inferior izquierda */}
                 <svg className="absolute bottom-20 left-1/4 w-24 h-24 text-red-400 opacity-60" viewBox="0 0 100 100">
-                  <line x1="10" y1="90" x2="90" y2="10" stroke="currentColor" strokeWidth="2.5"/>
-                  <circle cx="10" cy="90" r="3" fill="currentColor"/>
-                  <circle cx="90" cy="10" r="3" fill="currentColor"/>
+                  <line x1="10" y1="90" x2="90" y2="10" stroke="currentColor" strokeWidth="2.5" />
+                  <circle cx="10" cy="90" r="3" fill="currentColor" />
+                  <circle cx="90" cy="10" r="3" fill="currentColor" />
                   {/* Ejes */}
-                  <line x1="5" y1="95" x2="95" y2="95" stroke="currentColor" strokeWidth="1" opacity="0.5"/>
-                  <line x1="5" y1="5" x2="5" y2="95" stroke="currentColor" strokeWidth="1" opacity="0.5"/>
+                  <line x1="5" y1="95" x2="95" y2="95" stroke="currentColor" strokeWidth="1" opacity="0.5" />
+                  <line x1="5" y1="5" x2="5" y2="95" stroke="currentColor" strokeWidth="1" opacity="0.5" />
                 </svg>
-                
+
                 {/* Triángulo de Pitágoras - Superior izquierda */}
                 <svg className="absolute top-1/4 left-1/4 w-20 h-20 text-teal-400 opacity-50" viewBox="0 0 100 100">
-                  <polygon points="10,90 10,30 70,90" stroke="currentColor" strokeWidth="2.5" fill="none"/>
+                  <polygon points="10,90 10,30 70,90" stroke="currentColor" strokeWidth="2.5" fill="none" />
                   <text x="15" y="60" fontSize="12" fill="currentColor">a</text>
                   <text x="35" y="95" fontSize="12" fill="currentColor">b</text>
                   <text x="40" y="65" fontSize="12" fill="currentColor">c</text>
                 </svg>
-                
+
                 {/* Círculo unitario - Inferior derecha */}
                 <svg className="absolute bottom-1/4 right-1/4 w-24 h-24 text-violet-400 opacity-50" viewBox="0 0 100 100">
-                  <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="2" fill="none"/>
-                  <line x1="10" y1="50" x2="90" y2="50" stroke="currentColor" strokeWidth="1.5"/>
-                  <line x1="50" y1="10" x2="50" y2="90" stroke="currentColor" strokeWidth="1.5"/>
-                  <line x1="50" y1="50" x2="78" y2="28" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2,2"/>
-                  <circle cx="78" cy="28" r="2" fill="currentColor"/>
+                  <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="2" fill="none" />
+                  <line x1="10" y1="50" x2="90" y2="50" stroke="currentColor" strokeWidth="1.5" />
+                  <line x1="50" y1="10" x2="50" y2="90" stroke="currentColor" strokeWidth="1.5" />
+                  <line x1="50" y1="50" x2="78" y2="28" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2,2" />
+                  <circle cx="78" cy="28" r="2" fill="currentColor" />
                 </svg>
-                
+
                 {/* Gráfica de barras - Centro */}
                 <svg className="absolute top-1/2 left-1/3 w-20 h-20 text-emerald-400 opacity-50" viewBox="0 0 100 100">
-                  <rect x="10" y="60" width="15" height="30" fill="currentColor"/>
-                  <rect x="30" y="40" width="15" height="50" fill="currentColor"/>
-                  <rect x="50" y="50" width="15" height="40" fill="currentColor"/>
-                  <rect x="70" y="30" width="15" height="60" fill="currentColor"/>
-                  <line x1="5" y1="90" x2="95" y2="90" stroke="currentColor" strokeWidth="1.5"/>
+                  <rect x="10" y="60" width="15" height="30" fill="currentColor" />
+                  <rect x="30" y="40" width="15" height="50" fill="currentColor" />
+                  <rect x="50" y="50" width="15" height="40" fill="currentColor" />
+                  <rect x="70" y="30" width="15" height="60" fill="currentColor" />
+                  <line x1="5" y1="90" x2="95" y2="90" stroke="currentColor" strokeWidth="1.5" />
                 </svg>
               </div>
 
               <h3 className="text-2xl font-bold text-primary text-center mb-8 relative z-10">
-                🎭 Elige tu personaje histórico
+                🎭 Elige tu personaje
               </h3>
-              
+
               <div className="grid grid-cols-4 gap-6 max-h-[500px] overflow-y-auto pr-4 custom-scrollbar relative z-10">
                 {/* Botón de subir imagen en el modal */}
                 <div className="flex flex-col items-center gap-3">
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className={`w-24 h-24 rounded-full flex flex-col items-center justify-center transition-all border-4 shadow-lg hover:scale-110 ${
-                      uploadedImage
+                    className={`w-24 h-24 rounded-full flex flex-col items-center justify-center transition-all border-4 shadow-lg hover:scale-110 ${uploadedImage
                         ? 'bg-primary ring-4 ring-primary-light border-white'
                         : 'bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 border-white'
-                    }`}
+                      }`}
                   >
                     {uploadedImage ? (
                       <img
@@ -441,17 +444,17 @@ export default function AvatarSelector({
                         onSelectAvatar(avatar.emoji);
                         setIsExpanded(false);
                       }}
-                      className={`w-24 h-24 rounded-full text-5xl flex items-center justify-center transition-all transform hover:scale-110 shadow-lg ${
-                        selectedAvatar === avatar.emoji && !uploadedImage
+                      className={`w-24 h-24 rounded-full flex items-center justify-center transition-all transform hover:scale-110 shadow-lg overflow-hidden ${selectedAvatar === avatar.emoji && !uploadedImage
                           ? 'ring-4 ring-primary border-4 border-white'
                           : `${avatar.color} border-4 border-white hover:shadow-xl`
-                      }`}
+                        }`}
                     >
-                      {avatar.emoji}
+                      {avatar.emoji.startsWith('/') ? (
+                        <img src={avatar.emoji} alt="Avatar" className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-5xl">{avatar.emoji}</span>
+                      )}
                     </button>
-                    <span className="text-sm text-text-secondary font-medium text-center leading-tight">
-                      {avatar.name}
-                    </span>
                   </div>
                 ))}
               </div>
