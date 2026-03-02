@@ -207,22 +207,22 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                         </div>
 
                         {/* PRÁCTICA */}
-                        <div className="space-y-12 mt-12 pb-8">
+                        <div className="space-y-12 mt-12 pb-32">
                             <div className="bg-[#800000] text-white font-bold px-6 py-1.5 rounded-sm w-fit text-lg shadow-md tracking-wider">
                                 PRÁCTICA
                             </div>
 
                             {/* Row 1 - Exercise 1 */}
-                            <div className="flex items-start gap-6">
-                                {/* Fixed width container for left side to align arrows */}
-                                <div className="flex items-center gap-4 min-w-[340px]">
+                            <div className="flex items-start gap-4">
+                                {/* Left side showing the fractions */}
+                                <div className="flex items-center gap-2 w-[240px] shrink-0">
                                     <div className="w-4 h-4 bg-[#800000] flex-shrink-0" />
-                                    <div className="flex items-center font-black gap-4 justify-center flex-1">
+                                    <div className="flex items-center font-black gap-2 justify-center flex-1">
                                         <Fraction num="3" den="5" color="text-gray-800" size="text-2xl" />
                                         <span className="text-2xl font-black text-gray-300">=</span>
                                         <Fraction num="12" den="20" color="text-gray-800" size="text-2xl" />
                                     </div>
-                                    <span className="text-2xl text-gray-300 w-12 text-center">→</span>
+                                    <span className="text-2xl text-gray-300 w-8 text-center">→</span>
                                 </div>
 
                                 {/* Right Side - Inputs Part */}
@@ -263,16 +263,16 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                             </div>
 
                             {/* Row 2 - Exercise 2 */}
-                            <div className="flex items-start gap-6">
-                                {/* Fixed width container for left side to align arrows */}
-                                <div className="flex items-center gap-4 min-w-[340px]">
+                            <div className="flex items-start gap-4">
+                                {/* Left side showing the fractions */}
+                                <div className="flex items-center gap-2 w-[240px] shrink-0">
                                     <div className="w-4 h-4 bg-[#800000] flex-shrink-0" />
-                                    <div className="flex items-center font-black gap-4 justify-center flex-1">
+                                    <div className="flex items-center font-black gap-2 justify-center flex-1">
                                         <Fraction num="6" den="10" color="text-gray-800" size="text-2xl" />
                                         <span className="text-2xl font-black text-gray-300">=</span>
                                         <Fraction num="12" den="20" color="text-gray-800" size="text-2xl" />
                                     </div>
-                                    <span className="text-2xl text-gray-300 w-12 text-center">→</span>
+                                    <span className="text-2xl text-gray-300 w-8 text-center">→</span>
                                 </div>
 
                                 {/* Right Side - Inputs Part */}

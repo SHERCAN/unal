@@ -39,6 +39,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
     const [amp2Ans, setAmp2Ans] = useState({ n: '', d: '' });
     const [amp1Result, setAmp1Result] = useState<'correct' | 'incorrect' | null>(null);
     const [amp2Result, setAmp2Result] = useState<'correct' | 'incorrect' | null>(null);
+    const [showHelp, setShowHelp] = useState(false);
 
     // Initial load and auto-checking
     useEffect(() => {
@@ -159,8 +160,31 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                     </p>
                                 </div>
 
-                                <div className="flex justify-center my-8 pl-8">
-                                    <img src="/fracciones_equivalentes/img1.png" alt="Ejemplo Simplificación" className="h-20 object-containshadow-md" />
+                                <div className="flex justify-center my-8 pl-8 items-center gap-4 relative">
+                                    <img src="/fracciones_equivalentes/img1.png" alt="Ejemplo Simplificación" className="h-20 object-contain" />
+
+                                    <div
+                                        className="relative flex items-center"
+                                        onMouseEnter={() => setShowHelp(true)}
+                                        onMouseLeave={() => setShowHelp(false)}
+                                    >
+                                        <img
+                                            src="/shared/iconoLuz.svg"
+                                            alt="Icono Luz"
+                                            className="w-10 h-10 cursor-help transition-transform hover:scale-110"
+                                        />
+
+                                        {showHelp && (
+                                            <div className="absolute left-12 top-1/2 -translate-y-1/2 z-50 w-64 animate-in fade-in zoom-in duration-200">
+                                                <img
+                                                    src="/shared/ayuda.svg"
+                                                    alt="Ayuda"
+                                                    className="w-full h-auto drop-shadow-2xl rounded-lg"
+                                                    style={{ filter: 'drop-shadow(0 20px 25px rgb(0 0 0 / 0.15))' }}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
 
                                 <div className="flex items-center gap-4 pl-12 w-full">

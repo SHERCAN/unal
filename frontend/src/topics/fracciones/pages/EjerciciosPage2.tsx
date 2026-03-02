@@ -41,9 +41,11 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
 
     // --- State for Problems ---
     const [pencilFrac, setPencilFrac] = useState({ n: '', d: '' });
+    const [pencilSelection, setPencilSelection] = useState<number | null>(null);
     const [pencilResult, setPencilResult] = useState<'correct' | 'incorrect' | null>(null);
 
     const [notebookFrac, setNotebookFrac] = useState({ n: '', d: '' });
+    const [notebookSelection, setNotebookSelection] = useState<number | null>(null);
     const [notebookResult, setNotebookResult] = useState<'correct' | 'incorrect' | null>(null);
 
     const [libraryAns, setLibraryAns] = useState('');
@@ -57,7 +59,7 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
 
     const checkPencil = async () => {
         if (isExerciseCompleted(EXERCISE_IDS.EJ4)) return;
-        const isCorrect = pencilFrac.n === '5' && pencilFrac.d === '20';
+        const isCorrect = pencilFrac.n === '5' && pencilFrac.d === '20' && pencilSelection === 1;
         setPencilResult(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.EJ4, isCorrect, 'modulo_b');
         if (isCorrect) {
@@ -67,7 +69,7 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
 
     const checkNotebook = async () => {
         if (isExerciseCompleted(EXERCISE_IDS.EJ5)) return;
-        const isCorrect = notebookFrac.n === '6' && notebookFrac.d === '24';
+        const isCorrect = notebookFrac.n === '6' && notebookFrac.d === '24' && notebookSelection === 3;
         setNotebookResult(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.EJ5, isCorrect, 'modulo_b');
         if (isCorrect) {
@@ -91,8 +93,8 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
         }
     };
 
-    const resetPencil = () => { if (isExerciseCompleted(EXERCISE_IDS.EJ4)) return; setPencilFrac({ n: '', d: '' }); setPencilResult(null); };
-    const resetNotebook = () => { if (isExerciseCompleted(EXERCISE_IDS.EJ5)) return; setNotebookFrac({ n: '', d: '' }); setNotebookResult(null); };
+    const resetPencil = () => { if (isExerciseCompleted(EXERCISE_IDS.EJ4)) return; setPencilFrac({ n: '', d: '' }); setPencilSelection(null); setPencilResult(null); };
+    const resetNotebook = () => { if (isExerciseCompleted(EXERCISE_IDS.EJ5)) return; setNotebookFrac({ n: '', d: '' }); setNotebookSelection(null); setNotebookResult(null); };
     const resetLibrary = () => { if (isExerciseCompleted(EXERCISE_IDS.EJ6)) return; setLibraryAns(''); setLibraryResult(null); };
 
 
@@ -122,9 +124,27 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
 
                                         {/* Visual Pencils */}
                                         <div className="flex justify-center items-center gap-12 py-6">
-                                            <Image src={lapices1Img} alt="Lápices 1" className="h-36 w-auto object-contain" />
-                                            <Image src={lapices2Img} alt="Lápices 2" className="h-36 w-auto object-contain" />
-                                            <Image src={lapices3Img} alt="Lápices 3" className="h-36 w-auto object-contain" />
+                                            {[
+                                                { img: lapices1Img, id: 1 },
+                                                { img: lapices2Img, id: 2 },
+                                                { img: lapices3Img, id: 3 }
+                                            ].map((item) => (
+                                                <div
+                                                    key={item.id}
+                                                    onClick={() => {
+                                                        if (pencilResult !== 'correct') {
+                                                            setPencilSelection(item.id);
+                                                            setPencilResult(null);
+                                                        }
+                                                    }}
+                                                    className={`p-2 rounded-2xl transition-all cursor-pointer border-4 ${pencilSelection === item.id
+                                                            ? 'border-purple-500 scale-110 shadow-lg'
+                                                            : 'border-transparent hover:border-purple-200'
+                                                        } ${pencilResult === 'correct' ? 'cursor-default' : ''}`}
+                                                >
+                                                    <Image src={item.img} alt={`Lápices ${item.id}`} className="h-36 w-auto object-contain" />
+                                                </div>
+                                            ))}
                                         </div>
 
                                         <div className="flex flex-col items-center gap-6 pt-4 text-center">
@@ -180,9 +200,27 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
 
                                         {/* Visual Notebooks */}
                                         <div className="flex justify-center items-center gap-12 py-6">
-                                            <Image src={cuadernos1Img} alt="Cuadernos 1" className="h-36 w-auto object-contain" />
-                                            <Image src={cuadernos2Img} alt="Cuadernos 2" className="h-36 w-auto object-contain" />
-                                            <Image src={cuadernos3Img} alt="Cuadernos 3" className="h-36 w-auto object-contain" />
+                                            {[
+                                                { img: cuadernos1Img, id: 1 },
+                                                { img: cuadernos2Img, id: 2 },
+                                                { img: cuadernos3Img, id: 3 }
+                                            ].map((item) => (
+                                                <div
+                                                    key={item.id}
+                                                    onClick={() => {
+                                                        if (notebookResult !== 'correct') {
+                                                            setNotebookSelection(item.id);
+                                                            setNotebookResult(null);
+                                                        }
+                                                    }}
+                                                    className={`p-2 rounded-2xl transition-all cursor-pointer border-4 ${notebookSelection === item.id
+                                                            ? 'border-purple-500 scale-110 shadow-lg'
+                                                            : 'border-transparent hover:border-purple-200'
+                                                        } ${notebookResult === 'correct' ? 'cursor-default' : ''}`}
+                                                >
+                                                    <Image src={item.img} alt={`Cuadernos ${item.id}`} className="h-36 w-auto object-contain" />
+                                                </div>
+                                            ))}
                                         </div>
 
                                         <div className="flex flex-col items-center gap-6 pt-4 text-center">
