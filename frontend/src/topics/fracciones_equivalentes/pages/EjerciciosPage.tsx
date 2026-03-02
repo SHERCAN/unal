@@ -41,7 +41,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
     // --- ACTIVITY 1: MATCHING ---
     const [act1, setAct1] = useState<Record<number, number | null>>({ 0: null, 1: null, 2: null });
-    const [act1Result, setAct1Result] = useState<'correct' | 'incorrect' | null>(null);
+    const [act1Results, setAct1Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({ 0: null, 1: null, 2: null });
 
     // --- ACTIVITY 2: AMPLIFICATION ---
     const [act2, setAct2] = useState<Record<number, string>>({});
@@ -61,15 +61,25 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     // Initial load and auto-checking
     useEffect(() => {
         // Activity 1
-        if (isExerciseCompleted('fracciones_equivalentes-pag28-ej1')) {
-            setAct1Result('correct');
-            completeStage(STAGE_IDS.ACT1);
+        const act1DoneIndices: number[] = [];
+        [0, 1, 2].forEach(idx => {
+            if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 1}`)) {
+                act1DoneIndices.push(idx);
+            }
+        });
+        if (act1DoneIndices.length > 0) {
+            setAct1Results(prev => {
+                const next = { ...prev };
+                act1DoneIndices.forEach(idx => { next[idx] = 'correct'; });
+                return next;
+            });
+            if (act1DoneIndices.length === 3) completeStage(STAGE_IDS.ACT1);
         }
 
         // Activity 2
         const act2DoneIndices: number[] = [];
         [0, 1, 2, 3, 4].forEach(idx => {
-            if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 2}`)) {
+            if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 4}`)) {
                 act2DoneIndices.push(idx);
             }
         });
@@ -85,7 +95,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         // Activity 3
         const act3DoneIndices: number[] = [];
         [0, 1, 2].forEach(idx => {
-            if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 7}`)) {
+            if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 9}`)) {
                 act3DoneIndices.push(idx);
             }
         });
@@ -101,7 +111,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         // Activity 4
         const act4DoneIndices: number[] = [];
         [0, 1, 2, 3].forEach(idx => {
-            if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 10}`)) {
+            if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 12}`)) {
                 act4DoneIndices.push(idx);
             }
         });
@@ -116,47 +126,54 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
         // Check if all activities are completed to mark FINAL_STAGE
         const allActivitiesCompleted =
-            isExerciseCompleted('fracciones_equivalentes-pag28-ej1') &&
-            [0, 1, 2, 3, 4].every(idx => isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 2}`)) &&
-            [0, 1, 2].every(idx => isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 7}`)) &&
-            [0, 1, 2, 3].every(idx => isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 10}`));
+            [0, 1, 2].every(idx => isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 1}`)) &&
+            [0, 1, 2, 3, 4].every(idx => isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 4}`)) &&
+            [0, 1, 2].every(idx => isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 9}`)) &&
+            [0, 1, 2, 3].every(idx => isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 12}`));
 
         if (allActivitiesCompleted) {
             completeStage(STAGE_IDS.FINAL_STAGE);
         }
     }, [isExerciseCompleted, watchedVideos, completedExercises]);
 
-    const checkAct1 = async () => {
-        if (isExerciseCompleted('fracciones_equivalentes-pag28-ej1')) return;
-        const correct = act1[0] === 1 && act1[1] === 0 && act1[2] === 2;
-        setAct1Result(correct ? 'correct' : 'incorrect');
-        await submitExercise('fracciones_equivalentes-pag28-ej1', correct, 'modulo_a');
+    const checkSubAct1 = async (idx: number) => {
+        if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 1}`)) return;
+        const answers = [1, 0, 2]; // circulo2 (idx 1), cebra1 (idx 0), linea3 (idx 2)
+        const correct = act1[idx] === answers[idx];
+        setAct1Results(prev => ({ ...prev, [idx]: correct ? 'correct' : 'incorrect' }));
+        await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 1}`, correct, 'modulo_a');
+    };
+
+    const resetSubAct1 = (idx: number) => {
+        if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 1}`)) return;
+        setAct1({ ...act1, [idx]: null });
+        setAct1Results({ ...act1Results, [idx]: null });
     };
 
     const checkSubAct2 = async (idx: number) => {
-        if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 2}`)) return;
+        if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 4}`)) return;
         const ansIndices = [1, 2, 5, 6, 9];
         const val = act2[ansIndices[idx]] || '';
         const isCorrect = val === act2Answers[idx as keyof typeof act2Answers];
 
         setAct2Results(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
-        await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 2}`, isCorrect, 'modulo_b');
+        await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 4}`, isCorrect, 'modulo_b');
     };
 
     const checkSubAct3 = async (idx: number) => {
-        if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 7}`)) return;
+        if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 9}`)) return;
         const isCorrect = act3[idx * 2] === act3Answers[idx * 2 as keyof typeof act3Answers] &&
             act3[idx * 2 + 1] === act3Answers[(idx * 2 + 1) as keyof typeof act3Answers];
 
         setAct3Results(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
-        await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 7}`, isCorrect, 'modulo_b');
+        await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 9}`, isCorrect, 'modulo_b');
     };
 
     const checkSubAct4 = async (idx: number) => {
-        if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 10}`)) return;
+        if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 12}`)) return;
         const isCorrect = act4[idx] === act4Answers[idx as keyof typeof act4Answers];
         setAct4Results(prev => ({ ...prev, [idx]: isCorrect ? 'correct' : 'incorrect' }));
-        await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 10}`, isCorrect, 'modulo_b');
+        await submitExercise(`fracciones_equivalentes-pag28-ej${idx + 12}`, isCorrect, 'modulo_b');
     };
 
     // HELPERS
@@ -185,6 +202,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         />
     );
 
+    const [showHelp, setShowHelp] = useState(false);
+
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones Equivalentes' }} pageId="frac-equiv-ejercicios">
             <h2 className="text-3xl font-black text-purple-700 mb-8 pl-12">EJERCICIOS</h2>
@@ -203,91 +222,104 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
                     <div className="pl-16 space-y-12">
                         {/* Row 1: 1/3 = 3/9 */}
-                        <div className="flex items-center gap-6">
-                            <div className="flex items-center gap-4 w-[150px] flex-shrink-0">
-                                <div className="w-4 h-4 bg-purple-700 flex-shrink-0" />
-                                <div className="flex items-center gap-4">
-                                    <Fraction num="1" den="3" size="text-2xl" />
-                                    <span className="text-2xl font-black text-gray-300">=</span>
-                                    <Fraction num="3" den="9" size="text-2xl" />
+                        <div className="flex flex-col gap-4">
+                            <div className="flex items-center gap-6">
+                                <div className="flex items-center gap-4 w-[150px] flex-shrink-0">
+                                    <div className="w-4 h-4 bg-purple-700 flex-shrink-0" />
+                                    <div className="flex items-center gap-4">
+                                        <Fraction num="1" den="3" size="text-2xl" />
+                                        <span className="text-2xl font-black text-gray-300">=</span>
+                                        <Fraction num="3" den="9" size="text-2xl" />
+                                    </div>
+                                </div>
+                                <span className="text-2xl text-gray-300 w-12 text-center">→</span>
+                                <div className="flex gap-3">
+                                    {[circulo1, circulo2, circulo3].map((img, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => { if (act1Results[0] !== 'correct') setAct1({ ...act1, 0: i }); setAct1Results({ ...act1Results, 0: null }); }}
+                                            className={`p-2 border-2 rounded-xl transition-all shadow-sm ${act1[0] === i ? 'border-purple-600 bg-purple-50' : 'border-gray-100 bg-gray-50/50 hover:bg-gray-50'}`}
+                                            disabled={act1Results[0] === 'correct'}
+                                        >
+                                            <div className="relative w-32 h-16">
+                                                <Image src={img} alt="model" layout="fill" objectFit="contain" />
+                                            </div>
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
-                            <span className="text-2xl text-gray-300 w-12 text-center">→</span>
-                            <div className="flex gap-3">
-                                {[circulo1, circulo2, circulo3].map((img, i) => (
-                                    <button
-                                        key={i}
-                                        onClick={() => { if (act1Result !== 'correct') setAct1({ ...act1, 0: i }); setAct1Result(null); }}
-                                        className={`p-2 border-2 rounded-xl transition-all shadow-sm ${act1[0] === i ? 'border-purple-600 bg-purple-50' : 'border-gray-100 bg-gray-50/50 hover:bg-gray-50'}`}
-                                        disabled={act1Result === 'correct'}
-                                    >
-                                        <div className="relative w-32 h-16">
-                                            <Image src={img} alt="model" layout="fill" objectFit="contain" />
-                                        </div>
-                                    </button>
-                                ))}
+                            <div className="flex justify-center ml-[150px]">
+                                <FeedbackButton status={act1Results[0]} onCheck={() => checkSubAct1(0)} onReset={() => resetSubAct1(0)} className="scale-75" />
                             </div>
                         </div>
 
                         {/* Row 2: 2/7 = 6/21 */}
-                        <div className="flex items-center gap-6">
-                            <div className="flex items-center gap-4 w-[150px] flex-shrink-0">
-                                <div className="w-4 h-4 bg-purple-700 flex-shrink-0" />
-                                <div className="flex items-center gap-4">
-                                    <Fraction num="2" den="7" size="text-2xl" />
-                                    <span className="text-2xl font-black text-gray-300">=</span>
-                                    <Fraction num="6" den="21" size="text-2xl" />
+                        <div className="flex flex-col gap-4">
+                            <div className="flex items-center gap-6">
+                                <div className="flex items-center gap-4 w-[150px] flex-shrink-0">
+                                    <div className="w-4 h-4 bg-purple-700 flex-shrink-0" />
+                                    <div className="flex items-center gap-4">
+                                        <Fraction num="2" den="7" size="text-2xl" />
+                                        <span className="text-2xl font-black text-gray-300">=</span>
+                                        <Fraction num="6" den="21" size="text-2xl" />
+                                    </div>
+                                </div>
+                                <span className="text-2xl text-gray-300 w-12 text-center">→</span>
+                                <div className="flex gap-3">
+                                    {[cebra1, cebra2, cebra3].map((img, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => { if (act1Results[1] !== 'correct') setAct1({ ...act1, 1: i }); setAct1Results({ ...act1Results, 1: null }); }}
+                                            className={`p-2 border-2 rounded-xl transition-all shadow-sm ${act1[1] === i ? 'border-purple-600 bg-purple-50' : 'border-gray-100 bg-gray-50/50 hover:bg-gray-50'}`}
+                                            disabled={act1Results[1] === 'correct'}
+                                        >
+                                            <div className="relative w-32 h-16">
+                                                <Image src={img} alt="model" layout="fill" objectFit="contain" />
+                                            </div>
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
-                            <span className="text-2xl text-gray-300 w-12 text-center">→</span>
-                            <div className="flex gap-3">
-                                {[cebra1, cebra2, cebra3].map((img, i) => (
-                                    <button
-                                        key={i}
-                                        onClick={() => { if (act1Result !== 'correct') setAct1({ ...act1, 1: i }); setAct1Result(null); }}
-                                        className={`p-2 border-2 rounded-xl transition-all shadow-sm ${act1[1] === i ? 'border-purple-600 bg-purple-50' : 'border-gray-100 bg-gray-50/50 hover:bg-gray-50'}`}
-                                        disabled={act1Result === 'correct'}
-                                    >
-                                        <div className="relative w-32 h-16">
-                                            <Image src={img} alt="model" layout="fill" objectFit="contain" />
-                                        </div>
-                                    </button>
-                                ))}
+                            <div className="flex justify-center ml-[150px]">
+                                <FeedbackButton status={act1Results[1]} onCheck={() => checkSubAct1(1)} onReset={() => resetSubAct1(1)} className="scale-75" />
                             </div>
                         </div>
 
                         {/* Row 3: 4/8 = 2/4 = 1/2 */}
-                        <div className="flex items-center gap-6">
-                            <div className="flex items-center gap-4 w-[150px] flex-shrink-0">
-                                <div className="w-4 h-4 bg-purple-700 flex-shrink-0" />
-                                <div className="flex items-center gap-3">
-                                    <Fraction num="4" den="8" size="text-2xl" />
-                                    <span className="text-2xl font-black text-gray-300">=</span>
-                                    <Fraction num="2" den="4" size="text-2xl" />
-                                    <span className="text-2xl font-black text-gray-300">=</span>
-                                    <Fraction num="1" den="2" size="text-2xl" />
+                        <div className="flex flex-col gap-4">
+                            <div className="flex items-center gap-6">
+                                <div className="flex items-center gap-4 w-[150px] flex-shrink-0">
+                                    <div className="w-4 h-4 bg-purple-700 flex-shrink-0" />
+                                    <div className="flex items-center gap-3">
+                                        <Fraction num="4" den="8" size="text-2xl" />
+                                        <span className="text-2xl font-black text-gray-300">=</span>
+                                        <Fraction num="2" den="4" size="text-2xl" />
+                                        <span className="text-2xl font-black text-gray-300">=</span>
+                                        <Fraction num="1" den="2" size="text-2xl" />
+                                    </div>
+                                </div>
+                                <span className="text-2xl text-gray-300 w-12 text-center">→</span>
+                                <div className="flex gap-3">
+                                    {[linea1, linea2, linea3].map((img, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => { if (act1Results[2] !== 'correct') setAct1({ ...act1, 2: i }); setAct1Results({ ...act1Results, 2: null }); }}
+                                            className={`p-2 border-2 rounded-xl transition-all shadow-sm ${act1[2] === i ? 'border-purple-600 bg-purple-50' : 'border-gray-100 bg-gray-50/50 hover:bg-gray-50'}`}
+                                            disabled={act1Results[2] === 'correct'}
+                                        >
+                                            <div className="relative w-32 h-16">
+                                                <Image src={img} alt="model" layout="fill" objectFit="contain" />
+                                            </div>
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
-                            <span className="text-2xl text-gray-300 w-12 text-center">→</span>
-                            <div className="flex gap-3">
-                                {[linea1, linea2, linea3].map((img, i) => (
-                                    <button
-                                        key={i}
-                                        onClick={() => { if (act1Result !== 'correct') setAct1({ ...act1, 2: i }); setAct1Result(null); }}
-                                        className={`p-2 border-2 rounded-xl transition-all shadow-sm ${act1[2] === i ? 'border-purple-600 bg-purple-50' : 'border-gray-100 bg-gray-50/50 hover:bg-gray-50'}`}
-                                        disabled={act1Result === 'correct'}
-                                    >
-                                        <div className="relative w-32 h-16">
-                                            <Image src={img} alt="model" layout="fill" objectFit="contain" />
-                                        </div>
-                                    </button>
-                                ))}
+                            <div className="flex justify-center ml-[150px]">
+                                <FeedbackButton status={act1Results[2]} onCheck={() => checkSubAct1(2)} onReset={() => resetSubAct1(2)} className="scale-75" />
                             </div>
                         </div>
                     </div>
-                    <div className="flex justify-end pr-24">
-                        <FeedbackButton status={act1Result} onCheck={checkAct1} onReset={() => { if (act1Result === 'correct') return; setAct1({ 0: null, 1: null, 2: null }); setAct1Result(null); }} />
-                    </div>
+                    <div />
                 </div>
 
                 {/* 2. FILL MISSING (AMP) */}
@@ -375,8 +407,18 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                             </div>
                         ))}
 
-                        <div className="bg-purple-600 p-1.5 rounded-lg shadow-sm flex-shrink-0 self-start mt-2 ml-auto mr-12 hover:bg-purple-700 transition-colors cursor-help">
-                            <MdLightbulbOutline className="text-white text-2xl" />
+                        <div className="rounded-lg shadow-sm flex-shrink-0 self-start mt-2 transition-colors cursor-help">
+                            <div
+                                className="relative flex items-center"
+                                onMouseEnter={() => setShowHelp(true)}
+                                onMouseLeave={() => setShowHelp(false)}
+                            >
+                                <img
+                                    src="/shared/iconoLuz.svg"
+                                    alt="Icono Luz"
+                                    className="w-10 h-10 cursor-help transition-transform hover:scale-110"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -436,6 +478,18 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                     </div>
                 </div>
             </div>
+            {/* Help Overlay - Centered on page with high z-index */}
+            {showHelp && (
+                <div className="absolute inset-0 z-[100] flex items-center justify-center pointer-events-none p-12 bg-black/5 animate-in fade-in duration-300">
+                    <div className="max-w-sm w-full animate-in zoom-in duration-300">
+                        <img
+                            src="/shared/ayuda.svg"
+                            alt="Ayuda"
+                            className="w-30 h-auto drop-shadow-[0_35px_35px_rgba(0,0,0,0.4)] rounded-xl"
+                        />
+                    </div>
+                </div>
+            )}
         </BookPageContainer >
     );
 }
