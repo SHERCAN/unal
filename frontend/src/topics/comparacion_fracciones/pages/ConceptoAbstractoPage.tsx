@@ -111,11 +111,11 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
                                     <p className="text-gray-700 leading-tight text-base font-semibold">
                                         Cuando dos fracciones tienen el diferente denominador, compararlas es poco difícil.
                                     </p>
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_DIFF_DEN} title="" videoId="/pag1/vv-7" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_DIFF_DEN} title="" videoId="/pag30/vv-4" />
                                 </div>
 
                                 <div className="flex items-start gap-4 ml-6">
-                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_STRATEGY} title="" videoId="/pag30/vv-4" />
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.A_STRATEGY} title="" videoId="/pag30/vv-5" />
                                     <div>
                                         <h3 className="text-red-600 font-black text-lg uppercase mb-2">ESTRATEGIA:</h3>
                                         <ol className="list-decimal pl-5 text-gray-800 dark:text-gray-300 space-y-2 font-semibold leading-snug text-base">
@@ -127,7 +127,7 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
 
                                 <div className="space-y-8 ml-6">
                                     <div className="flex items-center gap-4">
-                                        <PlayVideoButton trackingId={VIDEO_TRACKING.A_STRATEGY} title="" videoId="/pag30/vv-5" />
+                                        <PlayVideoButton trackingId={VIDEO_TRACKING.A_STRATEGY} title="" videoId="/pag30/vv-6" />
                                         <span className="bg-green-600 text-white font-black px-4 py-1 rounded text-sm inline-block">Ejemplo:</span>
                                     </div>
                                     <div className="flex items-center gap-6 font-black ml-4" style={{ fontSize: 'clamp(1.5rem, 4vmin, 2rem)' }}>
