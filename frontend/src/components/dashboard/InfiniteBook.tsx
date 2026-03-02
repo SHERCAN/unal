@@ -106,13 +106,13 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
                 <SinopsisPage zoom={zoom} />
             )
         },
-        {
-            id: 'explicacion',
-            topicId: 'shared',
-            component: ({ zoom }: { zoom?: number }) => (
-                <ExplicacionPage zoom={zoom} />
-            )
-        },
+        // {
+        //     id: 'explicacion',
+        //     topicId: 'shared',
+        //     component: ({ zoom }: { zoom?: number }) => (
+        //         <ExplicacionPage zoom={zoom} />
+        //     )
+        // },
         {
             id: 'index-page',
             topicId: 'shared',

@@ -23,6 +23,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const { isExerciseCompleted, completeStage, submitExercise } = useVideoProgress();
 
     const VIDEO_TRACKING = {
+        V1: 'fracciones-pag21-v1',
+        V2: 'fracciones-pag21-v2',
         EX1_TABLE: 'fracciones-ex1-table',
         EX1_ISFRAC: 'fracciones-ex1-isfrac',
         EX3_DEFS: 'fracciones-pag21-v4',
@@ -80,18 +82,16 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
         // Re-implementing check logic to match the 6 fields
         const correctAnswers: Record<string, string> = {
-            field1: '1', field2: '2', // Triangle
-            field3: '1', field4: '4', // Circle
-            field5: '3', field6: '4', // Square
+            field1: 'A', field2: 'B',
+            field3: '2', field4: '3',
+            field5: '7', field6: '12',
         };
-        // Wait, hexagon is in tableData but maybe not in fields?
-        // Let's check the fields again. field1 to field6.
-        // Triangle: num=1, den=2. Circle: num=1, den=4. Square: num=3, den=4.
-        // Hexagon num=5 den=6 is missing in the field mapping (only 6 fields).
 
         let allCorrect = true;
         Object.keys(correctAnswers).forEach(fid => {
-            if (tableInputs[fid] !== correctAnswers[fid]) allCorrect = false;
+            const userInput = (tableInputs[fid] || '').trim().toUpperCase();
+            const correctAnswer = correctAnswers[fid].toUpperCase();
+            if (userInput !== correctAnswer) allCorrect = false;
         });
 
         setTableTotalResult(allCorrect ? 'correct' : 'incorrect');
@@ -158,6 +158,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                             {/* EXERCISE 1: Table */}
                             <div className="space-y-6">
                                 <div className="flex items-center gap-3">
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.V1} title="" videoId="/pag21/vv-1" />
                                     <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">1</div>
                                     <p className="font-bold text-base text-gray-800">Completa la tabla de acuerdo con la información solicitada.</p>
                                 </div>
@@ -171,17 +172,17 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                         />
 
                                         {[
-                                            { id: 'field1', top: '75.5%', left: '17%', correct: '1' },
-                                            { id: 'field2', top: '88.5%', left: '17%', correct: '2' },
-                                            { id: 'field3', top: '30.5%', left: '51%', correct: '1' },
-                                            { id: 'field4', top: '55.5%', left: '51%', correct: '4' },
-                                            { id: 'field5', top: '30.5%', left: '84%', correct: '3' },
-                                            { id: 'field6', top: '55.5%', left: '84%', correct: '4' },
+                                            { id: 'field1', top: '75.5%', left: '17%', correct: 'A' },
+                                            { id: 'field2', top: '88.5%', left: '17%', correct: 'B' },
+                                            { id: 'field3', top: '30.5%', left: '51%', correct: '2' },
+                                            { id: 'field4', top: '55.5%', left: '51%', correct: '3' },
+                                            { id: 'field5', top: '30.5%', left: '84%', correct: '7' },
+                                            { id: 'field6', top: '55.5%', left: '84%', correct: '12' },
                                         ].map((field, idx) => (
                                             <input
                                                 key={field.id}
                                                 id={`table-input-${idx + 1}`}
-                                                type="number"
+                                                type="text"
                                                 className="absolute w-[8%] h-[12%] text-center text-lg font-bold border-none outline-none rounded shadow-sm transition-all focus:ring-2 focus:ring-purple-400"
                                                 style={{
                                                     backgroundColor: '#d9d9d9',
@@ -208,6 +209,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                             {/* EXERCISE 2: Is Fraction? */}
                             <div className="space-y-6 pt-8 border-t">
                                 <div className="flex items-center gap-3">
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.V2} title="" videoId="/pag21/vv-2" />
                                     <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">2</div>
                                     <p className="font-bold text-gray-800">Determinar si las siguientes figuras son formas de fracción o no.</p>
                                 </div>
