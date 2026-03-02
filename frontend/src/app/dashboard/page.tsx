@@ -548,27 +548,7 @@ export default function DashboardPage() {
             <div className="bg-white/40 backdrop-blur-sm p-4 rounded-xl flex items-center justify-center gap-2 relative overflow-hidden">
               <div className="z-10 flex items-center gap-3">
                 <div className="relative w-12 h-12 flex items-center justify-center">
-                  <svg
-                    viewBox="0 0 100 100"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle cx="50" cy="50" r="45" fill="#E95A53" />
-                    <path
-                      d="M50 25C36.19 25 25 36.19 25 50C25 63.81 36.19 75 50 75C63.81 75 75 63.81 75 50C75 36.19 63.81 25 50 25ZM50 66C41.16 66 34 58.84 34 50C34 41.16 41.16 34 50 34C58.84 34 66 41.16 66 50C66 58.84 58.84 66 50 66Z"
-                      fill="#004655"
-                    />
-                    <circle cx="50" cy="50" r="11" fill="#D9D9D9" />
-                    <circle cx="50" cy="50" r="4.5" fill="#004655" />
-                    <path
-                      d="M21.5 25.5L46 46M21.5 25.5L25 35L31 31L40.5 27.5L21.5 25.5ZM21.5 25.5L13.5 24L17 33L21.5 25.5Z"
-                      stroke="#004655"
-                      strokeWidth="4"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      fill="#004655"
-                    />
-                  </svg>
+                  <img src="/diana.svg" alt="Puntaje Definitivo" className="w-full h-full object-contain" />
                 </div>
                 <span className="text-5xl font-black text-[#ef4444] tracking-tight">+ {animatedPuntosDefinitivos}</span>
               </div>
@@ -584,7 +564,7 @@ export default function DashboardPage() {
                 <>
                   <div className="flex items-center justify-between gap-2 mb-2">
                     {/* Start Star (Current Level) */}
-                    <div className="relative w-12 h-12 flex items-center justify-center filter drop-shadow-md">
+                    <div className="relative w-20 h-auto flex items-center justify-center filter drop-shadow-md">
                       <svg viewBox="0 0 24 24" fill="#fde047" stroke="#7e22ce" strokeWidth="1.5" className="w-full h-full">
                         <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
                       </svg>
@@ -602,7 +582,7 @@ export default function DashboardPage() {
                     {/* End Star (Next Level) */}
                     <div
                       ref={nextLevelStarRef}
-                      className="relative w-10 h-10 flex items-center justify-center opacity-80 filter drop-shadow-sm cursor-pointer transition-all duration-200 hover:opacity-100 hover:scale-110"
+                      className="relative w-14 h-auto flex items-center justify-center opacity-80 filter drop-shadow-sm cursor-pointer transition-all duration-200 hover:opacity-100 hover:scale-110"
                     >
                       <svg viewBox="0 0 24 24" fill="#fde047" stroke="#7e22ce" strokeWidth="1.5" className="w-full h-full">
                         <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
