@@ -742,6 +742,7 @@ export default function DashboardPage() {
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             currentTopicInfo={currentTopicInfo}
+            isSidebarOpen={isSidebarOpen}
           />
         </div>
 
@@ -762,7 +763,8 @@ function InfiniteBookWrapper({
   completedModules,
   currentPage,
   setCurrentPage,
-  currentTopicInfo
+  currentTopicInfo,
+  isSidebarOpen
 }: {
   completedPages: number[];
   setCompletedPages: React.Dispatch<React.SetStateAction<number[]>>;
@@ -772,6 +774,7 @@ function InfiniteBookWrapper({
   currentPage: number;
   setCurrentPage: (page: number) => void;
   currentTopicInfo: any;
+  isSidebarOpen: boolean;
 }) {
   const navigateCallbackRef = useRef<((page: number) => void) | null>(null);
 
@@ -791,43 +794,75 @@ function InfiniteBookWrapper({
     }
   }, []);
 
-  const totalPagesInBook = topics.reduce((acc, t) => acc + t.pages.length + t.exercisePages.length, 0) + 3;
+  const totalLessonPages = topics.reduce((acc, t) => acc + t.pages.length + t.exercisePages.length, 0);
+  const totalPagesInBook = totalLessonPages + 4; // Portada, Sinopsis, Explicacion, Indice
 
   const goToNextTopic = useCallback(() => {
+    // If we are in the special intro pages (0-2), go to the next individual intro page
+    if (currentPage < 3) {
+      handleNavigateToPage(currentPage + 1);
+      return;
+    }
+
+    // If we are on the Index (3) or at the start of a topic, jump to the next section
     let offset = 4;
     for (let i = 0; i < topics.length; i++) {
       const topic = topics[i];
       const count = topic.pages.length + topic.exercisePages.length;
+
+      // If we are currently "before" this topic's start, jump TO it
       if (currentPage < offset) {
         handleNavigateToPage(offset);
         return;
       }
+
+      // If we are inside or at the start of this topic, jump to the NEXT topic's start
       if (currentPage >= offset && currentPage < offset + count) {
-        if (i + 1 < topics.length) {
-          handleNavigateToPage(offset + count);
+        const nextStart = offset + count;
+        if (nextStart < totalPagesInBook) {
+          handleNavigateToPage(nextStart);
         }
         return;
       }
       offset += count;
     }
-  }, [currentPage, topics, handleNavigateToPage]);
+  }, [currentPage, topics, handleNavigateToPage, totalPagesInBook]);
 
   const goToPrevTopic = useCallback(() => {
     if (currentPage === 0) return;
+
+    // If we are at the very first lesson (index 4) or just after intro, go back to special pages one by one
+    if (currentPage <= 4) {
+      handleNavigateToPage(currentPage - 1);
+      return;
+    }
+
     let offset = 4;
-    let prevOffset = 3; // Index page
+    let prevTopicStart = 3; // Index page is at 3
+
     for (let i = 0; i < topics.length; i++) {
       const topic = topics[i];
       const count = topic.pages.length + topic.exercisePages.length;
-      if (currentPage >= offset && currentPage < offset + count) {
-        handleNavigateToPage(prevOffset);
+
+      // If we are at the beginning of a topic, jump to the start of the previous one
+      if (currentPage === offset) {
+        handleNavigateToPage(prevTopicStart);
         return;
       }
-      prevOffset = offset;
+
+      // If we are inside a topic but not at the very start, jump to its own start first
+      if (currentPage > offset && currentPage < offset + count) {
+        handleNavigateToPage(offset);
+        return;
+      }
+
+      prevTopicStart = offset;
       offset += count;
     }
+
+    // If we are past all topics (footer/end), go to the start of the last topic
     if (currentPage >= offset) {
-      handleNavigateToPage(prevOffset);
+      handleNavigateToPage(prevTopicStart);
     }
   }, [currentPage, topics, handleNavigateToPage]);
 
@@ -840,7 +875,7 @@ function InfiniteBookWrapper({
       />
 
       {/* Navigation Jump Buttons */}
-      <div className="fixed top-1/2 -translate-y-1/2 left-80 ml-6 z-[100] pointer-events-none hidden lg:block">
+      <div className={`fixed top-1/2 -translate-y-1/2 z-[100] pointer-events-none hidden lg:block transition-all duration-300 ${isSidebarOpen ? 'left-80 ml-6' : 'left-6'}`}>
         <button
           onClick={goToPrevTopic}
           disabled={currentPage === 0}
@@ -856,8 +891,8 @@ function InfiniteBookWrapper({
       <div className="fixed top-1/2 -translate-y-1/2 right-6 z-[100] pointer-events-none hidden lg:block">
         <button
           onClick={goToNextTopic}
-          disabled={currentPage >= totalPagesInBook}
-          className={`p-4 rounded-full bg-white dark:bg-gray-800 border-2 border-primary/20 shadow-[0_10px_40px_rgba(126,34,206,0.3)] transition-all duration-500 pointer-events-auto ${currentPage >= totalPagesInBook ? 'opacity-0 scale-50' : 'opacity-100 scale-100 hover:scale-115 hover:border-primary/50 hover:shadow-[0_20px_60px_rgba(126,34,206,0.4)] hover:-translate-y-2 active:scale-95'}`}
+          disabled={currentPage >= totalPagesInBook - 1}
+          className={`p-4 rounded-full bg-white dark:bg-gray-800 border-2 border-primary/20 shadow-[0_10px_40px_rgba(126,34,206,0.3)] transition-all duration-500 pointer-events-auto ${currentPage >= totalPagesInBook - 1 ? 'opacity-0 scale-50' : 'opacity-100 scale-100 hover:scale-115 hover:border-primary/50 hover:shadow-[0_20px_60px_rgba(126,34,206,0.4)] hover:-translate-y-2 active:scale-95'}`}
           title="Siguiente Lección"
         >
           <svg className="w-8 h-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -890,7 +925,11 @@ function InfiniteBookWrapper({
           />
           {/* Global Page Indicator Overlay */}
           <div className="absolute top-[-30px] right-4 bg-black/50 text-white px-3 py-1 rounded-t-lg text-xs font-mono backdrop-blur-sm pointer-events-none">
-            LIBRO: Pág. {currentPage} / {totalPagesInBook}
+            {currentPage < 4 ? (
+              <span>LIBRO: {currentPage === 0 ? 'Portada' : currentPage === 3 ? 'Índice' : 'Introducción'}</span>
+            ) : (
+              <span>LIBRO: Pág. {currentPage - 3} / {totalLessonPages}</span>
+            )}
           </div>
         </div>
       )}

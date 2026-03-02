@@ -30,6 +30,7 @@ interface ModuleActivity {
     flexPoints: number;
     defPoints: number;
     details: string;
+    moduloType?: 'A' | 'B';
 }
 
 interface GroupedModule {
@@ -158,7 +159,11 @@ const getUserModules = (user: User): GroupedModule[] => {
             lowerId.includes('-pag25-') ||
             lowerId.includes('-pag26-') ||
             lowerId.includes('-pag29-') || // Comp CPA
-            lowerId.includes('-pag30-');
+            lowerId.includes('-pag30-') ||
+            ex.type === 'juego_cpa' ||
+            ex.type === 'completar_c' ||
+            ex.type === 'completar_p' ||
+            ex.type === 'completar_a';
 
         const isFormalExercise = lowerId.includes('calc') ||
             lowerId.includes('prob') ||
@@ -173,7 +178,9 @@ const getUserModules = (user: User): GroupedModule[] => {
             lowerId.includes('pag21-') || // Exercises Fracciones
             lowerId.includes('pag27-') || // Exercises Equiv
             lowerId.includes('pag28-') ||
-            lowerId.includes('pag31-'); // Exercises Comp
+            lowerId.includes('pag31-') ||
+            ex.type === 'modulo_a' ||
+            ex.type === 'modulo_b';
 
         let activityType: 'Ejercicio' | 'Actividad';
         if (isCPA) {
@@ -190,7 +197,7 @@ const getUserModules = (user: User): GroupedModule[] => {
         let f = 0, d = 0;
         let text = ex.completed ? 'Completado' : 'Intentado, sin pasar';
 
-        const is20PtType = isCPA || lowerId.includes('modulo_b');
+        const is20PtType = isCPA || lowerId.includes('modulo_b') || ex.type === 'modulo_b' || ex.type?.includes('juego') || ex.type?.includes('completar');
 
         if (ex.completed) {
             if (ex.attemptCount === 1) {
@@ -216,7 +223,8 @@ const getUserModules = (user: User): GroupedModule[] => {
             date: ex.updatedAt,
             flexPoints: f,
             defPoints: d,
-            details: text
+            details: text,
+            moduloType: is20PtType ? 'B' : 'A'
         });
     });
 
@@ -557,8 +565,8 @@ export default function AdminDashboard() {
                                                                 <span className="text-sm font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 px-3 py-1 rounded-full">
                                                                     {mod.activities.length} Interacciones
                                                                 </span>
-                                                                <span className="text-sm font-bold bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 px-2 py-1 rounded"> +{mod.totalFlex} flex </span>
-                                                                <span className="text-sm font-bold bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300 px-2 py-1 rounded"> +{mod.totalDef} def </span>
+                                                                <span className="text-sm font-bold bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 px-2 py-1 rounded"> +{mod.totalFlex} pts </span>
+                                                                <span className="text-sm font-bold bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300 px-2 py-1 rounded"> +{mod.totalDef} pts definitivos </span>
                                                                 <svg className={`w-5 h-5 transition-transform ${expandedModule === mod.moduleName ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                                                 </svg>
@@ -613,14 +621,20 @@ export default function AdminDashboard() {
                                                                                                         ) : (act.type === 'Actividad' ? 'Actividad' : act.type)}
                                                                                                     </span>
                                                                                                     <span className="text-text-secondary text-xs">{act.details}</span>
+                                                                                                    {act.moduloType && (
+                                                                                                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ml-2 ${act.moduloType === 'B' ? 'bg-orange-500/10 text-orange-600 border border-orange-200' : 'bg-blue-500/10 text-blue-600 border border-blue-200'}`}>
+                                                                                                            {act.moduloType === 'B' ? 'Módulo B' : 'Módulo A'}
+                                                                                                        </span>
+                                                                                                    )}
+
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div className="text-right flex flex-col items-end">
                                                                                                 <p className="text-xs text-text-secondary mb-1">{new Date(act.date).toLocaleString()}</p>
                                                                                                 {(act.flexPoints > 0 || act.defPoints > 0) ? (
                                                                                                     <div className="flex space-x-2 text-xs">
-                                                                                                        {act.flexPoints > 0 && <span className="text-purple-700 dark:text-purple-400 font-bold">+{act.flexPoints} pts flex</span>}
-                                                                                                        {act.defPoints > 0 && <span className="text-red-600 dark:text-red-400 font-bold">+{act.defPoints} pts def</span>}
+                                                                                                        {act.flexPoints > 0 && <span className="text-purple-700 dark:text-purple-400 font-bold">+{act.flexPoints} pts</span>}
+                                                                                                        {act.defPoints > 0 && <span className="text-red-600 dark:text-red-400 font-bold">+{act.defPoints} pts definitivos</span>}
                                                                                                     </div>
                                                                                                 ) : act.type !== 'Calificación' && (
                                                                                                     <span className="text-gray-400 font-medium text-xs">0 pts asignados</span>

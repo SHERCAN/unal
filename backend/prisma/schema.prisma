@@ -73,6 +73,7 @@ model ExerciseAttempt {
   id              String   @id @default(uuid())
   userId          String
   exerciseId      String   // e.g., "division-exercises-activity1", "division-game-c-question"
+  type            String?  @default("modulo_a") // Track exercise type (modulo_a, modulo_b, etc.)
   attempted       Boolean  @default(false)
   completed       Boolean  @default(false)
   attemptCount    Int      @default(1) // Track number of attempts

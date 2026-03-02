@@ -21,8 +21,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     const { isVideoWatched, markVideoWatched, submitGame, submitExercise, completeStage, isExerciseCompleted, watchedVideos, completedExercises } = useVideoProgress();
 
     const EXERCISE_IDS = {
-        CALC_BLOCK: 'division_exacta-pag10-calc-block',
-        EXACT_BLOCK: 'division_exacta-pag10-exact-block'
+        BASE: 'division_exacta-pag10-ej'
     };
 
     const VIDEO_TRACKING = {
@@ -45,7 +44,9 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         { dividend: 1059, divisor: 3, answer: 353 },
     ];
     const [calcAnswers, setCalcAnswers] = useState<Record<number, string>>({});
-    const [calcStatus, setCalcStatus] = useState<'correct' | 'incorrect' | null>(null);
+    const [calcStatuses, setCalcStatuses] = useState<Record<number, 'correct' | 'incorrect' | null>>({
+        0: null, 1: null, 2: null, 3: null, 4: null
+    });
 
     // Activity 2: Determine if exact
     const exactItems = [
@@ -56,49 +57,72 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         { dividend: 60, divisor: 12, isExact: true },
     ];
     const [exactAnswers, setExactAnswers] = useState<Record<number, string>>({});
-    const [exactStatus, setExactStatus] = useState<'correct' | 'incorrect' | null>(null);
+    const [exactStatuses, setExactStatuses] = useState<Record<number, 'correct' | 'incorrect' | null>>({
+        0: null, 1: null, 2: null, 3: null, 4: null
+    });
 
 
     // Initial load and auto-checking
     useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.CALC_BLOCK)) setCalcStatus('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.EXACT_BLOCK)) setExactStatus('correct');
+        const newCalcStatuses: Record<number, 'correct' | 'incorrect' | null> = {};
+        calcItems.forEach((_, i) => {
+            newCalcStatuses[i] = isExerciseCompleted(`${EXERCISE_IDS.BASE}${i + 1}`) ? 'correct' : null;
+        });
+        setCalcStatuses(newCalcStatuses);
 
-        const calcDone = (watchedVideos.includes(VIDEO_TRACKING.EJ_1) || isExerciseCompleted(VIDEO_TRACKING.EJ_1)) && isExerciseCompleted(EXERCISE_IDS.CALC_BLOCK);
-        if (calcDone) completeStage(STAGE_IDS.CALC_STAGE);
+        const newExactStatuses: Record<number, 'correct' | 'incorrect' | null> = {};
+        exactItems.forEach((_, i) => {
+            newExactStatuses[i] = isExerciseCompleted(`${EXERCISE_IDS.BASE}${i + 6}`) ? 'correct' : null;
+        });
+        setExactStatuses(newExactStatuses);
 
-        const exactDone = (watchedVideos.includes(VIDEO_TRACKING.EJ_2) || isExerciseCompleted(VIDEO_TRACKING.EJ_2)) && isExerciseCompleted(EXERCISE_IDS.EXACT_BLOCK);
-        if (exactDone) completeStage(STAGE_IDS.EXACT_STAGE);
+        // Check for stage completion
+        const allCalcDone = calcItems.every((_, i) => isExerciseCompleted(`${EXERCISE_IDS.BASE}${i + 1}`));
+        const allExactDone = exactItems.every((_, i) => isExerciseCompleted(`${EXERCISE_IDS.BASE}${i + 6}`));
 
-        if (calcDone && exactDone) {
+        if (allCalcDone && (watchedVideos.includes(VIDEO_TRACKING.EJ_1) || isExerciseCompleted(VIDEO_TRACKING.EJ_1))) {
+            completeStage(STAGE_IDS.CALC_STAGE);
+        }
+
+        if (allExactDone && (watchedVideos.includes(VIDEO_TRACKING.EJ_2) || isExerciseCompleted(VIDEO_TRACKING.EJ_2))) {
+            completeStage(STAGE_IDS.EXACT_STAGE);
+        }
+
+        if (allCalcDone && allExactDone) {
             completeStage(STAGE_IDS.FINAL_STAGE);
         }
     }, [isExerciseCompleted, watchedVideos, completedExercises]);
 
-    const handleCalcCheck = async () => {
-        if (isExerciseCompleted(EXERCISE_IDS.CALC_BLOCK)) return;
-        const allCorrect = calcItems.every((item, i) => parseInt(calcAnswers[i] || '') === item.answer);
-        setCalcStatus(allCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.CALC_BLOCK, allCorrect, 'modulo_b');
+    const handleCalcCheck = async (index: number) => {
+        const id = `${EXERCISE_IDS.BASE}${index + 1}`;
+        if (isExerciseCompleted(id)) return;
+
+        const isCorrect = parseInt(calcAnswers[index] || '') === calcItems[index].answer;
+        setCalcStatuses(prev => ({ ...prev, [index]: isCorrect ? 'correct' : 'incorrect' }));
+        await submitExercise(id, isCorrect, 'modulo_b');
     };
 
-    const resetCalc = () => {
-        if (isExerciseCompleted(EXERCISE_IDS.CALC_BLOCK)) return;
-        setCalcAnswers({});
-        setCalcStatus(null);
+    const resetCalc = (index: number) => {
+        const id = `${EXERCISE_IDS.BASE}${index + 1}`;
+        if (isExerciseCompleted(id)) return;
+        setCalcAnswers(prev => ({ ...prev, [index]: '' }));
+        setCalcStatuses(prev => ({ ...prev, [index]: null }));
     };
 
-    const handleExactCheck = async () => {
-        if (isExerciseCompleted(EXERCISE_IDS.EXACT_BLOCK)) return;
-        const allCorrect = exactItems.every((item, i) => (exactAnswers[i] === 'exacta') === item.isExact);
-        setExactStatus(allCorrect ? 'correct' : 'incorrect');
-        await submitExercise(EXERCISE_IDS.EXACT_BLOCK, allCorrect, 'modulo_b');
+    const handleExactCheck = async (index: number) => {
+        const id = `${EXERCISE_IDS.BASE}${index + 6}`;
+        if (isExerciseCompleted(id)) return;
+
+        const isCorrect = (exactAnswers[index] === 'exacta') === exactItems[index].isExact;
+        setExactStatuses(prev => ({ ...prev, [index]: isCorrect ? 'correct' : 'incorrect' }));
+        await submitExercise(id, isCorrect, 'modulo_b');
     };
 
-    const resetExact = () => {
-        if (isExerciseCompleted(EXERCISE_IDS.EXACT_BLOCK)) return;
-        setExactAnswers({});
-        setExactStatus(null);
+    const resetExact = (index: number) => {
+        const id = `${EXERCISE_IDS.BASE}${index + 6}`;
+        if (isExerciseCompleted(id)) return;
+        setExactAnswers(prev => ({ ...prev, [index]: '' }));
+        setExactStatuses(prev => ({ ...prev, [index]: null }));
     };
 
 
@@ -117,33 +141,32 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                         </p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-y-4 gap-x-12 ml-4 md:ml-12 mb-8">
+                    <div className="flex flex-col gap-y-4 ml-4 md:ml-12 mb-8">
                         {calcItems.map((item, i) => (
-                            <div key={i} className="flex items-center gap-4">
-                                <span className="w-2 h-2 bg-purple-400 rounded-full"></span>
-                                <p className="text-xl font-bold text-gray-700 dark:text-gray-300 w-32">
+                            <div key={i} className="flex items-center gap-2 md:gap-4 flex-nowrap whitespace-nowrap">
+                                <span className="w-2 h-2 bg-purple-400 rounded-full flex-shrink-0"></span>
+                                <p className="text-xl font-bold text-gray-700 dark:text-gray-300 w-32 flex-shrink-0">
                                     {item.dividend} ÷ {item.divisor} =
                                 </p>
                                 <input
                                     type="number"
-                                    value={calcStatus === 'correct' ? item.answer : (calcAnswers[i] || '')}
-                                    onChange={(e) => { setCalcAnswers(prev => ({ ...prev, [i]: e.target.value })); setCalcStatus(null); }}
-                                    className={`w-24 h-12 border-2 rounded-xl text-center font-black text-xl transition-all ${calcStatus === 'correct' ? 'border-green-500 bg-green-50 text-green-700' :
-                                        calcStatus === 'incorrect' && parseInt(calcAnswers[i] || '') !== item.answer ? 'border-red-500 bg-red-50 text-red-700' :
-                                            'border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-400 focus:bg-white'
+                                    value={calcStatuses[i] === 'correct' ? item.answer : (calcAnswers[i] || '')}
+                                    onChange={(e) => { setCalcAnswers(prev => ({ ...prev, [i]: e.target.value })); setCalcStatuses(prev => ({ ...prev, [i]: null })); }}
+                                    className={`w-20 h-10 border-2 rounded-xl text-center font-black text-xl transition-all flex-shrink-0 ${calcStatuses[i] === 'correct' ? 'border-green-500 bg-green-50 text-green-700' :
+                                        calcStatuses[i] === 'incorrect' ? 'border-red-500 bg-red-50 text-red-700' :
+                                            'border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-1 focus:ring-purple-400 focus:bg-white'
                                         }`}
-                                    disabled={calcStatus === 'correct'}
+                                    disabled={calcStatuses[i] === 'correct'}
                                 />
+                                <div className="scale-75 origin-left flex-shrink-0">
+                                    <FeedbackButton
+                                        onCheck={() => handleCalcCheck(i)}
+                                        onReset={() => resetCalc(i)}
+                                        status={calcStatuses[i]}
+                                    />
+                                </div>
                             </div>
                         ))}
-                    </div>
-
-                    <div className="flex justify-center border-t border-gray-100 dark:border-gray-700 pt-6">
-                        <FeedbackButton
-                            onCheck={handleCalcCheck}
-                            onReset={resetCalc}
-                            status={calcStatus}
-                        />
                     </div>
                 </div>
 
@@ -157,36 +180,35 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                         </p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-y-4 gap-x-12 ml-4 md:ml-12 mb-8">
+                    <div className="flex flex-col gap-y-4 ml-4 md:ml-12 mb-8">
                         {exactItems.map((item, i) => (
-                            <div key={i} className="flex items-center gap-4">
-                                <span className="w-2 h-2 bg-purple-400 rounded-full"></span>
-                                <p className="text-xl font-bold text-gray-700 dark:text-gray-300 w-32">
+                            <div key={i} className="flex items-center gap-2 md:gap-4 flex-nowrap whitespace-nowrap">
+                                <span className="w-2 h-2 bg-purple-400 rounded-full flex-shrink-0"></span>
+                                <p className="text-xl font-bold text-gray-700 dark:text-gray-300 w-32 flex-shrink-0">
                                     {item.dividend} ÷ {item.divisor}
                                 </p>
                                 <select
-                                    value={exactStatus === 'correct' ? (item.isExact ? 'exacta' : 'no-exacta') : (exactAnswers[i] || '')}
-                                    onChange={(e) => { setExactAnswers(prev => ({ ...prev, [i]: e.target.value })); setExactStatus(null); }}
-                                    className={`h-12 border-2 rounded-xl px-4 font-bold text-base transition-all ${exactStatus === 'correct' ? 'border-green-500 bg-green-50 text-green-700' :
-                                        exactStatus === 'incorrect' && (exactAnswers[i] === 'exacta') !== item.isExact ? 'border-red-500 bg-red-50 text-red-700' :
-                                            'border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-400 focus:bg-white'
+                                    value={exactStatuses[i] === 'correct' ? (item.isExact ? 'exacta' : 'no-exacta') : (exactAnswers[i] || '')}
+                                    onChange={(e) => { setExactAnswers(prev => ({ ...prev, [i]: e.target.value })); setExactStatuses(prev => ({ ...prev, [i]: null })); }}
+                                    className={`h-10 border-2 rounded-xl px-2 font-bold text-sm transition-all flex-shrink-0 ${exactStatuses[i] === 'correct' ? 'border-green-500 bg-green-50 text-green-700' :
+                                        exactStatuses[i] === 'incorrect' ? 'border-red-500 bg-red-50 text-red-700' :
+                                            'border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-1 focus:ring-purple-400 focus:bg-white'
                                         }`}
-                                    disabled={exactStatus === 'correct'}
+                                    disabled={exactStatuses[i] === 'correct'}
                                 >
                                     <option value="">Selecciona</option>
                                     <option value="exacta">es exacta</option>
                                     <option value="no-exacta">no es exacta</option>
                                 </select>
+                                <div className="scale-75 origin-left flex-shrink-0">
+                                    <FeedbackButton
+                                        onCheck={() => handleExactCheck(i)}
+                                        onReset={() => resetExact(i)}
+                                        status={exactStatuses[i]}
+                                    />
+                                </div>
                             </div>
                         ))}
-                    </div>
-
-                    <div className="flex justify-center border-t border-gray-100 dark:border-gray-700 pt-6">
-                        <FeedbackButton
-                            onCheck={handleExactCheck}
-                            onReset={resetExact}
-                            status={exactStatus}
-                        />
                     </div>
                 </div>
             </div>

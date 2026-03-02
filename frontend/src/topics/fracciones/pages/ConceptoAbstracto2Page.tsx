@@ -166,11 +166,11 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                     />
                 </div>
 
-                {/* Equals */}
-                <span className="text-2xl font-bold text-gray-400 mx-1 shrink-0">=</span>
+                {/* Arrow */}
+                <span className="text-2xl font-bold text-gray-400 mx-1 shrink-0">→</span>
 
                 {/* Fraction Input */}
-                <div className="flex items-center gap-3 bg-gray-50 p-2 rounded-xl border border-gray-100 shadow-sm shrink-0">
+                <div className="flex items-center gap-3 shrink-0">
                     <FractionInput
                         isCorrect={results[id] === 'correct'}
                         nValue={inputs[`${id}_n` as keyof typeof inputs]}
@@ -248,8 +248,8 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                     className="h-28 w-auto object-contain drop-shadow-sm"
                                 />
                             </div>
-                            <span className="text-2xl font-bold text-gray-400 mx-1 shrink-0">=</span>
-                            <div className="flex items-center gap-3 bg-gray-50 p-2 rounded-xl border border-gray-100 shadow-sm shrink-0">
+                            <span className="text-2xl font-bold text-gray-400 mx-1 shrink-0">→</span>
+                            <div className="flex items-center gap-3 shrink-0">
                                 <div className="flex items-center gap-2">
                                     <FractionInput
                                         isCorrect={results.ex3 === 'correct'}
@@ -258,7 +258,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                         onNChange={(val: string) => { setInputs({ ...inputs, ex3_n1: val }); setResults({ ...results, ex3: null }); }}
                                         onDChange={(val: string) => { setInputs({ ...inputs, ex3_d1: val }); setResults({ ...results, ex3: null }); }}
                                     />
-                                    <span className="text-xl font-bold text-purple-600">+</span>
+                                    <div className="w-8"></div>
                                     <FractionInput
                                         isCorrect={results.ex3 === 'correct'}
                                         nValue={inputs.ex3_n2}

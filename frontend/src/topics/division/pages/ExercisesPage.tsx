@@ -51,12 +51,21 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
         if (isExerciseCompleted(EXERCISE_IDS.ACT1A)) setAct1AStatus('correct');
         if (isExerciseCompleted(EXERCISE_IDS.ACT1B)) setAct1BStatus('correct');
         if (isExerciseCompleted(EXERCISE_IDS.ACT2)) setAct2Status('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.ACT3)) setAct3Status('correct');
         if (isExerciseCompleted(EXERCISE_IDS.ACT4)) setAct4Status('correct');
+
+        // Initial load for Activity 3 sub-exercises
+        const newAct3Statuses = [...act3Statuses];
+        for (let i = 0; i < 10; i++) {
+            if (isExerciseCompleted(`${EXERCISE_IDS.ACT3}-${i + 1}`)) {
+                newAct3Statuses[i] = 'correct';
+            }
+        }
+        setAct3Statuses(newAct3Statuses);
 
         // Check for final completion
         const allDone = [
-            EXERCISE_IDS.ACT1A, EXERCISE_IDS.ACT1B, EXERCISE_IDS.ACT2, EXERCISE_IDS.ACT3, EXERCISE_IDS.ACT4
+            EXERCISE_IDS.ACT1A, EXERCISE_IDS.ACT1B, EXERCISE_IDS.ACT2, EXERCISE_IDS.ACT4,
+            ...Array.from({ length: 10 }, (_, i) => `${EXERCISE_IDS.ACT3}-${i + 1}`)
         ].every(id => isExerciseCompleted(id));
 
         if (allDone) {
@@ -78,7 +87,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
 
     const checkAct1A = async () => {
         if (isExerciseCompleted(EXERCISE_IDS.ACT1A)) return;
-        const isCorrect = act1_a_selected === 0;
+        const isCorrect = act1_a_selected === 1;
         setAct1AStatus(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.ACT1A, isCorrect, 'modulo_a');
         if (isCorrect) {
@@ -88,7 +97,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
 
     const checkAct1B = async () => {
         if (isExerciseCompleted(EXERCISE_IDS.ACT1B)) return;
-        const isCorrect = act1_b_selected === 2;
+        const isCorrect = act1_b_selected === 0;
         setAct1BStatus(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.ACT1B, isCorrect, 'modulo_a');
         if (isCorrect) {
@@ -100,6 +109,42 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
     const [connections, setConnections] = useState<{ from: number, to: number }[]>([]);
     const [selectedLeft, setSelectedLeft] = useState<number | null>(null);
     const [act2Status, setAct2Status] = useState<'correct' | 'incorrect' | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const leftDotsRef = useRef<(HTMLDivElement | null)[]>([]);
+    const rightDotsRef = useRef<(HTMLDivElement | null)[]>([]);
+    const [dotCoords, setDotCoords] = useState<{ left: { x: number, y: number }[], right: { x: number, y: number }[] }>({ left: [], right: [] });
+
+    // Update coordinates when connections change or on resize
+    const updateCoords = () => {
+        if (!containerRef.current) return;
+        const containerRect = containerRef.current.getBoundingClientRect();
+
+        const left = leftDotsRef.current.map(dot => {
+            if (!dot) return { x: 0, y: 0 };
+            const rect = dot.getBoundingClientRect();
+            return {
+                x: rect.left - containerRect.left + rect.width / 2,
+                y: rect.top - containerRect.top + rect.height / 2
+            };
+        });
+
+        const right = rightDotsRef.current.map(dot => {
+            if (!dot) return { x: 0, y: 0 };
+            const rect = dot.getBoundingClientRect();
+            return {
+                x: rect.left - containerRect.left + rect.width / 2,
+                y: rect.top - containerRect.top + rect.height / 2
+            };
+        });
+
+        setDotCoords({ left, right });
+    };
+
+    useEffect(() => {
+        updateCoords();
+        window.addEventListener('resize', updateCoords);
+        return () => window.removeEventListener('resize', updateCoords);
+    }, [connections]);
 
     const resetAct2 = () => {
         if (isExerciseCompleted(EXERCISE_IDS.ACT2)) return;
@@ -146,23 +191,36 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
 
     // --- ACTIVITY 3: QUOTIENTS ---
     const [act3Inputs, setAct3Inputs] = useState<string[]>(Array(10).fill(''));
-    const [act3Status, setAct3Status] = useState<'correct' | 'incorrect' | null>(null);
+    const [act3Statuses, setAct3Statuses] = useState<('correct' | 'incorrect' | null)[]>(Array(10).fill(null));
 
-    const resetAct3 = () => {
-        if (isExerciseCompleted(EXERCISE_IDS.ACT3)) return;
-        setAct3Inputs(Array(10).fill(''));
-        setAct3Status(null);
+    const resetAct3Single = (index: number) => {
+        if (isExerciseCompleted(`${EXERCISE_IDS.ACT3}-${index + 1}`)) return;
+        const newInputs = [...act3Inputs];
+        newInputs[index] = '';
+        setAct3Inputs(newInputs);
+        const newStatuses = [...act3Statuses];
+        newStatuses[index] = null;
+        setAct3Statuses(newStatuses);
     };
 
-    const checkAct3 = async () => {
-        if (isExerciseCompleted(EXERCISE_IDS.ACT3)) return;
+    const checkAct3Single = async (index: number) => {
+        const id = `${EXERCISE_IDS.ACT3}-${index + 1}`;
+        if (isExerciseCompleted(id)) return;
+
         const answers = ['5', '4', '6', '9', '6', '4', '10', '5', '3', '5'];
-        const isCorrect = act3Inputs.every((val, i) => val.trim() === answers[i]);
-        setAct3Status(isCorrect ? 'correct' : 'incorrect');
-        // ACT3 is MODULO B based on comments, use submitGame (20 pts)
-        await submitGame(EXERCISE_IDS.ACT3, isCorrect, 'modulo_b');
-        if (isCorrect) {
-            // CSV says Completar B is 0 points, but stage completion should still be marked
+        const isCorrect = act3Inputs[index].trim() === answers[index];
+
+        const newStatuses = [...act3Statuses];
+        newStatuses[index] = isCorrect ? 'correct' : 'incorrect';
+        setAct3Statuses(newStatuses);
+
+        await submitGame(id, isCorrect, 'modulo_b');
+
+        // If all 10 are correct, mark stage as complete
+        const allCompleted = act3Inputs.every((val, i) =>
+            i === index ? isCorrect : isExerciseCompleted(`${EXERCISE_IDS.ACT3}-${i + 1}`)
+        );
+        if (allCompleted) {
             await completeStage(STAGE_IDS.ACT3);
         }
     };
@@ -239,7 +297,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                                         className="w-full h-full object-contain"
                                                     />
                                                 </div>
-                                                {(act1AStatus === 'correct' && i === 0) && (
+                                                {(act1AStatus === 'correct' && i === 1) && (
                                                     <div className="absolute top-2 right-2 rounded-full p-1 shadow-sm bg-green-100 text-green-600">
                                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
                                                     </div>
@@ -294,7 +352,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                                         className="w-full h-full object-contain"
                                                     />
                                                 </div>
-                                                {(act1BStatus === 'correct' && i === 2) && (
+                                                {(act1BStatus === 'correct' && i === 0) && (
                                                     <div className="absolute top-2 right-2 rounded-full p-1 shadow-sm bg-green-100 text-green-600">
                                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
                                                     </div>
@@ -336,21 +394,26 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                             </div>
                         </div>
 
-                        <div className={`relative flex justify-between items-stretch px-4 md:px-12 py-8 select-none min-h-[350px] ${act2Status === 'correct' ? 'pointer-events-none' : ''}`}>
+                        <div ref={containerRef} className={`relative flex justify-between items-stretch px-4 md:px-12 py-8 select-none min-h-[350px] ${act2Status === 'correct' ? 'pointer-events-none' : ''}`}>
                             <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
-                                {connections.map((conn, i) => (
-                                    <line
-                                        key={i}
-                                        x1="25%"
-                                        y1={`${10 + conn.from * 20}%`}
-                                        x2="75%"
-                                        y2={`${10 + conn.to * 20}%`}
-                                        stroke={act2Status === 'correct' ? '#10b981' : (act2Status === 'incorrect' ? '#ef4444' : '#9333ea')}
-                                        strokeWidth="4"
-                                        strokeLinecap="round"
-                                        className="drop-shadow-sm transition-all duration-300"
-                                    />
-                                ))}
+                                {connections.map((conn, i) => {
+                                    const start = dotCoords.left[conn.from];
+                                    const end = dotCoords.right[conn.to];
+                                    if (!start || !end) return null;
+                                    return (
+                                        <line
+                                            key={i}
+                                            x1={start.x}
+                                            y1={start.y}
+                                            x2={end.x}
+                                            y2={end.y}
+                                            stroke={act2Status === 'correct' ? '#10b981' : (act2Status === 'incorrect' ? '#ef4444' : '#9333ea')}
+                                            strokeWidth="4"
+                                            strokeLinecap="round"
+                                            className="drop-shadow-sm transition-all duration-300"
+                                        />
+                                    );
+                                })}
                             </svg>
 
                             {/* Left Column */}
@@ -369,7 +432,10 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                         `}
                                     >
                                         <span className="font-bold text-xl text-gray-800 dark:text-gray-200">{text}</span>
-                                        <div className={`w-4 h-4 rounded-full border-2 ${connections.some(c => c.from === i) ? 'bg-purple-600 border-purple-600' : 'bg-white dark:bg-gray-700 border-purple-300 dark:border-purple-500'}`}></div>
+                                        <div
+                                            ref={el => { leftDotsRef.current[i] = el; }}
+                                            className={`w-4 h-4 rounded-full border-2 ${connections.some(c => c.from === i) ? 'bg-purple-600 border-purple-600' : 'bg-white dark:bg-gray-700 border-purple-300 dark:border-purple-500'}`}
+                                        ></div>
                                     </div>
                                 ))}
                             </div>
@@ -386,7 +452,10 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                                         }}
                                         className={`flex items-center justify-between cursor-pointer p-4 rounded-xl transition-all shadow-sm border h-16 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-500 hover:shadow-md ${act2Status === 'correct' ? 'opacity-90 border-green-500' : ''}`}
                                     >
-                                        <div className={`w-4 h-4 rounded-full border-2 ${connections.some(c => c.to === i) ? 'bg-purple-600 border-purple-600' : 'bg-white dark:bg-gray-700 border-purple-300 dark:border-purple-500'}`}></div>
+                                        <div
+                                            ref={el => { rightDotsRef.current[i] = el; }}
+                                            className={`w-4 h-4 rounded-full border-2 ${connections.some(c => c.to === i) ? 'bg-purple-600 border-purple-600' : 'bg-white dark:bg-gray-700 border-purple-300 dark:border-purple-500'}`}
+                                        ></div>
                                         <span className="font-bold text-xl text-gray-800 dark:text-gray-200">{text}</span>
                                     </div>
                                 ))}
@@ -419,51 +488,39 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
                             </div>
                         </div>
 
-                        <div className="flex justify-between items-start gap-8">
-                            <div className={`grid grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-6 w-full ${act3Status === 'correct' ? 'pointer-events-none' : ''}`}>
+                        <div className="w-full">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 w-full">
                                 {['20 ÷ 4 =', '36 ÷ 9 =', '30 ÷ 5 =', '18 ÷ 2 =', '60 ÷ 10 =', '60 ÷ 15 =', '80 ÷ 8 =', '100 ÷ 20 =', '36 ÷ 12 =', '125 ÷ 25 ='].map((text, i) => (
-                                    <div key={i} className="flex items-center gap-3">
+                                    <div key={i} className={`flex items-center gap-3 p-2 rounded-lg border border-transparent hover:border-purple-100 transition-colors ${act3Statuses[i] === 'correct' ? 'pointer-events-none' : ''}`}>
                                         <div className="w-2 h-2 bg-purple-400 rounded-full shrink-0"></div>
-                                        <span className="font-bold text-2xl text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[120px]">{text}</span>
+                                        <span className="font-bold text-xl text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[100px]">{text}</span>
                                         <input
-                                            value={act3Status === 'correct' ? ['5', '4', '6', '9', '6', '4', '10', '5', '3', '5'][i] : act3Inputs[i]}
+                                            value={act3Statuses[i] === 'correct' ? ['5', '4', '6', '9', '6', '4', '10', '5', '3', '5'][i] : act3Inputs[i]}
                                             onChange={(e) => {
-                                                if (act3Status === 'correct') return;
+                                                if (act3Statuses[i] === 'correct') return;
                                                 const newInputs = [...act3Inputs];
                                                 newInputs[i] = e.target.value;
                                                 setAct3Inputs(newInputs);
-                                                setAct3Status(null);
+                                                const newStatuses = [...act3Statuses];
+                                                newStatuses[i] = null;
+                                                setAct3Statuses(newStatuses);
                                             }}
-                                            className={`w-20 h-12 border-2 bg-white dark:bg-gray-800 text-center font-bold text-2xl dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all
-                                                ${act3Status === 'correct' ? 'border-green-400 bg-green-50 dark:bg-green-900/20' : (act3Status === 'incorrect' ? 'border-red-300 bg-red-50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-600 focus:border-purple-500')}
+                                            className={`w-16 h-10 border-2 bg-white dark:bg-gray-800 text-center font-bold text-xl dark:text-white rounded focus:outline-none focus:ring-1 focus:ring-purple-400 transition-all
+                                                ${act3Statuses[i] === 'correct' ? 'border-green-400 bg-green-50 dark:bg-green-900/20' : (act3Statuses[i] === 'incorrect' ? 'border-red-300 bg-red-50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-600 focus:border-purple-500')}
                                             `}
                                             inputMode="numeric"
-                                            readOnly={act3Status === 'correct'}
+                                            readOnly={act3Statuses[i] === 'correct'}
                                         />
-                                        {act3Status && (
-                                            <div className="w-6">
-                                                {(() => {
-                                                    const answers = ['5', '4', '6', '9', '6', '4', '10', '5', '3', '5'];
-                                                    const currentVal = act3Status === 'correct' ? answers[i] : act3Inputs[i].trim();
-                                                    return currentVal === answers[i] ? (
-                                                        <span className="text-green-500 font-bold text-xl">✓</span>
-                                                    ) : (
-                                                        <span className="text-red-500 font-bold text-xl">✕</span>
-                                                    );
-                                                })()}
-                                            </div>
-                                        )}
+                                        <div className="shrink-0 scale-75 origin-left">
+                                            <FeedbackButton
+                                                onCheck={() => checkAct3Single(i)}
+                                                onReset={() => resetAct3Single(i)}
+                                                status={act3Statuses[i]}
+                                            />
+                                        </div>
                                     </div>
                                 ))}
                             </div>
-                        </div>
-
-                        <div className="flex items-center gap-4 mt-6 justify-end">
-                            <FeedbackButton
-                                onCheck={checkAct3}
-                                onReset={resetAct3}
-                                status={act3Status}
-                            />
                         </div>
                     </div>
                 </div>

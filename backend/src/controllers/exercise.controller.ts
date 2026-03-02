@@ -78,6 +78,7 @@ export const submitExercise = async (req: Request, res: Response) => {
                         data: {
                             userId,
                             exerciseId,
+                            type: type || 'modulo_a',
                             attempted: true,
                             completed: true,
                             attemptCount: 1
@@ -100,6 +101,7 @@ export const submitExercise = async (req: Request, res: Response) => {
                     data: {
                         userId,
                         exerciseId,
+                        type: type || 'modulo_a',
                         attempted: true,
                         completed: false,
                         attemptCount: 1

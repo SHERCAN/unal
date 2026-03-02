@@ -91,7 +91,7 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
     }, [onNavigationRequest, navigateToPage]);
 
     // Combine special pages + index + all lesson pages and exercise pages from all topics
-    const allPages = [
+    const allPages = React.useMemo(() => [
         {
             id: 'portada',
             topicId: 'shared',
@@ -124,7 +124,36 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
             ...topic.pages.map(p => ({ ...p, topicId: topic.id })),
             ...topic.exercisePages.map(ep => ({ ...ep, isExercise: true, topicId: topic.id }))
         ]),
-    ];
+    ], [topics, navigateToPage]);
+
+    // Keyboard navigation
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            // Ignore if the user is typing in an input or select
+            if (
+                e.target instanceof HTMLInputElement ||
+                e.target instanceof HTMLTextAreaElement ||
+                (e.target as HTMLElement).isContentEditable
+            ) {
+                return;
+            }
+
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                if (currentPage < allPages.length - 1) {
+                    e.preventDefault();
+                    navigateToPage(currentPage + 1);
+                }
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                if (currentPage > 0) {
+                    e.preventDefault();
+                    navigateToPage(currentPage - 1);
+                }
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [currentPage, allPages.length, navigateToPage]);
 
     const [loadedLimit, setLoadedLimit] = useState(2); // Start with Index + buffer
     const allPagesCount = allPages.length;

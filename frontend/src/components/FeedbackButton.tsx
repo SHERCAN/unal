@@ -21,7 +21,7 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
 }) => {
     return (
         <div className={`flex items-center justify-center min-w-[200px] h-12 ${className}`}>
-            {status === null ? (
+            {(status === null || status === undefined) ? (
                 !hideCheck && (
                     <button
                         type="button"
