@@ -15,6 +15,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
 
     const VIDEO_TRACKING = {
         A_INTRO: 'fracciones-pag18-v1',
+        A_REPR: 'fracciones-pag18-v2',
         A_DEF: 'fracciones-pag18-v3',
         A_PARTS: 'fracciones-pag18-v7',
         A_ERROR: 'fracciones-pag18-v8',
@@ -70,6 +71,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                             </div>
 
                             <div className="flex items-center gap-4">
+                                <PlayVideoButton trackingId={VIDEO_TRACKING.A_REPR} title="Representación de fracción" videoId="/pag18/vv-2" />
                                 <p className="font-semibold text-base text-gray-800">La <span className="text-[#e95352]">fracción</span> se representa cómo</p>
                             </div>
 

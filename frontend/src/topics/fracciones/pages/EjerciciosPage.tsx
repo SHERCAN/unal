@@ -115,7 +115,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
     const checkIsFrac = async () => {
         if (isExerciseCompleted(EXERCISE_IDS.EJ2)) return;
-        const correct = ['no', 'es', 'es', 'no', 'no', 'es'];
+        const correct = ['no', 'es', 'es', 'no', 'es', 'es'];
         const allCorrect = isFracAnswers.every((ans, i) => ans === correct[i]);
         setIsFracResult(allCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.EJ2, allCorrect, 'modulo_a');
@@ -220,7 +220,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                                         { img: corazonImg, alt: 'Corazón', correct: 'es' },
                                         { img: ajedrezImg, alt: 'Ajedrez', correct: 'es' },
                                         { img: corazonoblicuoImg, alt: 'Corazón Oblicuo', correct: 'no' },
-                                        { img: piramideImg, alt: 'Pirámide', correct: 'no' },
+                                        { img: piramideImg, alt: 'Pirámide', correct: 'es' },
                                         { img: trapecioImg, alt: 'Trapecio', correct: 'es' }
                                     ].map((item, idx) => (
                                         <div key={idx} className="flex items-center gap-4 py-2">

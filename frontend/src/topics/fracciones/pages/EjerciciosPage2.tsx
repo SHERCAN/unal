@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { PlayVideoButton } from '@/components/PlayVideoButton';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
@@ -113,6 +114,7 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
                             {/* EXERCISE 4: Pencils */}
                             <div className="space-y-6">
                                 <div className="flex items-center gap-3">
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.EX2_PENCILS} videoId="/pag22/vv-1" title="" />
                                     <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold shrink-0">4</div>
                                     <p className="font-bold text-gray-700 text-xl">
                                         En una caja hay 15 lápices negros y 5 lápices rojos.
@@ -138,8 +140,8 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
                                                         }
                                                     }}
                                                     className={`p-2 rounded-2xl transition-all cursor-pointer border-4 ${pencilSelection === item.id
-                                                            ? 'border-purple-500 scale-110 shadow-lg'
-                                                            : 'border-transparent hover:border-purple-200'
+                                                        ? 'border-purple-500 scale-110 shadow-lg'
+                                                        : 'border-transparent hover:border-purple-200'
                                                         } ${pencilResult === 'correct' ? 'cursor-default' : ''}`}
                                                 >
                                                     <Image src={item.img} alt={`Lápices ${item.id}`} className="h-36 w-auto object-contain" />
@@ -189,6 +191,7 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
                             {/* EXERCISE 5: Notebooks */}
                             <div className="space-y-6 pt-12 border-t border-gray-100">
                                 <div className="flex items-center gap-3">
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.EX2_NOTEBOOKS} videoId="/pag22/vv-2" title="" />
                                     <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold shrink-0">5</div>
                                     <p className="font-bold text-gray-700 text-xl">
                                         En una caja hay 18 cuadernos negros y 6 azules.
@@ -214,8 +217,8 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
                                                         }
                                                     }}
                                                     className={`p-2 rounded-2xl transition-all cursor-pointer border-4 ${notebookSelection === item.id
-                                                            ? 'border-purple-500 scale-110 shadow-lg'
-                                                            : 'border-transparent hover:border-purple-200'
+                                                        ? 'border-purple-500 scale-110 shadow-lg'
+                                                        : 'border-transparent hover:border-purple-200'
                                                         } ${notebookResult === 'correct' ? 'cursor-default' : ''}`}
                                                 >
                                                     <Image src={item.img} alt={`Cuadernos ${item.id}`} className="h-36 w-auto object-contain" />
@@ -265,6 +268,7 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
                             {/* EXERCISE 6: Library */}
                             <div className="space-y-6 pt-12 border-t border-gray-100">
                                 <div className="flex items-center gap-3">
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING.EX2_LIBRARY} videoId="/pag22/vv-3" title="" />
                                     <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold shrink-0">6</div>
                                     <p className="font-bold text-gray-700 text-xl">
                                         En una biblioteca hay <span className="font-bold">36</span> libros. Si <span className="font-bold">1/6</span> son de cuentos, ¿cuántos libros de cuentos hay?
