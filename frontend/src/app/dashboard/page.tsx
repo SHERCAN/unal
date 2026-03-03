@@ -251,17 +251,17 @@ export default function DashboardPage() {
 
   // Determine current topic based on page index
   const currentTopicInfo = React.useMemo(() => {
-    // Handling of the first 4 special pages (indices 0, 1, 2, 3)
-    if (currentPage < 3) return {
+    // Handling of the first 3 special pages (indices 0, 1, 2)
+    if (currentPage < 2) return {
       topic: { id: 'shared', name: '', pages: [], exercisePages: [] },
       relativePage: 0
     };
-    if (currentPage === 3) return {
+    if (currentPage === 2) return {
       topic: { id: 'shared', name: 'Índice de Contenidos', pages: [], exercisePages: [] },
       relativePage: 0
     };
 
-    let offset = 4; // Topics start at index 4
+    let offset = 3; // Topics start at index 3
     for (const topic of ORDERED_TOPICS) {
       const count = topic.pages.length + topic.exercisePages.length;
       if (currentPage < offset + count) {
@@ -777,17 +777,17 @@ function InfiniteBookWrapper({
   }, []);
 
   const totalLessonPages = topics.reduce((acc, t) => acc + t.pages.length + t.exercisePages.length, 0);
-  const totalPagesInBook = totalLessonPages + 4; // Portada, Sinopsis, Explicacion, Indice
+  const totalPagesInBook = totalLessonPages + 3; // Portada, Sinopsis, Indice
 
   const goToNextTopic = useCallback(() => {
-    // If we are in the special intro pages (0-2), go to the next individual intro page
-    if (currentPage < 3) {
+    // If we are in the special intro pages (0-1), go to the next individual intro page
+    if (currentPage < 2) {
       handleNavigateToPage(currentPage + 1);
       return;
     }
 
-    // If we are on the Index (3) or at the start of a topic, jump to the next section
-    let offset = 4;
+    // If we are on the Index (2) or at the start of a topic, jump to the next section
+    let offset = 3;
     for (let i = 0; i < topics.length; i++) {
       const topic = topics[i];
       const count = topic.pages.length + topic.exercisePages.length;
@@ -813,14 +813,14 @@ function InfiniteBookWrapper({
   const goToPrevTopic = useCallback(() => {
     if (currentPage === 0) return;
 
-    // If we are at the very first lesson (index 4) or just after intro, go back to special pages one by one
-    if (currentPage <= 4) {
+    // If we are at the very first lesson (index 3) or just after intro, go back to special pages one by one
+    if (currentPage <= 3) {
       handleNavigateToPage(currentPage - 1);
       return;
     }
 
-    let offset = 4;
-    let prevTopicStart = 3; // Index page is at 3
+    let offset = 3;
+    let prevTopicStart = 2; // Index page is at 2
 
     for (let i = 0; i < topics.length; i++) {
       const topic = topics[i];
@@ -895,7 +895,7 @@ function InfiniteBookWrapper({
             onPageChange={(relativePage) => {
               // Convert relative page back to global page
               if (!currentTopicInfo) return;
-              let globalOffset = 4;
+              let globalOffset = 3;
               for (const t of topics) {
                 if (t.id === currentTopicInfo.topic.id) {
                   handleNavigateToPage(globalOffset + relativePage - 1);
@@ -907,10 +907,10 @@ function InfiniteBookWrapper({
           />
           {/* Global Page Indicator Overlay */}
           <div className="absolute top-[-30px] right-4 bg-black/50 text-white px-3 py-1 rounded-t-lg text-xs font-mono backdrop-blur-sm pointer-events-none">
-            {currentPage < 4 ? (
-              <span>LIBRO: {currentPage === 0 ? 'Portada' : currentPage === 3 ? 'Índice' : 'Introducción'}</span>
+            {currentPage < 3 ? (
+              <span>LIBRO: {currentPage === 0 ? 'Portada' : currentPage === 2 ? 'Índice' : 'Introducción'}</span>
             ) : (
-              <span>LIBRO: Pág. {currentPage - 3} / {totalLessonPages}</span>
+              <span>LIBRO: Pág. {currentPage - 2} / {totalLessonPages}</span>
             )}
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TopicConfig } from '@/types/topic';
+import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 interface TopicDropdownProps {
     topicConfigs: TopicConfig[];
@@ -91,7 +92,7 @@ export function TopicDropdown({
 
     // Auto-expand current topic
     useEffect(() => {
-        let offset = 1;
+        let offset = 3;
         for (const topic of topicConfigs) {
             const count = topic.pages.length + topic.exercisePages.length;
             if (currentPage >= offset && currentPage < offset + count) {
@@ -105,7 +106,7 @@ export function TopicDropdown({
     // Calculate page offsets for each topic
     const getTopicOffsets = () => {
         const offsets: Record<string, { explanationPage: number; exercisePage: number; totalPages: number }> = {};
-        let offset = 1;
+        let offset = 3;
         for (const topic of topicConfigs) {
             offsets[topic.id] = {
                 explanationPage: offset,
@@ -126,14 +127,14 @@ export function TopicDropdown({
         if (!totalItems) return 0;
 
         // Count watched videos for this topic
-        const topicVideos = watchedVideos.filter(v => v.startsWith(prefix + '-'));
+        const topicVideos = watchedVideos.filter((v: string) => v.startsWith(prefix + '-'));
 
         // Count completed exercises for this topic
         const topicExercises = Object.entries(completedExercises)
-            .filter(([id, data]) => id.startsWith(prefix + '-') && data.completed);
+            .filter(([id, data]: [string, any]) => id.startsWith(prefix + '-') && data.completed);
 
         // Count completed stages for this topic
-        const topicStages = completedStages.filter(s => s.startsWith(prefix + '-'));
+        const topicStages = completedStages.filter((s: string) => s.startsWith(prefix + '-'));
 
         const completedCount = topicVideos.length + topicExercises.length + topicStages.length;
 
@@ -192,8 +193,8 @@ export function TopicDropdown({
                             {/* Indices Item */}
                             <div className="border-b border-purple-500/20">
                                 <button
-                                    onClick={() => handleNavigate(0)}
-                                    className={`w-full text-left px-4 py-3 flex items-center justify-between hover:bg-white/5 transition-colors ${currentPage === 0 ? 'border-l-4 border-green-400 bg-white/10' : ''}`}
+                                    onClick={() => handleNavigate(2)}
+                                    className={`w-full text-left px-4 py-3 flex items-center justify-between hover:bg-white/5 transition-colors ${currentPage === 2 ? 'border-l-4 border-green-400 bg-white/10' : ''}`}
                                 >
                                     <div className="flex items-center gap-3">
                                         <svg className="w-5 h-5 text-purple-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>

@@ -89,7 +89,7 @@ export const getUserProgress = async (req: Request, res: Response) => {
 export const updateProgress = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).userId;
-    const { modulo } = req.body;
+    const { modulo, points } = req.body;
 
     if (!modulo) return res.status(400).json({ error: 'Modulo required' });
 
@@ -102,13 +102,14 @@ export const updateProgress = async (req: Request, res: Response) => {
       return res.json({ message: 'Already completed', pointsAdded: 0 });
     }
 
+    // Determine points to add (allow 0)
+    const pointsToAward = typeof points === 'number' ? points : 20;
+
     // 1. Find existing record (completed or not)
     const record = await prisma.progreso.findFirst({ where: { userId, modulo } });
 
     let result;
     if (record) {
-      if (record.completado) return res.json({ message: 'Already completed', pointsAdded: 0 });
-
       // Update
       result = await prisma.$transaction([
         prisma.progreso.update({
@@ -117,7 +118,7 @@ export const updateProgress = async (req: Request, res: Response) => {
         }),
         prisma.user.update({
           where: { id: userId },
-          data: { puntos: { increment: 20 } }
+          data: { puntos: { increment: pointsToAward } }
         })
       ]);
     } else {
@@ -133,7 +134,7 @@ export const updateProgress = async (req: Request, res: Response) => {
         }),
         prisma.user.update({
           where: { id: userId },
-          data: { puntos: { increment: 20 } }
+          data: { puntos: { increment: pointsToAward } }
         })
       ]);
     }
@@ -141,7 +142,7 @@ export const updateProgress = async (req: Request, res: Response) => {
     // Notify admin panel
     notifyProgressUpdate(userId);
 
-    res.json({ message: 'Progress updated', pointsAdded: 20, newTotal: result[1].puntos });
+    res.json({ message: 'Progress updated', pointsAdded: pointsToAward, newTotal: result[1].puntos });
 
   } catch (error) {
     console.error('Error updating progress:', error);

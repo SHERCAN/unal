@@ -121,7 +121,7 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
             id: 'index-page',
             topicId: 'shared',
             component: ({ zoom }: { zoom?: number }) => (
-                <IndexPage topics={topics} onNavigate={navigateToPage} zoom={zoom} startPageIndex={4} />
+                <IndexPage topics={topics} onNavigate={navigateToPage} zoom={zoom} startPageIndex={1} />
             )
         },
         ...topics.flatMap(topic => [

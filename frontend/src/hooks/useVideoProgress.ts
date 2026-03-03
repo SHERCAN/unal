@@ -116,7 +116,7 @@ export function useVideoProgress() {
         return completedExercises[exerciseId]?.completed || false;
     }, [completedExercises]);
 
-    const completeStage = async (stageId: string) => {
+    const completeStage = async (stageId: string, points?: number) => {
         if (completedStages.includes(stageId)) return;
 
         try {
@@ -124,7 +124,7 @@ export function useVideoProgress() {
             if (!token) return;
 
             const response = await axios.post('/api/users/progress',
-                { modulo: stageId },
+                { modulo: stageId, points },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
@@ -135,7 +135,7 @@ export function useVideoProgress() {
                 // Show toast and dispatch event to update points in Dashboard
                 showToast('cpa', response.data.pointsAdded);
                 window.dispatchEvent(new Event('storage'));
-            } else if (response.data.message === 'Already completed') {
+            } else if (response.data.message === 'Already completed' || response.data.pointsAdded === 0) {
                 // Update local list even if no points (for consistency)
                 setCompletedStages(prev => {
                     if (prev.includes(stageId)) return prev;

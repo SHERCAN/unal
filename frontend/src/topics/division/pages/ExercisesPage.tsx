@@ -87,7 +87,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
         ].every(id => isExerciseCompleted(id));
 
         if (allDone) {
-            completeStage('division-final');
+            completeStage('division-final', 0);
         }
     }, [isExerciseCompleted]);
 
@@ -109,7 +109,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
         setAct1AStatus(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.ACT1A, isCorrect, 'modulo_a');
         if (isCorrect) {
-            await completeStage(STAGE_IDS.ACT1A);
+            await completeStage(STAGE_IDS.ACT1A, 0);
         }
     };
 
@@ -119,7 +119,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
         setAct1BStatus(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.ACT1B, isCorrect, 'modulo_a');
         if (isCorrect) {
-            await completeStage(STAGE_IDS.ACT1B);
+            await completeStage(STAGE_IDS.ACT1B, 0);
         }
     };
 
@@ -203,7 +203,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
         setAct2Status(allCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.ACT2, allCorrect, 'modulo_a');
         if (allCorrect) {
-            await completeStage(STAGE_IDS.ACT2);
+            await completeStage(STAGE_IDS.ACT2, 0);
         }
     };
 
@@ -239,7 +239,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
             i === index ? isCorrect : isExerciseCompleted(`${EXERCISE_IDS.ACT3}-${i + 1}`)
         );
         if (allCompleted) {
-            await completeStage(STAGE_IDS.ACT3);
+            await completeStage(STAGE_IDS.ACT3, 0);
         }
     };
 
@@ -260,7 +260,7 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
         setAct4Status(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.ACT4, isCorrect, 'modulo_a');
         if (isCorrect) {
-            await completeStage(STAGE_IDS.ACT4);
+            await completeStage(STAGE_IDS.ACT4, 0);
         }
     };
 

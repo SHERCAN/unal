@@ -343,7 +343,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                             <div key={i} className="space-y-2 bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
                                 {/* Problem text */}
                                 <div className="flex items-start gap-2">
-                                    <PlayVideoButton trackingId={item.trackingId} title={`Problema ${i + 1}`} videoId="/pag1/vv-1" />
+                                    <PlayVideoButton trackingId={item.trackingId} title={`Problema ${i + 1}`} videoId={`/pag13/vv-${i + 3}`} />
                                     <span className="w-3 h-3 bg-gray-800 dark:bg-gray-200 rounded-sm inline-block flex-shrink-0 mt-1.5"></span>
                                     <div>
                                         <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">{item.text}</p>
