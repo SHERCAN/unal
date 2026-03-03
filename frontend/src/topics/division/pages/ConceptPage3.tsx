@@ -322,19 +322,19 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                     {/* ... rest of rows could just be empty or as they are since we have pointer-events-none on parent ... */}
                                     {/* Row 2 */}
                                     <div className="flex items-center gap-2">
-                                        <InputBox value={ex1_m2_a.value} onChange={ex1_m2_a.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
+                                        <InputBox value={ex1Status === 'correct' ? '7' : ex1_m2_a.value} onChange={ex1_m2_a.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
                                         <span className="font-bold dark:text-white">×</span>
-                                        <InputBox value={ex1_m2_b.value} onChange={ex1_m2_b.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
+                                        <InputBox value={ex1Status === 'correct' ? '3' : ex1_m2_b.value} onChange={ex1_m2_b.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
                                         <span className="font-bold dark:text-white">=</span>
-                                        <InputBox value={ex1_m2_res.value} onChange={ex1_m2_res.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
+                                        <InputBox value={ex1Status === 'correct' ? '21' : ex1_m2_res.value} onChange={ex1_m2_res.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
                                     </div>
                                     {/* Row 3 */}
                                     <div className="flex items-center gap-2">
-                                        <InputBox value={ex1_m3_a.value} onChange={ex1_m3_a.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
+                                        <InputBox value={ex1Status === 'correct' ? '7' : ex1_m3_a.value} onChange={ex1_m3_a.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
                                         <span className="font-bold dark:text-white">×</span>
-                                        <InputBox value={ex1_m3_b.value} onChange={ex1_m3_b.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
+                                        <InputBox value={ex1Status === 'correct' ? '3' : ex1_m3_b.value} onChange={ex1_m3_b.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
                                         <span className="font-bold dark:text-white">=</span>
-                                        <InputBox value={ex1_m3_res.value} onChange={ex1_m3_res.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
+                                        <InputBox value={ex1Status === 'correct' ? '21' : ex1_m3_res.value} onChange={ex1_m3_res.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
                                     </div>
 
                                     <div className="flex items-center gap-2 mt-2">

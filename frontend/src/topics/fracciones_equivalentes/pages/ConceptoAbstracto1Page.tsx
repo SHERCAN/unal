@@ -62,8 +62,14 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
 
     // Initial load and auto-checking
     useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.ROW1)) setRow1Result('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.ROW2)) setRow2Result('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.ROW1)) {
+            setRow1Result('correct');
+            setRow1({ i1: '3', i2: '20', i3: '5', i4: '12', r1: '60', r2: '60' });
+        }
+        if (isExerciseCompleted(EXERCISE_IDS.ROW2)) {
+            setRow2Result('correct');
+            setRow2({ i1: '6', i2: '20', i3: '10', i4: '12', r1: '120', r2: '120' });
+        }
 
         const A_REQUIRED = [
             'fracciones_equivalentes-pag25-v1', 'fracciones_equivalentes-pag25-v2', 'fracciones_equivalentes-pag25-v3',

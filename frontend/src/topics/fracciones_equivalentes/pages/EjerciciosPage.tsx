@@ -62,6 +62,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     useEffect(() => {
         // Activity 1
         const act1DoneIndices: number[] = [];
+        const act1AnswersList = [1, 0, 2];
         [0, 1, 2].forEach(idx => {
             if (isExerciseCompleted(`fracciones_equivalentes-pag28-ej${idx + 1}`)) {
                 act1DoneIndices.push(idx);
@@ -71,6 +72,11 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
             setAct1Results(prev => {
                 const next = { ...prev };
                 act1DoneIndices.forEach(idx => { next[idx] = 'correct'; });
+                return next;
+            });
+            setAct1(prev => {
+                const next = { ...prev };
+                act1DoneIndices.forEach(idx => { next[idx] = act1AnswersList[idx]; });
                 return next;
             });
             if (act1DoneIndices.length === 3) completeStage(STAGE_IDS.ACT1);
@@ -89,6 +95,14 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                 act2DoneIndices.forEach(idx => { next[idx] = 'correct'; });
                 return next;
             });
+            setAct2(prev => {
+                const next = { ...prev };
+                const ansIndices = [1, 2, 5, 6, 9];
+                act2DoneIndices.forEach(idx => {
+                    next[ansIndices[idx]] = act2Answers[idx as keyof typeof act2Answers];
+                });
+                return next;
+            });
             if (act2DoneIndices.length === 5) completeStage(STAGE_IDS.ACT2);
         }
 
@@ -105,6 +119,14 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
                 act3DoneIndices.forEach(idx => { next[idx] = 'correct'; });
                 return next;
             });
+            setAct3(prev => {
+                const next = { ...prev };
+                act3DoneIndices.forEach(idx => {
+                    next[idx * 2] = act3Answers[idx * 2 as keyof typeof act3Answers];
+                    next[idx * 2 + 1] = act3Answers[(idx * 2 + 1) as keyof typeof act3Answers];
+                });
+                return next;
+            });
             if (act3DoneIndices.length === 3) completeStage(STAGE_IDS.ACT3);
         }
 
@@ -119,6 +141,13 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
             setAct4Results(prev => {
                 const next = { ...prev };
                 act4DoneIndices.forEach(idx => { next[idx] = 'correct'; });
+                return next;
+            });
+            setAct4(prev => {
+                const next = { ...prev };
+                act4DoneIndices.forEach(idx => {
+                    next[idx] = act4Answers[idx as keyof typeof act4Answers] as 'V' | 'F';
+                });
                 return next;
             });
             if (act4DoneIndices.length === 4) completeStage(STAGE_IDS.ACT4);

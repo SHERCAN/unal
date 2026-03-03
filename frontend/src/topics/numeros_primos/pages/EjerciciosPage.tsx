@@ -41,7 +41,15 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
     // Initial load sync
     useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.FINAL_STAGE)) setResult('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.FINAL_STAGE)) {
+            setResult('correct');
+            // Pre-fill connections with correct answers
+            const correctConnections: Record<number, string> = {};
+            allNumbers.forEach(n => {
+                correctConnections[n.num] = n.type;
+            });
+            setConnections(correctConnections);
+        }
     }, [isExerciseCompleted]);
 
     // Dragging state

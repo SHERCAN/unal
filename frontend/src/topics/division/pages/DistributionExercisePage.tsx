@@ -75,8 +75,25 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
 
     // Initial load and auto-checking
     useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.C_GAME)) setCStageResult('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.P_GAME)) setPStageResult('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.C_GAME)) {
+            setCStageResult('correct');
+            // Pre-fill oranges distributed into boxes (6 per box)
+            setOranges(prev => {
+                const newOranges = [...prev];
+                for (let i = 0; i < TOTAL_ORANGES; i++) {
+                    newOranges[i].inBox = Math.floor(i / ORANGES_PER_BOX) + 1;
+                }
+                return newOranges;
+            });
+            // Also intro oranges should be in basket
+            setIntroOranges(prev => prev.map(o => ({ ...o, location: 'basket' as const, top: '0%', left: '0%' })));
+        }
+        if (isExerciseCompleted(EXERCISE_IDS.P_GAME)) {
+            setPStageResult('correct');
+            // Pre-fill pOranges (6 per box)
+            setPOranges(prev => prev.map((o, i) => ({ ...o, boxId: Math.floor(i / ORANGES_PER_BOX) + 1 })));
+            setFinalAnswer('6');
+        }
 
         const C_REQUIRED = [
             'division-pag1-v1', // C_INTRO

@@ -48,19 +48,37 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
 
     // Load initial status
     useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.ACT1A)) setAct1AStatus('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.ACT1B)) setAct1BStatus('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.ACT2)) setAct2Status('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.ACT4)) setAct4Status('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.ACT1A)) {
+            setAct1AStatus('correct');
+            setAct1_a_selected(1);
+        }
+        if (isExerciseCompleted(EXERCISE_IDS.ACT1B)) {
+            setAct1BStatus('correct');
+            setAct1_b_selected(0);
+        }
+        if (isExerciseCompleted(EXERCISE_IDS.ACT2)) {
+            setAct2Status('correct');
+            setConnections([
+                { from: 0, to: 2 }, { from: 1, to: 3 }, { from: 2, to: 4 }, { from: 3, to: 1 }, { from: 4, to: 0 }
+            ]);
+        }
+        if (isExerciseCompleted(EXERCISE_IDS.ACT4)) {
+            setAct4Status('correct');
+            setAct4Selected('F');
+        }
 
         // Initial load for Activity 3 sub-exercises
         const newAct3Statuses = [...act3Statuses];
+        const newAct3Inputs = [...act3Inputs];
+        const act3Answers = ['5', '4', '6', '9', '6', '4', '10', '5', '3', '5'];
         for (let i = 0; i < 10; i++) {
             if (isExerciseCompleted(`${EXERCISE_IDS.ACT3}-${i + 1}`)) {
                 newAct3Statuses[i] = 'correct';
+                newAct3Inputs[i] = act3Answers[i];
             }
         }
         setAct3Statuses(newAct3Statuses);
+        setAct3Inputs(newAct3Inputs);
 
         // Check for final completion
         const allDone = [

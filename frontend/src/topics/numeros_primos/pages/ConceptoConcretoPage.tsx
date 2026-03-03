@@ -46,6 +46,9 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         if (isExerciseCompleted(EXERCISE_IDS.C_GAME)) {
             setPhase1Complete(true);
             setResultC('correct');
+            // Pre-fill a correct distribution: 7 tenistas, 1 ball each
+            setTenistaCount(7);
+            setBalls(Array.from({ length: TOTAL_BALLS }, (_, i) => ({ id: i, location: i })));
         }
 
         const C_REQUIRED = [
