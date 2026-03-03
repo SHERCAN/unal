@@ -179,8 +179,8 @@ export function UserProfile({ user, ranking, onBack }: UserProfileProps) {
                                 </svg>
                                 RANKINGS EN EL TIEMPO REAL
                             </h3>
-                            <div className="space-y-2">
-                                {ranking.slice(0, 5).map((rankUser, index) => (
+                            <div className="space-y-2 max-h-[450px] overflow-y-auto pr-2 custom-scrollbar">
+                                {ranking.map((rankUser, index) => (
                                     <div
                                         key={index}
                                         className={`flex items-center gap-3 p-3 rounded-xl transition-all ${rankUser.nickname === user.nickname
