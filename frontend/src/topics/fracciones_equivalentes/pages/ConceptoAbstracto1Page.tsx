@@ -9,6 +9,10 @@ import { FeedbackButton } from '@/components/FeedbackButton';
 import Image from 'next/image';
 import { MdOutlineStickyNote2 } from 'react-icons/md';
 
+// New Assets
+import lineasBoton from '../lineasBoton.svg';
+import lineasFraccion from '../lineasFraccion.svg';
+
 // Assets from comparison topic
 import fraccionesEquivalentesImg from '../../comparacion_fracciones/fraccionesEquivalentes.png';
 import equivalente30Img from '../../comparacion_fracciones/equivalente30.png';
@@ -59,6 +63,7 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
     const [row2, setRow2] = useState({ i1: '', i2: '', i3: '', i4: '', r1: '', r2: '' });
     const [row1Result, setRow1Result] = useState<'correct' | 'incorrect' | null>(null);
     const [row2Result, setRow2Result] = useState<'correct' | 'incorrect' | null>(null);
+    const [showLines, setShowLines] = useState(false);
 
     // Initial load and auto-checking
     useEffect(() => {
@@ -188,8 +193,19 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                     <span>=</span>
                                     <Fraction num="12" den="20" color="text-gray-800" size="text-4xl" />
                                 </div>
-                                <div className="bg-purple-600 p-2 rounded-lg shadow-md flex items-center justify-center">
-                                    <MdOutlineStickyNote2 className="text-white text-3xl" />
+                                <div className="relative">
+                                    <button
+                                        onClick={() => setShowLines(!showLines)}
+                                        className="transition-transform hover:scale-105 active:scale-95 shadow-md rounded-lg overflow-hidden flex items-center justify-center bg-purple-600"
+                                    >
+                                        <Image src={lineasBoton} alt="Botón Líneas" width={61} height={61} className="w-14 h-14" />
+                                    </button>
+
+                                    {showLines && (
+                                        <div className="absolute top-[calc(100%+10px)] left-1/2 -translate-x-1/2 z-20 bg-white p-2 rounded-xl shadow-2xl border border-purple-100 animate-in fade-in zoom-in duration-300 min-w-[500px]">
+                                            <Image src={lineasFraccion} alt="Líneas Fracción" className="w-full h-auto" />
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
