@@ -228,7 +228,7 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 0.6, delay: 0.1 }}
-                            className="snap-start snap-always mb-16"
+                            className="[scroll-snap-align:start_end] snap-always mb-16"
                             style={{ scrollMarginTop: '1rem', minHeight: shouldRender ? 'auto' : '800px' }}
                         >
                             {shouldRender ? (

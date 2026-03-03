@@ -654,7 +654,7 @@ export default function DashboardPage() {
         </aside>
 
         {/* Contenido Principal */}
-        <main className="flex-1 flex flex-col h-screen overflow-y-auto scroll-smooth snap-y snap-mandatory scroll-pt-24">
+        <main className="flex-1 flex flex-col h-screen overflow-y-auto scroll-smooth snap-y snap-mandatory scroll-pt-24 scroll-pb-32">
           {/* Header Stick */}
           <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 px-8 py-4 flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
