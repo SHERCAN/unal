@@ -17,6 +17,8 @@ interface UserProfileProps {
         nombre: string;
         avatar: string;
         puntos: number;
+        puntosFlexibles: number;
+        puntosDefinitivos: number;
     }>;
     onBack: () => void;
 }
@@ -202,14 +204,31 @@ export function UserProfile({ user, ranking, onBack }: UserProfileProps) {
                                                 {rankUser.nombre}
                                             </p>
                                         </div>
-                                        <div className="flex items-center gap-1">
-                                            <svg viewBox="0 0 24 24" fill="#fde047" stroke="#7e22ce" strokeWidth="1.5" className="w-6 h-6">
-                                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-                                            </svg>
-                                            <span className={`font-bold ${rankUser.nickname === user.nickname ? 'text-yellow-300' : 'text-[#7e22ce]'
-                                                }`}>
-                                                + {rankUser.puntos}
-                                            </span>
+                                        <div className="flex flex-col items-end gap-0.5">
+                                            <div className="flex items-center gap-1">
+                                                <svg className="w-4 h-4 text-[#9333ea]" viewBox="0 0 24 24" fill="currentColor">
+                                                    <path d="M12 2L2 22h20L12 2z" />
+                                                </svg>
+                                                <span className={`font-bold text-xs ${rankUser.nickname === user.nickname ? 'text-white/80' : 'text-[#9333ea]'}`}>
+                                                    {rankUser.puntosFlexibles}
+                                                </span>
+                                            </div>
+                                            <div className="flex items-center gap-1">
+                                                <div className="w-4 h-4 flex items-center justify-center">
+                                                    <img src="/diana.svg" alt="Reto" className="w-full h-full object-contain" />
+                                                </div>
+                                                <span className={`font-bold text-xs ${rankUser.nickname === user.nickname ? 'text-white/80' : 'text-[#ef4444]'}`}>
+                                                    {rankUser.puntosDefinitivos}
+                                                </span>
+                                            </div>
+                                            <div className="flex items-center gap-1 mt-1 border-t border-[#7e22ce]/20 pt-0.5">
+                                                <svg viewBox="0 0 24 24" fill="#fde047" stroke="#7e22ce" strokeWidth="1.5" className="w-5 h-5">
+                                                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                                                </svg>
+                                                <span className={`font-black text-sm ${rankUser.nickname === user.nickname ? 'text-yellow-300' : 'text-[#7e22ce]'}`}>
+                                                    {rankUser.puntos}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 ))}

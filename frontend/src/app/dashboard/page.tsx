@@ -225,10 +225,13 @@ interface User {
 }
 
 interface RankingUser {
+  id?: string;
   nickname: string;
   nombre: string;
   avatar: string;
-  puntos: number;
+  puntos: number; // Total points
+  puntosFlexibles: number;
+  puntosDefinitivos: number;
 }
 
 export default function DashboardPage() {
@@ -363,11 +366,11 @@ export default function DashboardPage() {
       } catch (error) {
         console.error('Error al cargar ranking:', error);
         setRanking([
-          { nickname: 'Luis', nombre: 'Luis', avatar: '👨', puntos: 625 },
-          { nickname: 'Juan', nombre: 'Juan', avatar: '🧑', puntos: 525 },
-          { nickname: 'Maria', nombre: 'Maria', avatar: '👩', puntos: 420 },
-          { nickname: 'Carlos', nombre: 'Carlos', avatar: '👦', puntos: 300 },
-          { nickname: 'Mariana', nombre: 'Mariana', avatar: '👧', puntos: 220 },
+          { nickname: 'Luis', nombre: 'Luis', avatar: '👨', puntos: 625, puntosFlexibles: 500, puntosDefinitivos: 125 },
+          { nickname: 'Juan', nombre: 'Juan', avatar: '🧑', puntos: 525, puntosFlexibles: 400, puntosDefinitivos: 125 },
+          { nickname: 'Maria', nombre: 'Maria', avatar: '👩', puntos: 420, puntosFlexibles: 320, puntosDefinitivos: 100 },
+          { nickname: 'Carlos', nombre: 'Carlos', avatar: '👦', puntos: 300, puntosFlexibles: 250, puntosDefinitivos: 50 },
+          { nickname: 'Mariana', nombre: 'Mariana', avatar: '👧', puntos: 220, puntosFlexibles: 200, puntosDefinitivos: 20 },
         ]);
       } finally {
         setLoadingRanking(false);
@@ -447,12 +450,12 @@ export default function DashboardPage() {
   const handleRankingUserClick = (rankUser: RankingUser) => {
     // Convertir RankingUser a User para mostrar en el perfil
     const userToShow: User = {
-      id: '', // No tenemos ID en RankingUser
+      id: rankUser.id || '',
       nickname: rankUser.nickname,
       nombre: rankUser.nombre,
       avatar: rankUser.avatar,
-      puntos: rankUser.puntos,
-      puntosDefinitivos: 0, // No tenemos esta info en RankingUser, podríamos asumirlo
+      puntos: rankUser.puntosFlexibles,
+      puntosDefinitivos: rankUser.puntosDefinitivos,
     };
     setSelectedUser(userToShow);
     setShowProfile(true);
