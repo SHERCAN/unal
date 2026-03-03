@@ -20,6 +20,9 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
     const [completedPages, setCompletedPages] = useState<number[]>([]);
     const pageRefs = useRef<(HTMLDivElement | null)[]>([]);
 
+    // Progressive loading state
+    const [loadedLimit, setLoadedLimit] = useState(2);
+
     const handleZoomIn = () => {
         setGlobalZoom(prev => Math.min(prev + 0.1, 2)); // Max 200%
     };
@@ -38,6 +41,7 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
             element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }, []);
+
 
     // Intersection Observer for page tracking
     useEffect(() => {
@@ -155,7 +159,6 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [currentPage, allPages.length, navigateToPage]);
 
-    const [loadedLimit, setLoadedLimit] = useState(2); // Start with Index + buffer
     const allPagesCount = allPages.length;
 
     // Progressive loading in the background

@@ -474,262 +474,264 @@ export default function DashboardPage() {
     );
   }
 
-  // Mostrar perfil de usuario si está activo
-  if (showProfile && selectedUser) {
-    return (
-      <UserProfile
-        user={selectedUser}
-        ranking={ranking}
-        onBack={handleBackToDashboard}
-      />
-    );
-  }
-
   return (
-    <div className="min-h-screen flex text-text transition-colors duration-300">
-
-      {/* Sidebar Izquierdo */}
-      <aside
-        className={`
-          bg-[#dba9f3]/85 backdrop-blur-md border-r border-gray-200 dark:border-gray-800 
-          sticky top-0 h-screen overflow-y-auto overflow-x-hidden transition-all duration-300 ease-in-out z-[200]
-          ${isSidebarOpen
-            ? 'w-80 p-6 opacity-100 translate-x-0'
-            : 'w-0 p-0 opacity-0 -translate-x-full border-none'}
-        `}
-      >
-        <div className={isSidebarOpen ? 'w-full' : 'w-0 hidden'}>
-          {/* Usuario */}
-          <button
-            onClick={handleUserClick}
-            className="text-center space-y-4 w-full hover:bg-white/20 rounded-2xl p-4 transition-all cursor-pointer"
-          >
-            <div className="relative inline-block">
-              <div className="w-28 h-28 mx-auto bg-gradient-to-tr from-primary to-blue-400 rounded-full p-[4px] shadow-xl">
-                <div className="w-full h-full bg-secondary rounded-full flex items-center justify-center text-6xl overflow-hidden relative">
-                  {user?.photoUrl ? (
-                    <img
-                      src={user.photoUrl}
-                      alt={user.nombre}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    user?.avatar?.startsWith('/') ? (
-                      <img src={user.avatar} alt={user.nombre} className="w-full h-full object-cover" />
-                    ) : (
-                      <span>{user?.avatar || '👤'}</span>
-                    )
-                  )}
-                </div>
-              </div>
-              <div className="absolute bottom-0 right-0 bg-green-500 w-6 h-6 rounded-full border-4 border-secondary"></div>
-            </div>
-            <div>
-              <h2 className="text-2xl font-black text-text tracking-tight">
-                {user?.nombre?.split(' ')[0] || 'Usuario'}
-              </h2>
-            </div>
-          </button>
-
-          {/* Stats Grid */}
-          {/* Stats Grid */}
-          <div className="space-y-3">
-            {/* Puntaje Flexible */}
-            <div className="bg-white/40 backdrop-blur-sm p-4 rounded-xl flex items-center justify-center gap-2 relative overflow-hidden">
-              <div className="z-10 flex items-center gap-3">
-                <svg className="w-12 h-12 text-[#9333ea]" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2L2 22h20L12 2z" />
-                </svg>
-                <span className="text-5xl font-black text-[#9333ea] tracking-tight">+ {animatedPuntos}</span>
-              </div>
-            </div>
-
-            {/* Puntaje Definitivo */}
-            <div className="bg-white/40 backdrop-blur-sm p-4 rounded-xl flex items-center justify-center gap-2 relative overflow-hidden">
-              <div className="z-10 flex items-center gap-3">
-                <div className="relative w-12 h-12 flex items-center justify-center">
-                  <img src="/diana.svg" alt="Puntaje Definitivo" className="w-full h-full object-contain" />
-                </div>
-                <span className="text-5xl font-black text-[#ef4444] tracking-tight">+ {animatedPuntosDefinitivos}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Reto Diario */}
-          {/* Nivel y Progreso */}
-          <div className="bg-white/40 backdrop-blur-sm p-4 rounded-xl relative overflow-visible mt-4 z-50">
-            {(() => {
-              const levelInfo = getLevelInfo(animatedPuntosTotales);
-              return (
-                <>
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    {/* Start Star (Current Level) */}
-                    <div className="relative w-20 h-auto flex items-center justify-center filter drop-shadow-md">
-                      <svg viewBox="0 0 24 24" fill="#fde047" stroke="#7e22ce" strokeWidth="1.5" className="w-full h-full">
-                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-                      </svg>
-                      <span className="absolute text-[#7e22ce] font-black text-lg pt-1">{levelInfo.currentLevel}</span>
-                    </div>
-
-                    {/* Progress Bar */}
-                    <div className="flex-1 h-3 bg-gray-200/50 rounded-full overflow-hidden border border-white/50">
-                      <div
-                        className="h-full bg-[#7e22ce] rounded-full shadow-sm transition-all duration-300"
-                        style={{ width: `${levelInfo.progressPercentage}%` }}
-                      ></div>
-                    </div>
-
-                    {/* End Star (Next Level) */}
-                    <div
-                      ref={nextLevelStarRef}
-                      className="relative w-14 h-auto flex items-center justify-center opacity-80 filter drop-shadow-sm cursor-pointer transition-all duration-200 hover:opacity-100 hover:scale-110"
-                    >
-                      <svg viewBox="0 0 24 24" fill="#fde047" stroke="#7e22ce" strokeWidth="1.5" className="w-full h-full">
-                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-                      </svg>
-                      <span className="absolute text-[#7e22ce] font-bold text-sm pt-0.5">{levelInfo.nextLevel}</span>
-                    </div>
-
-                    {/* Tooltip usando Portal */}
-                    <StarTooltip targetRef={nextLevelStarRef}>
-                      ✨ Necesitas <span className="font-black text-yellow-300">{levelInfo.pointsNeeded}</span> puntos más
-                    </StarTooltip>
-                  </div>
-
-                  <div className="text-right">
-                    <span className="text-4xl font-black text-[#7e22ce] tracking-tight mr-2">+ {animatedPuntosTotales}</span>
-                  </div>
-                </>
-              );
-            })()}
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex items-center justify-between text-sm mb-2">
-              <span className="font-bold text-[#7e22ce]">RANKING SEMANAL</span>
-            </div>
-            <div className="space-y-2">
-              {loadingRanking ? (
-                // Ranking Skeletons
-                Array.from({ length: 5 }).map((_, i) => (
-                  <div key={i} className="w-full flex items-center gap-3 p-2 rounded-xl bg-white/20 backdrop-blur-sm animate-pulse">
-                    <div className="w-8 h-8 rounded-lg bg-white/20"></div>
-                    <div className="w-10 h-10 rounded-full bg-white/20"></div>
-                    <div className="flex-1 h-6 bg-white/20 rounded-lg"></div>
-                    <div className="w-16 h-6 bg-white/20 rounded-full"></div>
-                  </div>
-                ))
-              ) : (
-                ranking.slice(0, 5).map((rankUser, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleRankingUserClick(rankUser)}
-                    className="w-full flex items-center gap-3 p-2 rounded-xl bg-white/40 backdrop-blur-sm transition-colors hover:bg-white/60 cursor-pointer"
-                  >
-                    <span className="w-8 h-8 flex items-center justify-center font-black text-3xl text-[#7e22ce]">
-                      {index + 1}
-                    </span>
-                    {rankUser.avatar?.startsWith('/') ? (
-                      <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
-                        <img src={rankUser.avatar} alt={rankUser.nombre} className="w-full h-full object-cover" />
-                      </div>
-                    ) : (
-                      <span className="text-4xl filter drop-shadow-sm">{rankUser.avatar}</span>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xl font-black text-[#1f2937] truncate tracking-tight">{rankUser.nombre}</p>
-                    </div>
-                    <span className="text-sm font-bold text-[#7e22ce] bg-[#7e22ce]/10 px-2 py-1 rounded-full whitespace-nowrap">{rankUser.puntos} XP</span>
-                  </button>
-                ))
-              )}
-            </div>
-          </div>
-
+    <div className="min-h-screen relative transition-colors duration-300">
+      {/* User Profile View - rendered as an overlay to keep dashboard mounted */}
+      {showProfile && selectedUser && (
+        <div className="fixed inset-0 z-[500] animate-in fade-in duration-300">
+          <UserProfile
+            user={selectedUser}
+            ranking={ranking}
+            onBack={handleBackToDashboard}
+          />
         </div>
-      </aside>
+      )}
 
-      {/* Contenido Principal */}
-      <main className="flex-1 flex flex-col h-screen overflow-y-auto scroll-smooth snap-y snap-mandatory scroll-pt-24">
-        {/* Header Stick */}
-        <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 px-8 py-4 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div>
-              {/* Mobile menu trigger */}
+      {/* Main Dashboard Layout */}
+      <div className={`flex text-text min-h-screen ${showProfile ? 'hidden' : ''}`}>
+        {/* Sidebar Izquierdo */}
+        <aside
+          className={`
+            bg-[#dba9f3]/85 backdrop-blur-md border-r border-gray-200 dark:border-gray-800 
+            sticky top-0 h-screen overflow-y-auto overflow-x-hidden transition-all duration-300 ease-in-out z-[200]
+            ${isSidebarOpen
+              ? 'w-80 p-6 opacity-100 translate-x-0'
+              : 'w-0 p-0 opacity-0 -translate-x-full border-none'}
+          `}
+        >
+          <div className={isSidebarOpen ? 'w-full' : 'w-0 hidden'}>
+            {/* Usuario */}
+            <button
+              onClick={handleUserClick}
+              className="text-center space-y-4 w-full hover:bg-white/20 rounded-2xl p-4 transition-all cursor-pointer"
+            >
+              <div className="relative inline-block">
+                <div className="w-28 h-28 mx-auto bg-gradient-to-tr from-primary to-blue-400 rounded-full p-[4px] shadow-xl">
+                  <div className="w-full h-full bg-secondary rounded-full flex items-center justify-center text-6xl overflow-hidden relative">
+                    {user?.photoUrl ? (
+                      <img
+                        src={user.photoUrl}
+                        alt={user.nombre}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      user?.avatar?.startsWith('/') ? (
+                        <img src={user.avatar} alt={user.nombre} className="w-full h-full object-cover" />
+                      ) : (
+                        <span>{user?.avatar || '👤'}</span>
+                      )
+                    )}
+                  </div>
+                </div>
+                <div className="absolute bottom-0 right-0 bg-green-500 w-6 h-6 rounded-full border-4 border-secondary"></div>
+              </div>
+              <div>
+                <h2 className="text-2xl font-black text-text tracking-tight">
+                  {user?.nombre?.split(' ')[0] || 'Usuario'}
+                </h2>
+              </div>
+            </button>
+
+            {/* Stats Grid */}
+            {/* Stats Grid */}
+            <div className="space-y-3">
+              {/* Puntaje Flexible */}
+              <div className="bg-white/40 backdrop-blur-sm p-4 rounded-xl flex items-center justify-center gap-2 relative overflow-hidden">
+                <div className="z-10 flex items-center gap-3">
+                  <svg className="w-12 h-12 text-[#9333ea]" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L2 22h20L12 2z" />
+                  </svg>
+                  <span className="text-5xl font-black text-[#9333ea] tracking-tight">+ {animatedPuntos}</span>
+                </div>
+              </div>
+
+              {/* Puntaje Definitivo */}
+              <div className="bg-white/40 backdrop-blur-sm p-4 rounded-xl flex items-center justify-center gap-2 relative overflow-hidden">
+                <div className="z-10 flex items-center gap-3">
+                  <div className="relative w-12 h-12 flex items-center justify-center">
+                    <img src="/diana.svg" alt="Puntaje Definitivo" className="w-full h-full object-contain" />
+                  </div>
+                  <span className="text-5xl font-black text-[#ef4444] tracking-tight">+ {animatedPuntosDefinitivos}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Reto Diario */}
+            {/* Nivel y Progreso */}
+            <div className="bg-white/40 backdrop-blur-sm p-4 rounded-xl relative overflow-visible mt-4 z-50">
+              {(() => {
+                const levelInfo = getLevelInfo(animatedPuntosTotales);
+                return (
+                  <>
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      {/* Start Star (Current Level) */}
+                      <div className="relative w-20 h-auto flex items-center justify-center filter drop-shadow-md">
+                        <svg viewBox="0 0 24 24" fill="#fde047" stroke="#7e22ce" strokeWidth="1.5" className="w-full h-full">
+                          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                        </svg>
+                        <span className="absolute text-[#7e22ce] font-black text-lg pt-1">{levelInfo.currentLevel}</span>
+                      </div>
+
+                      {/* Progress Bar */}
+                      <div className="flex-1 h-3 bg-gray-200/50 rounded-full overflow-hidden border border-white/50">
+                        <div
+                          className="h-full bg-[#7e22ce] rounded-full shadow-sm transition-all duration-300"
+                          style={{ width: `${levelInfo.progressPercentage}%` }}
+                        ></div>
+                      </div>
+
+                      {/* End Star (Next Level) */}
+                      <div
+                        ref={nextLevelStarRef}
+                        className="relative w-14 h-auto flex items-center justify-center opacity-80 filter drop-shadow-sm cursor-pointer transition-all duration-200 hover:opacity-100 hover:scale-110"
+                      >
+                        <svg viewBox="0 0 24 24" fill="#fde047" stroke="#7e22ce" strokeWidth="1.5" className="w-full h-full">
+                          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                        </svg>
+                        <span className="absolute text-[#7e22ce] font-bold text-sm pt-0.5">{levelInfo.nextLevel}</span>
+                      </div>
+
+                      {/* Tooltip usando Portal */}
+                      <StarTooltip targetRef={nextLevelStarRef}>
+                        ✨ Necesitas <span className="font-black text-yellow-300">{levelInfo.pointsNeeded}</span> puntos más
+                      </StarTooltip>
+                    </div>
+
+                    <div className="text-right">
+                      <span className="text-4xl font-black text-[#7e22ce] tracking-tight mr-2">+ {animatedPuntosTotales}</span>
+                    </div>
+                  </>
+                );
+              })()}
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-sm mb-2">
+                <span className="font-bold text-[#7e22ce]">RANKING SEMANAL</span>
+              </div>
+              <div className="space-y-2">
+                {loadingRanking ? (
+                  // Ranking Skeletons
+                  Array.from({ length: 5 }).map((_, i) => (
+                    <div key={i} className="w-full flex items-center gap-3 p-2 rounded-xl bg-white/20 backdrop-blur-sm animate-pulse">
+                      <div className="w-8 h-8 rounded-lg bg-white/20"></div>
+                      <div className="w-10 h-10 rounded-full bg-white/20"></div>
+                      <div className="flex-1 h-6 bg-white/20 rounded-lg"></div>
+                      <div className="w-16 h-6 bg-white/20 rounded-full"></div>
+                    </div>
+                  ))
+                ) : (
+                  ranking.slice(0, 5).map((rankUser, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleRankingUserClick(rankUser)}
+                      className="w-full flex items-center gap-3 p-2 rounded-xl bg-white/40 backdrop-blur-sm transition-colors hover:bg-white/60 cursor-pointer"
+                    >
+                      <span className="w-8 h-8 flex items-center justify-center font-black text-3xl text-[#7e22ce]">
+                        {index + 1}
+                      </span>
+                      {rankUser.avatar?.startsWith('/') ? (
+                        <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                          <img src={rankUser.avatar} alt={rankUser.nombre} className="w-full h-full object-cover" />
+                        </div>
+                      ) : (
+                        <span className="text-4xl filter drop-shadow-sm">{rankUser.avatar}</span>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xl font-black text-[#1f2937] truncate tracking-tight">{rankUser.nombre}</p>
+                      </div>
+                      <span className="text-sm font-bold text-[#7e22ce] bg-[#7e22ce]/10 px-2 py-1 rounded-full whitespace-nowrap">{rankUser.puntos} XP</span>
+                    </button>
+                  ))
+                )}
+              </div>
+            </div>
+
+          </div>
+        </aside>
+
+        {/* Contenido Principal */}
+        <main className="flex-1 flex flex-col h-screen overflow-y-auto scroll-smooth snap-y snap-mandatory scroll-pt-24">
+          {/* Header Stick */}
+          <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 px-8 py-4 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div>
+                {/* Mobile menu trigger */}
+                <button
+                  onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                  className="p-2 -ml-2 text-text-secondary hover:text-text rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  title={isSidebarOpen ? "Cerrar menú" : "Abrir menú"}
+                >
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                </button>
+              </div>
+              <TopicDropdown
+                topicConfigs={ORDERED_TOPICS}
+                onNavigateToPage={navigateToPage || undefined}
+                currentPage={currentPage}
+                watchedVideos={watchedVideos}
+                completedExercises={completedExercises}
+                completedStages={completedStages}
+              />
+            </div>
+
+            {/* Centered Lesson Title */}
+            <div className="absolute left-1/2 -translate-x-1/2 pointer-events-none hidden md:block">
+              <AnimatePresence mode="wait">
+                <motion.h2
+                  key={activeView === 'glossary' ? 'glosario' : currentTopicInfo?.topic.name}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                  className="text-lg font-black text-[#7e22ce] uppercase tracking-[0.2em] whitespace-nowrap drop-shadow-sm"
+                >
+                  {activeView === 'glossary' ? 'Glosario Interactivo' : currentTopicInfo?.topic.name}
+                </motion.h2>
+              </AnimatePresence>
+            </div>
+
+            <div className="flex items-center gap-3 mr-16">
               <button
-                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="p-2 -ml-2 text-text-secondary hover:text-text rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                title={isSidebarOpen ? "Cerrar menú" : "Abrir menú"}
+                onClick={() => setActiveView(activeView === 'book' ? 'glossary' : 'book')}
+                className={`px-8 py-4 rounded-xl shadow-xl border border-purple-500/30 font-black tracking-wide text-sm transition-all ${activeView === 'glossary'
+                  ? 'bg-pink-500 text-white'
+                  : 'bg-[#7e22ce] text-white hover:bg-[#6b21a8]'
+                  }`}
               >
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
+                {activeView === 'book' ? 'GLOSARIO' : 'LIBRO'}
+              </button>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 text-m font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors"
+              >
+                Salir
               </button>
             </div>
-            <TopicDropdown
-              topicConfigs={ORDERED_TOPICS}
-              onNavigateToPage={navigateToPage || undefined}
+          </header>
+
+          {/* Contenido Principal */}
+          <div className={`flex-1 flex flex-col ${activeView !== 'book' ? 'hidden' : ''}`}>
+            <InfiniteBookWrapper
+              completedPages={completedPages}
+              setCompletedPages={setCompletedPages}
+              topics={ORDERED_TOPICS}
+              setNavigateToPage={setNavigateToPage}
+              completedModules={completedModules}
               currentPage={currentPage}
-              watchedVideos={watchedVideos}
-              completedExercises={completedExercises}
-              completedStages={completedStages}
+              setCurrentPage={setCurrentPage}
+              currentTopicInfo={currentTopicInfo}
+              isSidebarOpen={isSidebarOpen}
             />
           </div>
 
-          {/* Centered Lesson Title */}
-          <div className="absolute left-1/2 -translate-x-1/2 pointer-events-none hidden md:block">
-            <AnimatePresence mode="wait">
-              <motion.h2
-                key={activeView === 'glossary' ? 'glosario' : currentTopicInfo?.topic.name}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-                className="text-lg font-black text-[#7e22ce] uppercase tracking-[0.2em] whitespace-nowrap drop-shadow-sm"
-              >
-                {activeView === 'glossary' ? 'Glosario Interactivo' : currentTopicInfo?.topic.name}
-              </motion.h2>
-            </AnimatePresence>
+          <div className={`flex-1 flex flex-col ${activeView !== 'glossary' ? 'hidden' : ''}`}>
+            <GlosarioView />
           </div>
-
-          <div className="flex items-center gap-3 mr-16">
-            <button
-              onClick={() => setActiveView(activeView === 'book' ? 'glossary' : 'book')}
-              className={`px-8 py-4 rounded-xl shadow-xl border border-purple-500/30 font-black tracking-wide text-sm transition-all ${activeView === 'glossary'
-                ? 'bg-pink-500 text-white'
-                : 'bg-[#7e22ce] text-white hover:bg-[#6b21a8]'
-                }`}
-            >
-              {activeView === 'book' ? 'GLOSARIO' : 'LIBRO'}
-            </button>
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 text-m font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors"
-            >
-              Salir
-            </button>
-          </div>
-        </header>
-
-        {/* Contenido Principal */}
-        <div className={`flex-1 flex flex-col ${activeView !== 'book' ? 'hidden' : ''}`}>
-          <InfiniteBookWrapper
-            completedPages={completedPages}
-            setCompletedPages={setCompletedPages}
-            topics={ORDERED_TOPICS}
-            setNavigateToPage={setNavigateToPage}
-            completedModules={completedModules}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            currentTopicInfo={currentTopicInfo}
-            isSidebarOpen={isSidebarOpen}
-          />
-        </div>
-
-        <div className={`flex-1 flex flex-col ${activeView !== 'glossary' ? 'hidden' : ''}`}>
-          <GlosarioView />
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }
