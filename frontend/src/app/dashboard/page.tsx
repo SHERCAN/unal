@@ -860,7 +860,7 @@ function InfiniteBookWrapper({
       />
 
       {/* Navigation Jump Buttons */}
-      <div className={`fixed top-1/2 -translate-y-1/2 z-[100] pointer-events-none hidden lg:block transition-all duration-300 ${isSidebarOpen ? 'left-80 ml-6' : 'left-6'}`}>
+      <div className={`fixed top-1/2 -translate-y-1/2 z-[100] pointer-events-none hidden md:block transition-all duration-300 ${isSidebarOpen ? 'left-80 ml-6' : 'left-6'}`}>
         <button
           onClick={goToPrevTopic}
           disabled={currentPage === 0}
@@ -873,7 +873,7 @@ function InfiniteBookWrapper({
         </button>
       </div>
 
-      <div className="fixed top-1/2 -translate-y-1/2 right-6 z-[100] pointer-events-none hidden lg:block">
+      <div className="fixed top-1/2 -translate-y-1/2 right-6 z-[100] pointer-events-none hidden md:block">
         <button
           onClick={goToNextTopic}
           disabled={currentPage >= totalPagesInBook - 1}
@@ -887,7 +887,7 @@ function InfiniteBookWrapper({
       </div>
 
       {currentPage > 0 && (
-        <div className="sticky bottom-0 z-50 w-full animate-in slide-in-from-bottom-5 duration-300">
+        <div className="fixed bottom-0 left-0 right-0 z-50 w-full animate-in slide-in-from-bottom-5 duration-300">
           <ProgressNavigation
             topicId={currentTopicInfo?.topic.id}
             lessonPages={currentTopicInfo ? currentTopicInfo.topic.pages.length : 0}
