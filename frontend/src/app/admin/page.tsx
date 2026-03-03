@@ -468,22 +468,39 @@ export default function AdminDashboard() {
                                 <div
                                     key={user.id}
                                     onClick={() => setSelectedUser(user)}
-                                    className={`p-4 rounded-xl cursor-pointer transition-all border-2 ${selectedUser?.id === user.id ? 'border-primary bg-primary/10' : 'border-transparent bg-background hover:border-primary/50'}`}
+                                    className={`p-4 rounded-xl cursor-pointer transition-all border-2 flex items-center gap-4 ${selectedUser?.id === user.id ? 'border-primary bg-primary/10' : 'border-transparent bg-background hover:border-primary/50'}`}
                                 >
-                                    <div className="flex justify-between items-start">
-                                        <div>
-                                            <h3 className="font-bold text-lg">{user.nombre}</h3>
-                                            <p className="text-sm text-text-secondary">@{user.nickname}</p>
-                                        </div>
-                                        <div className="text-right">
-                                            <span className="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900">
-                                                {user.puntos + user.puntosDefinitivos} pts
-                                            </span>
-                                        </div>
+                                    {/* Avatar del estudiante en la lista */}
+                                    <div className="w-12 h-12 rounded-full flex-shrink-0 overflow-hidden bg-primary/10 flex items-center justify-center border border-gray-100 dark:border-gray-800">
+                                        {user.photoUrl ? (
+                                            <img src={user.photoUrl} alt={user.nombre} className="w-full h-full object-cover" />
+                                        ) : user.avatar ? (
+                                            user.avatar.startsWith('/') ? (
+                                                <img src={user.avatar} alt={user.nombre} className="w-full h-full object-cover" />
+                                            ) : (
+                                                <span className="text-xl">{user.avatar}</span>
+                                            )
+                                        ) : (
+                                            <span className="text-lg font-bold text-primary">{user.nombre.charAt(0)}</span>
+                                        )}
                                     </div>
-                                    <div className="mt-2 flex space-x-2 text-xs text-text-secondary">
-                                        <span>Grado: {user.grado}</span>
-                                        <span>Edad: {user.edad}</span>
+
+                                    <div className="flex-1 flex flex-col justify-between items-start min-w-0">
+                                        <div className="w-full flex justify-between items-start">
+                                            <div className="truncate">
+                                                <h3 className="font-bold text-lg truncate">{user.nombre}</h3>
+                                                <p className="text-sm text-text-secondary truncate">@{user.nickname}</p>
+                                            </div>
+                                            <div className="text-right flex-shrink-0">
+                                                <span className="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900">
+                                                    {user.puntos + user.puntosDefinitivos} pts
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="mt-2 flex space-x-2 text-xs text-text-secondary">
+                                            <span>Grado: {user.grado}</span>
+                                            <span>Edad: {user.edad}</span>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
@@ -500,8 +517,12 @@ export default function AdminDashboard() {
                                             <img src={selectedUser.photoUrl} alt="Avatar" className="w-full h-full object-cover" />
                                         </div>
                                     ) : selectedUser.avatar ? (
-                                        <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center text-4xl shadow-inner">
-                                            {selectedUser.avatar}
+                                        <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center text-4xl shadow-inner overflow-hidden">
+                                            {selectedUser.avatar.startsWith('/') ? (
+                                                <img src={selectedUser.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                                            ) : (
+                                                selectedUser.avatar
+                                            )}
                                         </div>
                                     ) : (
                                         <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center text-white text-3xl font-bold font-sans">
@@ -741,6 +762,6 @@ export default function AdminDashboard() {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
