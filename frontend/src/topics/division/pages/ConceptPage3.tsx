@@ -264,41 +264,45 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                 </p>
                             </div>
 
-                            <div className={`flex flex-wrap items-center justify-center gap-8 sm:gap-16 ${ex1Status === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
+                            <div className={`flex flex-wrap items-start justify-center gap-8 sm:gap-16 ${ex1Status === 'correct' ? 'pointer-events-none opacity-80' : ''}`}>
 
-                                {/* Interactive Division */}
-                                <div className="relative pt-8">
-                                    <div className="flex items-start gap-4">
+                                {/* Interactive Division - Traditional "Galera" Layout */}
+                                <div className="flex flex-col gap-4 border-gray-200 dark:border-gray-700 pl-4 sm:pl-8">
+                                    <div className="flex items-start gap-2">
                                         {/* Left Side: Dividend, Subtraction, Remainder */}
-                                        <div className="flex flex-col items-end gap-1 relative right-2">
+                                        <div className="flex flex-col items-end gap-1">
                                             {/* Dividend Input */}
-                                            <div className="pr-[5px]">
+                                            <div className="pb-1">
                                                 <InputBox value={ex1Status === 'correct' ? '21' : ex1_dividend.value} onChange={ex1_dividend.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
                                             </div>
 
                                             {/* Subtraction Row: Minus Sign + Input */}
-                                            <div className="relative pr-[5px]">
-                                                <span className="font-bold text-xl dark:text-white absolute -left-5 top-1">-</span>
+                                            <div className="relative pb-1">
+                                                <span className="font-bold text-xl dark:text-white absolute -left-5 top-1">−</span>
                                                 <InputBox value={ex1Status === 'correct' ? '21' : ex1_subtraction.value} onChange={ex1_subtraction.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
                                             </div>
 
-                                            {/* Divider Line */}
-                                            <div className="w-[120px] h-0.5 bg-black dark:bg-white my-1"></div>
+                                            {/* Divider Line (subtraction line) */}
+                                            <div className="w-full h-[3px] bg-black dark:bg-white"></div>
 
                                             {/* Remainder Input */}
-                                            <div className="pr-[5px]">
+                                            <div className="pt-1">
                                                 <InputBox value={ex1Status === 'correct' ? '0' : ex1_remainder.value} onChange={ex1_remainder.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
                                             </div>
                                         </div>
 
-                                        {/* Vertical Separator Line for Division Bracket */}
-                                        <div className="border-l-2 border-black dark:border-white pl-4 pb-1 -ml-2 h-[50%] flex flex-col gap-4">
-                                            {/* Divisor Input (with bottom border) */}
-                                            <div className="border-b-2 border-black dark:border-white pb-2 pr-2">
+                                        {/* Division Bracket: Vertical line + Horizontal line forming an "L" shape */}
+                                        <div className="flex flex-col" style={{ marginLeft: '2px' }}>
+                                            {/* Top section: vertical line alongside dividend, then corner turns right */}
+                                            <div
+                                                className="border-l-[3px] border-b-[3px] border-black dark:border-white flex items-top"
+                                                style={{ height: '40px', paddingLeft: '8px' }}
+                                            >
+                                                {/* Divisor Input - sits to the right of the vertical line, above the horizontal line */}
                                                 <InputBox value={ex1Status === 'correct' ? '7' : ex1_divisor.value} onChange={ex1_divisor.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
                                             </div>
-                                            {/* Quotient Input */}
-                                            <div>
+                                            {/* Quotient Input - below the horizontal line */}
+                                            <div className="pt-2" style={{ paddingLeft: '8px' }}>
                                                 <InputBox value={ex1Status === 'correct' ? '3' : ex1_quotient.value} onChange={ex1_quotient.onChange} className="w-10 h-10 text-center border-2 border-gray-300 dark:border-gray-600 rounded focus:border-purple-500 text-lg font-bold bg-white dark:bg-gray-800 dark:text-white" />
                                             </div>
                                         </div>
