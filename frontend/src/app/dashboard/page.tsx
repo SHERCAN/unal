@@ -5,7 +5,10 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import axios from 'axios';
+import useSWR from 'swr';
+import { fetcher, fetcherWithToken } from '@/lib/fetcher';
 
 import { divisionConfig } from '@/topics/division/config';
 import { divisionDemoConfig } from '@/topics/division_demo/config';
@@ -34,9 +37,15 @@ const TOPIC_CONFIGS: Record<string, TopicConfig> = ORDERED_TOPICS.reduce((acc, c
 import { TopicDropdown } from '@/components/dashboard/TopicDropdown';
 import { InfiniteBook } from '@/components/dashboard/InfiniteBook';
 import { ProgressNavigation } from '@/components/navigation/ProgressNavigation';
-import { UserProfile } from '@/components/dashboard/UserProfile';
-import { ToastProvider } from '@/contexts/ToastContext';
-import { GlosarioView } from '@/components/dashboard/GlosarioView';
+import dynamic_next from 'next/dynamic';
+
+const UserProfile = dynamic_next(() => import('@/components/dashboard/UserProfile').then(mod => mod.UserProfile), {
+  loading: () => <div className="fixed inset-0 bg-primary/20 flex items-center justify-center backdrop-blur-sm z-[500]"><div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div></div>
+});
+
+const GlosarioView = dynamic_next(() => import('@/components/dashboard/GlosarioView').then(mod => mod.GlosarioView), {
+  loading: () => <div className="w-full h-full flex items-center justify-center"><div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div></div>
+});
 import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 export const dynamic = 'force-dynamic';
@@ -236,18 +245,62 @@ interface RankingUser {
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
-  const [ranking, setRanking] = useState<RankingUser[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [loadingRanking, setLoadingRanking] = useState(true);
-  const [loadingProgress, setLoadingProgress] = useState(true);
+  const [token, setToken] = useState<string | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [completedPages, setCompletedPages] = useState<number[]>([]);
   const [navigateToPage, setNavigateToPage] = useState<((page: number) => void) | null>(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [completedModules, setCompletedModules] = useState<string[]>([]);
-  const [currentTopicConfig, setCurrentTopicConfig] = useState<TopicConfig>(divisionConfig);
   const [currentPage, setCurrentPage] = useState(0);
   const nextLevelStarRef = useRef<HTMLDivElement>(null);
+
+  // SWR Hooks for optimized fetching and caching
+  const { data: profileData, mutate: mutateProfile } = useSWR(
+    token ? ['/api/users/profile', token] : null,
+    fetcherWithToken,
+    { revalidateOnFocus: false }
+  );
+
+  const { data: rankingData, isLoading: loadingRankingSWR } = useSWR(
+    '/api/users/ranking',
+    fetcher,
+    { refreshInterval: 60000 } // Refresh ranking every minute
+  );
+
+  const { data: progressData, isLoading: loadingProgressSWR } = useSWR(
+    token ? ['/api/users/progress', token] : null,
+    fetcherWithToken
+  );
+
+  const { data: exercisesData } = useSWR(
+    token ? ['/api/users/exercises', token] : null,
+    fetcherWithToken
+  );
+
+  // Sync profileData with local storage and state
+  const user = React.useMemo(() => {
+    if (profileData) {
+      const u = { ...profileData };
+      if (u.role === 'ADMIN') {
+        router.push('/admin');
+        return null;
+      }
+      const savedAvatar = localStorage.getItem('userAvatar');
+      if (savedAvatar) u.photoUrl = savedAvatar;
+      localStorage.setItem('user', JSON.stringify(u));
+      return u;
+    }
+    if (typeof window !== 'undefined') {
+      const localUser = localStorage.getItem('user');
+      if (localUser) {
+        try {
+          const u = JSON.parse(localUser);
+          const savedAvatar = localStorage.getItem('userAvatar');
+          if (savedAvatar) u.photoUrl = savedAvatar;
+          return u as User;
+        } catch (e) { }
+      }
+    }
+    return null;
+  }, [profileData, router]);
 
   // Progress data for TopicDropdown
   const { watchedVideos, completedExercises, completedStages } = useVideoProgress();
@@ -305,113 +358,31 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => {
-    const loadUserData = async () => {
-      const token = localStorage.getItem('token');
-      const localUserData = localStorage.getItem('user');
-
-      if (!token) {
-        router.push('/login');
-        return;
-      }
-
-      // 1. Immediate load from local storage
-      if (localUserData) {
-        try {
-          const parsedUser = JSON.parse(localUserData);
-          const savedAvatar = localStorage.getItem('userAvatar');
-          if (savedAvatar) parsedUser.photoUrl = savedAvatar;
-          setUser(parsedUser);
-          setLoading(false); // UI shell can show now
-        } catch (e) {
-          console.error("Local storage parse error", e);
-        }
-      }
-
-      // 2. Fetch all fresh data in parallel
-      Promise.all([
-        fetchProfile(token),
-        loadRanking(),
-        loadProgress(token)
-      ]).finally(() => {
-        setLoading(false);
-      });
-    };
-
-    const fetchProfile = async (token: string) => {
-      try {
-        const response = await fetch('/api/users/profile', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (response.ok) {
-          const freshUser = await response.json();
-          if (freshUser.role === 'ADMIN') {
-            router.push('/admin');
-            return;
-          }
-          const savedAvatar = localStorage.getItem('userAvatar');
-          if (savedAvatar) freshUser.photoUrl = savedAvatar;
-          setUser(freshUser);
-          localStorage.setItem('user', JSON.stringify(freshUser));
-        }
-      } catch (e) {
-        console.error("Failed to refresh profile", e);
-      }
-    };
-
-    const loadRanking = async () => {
-      setLoadingRanking(true);
-      try {
-        const response = await axios.get('/api/users/ranking');
-        setRanking(response.data);
-      } catch (error) {
-        console.error('Error al cargar ranking:', error);
-        setRanking([
-          { nickname: 'Luis', nombre: 'Luis', avatar: '👨', puntos: 625, puntosFlexibles: 500, puntosDefinitivos: 125 },
-          { nickname: 'Juan', nombre: 'Juan', avatar: '🧑', puntos: 525, puntosFlexibles: 400, puntosDefinitivos: 125 },
-          { nickname: 'Maria', nombre: 'Maria', avatar: '👩', puntos: 420, puntosFlexibles: 320, puntosDefinitivos: 100 },
-          { nickname: 'Carlos', nombre: 'Carlos', avatar: '👦', puntos: 300, puntosFlexibles: 250, puntosDefinitivos: 50 },
-          { nickname: 'Mariana', nombre: 'Mariana', avatar: '👧', puntos: 220, puntosFlexibles: 200, puntosDefinitivos: 20 },
-        ]);
-      } finally {
-        setLoadingRanking(false);
-      }
-    };
-
-    const loadProgress = async (token: string) => {
-      setLoadingProgress(true);
-      try {
-        const [progressRes, exercisesRes] = await Promise.all([
-          fetch('/api/users/progress', { headers: { 'Authorization': `Bearer ${token}` } }),
-          fetch('/api/users/exercises', { headers: { 'Authorization': `Bearer ${token}` } })
-        ]);
-
-        let modules: string[] = [];
-
-        if (progressRes.ok) {
-          const progressModules = await progressRes.json();
-          modules = [...progressModules];
-        }
-
-        if (exercisesRes.ok) {
-          const completedExercisesData = await exercisesRes.json();
-          const exerciseIds = Object.keys(completedExercisesData).filter(
-            id => completedExercisesData[id]?.completed
-          );
-          modules = [...modules, ...exerciseIds];
-        }
-
-        setCompletedModules(modules);
-      } catch (e) {
-        console.error("Progress load failed", e);
-      } finally {
-        setLoadingProgress(false);
-      }
-    };
-
-    loadUserData();
-    window.addEventListener('storage', loadUserData);
-    return () => window.removeEventListener('storage', loadUserData);
+    const storedToken = localStorage.getItem('token');
+    if (!storedToken) {
+      router.push('/login');
+      return;
+    }
+    setToken(storedToken);
   }, [router]);
+
+  const ranking = rankingData || [];
+  const loading = !user && !profileData;
+  const loadingRanking = loadingRankingSWR;
+
+  const completedModules = React.useMemo(() => {
+    let modules: string[] = [];
+    if (progressData) {
+      modules = [...progressData];
+    }
+    if (exercisesData) {
+      const exerciseIds = Object.keys(exercisesData).filter(
+        id => exercisesData[id]?.completed
+      );
+      modules = [...modules, ...exerciseIds];
+    }
+    return modules;
+  }, [progressData, exercisesData]);
 
 
 
@@ -512,14 +483,15 @@ export default function DashboardPage() {
                 <div className="w-28 h-28 mx-auto bg-gradient-to-tr from-primary to-blue-400 rounded-full p-[4px] shadow-xl">
                   <div className="w-full h-full bg-secondary rounded-full flex items-center justify-center text-6xl overflow-hidden relative">
                     {user?.photoUrl ? (
-                      <img
+                      <Image
                         src={user.photoUrl}
                         alt={user.nombre}
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
                       />
                     ) : (
                       user?.avatar?.startsWith('/') ? (
-                        <img src={user.avatar} alt={user.nombre} className="w-full h-full object-cover" />
+                        <Image src={user.avatar} alt={user.nombre} fill className="object-cover" />
                       ) : (
                         <span>{user?.avatar || '👤'}</span>
                       )
@@ -552,7 +524,7 @@ export default function DashboardPage() {
               <div className="bg-white/40 backdrop-blur-sm p-4 rounded-xl flex items-center justify-center gap-2 relative overflow-hidden">
                 <div className="z-10 flex items-center gap-3">
                   <div className="relative w-12 h-12 flex items-center justify-center">
-                    <img src="/diana.svg" alt="Puntaje Definitivo" className="w-full h-full object-contain" />
+                    <Image src="/diana.svg" alt="Puntaje Definitivo" width={48} height={48} className="object-contain" priority />
                   </div>
                   <span className="text-5xl font-black text-[#ef4444] tracking-tight">+ {animatedPuntosDefinitivos}</span>
                 </div>
@@ -624,7 +596,7 @@ export default function DashboardPage() {
                     </div>
                   ))
                 ) : (
-                  ranking.slice(0, 5).map((rankUser, index) => (
+                  ranking.slice(0, 5).map((rankUser: RankingUser, index: number) => (
                     <button
                       key={index}
                       onClick={() => handleRankingUserClick(rankUser)}
@@ -634,8 +606,8 @@ export default function DashboardPage() {
                         {index + 1}
                       </span>
                       {rankUser.avatar?.startsWith('/') ? (
-                        <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
-                          <img src={rankUser.avatar} alt={rankUser.nombre} className="w-full h-full object-cover" />
+                        <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 relative">
+                          <Image src={rankUser.avatar} alt={rankUser.nombre} fill className="object-cover" />
                         </div>
                       ) : (
                         <span className="text-4xl filter drop-shadow-sm">{rankUser.avatar}</span>

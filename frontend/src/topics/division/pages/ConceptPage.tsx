@@ -2,6 +2,7 @@
 import { PlayVideoButton } from '@/components/PlayVideoButton';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { BookPageContainer } from '@/components/book-pages/BookPageContainer';
 import { VIDEO_IDS } from '@/config/videos';
 import { useVideoProgress } from '@/hooks/useVideoProgress';
@@ -89,9 +90,12 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                             </div>
 
                             <div className='flex justify-center'>
-                                <img
+                                <Image
                                     src="/division/img division.png"
-                                    className="h-48 object-contain"
+                                    alt="Ejemplo de reparto"
+                                    width={400}
+                                    height={192}
+                                    className="h-48 w-auto object-contain"
                                     draggable={false}
                                 />
                             </div>
@@ -104,9 +108,12 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                                 <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.MATH_NOTATION} title="Representación matemática" videoId="/pag2/vv-3" />
                             </div>
                             <div className='flex justify-center'>
-                                <img
+                                <Image
                                     src="/division/img2.png"
-                                    className="h-16 object-contain"
+                                    alt="Notación matemática"
+                                    width={200}
+                                    height={64}
+                                    className="h-16 w-auto object-contain"
                                     draggable={false}
                                 />
                             </div>
@@ -149,9 +156,12 @@ export function ConceptPage({ zoom = 1 }: DivisionConceptPageProps) {
                                 Una <span className="text-red-500 font-bold">división</span> es repartir, distribuir o compartir algo de forma equitativa, es decir, en partes iguales.
                             </p>
                             <div className='flex justify-center'>
-                                <img
+                                <Image
                                     src="/division/img3.png"
-                                    className="h-24 object-contain"
+                                    alt="Concepto de división"
+                                    width={300}
+                                    height={96}
+                                    className="h-24 w-auto object-contain"
                                     draggable={false}
                                 />
                             </div>

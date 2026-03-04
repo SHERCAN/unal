@@ -5,12 +5,14 @@ import { IndexPage } from '@/components/book-pages/shared/IndexPage';
 import { GuidePage } from '@/components/book-pages/shared/GuidePage';
 import { PresentationPage } from '@/components/book-pages/shared/PresentationPage';
 import { ExplanationPage } from '@/components/book-pages/shared/ExplanationPage';
-import { DistributionExercisePage } from './pages/DistributionExercisePage';
-import { ConceptPage } from './pages/ConceptPage';
-import { ConceptPage2 } from './pages/ConceptPage2';
-import { ConceptPage3 } from './pages/ConceptPage3';
-import { ExercisesPage } from './pages/ExercisesPage';
-import { ExercisesPage2 } from './pages/ExercisesPage2'; // Added import
+import dynamic from 'next/dynamic';
+
+const DistributionExercisePage = dynamic(() => import('./pages/DistributionExercisePage').then(m => m.DistributionExercisePage));
+const ConceptPage = dynamic(() => import('./pages/ConceptPage').then(m => m.ConceptPage));
+const ConceptPage2 = dynamic(() => import('./pages/ConceptPage2').then(m => m.ConceptPage2));
+const ConceptPage3 = dynamic(() => import('./pages/ConceptPage3').then(m => m.ConceptPage3));
+const ExercisesPage = dynamic(() => import('./pages/ExercisesPage').then(m => m.ExercisesPage));
+const ExercisesPage2 = dynamic(() => import('./pages/ExercisesPage2').then(m => m.ExercisesPage2));
 
 export const divisionConfig: TopicConfig = {
     id: 'division',

@@ -2,11 +2,12 @@ import { motion } from 'framer-motion';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import React from 'react';
 import { TopicConfig } from '@/types/topic';
-import { IndexPage } from './IndexPage';
+import dynamic from 'next/dynamic';
+
+const CoverPage = dynamic(() => import('../book-pages/shared/CoverPage').then(mod => mod.CoverPage));
+const SinopsisPage = dynamic(() => import('../book-pages/shared/SinopsisPage').then(mod => mod.SinopsisPage));
+const IndexPage = dynamic(() => import('./IndexPage').then(mod => mod.IndexPage));
 import { BookProvider } from '@/contexts/BookContext';
-import { CoverPage } from '../book-pages/shared/CoverPage';
-import { SinopsisPage } from '../book-pages/shared/SinopsisPage';
-import { ExplicacionPage } from '../book-pages/shared/ExplicacionPage';
 
 interface InfiniteBookProps {
     topics: TopicConfig[];

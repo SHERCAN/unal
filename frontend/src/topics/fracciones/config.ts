@@ -5,12 +5,14 @@ import { IndexPage } from '@/components/book-pages/shared/IndexPage';
 import { GuidePage } from '@/components/book-pages/shared/GuidePage';
 import { PresentationPage } from '@/components/book-pages/shared/PresentationPage';
 import { ExplanationPage } from '@/components/book-pages/shared/ExplanationPage';
-import { ConceptoConcretoPage } from './pages/ConceptoConcretoPage';
-import { ConceptoAbstracto1Page } from './pages/ConceptoAbstracto1Page';
-import { ConceptoAbstracto2Page } from './pages/ConceptoAbstracto2Page';
-import { EjemplosPage } from './pages/EjemplosPage';
-import { EjerciciosPage } from './pages/EjerciciosPage';
-import { EjerciciosPage2 } from './pages/EjerciciosPage2';
+import dynamic from 'next/dynamic';
+
+const ConceptoConcretoPage = dynamic(() => import('./pages/ConceptoConcretoPage').then(m => m.ConceptoConcretoPage));
+const ConceptoAbstracto1Page = dynamic(() => import('./pages/ConceptoAbstracto1Page').then(m => m.ConceptoAbstracto1Page));
+const ConceptoAbstracto2Page = dynamic(() => import('./pages/ConceptoAbstracto2Page').then(m => m.ConceptoAbstracto2Page));
+const EjemplosPage = dynamic(() => import('./pages/EjemplosPage').then(m => m.EjemplosPage));
+const EjerciciosPage = dynamic(() => import('./pages/EjerciciosPage').then(m => m.EjerciciosPage));
+const EjerciciosPage2 = dynamic(() => import('./pages/EjerciciosPage2').then(m => m.EjerciciosPage2));
 
 export const fraccionesConfig: TopicConfig = {
     id: 'fracciones',

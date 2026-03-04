@@ -37,6 +37,7 @@ export const getProfile = async (req: Request, res: Response) => {
 
 export const getRanking = async (req: Request, res: Response) => {
   try {
+    // Optimized query to fetch only top 20 student candidates and sort them in DB
     const users = await prisma.user.findMany({
       where: {
         role: 'STUDENT',
@@ -49,16 +50,21 @@ export const getRanking = async (req: Request, res: Response) => {
         puntos: true,
         puntosDefinitivos: true,
       },
+      orderBy: [
+        { puntos: 'desc' },
+        { puntosDefinitivos: 'desc' }
+      ],
+      take: 20
     });
 
-    // Calculate total points and sort by total
+    // Calculate total points and sort by total (for the top subset)
     const rankedUsers = users
       .map(user => ({
         id: user.id,
         nickname: user.nickname,
         nombre: user.nombre,
         avatar: user.avatar,
-        puntos: user.puntos + user.puntosDefinitivos, // Total points for display
+        puntos: user.puntos + user.puntosDefinitivos,
         puntosFlexibles: user.puntos,
         puntosDefinitivos: user.puntosDefinitivos
       }))

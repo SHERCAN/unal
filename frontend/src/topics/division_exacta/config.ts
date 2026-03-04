@@ -5,10 +5,12 @@ import { IndexPage } from '@/components/book-pages/shared/IndexPage';
 import { GuidePage } from '@/components/book-pages/shared/GuidePage';
 import { PresentationPage } from '@/components/book-pages/shared/PresentationPage';
 import { ExplanationPage } from '@/components/book-pages/shared/ExplanationPage';
-import { ConceptoConcretoPage } from './pages/ConceptoConcretoPage';
-import { ConceptoPictoricoPage } from './pages/ConceptoProcesualPage';
-import { ConceptoAbstractoPage } from './pages/ConceptoAbstractoPage';
-import { EjerciciosPage } from './pages/EjerciciosPage';
+import dynamic from 'next/dynamic';
+
+const ConceptoConcretoPage = dynamic(() => import('./pages/ConceptoConcretoPage').then(m => m.ConceptoConcretoPage));
+const ConceptoPictoricoPage = dynamic(() => import('./pages/ConceptoProcesualPage').then(m => m.ConceptoPictoricoPage));
+const ConceptoAbstractoPage = dynamic(() => import('./pages/ConceptoAbstractoPage').then(m => m.ConceptoAbstractoPage));
+const EjerciciosPage = dynamic(() => import('./pages/EjerciciosPage').then(m => m.EjerciciosPage));
 
 export const divisionExactaConfig: TopicConfig = {
     id: 'division-exacta',
