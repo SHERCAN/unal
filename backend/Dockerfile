@@ -48,5 +48,5 @@ COPY --from=builder /app/tsconfig.json ./tsconfig.json
 
 EXPOSE 4000
 
-# Sincronizar esquema, crear el administrador y luego arrancar la app.
-CMD ["sh", "-c", "pnpm prisma db push --accept-data-loss && pnpm exec ts-node scripts/createAdmin.ts && pnpm run start"]
+# Sincronizar esquema, crear la base de datos si no existe, crear el administrador y luego arrancar la app.
+CMD ["sh", "-c", "pnpm exec ts-node scripts/initdb.ts && pnpm prisma db push --accept-data-loss && pnpm exec ts-node scripts/createAdmin.ts && pnpm run start"]

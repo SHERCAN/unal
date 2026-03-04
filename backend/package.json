@@ -4,7 +4,7 @@
   "description": "Backend API for Math Learning Platform",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "nodemon src/index.ts",
+    "dev": "ts-node scripts/initdb.ts && npx prisma db push && nodemon src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "prisma:generate": "prisma generate",
@@ -13,12 +13,14 @@
   },
   "dependencies": {
     "@prisma/client": "^5.7.0",
+    "@types/pg": "^8.18.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
+    "pg": "^8.19.0",
     "socket.io": "^4.8.3"
   },
   "devDependencies": {
