@@ -35,7 +35,7 @@ export function UserProfile({ user, ranking, onBack }: UserProfileProps) {
     const userRankPosition = ranking.findIndex(u => u.nickname === user.nickname) + 1;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-[#dba9f3] to-[#c084fc] p-8 overflow-y-auto">
+        <div className="h-screen bg-gradient-to-br from-[#dba9f3] to-[#c084fc] p-4 md:p-8 flex flex-col overflow-hidden">
             {/* Botón Volver */}
             <button
                 onClick={onBack}
@@ -47,13 +47,13 @@ export function UserProfile({ user, ranking, onBack }: UserProfileProps) {
                 VOLVER
             </button>
 
-            <div className="max-w-6xl mx-auto">
+            <div className="max-w-6xl mx-auto w-full flex-1 flex flex-col min-h-0">
                 {/* Header */}
                 <h1 className="text-4xl font-black text-[#7e22ce] mb-8 text-center">
                     PERFIL DE USUARIO
                 </h1>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1 min-h-0">
                     {/* Columna Izquierda */}
                     <div className="space-y-6">
                         {/* Usuario */}
@@ -130,7 +130,7 @@ export function UserProfile({ user, ranking, onBack }: UserProfileProps) {
                     </div>
 
                     {/* Columna Derecha */}
-                    <div className="space-y-6">
+                    <div className="space-y-6 flex flex-col h-full min-h-0">
                         {/* Puntos */}
                         <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6">
                             <div className="grid grid-cols-2 gap-4 mb-6">
@@ -175,14 +175,14 @@ export function UserProfile({ user, ranking, onBack }: UserProfileProps) {
                         </div>
 
                         {/* Ranking en Tiempo Real */}
-                        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6">
+                        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-sm flex flex-col flex-1 min-h-0">
                             <h3 className="text-2xl font-black text-[#7e22ce] mb-4 flex items-center gap-2">
                                 <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
                                 </svg>
                                 RANKINGS EN EL TIEMPO REAL
                             </h3>
-                            <div className="space-y-2 max-h-[450px] overflow-y-auto pr-2 custom-scrollbar">
+                            <div className="space-y-2 flex-1 overflow-y-auto pr-2 custom-scrollbar">
                                 {ranking.map((rankUser, index) => (
                                     <div
                                         key={index}
