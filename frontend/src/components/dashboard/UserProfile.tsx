@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { getLevelInfo } from '@/lib/leveling';
 
 interface UserProfileProps {
     user: {
@@ -25,8 +26,10 @@ interface UserProfileProps {
 
 export function UserProfile({ user, ranking, onBack }: UserProfileProps) {
     const totalPuntos = user.puntos + user.puntosDefinitivos;
-    const nivel = Math.floor(totalPuntos / 100);
-    const progreso = totalPuntos % 100;
+    const levelInfo = getLevelInfo(totalPuntos);
+    const nivel = levelInfo.currentLevel;
+    const progreso = totalPuntos - levelInfo.currentLevelMin;
+    const maxProgreso = levelInfo.currentLevelMax - levelInfo.currentLevelMin;
 
     // Encontrar posición del usuario en el ranking
     const userRankPosition = ranking.findIndex(u => u.nickname === user.nickname) + 1;
@@ -162,7 +165,7 @@ export function UserProfile({ user, ranking, onBack }: UserProfileProps) {
                                     </svg>
                                     <div>
                                         <span className="text-6xl font-black text-[#7e22ce]">{nivel}</span>
-                                        <p className="text-sm font-bold text-[#7e22ce]">+ {progreso}/100</p>
+                                        <p className="text-sm font-bold text-[#7e22ce]">+ {progreso}/{maxProgreso}</p>
                                     </div>
                                 </div>
                                 <p className="text-center text-2xl font-black text-[#7e22ce]">

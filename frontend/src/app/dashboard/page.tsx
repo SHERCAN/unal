@@ -19,6 +19,7 @@ import { fraccionesConfig } from '@/topics/fracciones/config';
 import { fraccionesEquivalentesConfig } from '@/topics/fracciones_equivalentes/config';
 import { comparacionFraccionesConfig } from '@/topics/comparacion_fracciones/config';
 import { TopicConfig } from '@/types/topic';
+import { getLevelInfo } from '@/lib/leveling';
 
 const ORDERED_TOPICS = [
   divisionConfig,
@@ -50,119 +51,56 @@ import { useVideoProgress } from '@/hooks/useVideoProgress';
 
 export const dynamic = 'force-dynamic';
 
-// Configuración de niveles basada en el archivo CSV
-const LEVEL_THRESHOLDS = [
-  { level: 1, min: 0, max: 100 },
-  { level: 2, min: 100, max: 200 },
-  { level: 3, min: 200, max: 300 },
-  { level: 4, min: 300, max: 400 },
-  { level: 5, min: 400, max: 500 },
-  { level: 6, min: 500, max: 650 },
-  { level: 7, min: 650, max: 800 },
-  { level: 8, min: 800, max: 950 },
-  { level: 9, min: 950, max: 1100 },
-  { level: 10, min: 1100, max: 1300 },
-  { level: 11, min: 1300, max: 1500 },
-  { level: 12, min: 1500, max: 1750 },
-  { level: 13, min: 1750, max: 2000 },
-  { level: 14, min: 2000, max: 2250 },
-  { level: 15, min: 2250, max: 2500 },
-  { level: 16, min: 2500, max: 2750 },
-  { level: 17, min: 2750, max: 3000 },
-  { level: 18, min: 3000, max: 3300 },
-  { level: 19, min: 3300, max: 3600 },
-  { level: 20, min: 3600, max: 3900 },
-  { level: 21, min: 3900, max: 4200 },
-];
-
-// Función para obtener información del nivel basado en puntos totales
-function getLevelInfo(totalPoints: number) {
-  // Encontrar el nivel actual
-  let currentLevelData = LEVEL_THRESHOLDS[0];
-
-  for (const levelData of LEVEL_THRESHOLDS) {
-    if (totalPoints >= levelData.min && totalPoints < levelData.max) {
-      currentLevelData = levelData;
-      break;
-    }
-    // Si los puntos son >= al máximo del último nivel, usar el último nivel
-    if (levelData.level === 21 && totalPoints >= levelData.min) {
-      currentLevelData = levelData;
-      break;
-    }
-  }
-
-  // Calcular progreso dentro del nivel actual
-  const pointsInLevel = totalPoints - currentLevelData.min;
-  const levelRange = currentLevelData.max - currentLevelData.min;
-  const progressPercentage = Math.min((pointsInLevel / levelRange) * 100, 100);
-
-  // Calcular puntos necesarios para el siguiente nivel
-  const pointsNeeded = currentLevelData.max - totalPoints;
-
-  // Obtener el siguiente nivel
-  const nextLevel = currentLevelData.level < 21 ? currentLevelData.level + 1 : 21;
-
-  return {
-    currentLevel: currentLevelData.level,
-    nextLevel,
-    progressPercentage,
-    pointsNeeded: Math.max(pointsNeeded, 0),
-    currentLevelMin: currentLevelData.min,
-    currentLevelMax: currentLevelData.max,
-  };
-}
 
 // Hook personalizado para animar el incremento de números
 function useAnimatedCounter(targetValue: number, duration: number = 2000) {
-  const [displayValue, setDisplayValue] = useState(0);
+  const [displayValue, setDisplayValue] = useState(targetValue);
+  const previousTargetRef = useRef(targetValue);
   const animationFrameRef = useRef<number | null>(null);
-  const previousTargetRef = useRef(0);
 
   useEffect(() => {
-    // Solo iniciar animación si el valor objetivo realmente cambió
-    if (targetValue === previousTargetRef.current) {
-      return;
-    }
+    // Si el valor objetivo cambió, inicia la animación
+    if (targetValue !== previousTargetRef.current) {
+      const startValue = displayValue;
+      const startTime = performance.now();
+      const endValue = targetValue;
+      previousTargetRef.current = targetValue;
 
-    const startValue = displayValue;
-    const startTime = performance.now();
-    previousTargetRef.current = targetValue;
+      const animate = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
 
-    const animate = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
+        // Curva ease-out
+        const easeOut = 1 - Math.pow(1 - progress, 3);
 
-      // Curva ease-in-out: empieza despacio, rápido en la mitad, termina despacio
-      const easeInOut = progress < 0.5
-        ? 2 * progress * progress
-        : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+        const currentValue = Math.floor(
+          startValue + (endValue - startValue) * easeOut
+        );
 
-      const currentValue = Math.floor(
-        startValue + (targetValue - startValue) * easeInOut
-      );
+        setDisplayValue(currentValue);
 
-      setDisplayValue(currentValue);
+        if (progress < 1) {
+          animationFrameRef.current = requestAnimationFrame(animate);
+        } else {
+          setDisplayValue(endValue);
+        }
+      };
 
-      if (progress < 1) {
-        animationFrameRef.current = requestAnimationFrame(animate);
-      } else {
-        setDisplayValue(targetValue);
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
       }
-    };
-
-    if (animationFrameRef.current !== null) {
-      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = requestAnimationFrame(animate);
+    } else if (displayValue === 0 && targetValue > 0) {
+      // Caso de seguridad: si estamos en 0 pero el objetivo es > 0 y no hay animación activa
+      setDisplayValue(targetValue);
     }
-
-    animationFrameRef.current = requestAnimationFrame(animate);
 
     return () => {
       if (animationFrameRef.current !== null) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [targetValue]);
+  }, [targetValue, duration, displayValue]);
 
   return displayValue;
 }
@@ -250,7 +188,12 @@ export default function DashboardPage() {
   const [completedPages, setCompletedPages] = useState<number[]>([]);
   const [navigateToPage, setNavigateToPage] = useState<((page: number) => void) | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
+  const [mounted, setMounted] = useState(false);
   const nextLevelStarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // SWR Hooks for optimized fetching and caching
   const { data: profileData, mutate: mutateProfile } = useSWR(
@@ -259,26 +202,71 @@ export default function DashboardPage() {
     { revalidateOnFocus: false }
   );
 
-  const { data: rankingData, isLoading: loadingRankingSWR } = useSWR(
+  const { data: rankingData, isLoading: loadingRankingSWR, mutate: mutateRanking } = useSWR(
     '/api/users/ranking',
     fetcher,
     { refreshInterval: 60000 } // Refresh ranking every minute
   );
 
-  const { data: progressData, isLoading: loadingProgressSWR } = useSWR(
+  const { data: progressData, isLoading: loadingProgressSWR, mutate: mutateProgress } = useSWR(
     token ? ['/api/users/progress', token] : null,
     fetcherWithToken
   );
 
-  const { data: exercisesData } = useSWR(
+  const { data: exercisesData, mutate: mutateExercises } = useSWR(
     token ? ['/api/users/exercises', token] : null,
     fetcherWithToken
   );
 
+  // Re-fetch data whenever points are updated (dispatched from useVideoProgress after completing an exercise)
+  useEffect(() => {
+    const handleScoreUpdate = () => {
+      mutateProfile();
+      mutateRanking();
+      mutateProgress();
+      mutateExercises();
+    };
+
+    window.addEventListener('points-updated', handleScoreUpdate);
+    // Keep storage listener for multi-tab sync if needed, but points-updated covers current tab
+    window.addEventListener('storage', handleScoreUpdate);
+    return () => {
+      window.removeEventListener('points-updated', handleScoreUpdate);
+      window.removeEventListener('storage', handleScoreUpdate);
+    };
+  }, [mutateProfile, mutateRanking, mutateProgress, mutateExercises]);
+
   // Sync profileData with local storage and state
   const user = React.useMemo(() => {
     if (profileData) {
-      const u = { ...profileData };
+      const pDefinitivos = Number(
+        profileData.puntosDefinitivos ??
+        profileData.puntos_definitivos ??
+        0
+      );
+
+      const pTotal = Number(profileData.puntos ?? 0);
+
+      // Si existe un campo explícito para flexibles, usarlo.
+      // Si no, asumimos que 'puntos' es el total y restamos los definitivos.
+      const pFlexibles = Number(
+        profileData.puntosFlexibles ??
+        profileData.puntos_flexibles ??
+        (pTotal > pDefinitivos ? pTotal - pDefinitivos : pTotal)
+      );
+
+      const u = {
+        ...profileData,
+        puntos: pFlexibles,
+        puntosDefinitivos: pDefinitivos
+      };
+
+      console.log('Final User Stats Mapping:', {
+        rawPuntos: profileData.puntos,
+        rawDefinitivos: profileData.puntosDefinitivos,
+        mappedFlexibles: pFlexibles,
+        mappedDefinitivos: pDefinitivos
+      });
       if (u.role === 'ADMIN') {
         router.push('/admin');
         return null;
@@ -439,7 +427,7 @@ export default function DashboardPage() {
 
 
 
-  if (loading && !user) {
+  if (!mounted || (loading && !user)) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-secondary text-text gap-4">
         <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>

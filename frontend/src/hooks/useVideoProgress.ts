@@ -99,7 +99,7 @@ export function useVideoProgress() {
                     // If points were awarded, update dashboard and show toast
                     if (response.data.pointsAdded > 0) {
                         showToast('video', response.data.pointsAdded);
-                        window.dispatchEvent(new Event('storage'));
+                        window.dispatchEvent(new Event('points-updated'));
                     }
                 }
             } catch (error) {
@@ -142,7 +142,7 @@ export function useVideoProgress() {
                     return [...prev, stageId];
                 });
                 // Ensure other tabs/components sync up even if already done
-                window.dispatchEvent(new Event('storage'));
+                window.dispatchEvent(new Event('points-updated'));
             }
         } catch (error) {
             console.error('Error completing stage:', error);
@@ -177,7 +177,7 @@ export function useVideoProgress() {
 
                 const totalPoints = response.data.pointsAdded + (response.data.pointsDefinitivosAdded || 0);
                 showToast(toastType, totalPoints);
-                window.dispatchEvent(new Event('storage'));
+                window.dispatchEvent(new Event('points-updated'));
             }
             return response.data;
         } catch (error) {
@@ -214,7 +214,7 @@ export function useVideoProgress() {
 
                 const totalPoints = response.data.pointsAdded + (response.data.pointsDefinitivosAdded || 0);
                 showToast(toastType, totalPoints);
-                window.dispatchEvent(new Event('storage'));
+                window.dispatchEvent(new Event('points-updated'));
             }
             return response.data;
         } catch (error) {

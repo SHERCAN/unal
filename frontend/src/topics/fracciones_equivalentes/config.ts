@@ -1,10 +1,4 @@
 import { TopicConfig } from '@/types/topic';
-import { CoverPage } from '@/components/book-pages/shared/CoverPage';
-import { IntroPage } from '@/components/book-pages/shared/IntroPage';
-import { IndexPage } from '@/components/book-pages/shared/IndexPage';
-import { GuidePage } from '@/components/book-pages/shared/GuidePage';
-import { PresentationPage } from '@/components/book-pages/shared/PresentationPage';
-import { ExplanationPage } from '@/components/book-pages/shared/ExplanationPage';
 import { ConceptoConcretoPage } from './pages/ConceptoConcretoPage';
 import { ConceptoPictoricoPage } from './pages/ConceptoProcesualPage';
 import { ConceptoAbstracto1Page } from './pages/ConceptoAbstracto1Page';
@@ -19,12 +13,6 @@ export const fraccionesEquivalentesConfig: TopicConfig = {
     color: '#D946EF',
     description: 'Aprende sobre las fracciones equivalentes',
     pages: [
-        // { component: CoverPage, id: 'cover', title: 'Portada' },
-        // { component: IntroPage, id: 'intro', title: 'Introducción' },
-        // { component: IndexPage, id: 'index', title: 'Índice' },
-        // { component: GuidePage, id: 'guide', title: 'Guía' },
-        // { component: PresentationPage, id: 'presentation', title: 'Presentación' },
-        // { component: ExplanationPage, id: 'explanation', title: 'Explicación' },
         { component: ConceptoConcretoPage, id: 'concepto-concreto', title: 'Concreto' },
         { component: ConceptoPictoricoPage, id: 'concepto-pictorico', title: 'Pictórico' },
         { component: ConceptoAbstracto1Page, id: 'concepto-abstracto-1', title: 'Explicación teórica' },

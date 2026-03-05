@@ -1,12 +1,14 @@
+'use client';
+
 import { motion } from 'framer-motion';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import React from 'react';
 import { TopicConfig } from '@/types/topic';
 import dynamic from 'next/dynamic';
 
-const CoverPage = dynamic(() => import('../book-pages/shared/CoverPage').then(mod => mod.CoverPage));
-const SinopsisPage = dynamic(() => import('../book-pages/shared/SinopsisPage').then(mod => mod.SinopsisPage));
-const IndexPage = dynamic(() => import('./IndexPage').then(mod => mod.IndexPage));
+const CoverPage = dynamic(() => import('@/components/book-pages/shared/CoverPage').then(mod => ({ default: mod.CoverPage })), { ssr: false });
+const SinopsisPage = dynamic(() => import('@/components/book-pages/shared/SinopsisPage').then(mod => ({ default: mod.SinopsisPage })), { ssr: false });
+const IndexPage = dynamic(() => import('@/components/dashboard/IndexPage').then(mod => ({ default: mod.IndexPage })), { ssr: false });
 import { BookProvider } from '@/contexts/BookContext';
 
 interface InfiniteBookProps {
