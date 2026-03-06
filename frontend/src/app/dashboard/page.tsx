@@ -64,10 +64,6 @@ function useAnimatedCounter(targetValue: number, duration: number = 2000) {
       const startValue = displayValue;
       const startTime = performance.now();
       const endValue = targetValue;
-
-      console.log(`[Counter Debug] 🎯 Nuevo Objetivo: ${targetValue} (Viene de: ${previousTargetRef.current})`);
-      console.log(`[Counter Debug] 🔄 Animación Iniciada: ${startValue} -> ${endValue}`);
-
       previousTargetRef.current = targetValue;
 
       const animate = (currentTime: number) => {
