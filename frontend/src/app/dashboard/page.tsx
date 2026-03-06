@@ -59,11 +59,15 @@ function useAnimatedCounter(targetValue: number, duration: number = 2000) {
   const animationFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
-    // Si el valor objetivo cambió, inicia la animación
+    // Debug: Detectar cambio de objetivo
     if (targetValue !== previousTargetRef.current) {
       const startValue = displayValue;
       const startTime = performance.now();
       const endValue = targetValue;
+
+      console.log(`[Counter Debug] 🎯 Nuevo Objetivo: ${targetValue} (Viene de: ${previousTargetRef.current})`);
+      console.log(`[Counter Debug] 🔄 Animación Iniciada: ${startValue} -> ${endValue}`);
+
       previousTargetRef.current = targetValue;
 
       const animate = (currentTime: number) => {
@@ -72,16 +76,21 @@ function useAnimatedCounter(targetValue: number, duration: number = 2000) {
 
         // Curva ease-out
         const easeOut = 1 - Math.pow(1 - progress, 3);
-
         const currentValue = Math.floor(
           startValue + (endValue - startValue) * easeOut
         );
+
+        // Solo loguear pasos significativos para no inundar la consola
+        if (elapsed % 100 < 16) {
+          console.log(`[Counter Debug] 📈 Progreso: ${Math.round(progress * 100)}% | Valor: ${currentValue}`);
+        }
 
         setDisplayValue(currentValue);
 
         if (progress < 1) {
           animationFrameRef.current = requestAnimationFrame(animate);
         } else {
+          console.log(`[Counter Debug] 🏁 Animación Finalizada en: ${endValue}`);
           setDisplayValue(endValue);
         }
       };
@@ -91,7 +100,7 @@ function useAnimatedCounter(targetValue: number, duration: number = 2000) {
       }
       animationFrameRef.current = requestAnimationFrame(animate);
     } else if (displayValue === 0 && targetValue > 0) {
-      // Caso de seguridad: si estamos en 0 pero el objetivo es > 0 y no hay animación activa
+      console.log(`[Counter Debug] ⚡ Salto de seguridad: 0 -> ${targetValue}`);
       setDisplayValue(targetValue);
     }
 
@@ -100,7 +109,7 @@ function useAnimatedCounter(targetValue: number, duration: number = 2000) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [targetValue, duration, displayValue]);
+  }, [targetValue, duration]);
 
   return displayValue;
 }
