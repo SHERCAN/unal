@@ -727,15 +727,42 @@ function InfiniteBookWrapper({
   isSidebarOpen: boolean;
 }) {
   const navigateCallbackRef = useRef<((page: number) => void) | null>(null);
+  const hasRestored = useRef(false);
 
   const handlePageChange = useCallback((page: number, completed: number[]) => {
     setCurrentPage(page);
     setCompletedPages(completed);
-  }, [setCompletedPages]);
+
+    // Evitamos guardar la página 0 si ocurre durante el montaje inicial
+    // antes de que hayamos tenido oportunidad de restaurar la sesión.
+    if (!hasRestored.current && page === 0) return;
+
+    // Persist the last visited page
+    localStorage.setItem('lastVisitedPage', page.toString());
+  }, [setCurrentPage, setCompletedPages]);
 
   const handleNavigationRequest = useCallback((callback: (page: number) => void) => {
     navigateCallbackRef.current = callback;
     setNavigateToPage(() => callback);
+
+    // After mounting and receiving the navigate callback, check if we should restore a previous page
+    const savedPage = localStorage.getItem('lastVisitedPage');
+    if (savedPage) {
+      const pageIndex = parseInt(savedPage);
+      if (!isNaN(pageIndex) && pageIndex > 0) {
+        // We use a small timeout to ensure the book component is ready
+        setTimeout(() => {
+          if ((window as any).restoreInfiniteBookPage) {
+            (window as any).restoreInfiniteBookPage(pageIndex);
+          } else {
+            callback(pageIndex);
+          }
+          hasRestored.current = true;
+        }, 300); // Reduced delay since we bump the load limit immediately now
+        return;
+      }
+    }
+    hasRestored.current = true;
   }, [setNavigateToPage]);
 
   const handleNavigateToPage = useCallback((page: number) => {

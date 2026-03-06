@@ -22,6 +22,7 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
     const [currentPage, setCurrentPage] = useState(0); // 0 is Portada
     const [completedPages, setCompletedPages] = useState<number[]>([]);
     const pageRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const isProgrammaticScroll = useRef(false);
 
     // Progressive loading state
     const [loadedLimit, setLoadedLimit] = useState(2);
@@ -38,11 +39,23 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
         setGlobalZoom(1);
     };
 
-    const navigateToPage = useCallback((page: number) => {
-        const element = pageRefs.current[page];
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+    const navigateToPage = useCallback((page: number, behavior: ScrollBehavior = 'smooth') => {
+        // If target page is beyond current loaded limit, increase limit immediately
+        setLoadedLimit(prev => Math.max(prev, page + 5));
+
+        setTimeout(() => {
+            const element = pageRefs.current[page];
+            if (element) {
+                isProgrammaticScroll.current = true;
+                element.scrollIntoView({ behavior, block: 'start' });
+
+                // Unblock tracking after scroll finishes
+                const timeout = behavior === 'smooth' ? 1000 : 100;
+                setTimeout(() => {
+                    isProgrammaticScroll.current = false;
+                }, timeout);
+            }
+        }, behavior === 'instant' ? 0 : 50);
     }, []);
 
 
@@ -66,6 +79,7 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
             });
 
             if (maxEntry && maxRatio > 0.1) {
+                if (isProgrammaticScroll.current) return;
                 const pageIndex = pageRefs.current.findIndex(ref => ref === maxEntry!.target);
                 if (pageIndex !== -1) {
                     setCurrentPage(pageIndex);
@@ -93,7 +107,9 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
     // Expose navigation function to parent
     useEffect(() => {
         if (onNavigationRequest) {
-            onNavigationRequest(navigateToPage);
+            onNavigationRequest((page: number) => navigateToPage(page, 'smooth'));
+            // Special initialization for the dashboard to call instant restore
+            (window as any).restoreInfiniteBookPage = (page: number) => navigateToPage(page, 'instant');
         }
     }, [onNavigationRequest, navigateToPage]);
 

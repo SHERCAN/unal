@@ -117,14 +117,11 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
             (act4_v_sub === '36') &&
             (act4_v_rem === '0');
 
-        const mRowsFilled = act4_m_rows.filter(r => r.a && r.b && r.res);
-        const hasTarget = mRowsFilled.some(r =>
-            (r.a === '12' && r.b === '3' && r.res === '36') ||
-            (r.a === '3' && r.b === '12' && r.res === '36')
+        const mCorrect = act4_m_rows.every((r, idx) =>
+            r.a === '12' && r.b === (idx + 1).toString() && r.res === (12 * (idx + 1)).toString()
         );
-        const mathValid = mRowsFilled.every(r => parseInt(r.a) * parseInt(r.b) === parseInt(r.res));
 
-        const isCorrect = hCorrect && vCorrect && hasTarget && mathValid;
+        const isCorrect = hCorrect && vCorrect && mCorrect;
         setAct4Status(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.ACT4, isCorrect, 'modulo_a');
         if (isCorrect) {
@@ -273,7 +270,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                                 </div>
                                 <div className="flex flex-col">
                                     <div className="border-l-4 border-b-4 border-black dark:border-white pl-2 pb-2 mb-2">
-                                        <InputBox value={act4Status === 'correct' ? '12' : act4_v_divisor} onChange={v => { setAct4_v_divisor(v); setAct4Status(null); }} className="w-16 h-16 text-3xl border-none focus:ring-0 bg-transparent" />
+                                        <InputBox value={act4Status === 'correct' ? '12' : act4_v_divisor} onChange={v => { setAct4_v_divisor(v); setAct4Status(null); }} className="w-16 h-16 text-3xl " />
                                     </div>
                                     <div className="pl-2">
                                         <InputBox value={act4Status === 'correct' ? '3' : act4_v_quotient} onChange={v => { setAct4_v_quotient(v); setAct4Status(null); }} className="w-16 h-16 text-3xl" />
@@ -286,15 +283,15 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
                             <div className="flex flex-col gap-4 text-gray-800 dark:text-white">
                                 {act4_m_rows.map((row, i) => (
                                     <div key={i} className="flex items-center gap-2">
-                                        <InputBox value={act4Status === 'correct' && i === 0 ? '12' : row.a} onChange={v => {
+                                        <InputBox value={act4Status === 'correct' ? '12' : row.a} onChange={v => {
                                             const n = [...act4_m_rows]; n[i].a = v; setAct4_m_rows(n); setAct4Status(null);
                                         }} className="w-14 h-12" />
                                         <span className="text-xl font-bold">×</span>
-                                        <InputBox value={act4Status === 'correct' && i === 0 ? '3' : row.b} onChange={v => {
+                                        <InputBox value={act4Status === 'correct' ? (i + 1).toString() : row.b} onChange={v => {
                                             const n = [...act4_m_rows]; n[i].b = v; setAct4_m_rows(n); setAct4Status(null);
                                         }} className="w-14 h-12" />
                                         <span className="text-xl font-bold">=</span>
-                                        <InputBox value={act4Status === 'correct' && i === 0 ? '36' : row.res} onChange={v => {
+                                        <InputBox value={act4Status === 'correct' ? (12 * (i + 1)).toString() : row.res} onChange={v => {
                                             const n = [...act4_m_rows]; n[i].res = v; setAct4_m_rows(n); setAct4Status(null);
                                         }} className="w-14 h-12" />
                                     </div>
