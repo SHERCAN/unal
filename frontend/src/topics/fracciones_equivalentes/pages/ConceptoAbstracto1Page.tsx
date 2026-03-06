@@ -178,11 +178,11 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
                                 <div className="bg-green-600 text-white font-bold px-4 py-1 rounded inline-block text-lg shadow-sm">
                                     Ejemplo:
                                 </div>
-                                <p className="text-base text-gray-800 font-semibold">
+                                <div className="text-base text-gray-800 font-semibold">
                                     <Fraction num="3" den="5" size="text-2xl" color="text-gray-800" /> ,
                                     <Fraction num="6" den="10" size="text-2xl" color="text-gray-800" /> y
                                     <Fraction num="12" den="20" size="text-2xl" color="text-gray-800" /> son fracciones equivalentes.
-                                </p>
+                                </div>
                             </div>
 
                             <div className="flex items-center justify-center gap-8 pl-12">
@@ -212,9 +212,9 @@ export function ConceptoAbstracto1Page({ zoom = 1 }: Props) {
 
                         <div className="space-y-6 pt-8 border-t-2 border-dashed border-gray-100">
                             <div className="flex items-center gap-4">
-                                <p className="text-base text-gray-800 font-semibold">
+                                <div className="text-base text-gray-800 font-semibold">
                                     ¿Cómo sabemos que <Fraction num="3" den="5" size="text-2xl" color="text-gray-800" /> y <Fraction num="6" den="10" size="text-2xl" color="text-gray-800" /> son equivalentes?
-                                </p>
+                                </div>
                                 <PlayVideoButton trackingId={VIDEO_TRACKING.A_HOW_TO} title="" videoId="/pag25/vv-6" />
                             </div>
 

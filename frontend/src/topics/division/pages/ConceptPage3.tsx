@@ -240,10 +240,13 @@ export function ConceptPage3({ zoom = 1 }: DivisionConceptPage3Props) {
                                     draggable={false}
                                 />
                             </div>
-                            <div className="mt-4 text-sm text-gray-800 dark:text-gray-200 flex items-start gap-2">
-                                <p>
-                                    <span className='font-semibold text-base'> Para dividir 25 entre 5, buscamos cuántas veces el número 5 está contenido en 25.
-                                        <p>Como 5 × 5 = 25, el cociente es 5 y el resto es 0.<PlayVideoButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE_MAIN} title="Explicación del ejemplo" videoId="/pag4/vv-1" /></p></span>
+                            <div className="mt-4 text-sm text-gray-800 dark:text-gray-200">
+                                <p className='font-semibold text-base'>
+                                    Para dividir 25 entre 5, buscamos cuántas veces el número 5 está contenido en 25.
+                                </p>
+                                <p className='mt-2'>
+                                    Como 5 × 5 = 25, el cociente es 5 y el resto es 0.
+                                    <PlayVideoButton trackingId={VIDEO_TRACKING_IDS.EXAMPLE_MAIN} title="Explicación del ejemplo" videoId="/pag4/vv-1" />
                                 </p>
                             </div>
                         </div>
