@@ -252,7 +252,7 @@ export default function DashboardPage() {
       const pFlexibles = Number(
         profileData.puntosFlexibles ??
         profileData.puntos_flexibles ??
-        (pTotal > pDefinitivos ? pTotal - pDefinitivos : pTotal)
+        pTotal
       );
 
       const u = {
