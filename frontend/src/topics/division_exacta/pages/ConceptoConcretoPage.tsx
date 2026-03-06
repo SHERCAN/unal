@@ -45,10 +45,38 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
     const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted, watchedVideos, completedExercises, completedStages } = useVideoProgress();
 
+    // ==================== C SECTION: Medals ====================
+    const totalMedals = 18;
+    const [medals, setMedals] = useState<Medal[]>(
+        Array.from({ length: totalMedals }, (_, i) => ({ id: i, inTeam: null }))
+    );
+    const [draggedMedal, setDraggedMedal] = useState<number | null>(null);
+    const [medalResult, setMedalResult] = useState<'correct' | 'incorrect' | null>(null);
+
+    // ==================== P SECTION: Yellow Circles ====================
+    const totalCircles = 18;
+    const [circles, setCircles] = useState<Circle[]>(
+        Array.from({ length: totalCircles }, (_, i) => ({ id: i, inGroup: null }))
+    );
+    const [draggedCircle, setDraggedCircle] = useState<number | null>(null);
+    const [circleResult, setCircleResult] = useState<'correct' | 'incorrect' | null>(null);
+
     // Initial load and auto-checking
     useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.C_GAME)) setMedalResult('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.P_GAME)) setCircleResult('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.C_GAME)) {
+            setMedalResult('correct');
+            setMedals(Array.from({ length: totalMedals }, (_, i) => ({
+                id: i,
+                inTeam: Math.floor(i / 6) + 1
+            })));
+        }
+        if (isExerciseCompleted(EXERCISE_IDS.P_GAME)) {
+            setCircleResult('correct');
+            setCircles(Array.from({ length: totalCircles }, (_, i) => ({
+                id: i,
+                inGroup: Math.floor(i / 6) + 1
+            })));
+        }
 
         const C_REQUIRED = [
             'division_exacta-pag7-v1', // C_INTRO
@@ -69,14 +97,6 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         );
         if (pDone) completeStage(STAGE_IDS.P_STAGE);
     }, [isExerciseCompleted, watchedVideos, completedExercises]);
-
-    // ==================== C SECTION: Medals ====================
-    const totalMedals = 18;
-    const [medals, setMedals] = useState<Medal[]>(
-        Array.from({ length: totalMedals }, (_, i) => ({ id: i, inTeam: null }))
-    );
-    const [draggedMedal, setDraggedMedal] = useState<number | null>(null);
-    const [medalResult, setMedalResult] = useState<'correct' | 'incorrect' | null>(null);
 
     const getMedalsInBox = () => medals.filter(m => m.inTeam === null);
     const getMedalsInTeam = (teamId: number) => medals.filter(m => m.inTeam === teamId);
@@ -128,14 +148,6 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
             // Stage completion handled by useEffect
         }
     };
-
-    // ==================== P SECTION: Yellow Circles ====================
-    const totalCircles = 18;
-    const [circles, setCircles] = useState<Circle[]>(
-        Array.from({ length: totalCircles }, (_, i) => ({ id: i, inGroup: null }))
-    );
-    const [draggedCircle, setDraggedCircle] = useState<number | null>(null);
-    const [circleResult, setCircleResult] = useState<'correct' | 'incorrect' | null>(null);
 
     const getCirclesInPool = () => circles.filter(c => c.inGroup === null);
     const getCirclesInGroup = (groupId: number) => circles.filter(c => c.inGroup === groupId);

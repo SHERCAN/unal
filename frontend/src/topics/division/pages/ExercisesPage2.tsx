@@ -149,7 +149,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
         const i1 = act5_inputs[1].toUpperCase().trim();
         const i2 = act5_inputs[2].toUpperCase().trim();
 
-        const isCorrect = (i0 === 'V') && (i1 === 'F') && (i2 === 'F');
+        const isCorrect = (i0 === '') && (i1 === 'F') && (i2 === 'F');
         setAct5Status(isCorrect ? 'correct' : 'incorrect');
         await submitExercise(EXERCISE_IDS.ACT5, isCorrect, 'modulo_a');
         if (isCorrect) {
@@ -325,7 +325,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
 
                     <div className={`ml-0 md:ml-12 grid gap-6 ${act5Status === 'correct' ? 'pointer-events-none' : ''}`}>
                         {[
-                            { text: '56 ÷ 7 = 8', idx: 0, ans: 'V' },
+                            { text: '56 ÷ 7 = 8', idx: 0, ans: '' },
                             { text: '45 ÷ 9 = 6', idx: 1, ans: 'F' },
                             { text: '72 ÷ 6 = 14', idx: 2, ans: 'F' },
                         ].map((item) => (
