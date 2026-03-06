@@ -64,7 +64,10 @@ export function EjemplosPage({ zoom = 1 }: Props) {
 
     // Initial load sync
     useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.SOL1)) setSol1Result('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.SOL1)) {
+            setSol1Result('correct');
+            setSol1({ i1: '3', i2: '4', i3: '12', i4: '1', r1: '12', r2: '12' });
+        }
     }, [isExerciseCompleted]);
 
     const checkSol1 = async () => {

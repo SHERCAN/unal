@@ -32,10 +32,23 @@ export function ConceptoPictoricoPage({ zoom = 1 }: Props) {
         DESAFIO_VIDEO: 'fracciones_equivalentes-pag24-v3',
     };
 
+    // --- State for Exercises ---
+    const [lapsAns, setLapsAns] = useState('');
+    const [lapsResult, setLapsResult] = useState<'correct' | 'incorrect' | null>(null);
+
+    const [desafioAns, setDesafioAns] = useState('');
+    const [desafioResult, setDesafioResult] = useState<'correct' | 'incorrect' | null>(null);
+
     // Initial load and auto-checking
     React.useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.LAPS)) setLapsResult('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.DESAFIO)) setDesafioResult('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.LAPS)) {
+            setLapsResult('correct');
+            setLapsAns('4');
+        }
+        if (isExerciseCompleted(EXERCISE_IDS.DESAFIO)) {
+            setDesafioResult('correct');
+            setDesafioAns('8');
+        }
 
         const P_REQUIRED = [
             'fracciones_equivalentes-pag1-v1', // BONO_EXPLICADO
@@ -50,13 +63,6 @@ export function ConceptoPictoricoPage({ zoom = 1 }: Props) {
         );
         if (pDone) completeStage(STAGE_IDS.P_STAGE);
     }, [isExerciseCompleted, watchedVideos, completedExercises]);
-
-    // --- State for Exercises ---
-    const [lapsAns, setLapsAns] = useState('');
-    const [lapsResult, setLapsResult] = useState<'correct' | 'incorrect' | null>(null);
-
-    const [desafioAns, setDesafioAns] = useState('');
-    const [desafioResult, setDesafioResult] = useState<'correct' | 'incorrect' | null>(null);
 
 
     const handleLapsCheck = async () => {

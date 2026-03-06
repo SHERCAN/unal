@@ -6,6 +6,52 @@ import { useVideoProgress } from '@/hooks/useVideoProgress';
 import { FeedbackButton } from '@/components/FeedbackButton';
 
 interface Props { zoom?: number; }
+
+const Fraction = ({ num, den }: any) => (
+    <div className="inline-flex flex-col items-center align-middle text-2xl font-black px-1">
+        <span>{num}</span>
+        <div className="w-full h-0.5 bg-black my-0.5" />
+        <span>{den}</span>
+    </div>
+);
+
+const Exercise = ({ num1, den1, num2, den2, idx, state, setState, result, onCheck, onReset }: any) => (
+    <div className="flex items-center gap-4 p-2 rounded-xl hover:bg-gray-50 transition-colors group">
+        <div className="w-4 h-4 bg-purple-600 rounded-sm flex-shrink-0" />
+        <div className="flex items-center gap-3">
+            <Fraction num={num1} den={den1} />
+            <div className="relative">
+                <select
+                    value={state[idx] || ''}
+                    onChange={(e) => {
+                        setState((prev: any) => ({ ...prev, [idx]: e.target.value }));
+                        onReset(idx);
+                    }}
+                    className="w-14 h-14 text-2xl font-black text-purple-700 bg-gray-100 rounded-lg appearance-none text-center outline-none border-2 border-transparent focus:border-purple-300 cursor-pointer"
+                >
+                    <option value=""></option>
+                    <option value="<">&lt;</option>
+                    <option value=">">&gt;</option>
+                    <option value="=">=</option>
+                </select>
+                <div className="absolute right-1 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px] border-t-gray-400"></div>
+                </div>
+            </div>
+            <Fraction num={num2} den={den2} />
+        </div>
+        <FeedbackButton
+            status={result ?? null}
+            onCheck={() => onCheck(idx)}
+            onReset={() => {
+                setState((prev: any) => ({ ...prev, [idx]: '' }));
+                onReset(idx);
+            }}
+            className="scale-75 origin-left"
+        />
+    </div>
+);
+
 //PAGINA 3 EJERCICIOS
 export function EjerciciosPage({ zoom = 1 }: Props) {
     const { submitExercise, isExerciseCompleted, completeStage } = useVideoProgress();
@@ -49,63 +95,31 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
 
     // Initial load and sync
     React.useEffect(() => {
-        const nextA = { ...resultsA };
-        Object.keys(answersA).forEach(idx => {
-            if (isExerciseCompleted(`comparacion_fracciones-pag1-ej${parseInt(idx) + 1}`)) nextA[parseInt(idx)] = 'correct';
+        const nextResultsA = { ...resultsA };
+        const nextActA = { ...actA };
+        Object.keys(answersA).forEach(idxStr => {
+            const idx = parseInt(idxStr);
+            if (isExerciseCompleted(`comparacion_fracciones-pag1-ej${idx + 1}`)) {
+                nextResultsA[idx] = 'correct';
+                nextActA[idx] = answersA[idx as keyof typeof answersA];
+            }
         });
-        setResultsA(nextA);
+        setResultsA(nextResultsA);
+        setActA(nextActA);
 
-        const nextB = { ...resultsB };
-        Object.keys(answersB).forEach(idx => {
-            if (isExerciseCompleted(`comparacion_fracciones-pag1-ej${parseInt(idx) + 5}`)) nextB[parseInt(idx)] = 'correct';
+        const nextResultsB = { ...resultsB };
+        const nextActB = { ...actB };
+        Object.keys(answersB).forEach(idxStr => {
+            const idx = parseInt(idxStr);
+            if (isExerciseCompleted(`comparacion_fracciones-pag1-ej${idx + 5}`)) {
+                nextResultsB[idx] = 'correct';
+                nextActB[idx] = answersB[idx as keyof typeof answersB];
+            }
         });
-        setResultsB(nextB);
+        setResultsB(nextResultsB);
+        setActB(nextActB);
     }, [isExerciseCompleted]);
 
-    const Fraction = ({ num, den }: any) => (
-        <div className="inline-flex flex-col items-center align-middle text-2xl font-black px-1">
-            <span>{num}</span>
-            <div className="w-full h-0.5 bg-black my-0.5" />
-            <span>{den}</span>
-        </div>
-    );
-
-    const Exercise = ({ num1, den1, num2, den2, idx, state, setState, result, onCheck, onReset }: any) => (
-        <div className="flex items-center gap-4 p-2 rounded-xl hover:bg-gray-50 transition-colors group">
-            <div className="w-4 h-4 bg-purple-600 rounded-sm flex-shrink-0" />
-            <div className="flex items-center gap-3">
-                <Fraction num={num1} den={den1} />
-                <div className="relative">
-                    <select
-                        value={state[idx] || ''}
-                        onChange={(e) => {
-                            setState((prev: any) => ({ ...prev, [idx]: e.target.value }));
-                            onReset(idx);
-                        }}
-                        className="w-14 h-14 text-2xl font-black text-purple-700 bg-gray-100 rounded-lg appearance-none text-center outline-none border-2 border-transparent focus:border-purple-300 cursor-pointer"
-                    >
-                        <option value=""></option>
-                        <option value="<">&lt;</option>
-                        <option value=">">&gt;</option>
-                        <option value="=">=</option>
-                    </select>
-                    <div className="absolute right-1 top-1/2 -translate-y-1/2 pointer-events-none">
-                        <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px] border-t-gray-400"></div>
-                    </div>
-                </div>
-                <Fraction num={num2} den={den2} />
-            </div>
-            <FeedbackButton
-                status={result ?? null}
-                onCheck={() => onCheck(idx)}
-                onReset={() => {
-                    setState((prev: any) => ({ ...prev, [idx]: '' }));
-                    onReset(idx);
-                }}
-                className="scale-75 origin-left"
-            />
-        </div>
-    );
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Comparación de Fracciones' }} pageId="comp-frac-ejercicios">

@@ -8,6 +8,38 @@ import { FeedbackButton } from '@/components/FeedbackButton';
 import { MdLightbulbOutline } from 'react-icons/md';
 
 interface Props { zoom?: number; }
+
+// Helper components
+const Fraction = ({ num, den, size = "text-base", color = "text-semibold" }: any) => (
+    <div className={`inline-flex flex-col items-center align-middle ${size} font-bold px-1`}>
+        <span className={color}>{num}</span>
+        <div className={`w-full h-0.5 ${color === 'text-white' ? 'bg-white' : 'bg-black'} my-0.5`} />
+        <span className={color}>{den}</span>
+    </div>
+);
+
+const InputFraction = ({ value, onChange, result, disabled }: any) => (
+    <div className="flex flex-col items-center gap-1">
+        <input
+            type="text"
+            className="w-14 h-14 text-center rounded-lg text-2xl font-black outline-none border-none shadow-sm"
+            style={{ backgroundColor: '#d9d9d9' }}
+            value={value.n}
+            onChange={e => onChange({ ...value, n: e.target.value })}
+            disabled={disabled}
+        />
+        <div className="w-14 h-1 bg-black rounded-full" />
+        <input
+            type="text"
+            className="w-14 h-14 text-center rounded-lg text-2xl font-black outline-none border-none shadow-sm"
+            style={{ backgroundColor: '#d9d9d9' }}
+            value={value.d}
+            onChange={e => onChange({ ...value, d: e.target.value })}
+            disabled={disabled}
+        />
+    </div>
+);
+
 //PAGINA 4 ABSTRACTO
 export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
     const EXERCISE_IDS = {
@@ -43,9 +75,18 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
 
     // Initial load and auto-checking
     useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.SIMP)) setSimpResult('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.AMP1)) setAmp1Result('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.AMP2)) setAmp2Result('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.SIMP)) {
+            setSimpResult('correct');
+            setSimpAns({ n: '2', d: '5' });
+        }
+        if (isExerciseCompleted(EXERCISE_IDS.AMP1)) {
+            setAmp1Result('correct');
+            setAmp1Ans({ n: '10', d: '15' });
+        }
+        if (isExerciseCompleted(EXERCISE_IDS.AMP2)) {
+            setAmp2Result('correct');
+            setAmp2Ans({ n: '25', d: '35' });
+        }
 
         const A_REQUIRED = [
             // Page 25 Videos
@@ -92,36 +133,6 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
     const resetAmp1 = () => { if (isExerciseCompleted(EXERCISE_IDS.AMP1)) return; setAmp1Ans({ n: '', d: '' }); setAmp1Result(null); };
     const resetAmp2 = () => { if (isExerciseCompleted(EXERCISE_IDS.AMP2)) return; setAmp2Ans({ n: '', d: '' }); setAmp2Result(null); };
 
-    // Helper components
-    const Fraction = ({ num, den, size = "text-base", color = "text-semibold" }: any) => (
-        <div className={`inline-flex flex-col items-center align-middle ${size} font-bold px-1`}>
-            <span className={color}>{num}</span>
-            <div className={`w-full h-0.5 ${color === 'text-white' ? 'bg-white' : 'bg-black'} my-0.5`} />
-            <span className={color}>{den}</span>
-        </div>
-    );
-
-    const InputFraction = ({ value, onChange, result, disabled }: any) => (
-        <div className="flex flex-col items-center gap-1">
-            <input
-                type="text"
-                className="w-14 h-14 text-center rounded-lg text-2xl font-black outline-none border-none shadow-sm"
-                style={{ backgroundColor: '#d9d9d9' }}
-                value={value.n}
-                onChange={e => onChange({ ...value, n: e.target.value })}
-                disabled={disabled}
-            />
-            <div className="w-14 h-1 bg-black rounded-full" />
-            <input
-                type="text"
-                className="w-14 h-14 text-center rounded-lg text-2xl font-black outline-none border-none shadow-sm"
-                style={{ backgroundColor: '#d9d9d9' }}
-                value={value.d}
-                onChange={e => onChange({ ...value, d: e.target.value })}
-                disabled={disabled}
-            />
-        </div>
-    );
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones Equivalentes' }} pageId="frac-equiv-concepto-abstracto-2">
