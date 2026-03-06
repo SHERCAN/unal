@@ -389,7 +389,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                     <img src="/division/oranges-page/girl-basket.png" alt="Girl with Basket" className="w-full h-full object-contain" />
                                     {/* Oranges in Basket - Rendered in a pile/grid over the basket area */}
                                     <div className="absolute bottom-[2%] left-[15%] w-[70%] h-[25%] flex flex-wrap-reverse justify-center content-end pointer-events-none">
-                                        {introOranges.filter(o => o.location === 'basket').map(o => (
+                                        {introOranges.filter(o => o.location === 'basket').slice(0, 5).map(o => (
                                             <div
                                                 key={o.id}
                                                 draggable
@@ -512,7 +512,7 @@ export function DistributionExercisePage({ zoom = 1 }: DistributionExercisePageP
                                     >
                                         <img src="/division/oranges-page/girl-basket.png" alt="Girl" className="h-48 object-contain" />
                                         <div className="absolute top-[40%] left-[20%] w-[60%] h-[30%] flex flex-wrap justify-center items-center overflow-hidden">
-                                            {getOrangesInPool().map(o => (
+                                            {getOrangesInPool().slice(0, 5).map(o => (
                                                 <div
                                                     key={o.id}
                                                     draggable
