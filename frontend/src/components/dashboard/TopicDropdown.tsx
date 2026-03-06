@@ -23,13 +23,24 @@ const getTrackingPrefix = (topicId: string): string => {
 // Count total trackable items (videos + exercises + activities) for each topic
 // These are defined in the page components with patterns like [prefix]-pag[N]-v[M], [prefix]-pag[N]-ej[M], etc.
 const TOPIC_TOTAL_ITEMS: Record<string, number> = {
-    'division': 18,              // pag1-6: videos + CPA games + exercises
-    'division_exacta': 14,       // pag7-10: videos + CPA games + exercises
-    'division_inexacta': 16,     // pag11-13: videos + CPA games + exercises
-    'numeros_primos': 9,         // pag14-16: videos + CPA game + exercises
-    'fracciones': 16,            // pag17-22: videos + CPA games + exercises
-    'fracciones_equivalentes': 22, // pag23-28: videos + CPA games + exercises
-    'comparacion_fracciones': 10,  // pag29-31: videos + CPA games + exercises
+    'division': 60,              // pag1-6: videos + CPA games + exercises
+    'division_exacta': 35,       // pag7-10: videos + CPA games + exercises
+    'division_inexacta': 30,     // pag11-13: videos + CPA games + exercises
+    'numeros_primos': 20,        // pag14-16: videos + CPA game + exercises
+    'fracciones': 45,            // pag17-22: videos + CPA games + exercises
+    'fracciones_equivalentes': 50, // pag23-28: videos + CPA games + exercises
+    'comparacion_fracciones': 25,  // pag29-31: videos + CPA games + exercises
+};
+
+// Final stages that MUST be completed for 100% progress
+const FINAL_STAGES: Record<string, string | string[]> = {
+    'division': ['division-pag5-modulo-a', 'division-pag5-modulo-b', 'division-pag6-modulo-a', 'division-pag6-modulo-b', 'division-final'],
+    'division-exacta': 'division-exacta-final',
+    'division-inexacta': 'division-inexacta-final',
+    'numeros-primos': 'numeros-primos-final',
+    'fracciones': ['fracciones-pag21-modulo-a', 'fracciones-pag22-modulo-b', 'fracciones-a-stage'],
+    'fracciones_equivalentes': 'fracciones-equivalentes-final',
+    'comparacion_fracciones': 'comparacion-fracciones-final',
 };
 
 const ProgressCircle = ({ progress }: { progress: number }) => {
@@ -137,8 +148,21 @@ export function TopicDropdown({
         const topicStages = completedStages.filter((s: string) => s.startsWith(prefix + '-'));
 
         const completedCount = topicVideos.length + topicExercises.length + topicStages.length;
+        let progressPercent = Math.round((completedCount / totalItems) * 100);
 
-        return Math.min(100, Math.round((completedCount / totalItems) * 100));
+        // Check if actually finished via final stages
+        const finalId = FINAL_STAGES[topicId];
+        const isActuallyFinished = Array.isArray(finalId)
+            ? finalId.every(id => completedStages.includes(id))
+            : finalId ? completedStages.includes(finalId) : false;
+
+        // If progress is 100 but final stage is missing, cap at 99
+        if (progressPercent >= 100 && !isActuallyFinished) {
+            progressPercent = 99;
+        }
+
+        // Return the actual calculated progress (which won't be 100 if items are missing)
+        return Math.min(100, progressPercent);
     };
 
     // Auto-collapse when clicking outside
