@@ -15,6 +15,101 @@ import acordeonImg from '../acordeon.png';
 import circulosImg from '../circulos.png';
 import cebraOblicuaImg from '../cebraoblicua.png';
 
+const FractionInput = ({ nValue, dValue, isCorrect, onNChange, onDChange, nColor }: any) => {
+    const nStyle = !isCorrect && nColor ? { borderColor: `#${nColor}`, color: `#${nColor}` } : {};
+    return (
+        <div className="flex flex-col items-center gap-1">
+            <input
+                type="number"
+                className={`w-12 h-10 border-2 text-center text-lg font-bold rounded outline-none transition-all ${isCorrect ? 'border-green-500 bg-green-50 text-green-700' : 'focus:border-black'}`}
+                style={nStyle}
+                value={nValue}
+                onChange={(e) => onNChange(e.target.value)}
+            />
+            <div className="w-12 h-0.5 bg-black rounded-full"></div>
+            <input
+                type="number"
+                className={`w-12 h-10 border-2 text-center text-lg font-bold rounded outline-none transition-all ${isCorrect ? 'border-green-500 bg-green-50 text-green-700' : 'border-gray-200 focus:border-purple-600'}`}
+                value={dValue}
+                onChange={(e) => onDChange(e.target.value)}
+            />
+        </div>
+    );
+};
+
+interface ExerciseRowProps {
+    id: string;
+    title: string;
+    imgSrc: any;
+    correctN: string;
+    correctD: string;
+    className?: string;
+    results: any;
+    inputs: any;
+    setInputs: any;
+    setResults: any;
+    validate: any;
+    reset: any;
+    nColor?: string;
+}
+
+const ExerciseRow = ({
+    id,
+    imgSrc,
+    correctN,
+    correctD,
+    title,
+    results,
+    inputs,
+    setInputs,
+    setResults,
+    validate,
+    reset,
+    nColor,
+    className = ""
+}: ExerciseRowProps) => {
+    return (
+        <div className={`flex items-center gap-4 ${className}`}>
+            {/* Square Bullet */}
+            <div className="flex items-center shrink-0">
+                <div className="w-4 h-4 border-2 border-purple-600 bg-white"></div>
+            </div>
+
+            {/* Image */}
+            <div className="w-48 flex justify-center px-1">
+                <Image
+                    src={imgSrc}
+                    alt={title}
+                    className="h-28 w-auto object-contain drop-shadow-sm"
+                />
+            </div>
+
+            {/* Arrow */}
+            <span className="text-2xl font-bold text-gray-400 mx-1 shrink-0">→</span>
+
+            {/* Fraction Input */}
+            <div className="flex items-center gap-3 shrink-0">
+                <FractionInput
+                    isCorrect={results[id] === 'correct'}
+                    nValue={inputs[`${id}_n` as keyof typeof inputs]}
+                    dValue={inputs[`${id}_d` as keyof typeof inputs]}
+                    onNChange={(val: string) => { setInputs({ ...inputs, [`${id}_n`]: val }); setResults({ ...results, [id]: null }); }}
+                    onDChange={(val: string) => { setInputs({ ...inputs, [`${id}_d`]: val }); setResults({ ...results, [id]: null }); }}
+                    nColor={nColor}
+                />
+
+                <div className="flex flex-col gap-1">
+                    <FeedbackButton
+                        onCheck={() => validate(id, correctN, correctD)}
+                        onReset={() => reset(id)}
+                        status={results[id]}
+                    />
+                </div>
+            </div>
+        </div>
+    );
+};
+
 interface Props { zoom?: number; }
 
 //PAGINA 3 ABSTRACTO
@@ -54,10 +149,34 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
 
     // Initial load and auto-checking
     useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.EX1)) setResults(prev => ({ ...prev, ex1: 'correct' }));
-        if (isExerciseCompleted(EXERCISE_IDS.EX2)) setResults(prev => ({ ...prev, ex2: 'correct' }));
-        if (isExerciseCompleted(EXERCISE_IDS.EX3)) setResults(prev => ({ ...prev, ex3: 'correct' }));
-        if (isExerciseCompleted(EXERCISE_IDS.EX4)) setResults(prev => ({ ...prev, ex4: 'correct' }));
+        const newInputs = { ...inputs };
+        const newResults = { ...results };
+
+        if (isExerciseCompleted(EXERCISE_IDS.EX1)) {
+            newResults.ex1 = 'correct';
+            newInputs.ex1_n = '7';
+            newInputs.ex1_d = '16';
+        }
+        if (isExerciseCompleted(EXERCISE_IDS.EX2)) {
+            newResults.ex2 = 'correct';
+            newInputs.ex2_n = '5';
+            newInputs.ex2_d = '9';
+        }
+        if (isExerciseCompleted(EXERCISE_IDS.EX3)) {
+            newResults.ex3 = 'correct';
+            newInputs.ex3_n1 = '9';
+            newInputs.ex3_d1 = '24';
+            newInputs.ex3_n2 = '7';
+            newInputs.ex3_d2 = '24';
+        }
+        if (isExerciseCompleted(EXERCISE_IDS.EX4)) {
+            newResults.ex4 = 'correct';
+            newInputs.ex4_n = '8';
+            newInputs.ex4_d = '14';
+        }
+
+        setInputs(newInputs);
+        setResults(newResults);
 
         const A_REQUIRED = [
             // Page 18 Videos
@@ -103,7 +222,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
         const d1 = inputs.ex3_d1;
         const n2 = inputs.ex3_n2;
         const d2 = inputs.ex3_d2;
-        const isCorrect = n1 === "5" && d1 === "14" && n2 === "5" && d2 === "14";
+        const isCorrect = n1 === "9" && d1 === "24" && n2 === "7" && d2 === "24";
 
         setResults({ ...results, ex3: isCorrect ? 'correct' : 'incorrect' });
         submitGame(EXERCISE_IDS.EX3, isCorrect, 'completar_a');
@@ -115,81 +234,6 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
     };
 
 
-    const FractionInput = ({ id_n, id_d, nValue, dValue, isCorrect, onNChange, onDChange }: any) => (
-        <div className="flex flex-col items-center gap-1">
-            <input
-                type="number"
-                className={`w-12 h-10 border-2 text-center text-lg font-bold rounded outline-none transition-all ${isCorrect ? 'border-green-500 bg-green-50 text-green-700' : 'border-purple-300 focus:border-purple-600'}`}
-                value={nValue}
-                onChange={(e) => onNChange(e.target.value)}
-            />
-            <div className="w-12 h-0.5 bg-black rounded-full"></div>
-            <input
-                type="number"
-                className={`w-12 h-10 border-2 text-center text-lg font-bold rounded outline-none transition-all ${isCorrect ? 'border-green-500 bg-green-50 text-green-700' : 'border-purple-300 focus:border-purple-600'}`}
-                value={dValue}
-                onChange={(e) => onDChange(e.target.value)}
-            />
-        </div>
-    );
-
-    interface ExerciseRowProps {
-        id: string;
-        title: string;
-        imgSrc: any;
-        correctN: string;
-        correctD: string;
-        className?: string;
-    }
-
-    const ExerciseRow = ({
-        id,
-        imgSrc,
-        correctN,
-        correctD,
-        title,
-        className = ""
-    }: ExerciseRowProps) => {
-        return (
-            <div className={`flex items-center gap-4 ${className}`}>
-                {/* Square Bullet */}
-                <div className="flex items-center shrink-0">
-                    <div className="w-4 h-4 border-2 border-purple-600 bg-white"></div>
-                </div>
-
-                {/* Image */}
-                <div className="w-48 flex justify-center px-1">
-                    <Image
-                        src={imgSrc}
-                        alt={title}
-                        className="h-28 w-auto object-contain drop-shadow-sm"
-                    />
-                </div>
-
-                {/* Arrow */}
-                <span className="text-2xl font-bold text-gray-400 mx-1 shrink-0">→</span>
-
-                {/* Fraction Input */}
-                <div className="flex items-center gap-3 shrink-0">
-                    <FractionInput
-                        isCorrect={results[id] === 'correct'}
-                        nValue={inputs[`${id}_n` as keyof typeof inputs]}
-                        dValue={inputs[`${id}_d` as keyof typeof inputs]}
-                        onNChange={(val: string) => { setInputs({ ...inputs, [`${id}_n`]: val }); setResults({ ...results, [id]: null }); }}
-                        onDChange={(val: string) => { setInputs({ ...inputs, [`${id}_d`]: val }); setResults({ ...results, [id]: null }); }}
-                    />
-
-                    <div className="flex flex-col gap-1">
-                        <FeedbackButton
-                            onCheck={() => validate(id, correctN, correctD)}
-                            onReset={() => reset(id)}
-                            status={results[id]}
-                        />
-                    </div>
-                </div>
-            </div>
-        );
-    };
 
     return (
         <BookPageContainer zoom={zoom} moduleHeader={{ name: 'Fracciones' }} pageId="fracciones-concepto-abstracto-2">
@@ -227,13 +271,17 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                         {/* 1. Rombo */}
                         <ExerciseRow
                             id="ex1" title="Rombo"
-                            imgSrc={romboImg} correctN="9" correctD="16"
+                            imgSrc={romboImg} correctN="7" correctD="16"
+                            results={results} inputs={inputs} setInputs={setInputs} setResults={setResults} validate={validate} reset={reset}
+                            nColor="039296"
                         />
 
                         {/* 2. Cebra / Barras */}
                         <ExerciseRow
                             id="ex2" title="Barras"
                             imgSrc={cebraImg} correctN="5" correctD="9"
+                            results={results} inputs={inputs} setInputs={setInputs} setResults={setResults} validate={validate} reset={reset}
+                            nColor="a80000"
                         />
 
                         {/* 3. Acordeon (Special Case: 2 fractions) */}
@@ -257,6 +305,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                         dValue={inputs.ex3_d1}
                                         onNChange={(val: string) => { setInputs({ ...inputs, ex3_n1: val }); setResults({ ...results, ex3: null }); }}
                                         onDChange={(val: string) => { setInputs({ ...inputs, ex3_d1: val }); setResults({ ...results, ex3: null }); }}
+                                        nColor="53a806"
                                     />
                                     <div className="w-8"></div>
                                     <FractionInput
@@ -265,6 +314,7 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                                         dValue={inputs.ex3_d2}
                                         onNChange={(val: string) => { setInputs({ ...inputs, ex3_n2: val }); setResults({ ...results, ex3: null }); }}
                                         onDChange={(val: string) => { setInputs({ ...inputs, ex3_d2: val }); setResults({ ...results, ex3: null }); }}
+                                        nColor="6301ae"
                                     />
                                 </div>
 
@@ -281,7 +331,9 @@ export function ConceptoAbstracto2Page({ zoom = 1 }: Props) {
                         {/* 4. Circulos */}
                         <ExerciseRow
                             id="ex4" title="Círculos"
-                            imgSrc={circulosImg} correctN="8" correctD="15"
+                            imgSrc={circulosImg} correctN="8" correctD="14"
+                            results={results} inputs={inputs} setInputs={setInputs} setResults={setResults} validate={validate} reset={reset}
+                            nColor="e90595"
                         />
 
                         {/* NOTA spanning full width */}

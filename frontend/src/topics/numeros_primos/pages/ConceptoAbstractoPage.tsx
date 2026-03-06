@@ -55,7 +55,14 @@ export function ConceptoAbstractoPage({ zoom = 1 }: Props) {
 
     // Initial load and auto-checking
     useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.A_GAME)) setListoResult('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.A_GAME)) {
+            setListoResult('correct');
+            const correctAnswers: Record<number, string> = {};
+            numbers.forEach(n => {
+                correctAnswers[n.num] = n.answer;
+            });
+            setAnswers(correctAnswers);
+        }
 
         const A_REQUIRED = [
             VIDEO_TRACKING.A_DIVISION,

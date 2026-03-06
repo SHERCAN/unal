@@ -53,10 +53,32 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
 
     const { isVideoWatched, markVideoWatched, submitGame, completeStage, isExerciseCompleted, watchedVideos, completedExercises, completedStages } = useVideoProgress();
 
+    /* ═══════════════════════ SECTION C STATE ═══════════════════════ */
+    const [sliceLocations, setSliceLocations] = useState<Record<number, number>>({
+        0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0,
+    });
+    const [draggedSlice, setDraggedSlice] = useState<number | null>(null);
+    const [listoResultC, setListoResultC] = useState<'correct' | 'incorrect' | null>(null);
+
+    /* ═══════════════════════ SECTION P STATE ═══════════════════════ */
+    const [cuts, setCuts] = useState(0);
+    const [removedPortions, setRemovedPortions] = useState<number[]>([]);
+    const [listoResultP, setListoResultP] = useState<'correct' | 'incorrect' | null>(null);
+
     // Initial load and auto-checking
     useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.C_ACTIVITY)) setListoResultC('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.P_ACTIVITY)) setListoResultP('correct');
+        if (isExerciseCompleted(EXERCISE_IDS.C_ACTIVITY)) {
+            setListoResultC('correct');
+            // Repartir una porción en cada mesa (1, 2, 3)
+            setSliceLocations({
+                0: 1, 1: 2, 2: 3, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0
+            });
+        }
+        if (isExerciseCompleted(EXERCISE_IDS.P_ACTIVITY)) {
+            setListoResultP('correct');
+            setCuts(4); // 8 servings
+            setRemovedPortions([0, 1, 2]); // 3 removed
+        }
 
         const C_REQUIRED = [
             'fracciones-pag17-v1', // C_PIZZA
@@ -77,13 +99,6 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
         );
         if (pDone) completeStage(STAGE_IDS.P_STAGE);
     }, [isExerciseCompleted, watchedVideos, completedExercises]);
-
-    /* ═══════════════════════ SECTION C STATE ═══════════════════════ */
-    const [sliceLocations, setSliceLocations] = useState<Record<number, number>>({
-        0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0,
-    });
-    const [draggedSlice, setDraggedSlice] = useState<number | null>(null);
-    const [listoResultC, setListoResultC] = useState<'correct' | 'incorrect' | null>(null);
 
 
     const handleDragStart = (sliceIdx: number) => {
@@ -151,11 +166,8 @@ export function ConceptoConcretoPage({ zoom = 1 }: Props) {
     });
 
     /* ═══════════════════════ SECTION P STATE ═══════════════════════ */
-    const [cuts, setCuts] = useState(0);
     const maxCuts = 4;
     const totalPortions = cuts === 0 ? 1 : cuts * 2;
-    const [removedPortions, setRemovedPortions] = useState<number[]>([]);
-    const [listoResultP, setListoResultP] = useState<'correct' | 'incorrect' | null>(null);
 
     const handleAddCut = () => {
         if (listoResultP === 'correct') return;
