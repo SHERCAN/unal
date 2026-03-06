@@ -39,40 +39,29 @@ export function ProgressNavigation({
     const isCurrentPage = (page: number) => page === currentPage;
 
     const renderTimeline = (section: Section) => {
-        // Determine the last page of the current section to check completion status
-        const sectionEndPage = section === 'lesson' ? lessonPages : lessonPages + exercisePages;
-        const isSectionCompleted = isPageCompleted(sectionEndPage);
-
         const steps = [
-            { label: 'C', moduleId: `${topicId}-c-stage`, defaultColor: '#80e8bb' },
-            { label: 'P', moduleId: `${topicId}-p-stage`, defaultColor: '#8ec2e8' },
-            { label: 'A', moduleId: `${topicId}-a-stage`, defaultColor: '#be90de' },
-            { label: '✓', moduleId: 'final', defaultColor: '#bdbdbd' }
+            { label: 'C', moduleId: `${topicId}-c-stage`, defaultColor: '#80e8bb', activeColor: '#22c55e' },
+            { label: 'P', moduleId: `${topicId}-p-stage`, defaultColor: '#8ec2e8', activeColor: '#3b82f6' },
+            { label: 'A', moduleId: `${topicId}-a-stage`, defaultColor: '#be90de', activeColor: '#8b5cf6' },
+            { label: '✓', moduleId: 'final', defaultColor: '#f3f4f6', activeColor: '#10b981' }
         ];
 
         return (
             <div className="flex items-center justify-center gap-1.5">
                 {steps.map((step, index) => {
                     const isLast = index === 3;
-                    const isModuleCompleted = completedModules.includes(step.moduleId);
 
-                    let bgColor = step.defaultColor;
-                    let textColor = 'text-white';
-                    let scale = 'scale-110';
-
+                    // Final Checkmark Step Special Logic
+                    let isStepCompleted = false;
                     if (!isLast) {
-                        // C, P, A Steps
-                        if (isModuleCompleted) {
-                            bgColor = '#22c55e'; // Green-500
-                        }
+                        isStepCompleted = completedModules.includes(step.moduleId);
                     } else {
-                        // Final Checkmark Step
                         const FINAL_EXERCISES: Record<string, string | string[]> = {
                             'division': ['division-pag5-modulo-a', 'division-pag5-modulo-b', 'division-pag6-modulo-a', 'division-pag6-modulo-b', 'division-final'],
                             'division-exacta': 'division-exacta-final',
                             'division-inexacta': 'division-inexacta-final',
                             'numeros-primos': 'numeros-primos-final',
-                            'fracciones': ['fracciones-pag21-modulo-a', 'fracciones-pag22-modulo-b'],
+                            'fracciones': ['fracciones-pag21-modulo-a', 'fracciones-pag22-modulo-b', 'fracciones-a-stage'],
                             'fracciones-equivalentes': 'fracciones-equivalentes-final',
                             'comparacion-fracciones': 'comparacion-fracciones-final',
                             'division-demo': 'division-final'
@@ -80,34 +69,37 @@ export function ProgressNavigation({
 
                         const topicKey = topicId || 'division';
                         const finalId = FINAL_EXERCISES[topicKey];
-                        const allExercisesCompleted = Array.isArray(finalId)
+                        isStepCompleted = Array.isArray(finalId)
                             ? finalId.every(id => completedModules.includes(id))
                             : finalId ? completedModules.includes(finalId) : false;
-
-                        if (allExercisesCompleted) {
-                            bgColor = '#22c55e'; // Green-500
-                        } else {
-                            bgColor = '#e5e7eb'; // Gray-200
-                            textColor = 'text-gray-400';
-                            scale = 'scale-100';
-                        }
                     }
+
+                    const bgColor = isStepCompleted ? step.activeColor : step.defaultColor;
+                    const textColor = isStepCompleted ? 'text-white' : (isLast ? 'text-gray-400' : 'text-white');
+                    const scale = isStepCompleted ? 'scale-110' : 'scale-100';
 
                     return (
                         <React.Fragment key={index}>
                             <div
-                                className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-sm transition-all duration-200 shadow-sm ${textColor} ${scale}`}
+                                className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-xs transition-all duration-300 shadow-sm relative ${textColor} ${scale}`}
                                 style={{ backgroundColor: bgColor }}
-                                title={step.label === '✓' ? 'Finalización' : step.label}
+                                title={isLast ? 'Finalización' : step.label}
                             >
-                                {isModuleCompleted && !isLast ? '✓' : step.label}
+                                {step.label}
+                                {isStepCompleted && !isLast && (
+                                    <div className="absolute -top-1 -right-1 bg-white rounded-full w-4 h-4 flex items-center justify-center shadow-md animate-in zoom-in duration-300">
+                                        <svg className="w-3 h-3 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={4}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                )}
                             </div>
 
                             {index < steps.length - 1 && (
                                 <div
-                                    className={`h-0.5 w-4 rounded-full transition-colors duration-200 ${isModuleCompleted
+                                    className={`h-0.5 w-4 rounded-full transition-colors duration-300 ${isStepCompleted
                                         ? 'bg-green-500'
-                                        : 'bg-gray-300 dark:bg-gray-600'
+                                        : 'bg-gray-200 dark:bg-gray-700'
                                         }`}
                                 />
                             )}

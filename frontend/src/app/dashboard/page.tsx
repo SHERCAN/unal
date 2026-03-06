@@ -365,17 +365,27 @@ export default function DashboardPage() {
 
   const completedModules = React.useMemo(() => {
     let modules: string[] = [];
+
+    // Include stages from SWR progressData
     if (progressData) {
       modules = [...progressData];
     }
+
+    // Merge with stages from useVideoProgress hook for immediate reactivity
+    if (completedStages && completedStages.length > 0) {
+      modules = Array.from(new Set([...modules, ...completedStages]));
+    }
+
+    // Include completed exercises
     if (exercisesData) {
       const exerciseIds = Object.keys(exercisesData).filter(
         id => exercisesData[id]?.completed
       );
       modules = [...modules, ...exerciseIds];
     }
+
     return modules;
-  }, [progressData, exercisesData]);
+  }, [progressData, exercisesData, completedStages]);
 
 
 
