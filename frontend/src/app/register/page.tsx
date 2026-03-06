@@ -41,7 +41,7 @@ const AVATARS = [
 ];
 
 const GRADOS = [
-  'Primero', 'Segundo', 'Tercero', 'Cuarto', 'Quinto', 'Sexto'
+  '701', '801'
 ];
 
 export default function RegisterPage() {

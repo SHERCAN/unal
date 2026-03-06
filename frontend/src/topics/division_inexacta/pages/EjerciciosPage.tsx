@@ -47,14 +47,36 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     ];
     const [act1Answers, setAct1Answers] = useState<Record<number, string>>({});
     const [act1Results, setAct1Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({});
+    const [act2Results, setAct2Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({});
+    const [act3Results, setAct3Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({});
 
     useEffect(() => {
+        // Sync results from existing progress
         act1Items.forEach((_, i) => {
             if (isExerciseCompleted(`division_inexacta-pag13-ej${i + 1}`)) {
                 setAct1Results(prev => ({ ...prev, [i]: 'correct' }));
             }
         });
-    }, [isExerciseCompleted]);
+        act2Items.forEach((_, i) => {
+            if (isExerciseCompleted(`division_inexacta-pag13-ej${i + 5}`)) {
+                setAct2Results(prev => ({ ...prev, [i]: 'correct' }));
+            }
+        });
+        [0, 1, 2, 3].forEach(i => {
+            if (isExerciseCompleted(`division_inexacta-pag13-ej${i + 7}`)) {
+                setAct3Results(prev => ({ ...prev, [i]: 'correct' }));
+            }
+        });
+
+        // Check if all exercises on this page are finished
+        const allADone = [0, 1, 2, 3].every(idx => act1Results[idx] === 'correct' || isExerciseCompleted(`division_inexacta-pag13-ej${idx + 1}`));
+        const allBDone = [0, 1].every(idx => act2Results[idx] === 'correct' || isExerciseCompleted(`division_inexacta-pag13-ej${idx + 5}`));
+        const allCDone = [0, 1, 2, 3].every(idx => act3Results[idx] === 'correct' || isExerciseCompleted(`division_inexacta-pag13-ej${idx + 7}`));
+
+        if (allADone && allBDone && allCDone) {
+            completeStage(STAGE_IDS.FINAL_STAGE);
+        }
+    }, [isExerciseCompleted, act1Results, act2Results, act3Results]);
 
     const handleAct1Listo = async (index: number) => {
         if (isExerciseCompleted(`division_inexacta-pag13-ej${index + 1}`)) return;
@@ -77,15 +99,7 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         { dividend: 57, divisor: 14, quotient: 4, hasRemainder: true, remainder: 1, type: 'inexacta' },
     ];
     const [act2, setAct2] = useState<Record<string, string>>({});
-    const [act2Results, setAct2Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({});
 
-    useEffect(() => {
-        act2Items.forEach((_, i) => {
-            if (isExerciseCompleted(`division_inexacta-pag13-ej${i + 5}`)) {
-                setAct2Results(prev => ({ ...prev, [i]: 'correct' }));
-            }
-        });
-    }, [isExerciseCompleted]);
 
     const handleAct2Listo = async (index: number) => {
         if (isExerciseCompleted(`division_inexacta-pag13-ej${index + 5}`)) return;
@@ -146,15 +160,8 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
         },
     ];
     const [act3, setAct3] = useState<Record<string, string>>({});
-    const [act3Results, setAct3Results] = useState<Record<number, 'correct' | 'incorrect' | null>>({});
 
-    useEffect(() => {
-        act3Items.forEach((_, i) => {
-            if (isExerciseCompleted(`division_inexacta-pag13-ej${i + 7}`)) {
-                setAct3Results(prev => ({ ...prev, [i]: 'correct' }));
-            }
-        });
-    }, [isExerciseCompleted]);
+    const [act3ResultsSWR, setAct3ResultsSWR] = useState<Record<number, 'correct' | 'incorrect' | null>>({});
 
     const handleAct3Listo = async (index: number) => {
         if (isExerciseCompleted(`division_inexacta-pag13-ej${index + 7}`)) return;

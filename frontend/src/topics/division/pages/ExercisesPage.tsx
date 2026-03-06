@@ -80,13 +80,22 @@ export function ExercisesPage({ zoom = 1 }: ExercisesPageProps) {
         setAct3Statuses(newAct3Statuses);
         setAct3Inputs(newAct3Inputs);
 
-        // Check for final completion
-        const allDone = [
-            EXERCISE_IDS.ACT1A, EXERCISE_IDS.ACT1B, EXERCISE_IDS.ACT2, EXERCISE_IDS.ACT4,
-            ...Array.from({ length: 10 }, (_, i) => `${EXERCISE_IDS.ACT3}-${i + 1}`)
+        // Check for modulo completions
+        const moduloADone = [
+            EXERCISE_IDS.ACT1A, EXERCISE_IDS.ACT1B, EXERCISE_IDS.ACT2, EXERCISE_IDS.ACT4
         ].every(id => isExerciseCompleted(id));
 
-        if (allDone) {
+        const moduloBDone = Array.from({ length: 10 }, (_, i) => `${EXERCISE_IDS.ACT3}-${i + 1}`).every(id => isExerciseCompleted(id));
+
+        if (moduloADone) {
+            completeStage('division-pag5-modulo-a', 0);
+        }
+        if (moduloBDone) {
+            completeStage('division-pag5-modulo-b', 0);
+        }
+
+        // Check for final completion
+        if (moduloADone && moduloBDone) {
             completeStage('division-final', 0);
         }
     }, [isExerciseCompleted]);

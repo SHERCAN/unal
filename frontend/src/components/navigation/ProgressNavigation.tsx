@@ -54,9 +54,7 @@ export function ProgressNavigation({
             <div className="flex items-center justify-center gap-1.5">
                 {steps.map((step, index) => {
                     const isLast = index === 3;
-                    const isModuleCompleted = step.moduleId === 'final'
-                        ? isSectionCompleted
-                        : completedModules.includes(step.moduleId);
+                    const isModuleCompleted = completedModules.includes(step.moduleId);
 
                     let bgColor = step.defaultColor;
                     let textColor = 'text-white';
@@ -70,25 +68,24 @@ export function ProgressNavigation({
                     } else {
                         // Final Checkmark Step
                         const FINAL_EXERCISES: Record<string, string | string[]> = {
-                            'division': 'division-final',
+                            'division': ['division-pag5-modulo-a', 'division-pag5-modulo-b', 'division-pag6-modulo-a', 'division-pag6-modulo-b', 'division-final'],
                             'division-exacta': 'division-exacta-final',
                             'division-inexacta': 'division-inexacta-final',
                             'numeros-primos': 'numeros-primos-final',
-                            'fracciones': ['fracciones-pag21-ej3-row1', 'fracciones-pag21-ej3-row2', 'fracciones-pag21-ej3-row3', 'fracciones-pag21-ej3-row4'],
+                            'fracciones': ['fracciones-pag21-modulo-a', 'fracciones-pag22-modulo-b'],
                             'fracciones-equivalentes': 'fracciones-equivalentes-final',
-                            'comparacion-fracciones': 'comparacion-fracciones-final'
+                            'comparacion-fracciones': 'comparacion-fracciones-final',
+                            'division-demo': 'division-final'
                         };
 
                         const topicKey = topicId || 'division';
                         const finalId = FINAL_EXERCISES[topicKey];
                         const allExercisesCompleted = Array.isArray(finalId)
                             ? finalId.every(id => completedModules.includes(id))
-                            : finalId ? completedModules.includes(finalId) : isSectionCompleted;
+                            : finalId ? completedModules.includes(finalId) : false;
 
                         if (allExercisesCompleted) {
                             bgColor = '#22c55e'; // Green-500
-                        } else if (isSectionCompleted) {
-                            bgColor = '#9333ea'; // Purple-600
                         } else {
                             bgColor = '#e5e7eb'; // Gray-200
                             textColor = 'text-gray-400';
@@ -99,11 +96,7 @@ export function ProgressNavigation({
                     return (
                         <React.Fragment key={index}>
                             <div
-                                className={`
-                                    w-8 h-8 rounded-full flex items-center justify-center
-                                    font-black text-sm transition-all duration-200 shadow-sm
-                                    ${textColor} ${scale}
-                                `}
+                                className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-sm transition-all duration-200 shadow-sm ${textColor} ${scale}`}
                                 style={{ backgroundColor: bgColor }}
                                 title={step.label === '✓' ? 'Finalización' : step.label}
                             >

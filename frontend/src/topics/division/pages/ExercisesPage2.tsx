@@ -24,6 +24,7 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
         ACT1_STAGE: 'division-pag6-ej1-stage',
         ACT4_STAGE: 'division-pag6-ej2-stage',
         ACT5_STAGE: 'division-pag6-ej3-stage',
+        MODULO_A: 'division-pag6-modulo-a',
         MODULO_B: 'division-pag6-modulo-b',
         MODULO_C: 'division-pag6-modulo-c'
     };
@@ -40,11 +41,28 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
     const [act1_q2, setAct1_q2] = useState<'V' | 'F' | null>(null);
     const [act1Status, setAct1Status] = useState<'correct' | 'incorrect' | null>(null);
 
-    // Initial load
+    // Initial load and completion check
     useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.ACT1)) setAct1Status('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.ACT4)) setAct4Status('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.ACT5)) setAct5Status('correct');
+        const act1Done = isExerciseCompleted(EXERCISE_IDS.ACT1);
+        const act4Done = isExerciseCompleted(EXERCISE_IDS.ACT4);
+        const act5Done = isExerciseCompleted(EXERCISE_IDS.ACT5);
+
+        if (act1Done) {
+            setAct1Status('correct');
+            completeStage('division-pag6-modulo-b', 0);
+        }
+        if (act4Done) {
+            setAct4Status('correct');
+        }
+        if (act5Done) {
+            setAct5Status('correct');
+        }
+        if (act4Done && act5Done) {
+            completeStage('division-pag6-modulo-a', 0);
+        }
+        if (act1Done && act4Done && act5Done) {
+            completeStage('division-final', 0);
+        }
     }, [isExerciseCompleted]);
 
     const resetAct1 = () => {
@@ -61,8 +79,6 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
         await submitExercise(EXERCISE_IDS.ACT1, isCorrect, 'modulo_b');
         if (isCorrect) {
             await completeStage(STAGE_IDS.ACT1_STAGE);
-            // Check if Modulo B is done (this page + previous page act 3)
-            // For simplicity, I'll just complete the stage for this page's part
             await completeStage(STAGE_IDS.MODULO_B);
         }
     };
@@ -113,6 +129,9 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
         await submitExercise(EXERCISE_IDS.ACT4, isCorrect, 'modulo_a');
         if (isCorrect) {
             await completeStage(STAGE_IDS.ACT4_STAGE);
+            if (act5Status === 'correct') {
+                await completeStage(STAGE_IDS.MODULO_A);
+            }
             checkModuloC(isCorrect, act5Status === 'correct');
         }
     };
@@ -138,6 +157,9 @@ export function ExercisesPage2({ zoom = 1 }: ExercisesPage2Props) {
         await submitExercise(EXERCISE_IDS.ACT5, isCorrect, 'modulo_a');
         if (isCorrect) {
             await completeStage(STAGE_IDS.ACT5_STAGE);
+            if (act4Status === 'correct') {
+                await completeStage(STAGE_IDS.MODULO_A);
+            }
             checkModuloC(act4Status === 'correct', isCorrect);
         }
     };

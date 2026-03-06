@@ -56,9 +56,17 @@ export function EjerciciosPage({ zoom = 1 }: Props) {
     ];
 
     useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.EJ1)) setTableTotalResult('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.EJ2)) setIsFracResult('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.EJ3)) setDefResult('correct');
+        const e1 = isExerciseCompleted(EXERCISE_IDS.EJ1);
+        const e2 = isExerciseCompleted(EXERCISE_IDS.EJ2);
+        const e3 = isExerciseCompleted(EXERCISE_IDS.EJ3);
+
+        if (e1) setTableTotalResult('correct');
+        if (e2) setIsFracResult('correct');
+        if (e3) setDefResult('correct');
+
+        if (e1 && e2 && e3) {
+            completeStage(STAGE_IDS.MODULO_A);
+        }
     }, [isExerciseCompleted]);
 
     const checkTable = async () => {

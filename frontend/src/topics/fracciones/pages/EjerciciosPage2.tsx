@@ -53,9 +53,17 @@ export function EjerciciosPage2({ zoom = 1 }: Props) {
     const [libraryResult, setLibraryResult] = useState<'correct' | 'incorrect' | null>(null);
 
     useEffect(() => {
-        if (isExerciseCompleted(EXERCISE_IDS.EJ4)) setPencilResult('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.EJ5)) setNotebookResult('correct');
-        if (isExerciseCompleted(EXERCISE_IDS.EJ6)) setLibraryResult('correct');
+        const e4 = isExerciseCompleted(EXERCISE_IDS.EJ4);
+        const e5 = isExerciseCompleted(EXERCISE_IDS.EJ5);
+        const e6 = isExerciseCompleted(EXERCISE_IDS.EJ6);
+
+        if (e4) setPencilResult('correct');
+        if (e5) setNotebookResult('correct');
+        if (e6) setLibraryResult('correct');
+
+        if (e4 && e5 && e6) {
+            completeStage(STAGE_IDS.MODULO_B);
+        }
     }, [isExerciseCompleted]);
 
     const checkPencil = async () => {
