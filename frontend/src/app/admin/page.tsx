@@ -386,6 +386,7 @@ export default function AdminDashboard() {
             : window.location.origin.replace(':3000', ':4000');
 
         const socket = io(socketUrl, {
+            path: '/api/socket.io',
             transports: ['polling', 'websocket'],
             reconnectionAttempts: 10,
             reconnectionDelay: 1000

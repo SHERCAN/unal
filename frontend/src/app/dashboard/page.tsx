@@ -293,6 +293,7 @@ export default function DashboardPage() {
     if (isDev) console.log('📡 Dashboard: Connecting to real-time updates at', socketUrl);
 
     const socket = io(socketUrl, {
+      path: '/api/socket.io',
       transports: ['polling', 'websocket'], // Start with polling for reliability, then upgrade
       reconnection: true,
       reconnectionAttempts: 10,
