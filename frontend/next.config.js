@@ -19,6 +19,20 @@ const nextConfig = {
       },
     ];
   },
+
+  async rewrites() {
+    const backendUrl = process.env.API_URL ? process.env.API_URL.replace('/api', '') : 'http://math-learning-backend:4000';
+    return [
+      {
+        source: '/api/socket.io',
+        destination: `${backendUrl}/socket.io/`,
+      },
+      {
+        source: '/api/socket.io/:path*',
+        destination: `${backendUrl}/socket.io/:path*`,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

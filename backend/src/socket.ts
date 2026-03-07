@@ -5,7 +5,6 @@ let io: Server;
 
 export const initSocket = (server: HttpServer) => {
     io = new Server(server, {
-        path: '/api/socket.io',
         cors: {
             origin: '*', // Adjust for production
             methods: ['GET', 'POST']
