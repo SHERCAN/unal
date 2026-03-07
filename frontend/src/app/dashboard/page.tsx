@@ -9,6 +9,7 @@ import Image from 'next/image';
 import axios from 'axios';
 import useSWR from 'swr';
 import { fetcher, fetcherWithToken } from '@/lib/fetcher';
+import { io } from 'socket.io-client';
 
 import { divisionConfig } from '@/topics/division/config';
 import { divisionDemoConfig } from '@/topics/division_demo/config';
@@ -223,24 +224,6 @@ export default function DashboardPage() {
     fetcherWithToken
   );
 
-  // Re-fetch data whenever points are updated (dispatched from useVideoProgress after completing an exercise)
-  useEffect(() => {
-    const handleScoreUpdate = () => {
-      mutateProfile();
-      mutateRanking();
-      mutateProgress();
-      mutateExercises();
-    };
-
-    window.addEventListener('points-updated', handleScoreUpdate);
-    // Keep storage listener for multi-tab sync if needed, but points-updated covers current tab
-    window.addEventListener('storage', handleScoreUpdate);
-    return () => {
-      window.removeEventListener('points-updated', handleScoreUpdate);
-      window.removeEventListener('storage', handleScoreUpdate);
-    };
-  }, [mutateProfile, mutateRanking, mutateProgress, mutateExercises]);
-
   // Sync profileData with local storage and state
   const user = React.useMemo(() => {
     if (profileData) {
@@ -252,8 +235,6 @@ export default function DashboardPage() {
 
       const pTotal = Number(profileData.puntos ?? 0);
 
-      // Si existe un campo explícito para flexibles, usarlo.
-      // Si no, asumimos que 'puntos' es el total y restamos los definitivos.
       const pFlexibles = Number(
         profileData.puntosFlexibles ??
         profileData.puntos_flexibles ??
@@ -266,12 +247,6 @@ export default function DashboardPage() {
         puntosDefinitivos: pDefinitivos
       };
 
-      console.log('Final User Stats Mapping:', {
-        rawPuntos: profileData.puntos,
-        rawDefinitivos: profileData.puntosDefinitivos,
-        mappedFlexibles: pFlexibles,
-        mappedDefinitivos: pDefinitivos
-      });
       if (u.role === 'ADMIN') {
         router.push('/admin');
         return null;
@@ -294,6 +269,93 @@ export default function DashboardPage() {
     }
     return null;
   }, [profileData, router]);
+
+  // Sync across tabs and handle real-time updates from server
+  useEffect(() => {
+    // 1. Local tab synchronization using BroadcastChannel
+    const channel = new BroadcastChannel('points_sync');
+
+    // 2. Real-time updates from server using Socket.io
+    const socketUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:4000'
+      : window.location.origin.replace(':3000', ':4000');
+
+    const isDev = process.env.NODE_ENV !== 'production' || process.env.NEXT_PUBLIC_ALLOW_VIDEO_FAST_FORWARD === 'true';
+
+    if (isDev) console.log('📡 Dashboard: Connecting to real-time updates at', socketUrl);
+    const socket = io(socketUrl, {
+      transports: ['websocket', 'polling'],
+      reconnection: true,
+      reconnectionAttempts: 10,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      timeout: 20000,
+    });
+
+    socket.on('connect', () => {
+      if (isDev) console.log('✅ Real-time dashboard updates active');
+    });
+
+    socket.on('disconnect', (reason) => {
+      if (isDev) console.log('🔌 Socket disconnected:', reason);
+    });
+
+    socket.on('reconnect_attempt', (attempt) => {
+      if (isDev) console.log('🔄 Attempting to reconnect...', attempt);
+    });
+
+    const handleScoreUpdate = () => {
+      if (isDev) console.log('🔄 Refreshing local data due to score update event...');
+      mutateProfile();
+      mutateRanking();
+      mutateProgress();
+      mutateExercises();
+    };
+
+    const onPointsUpdated = () => {
+      handleScoreUpdate();
+      // Notify other tabs
+      if (channel && channel.name) {
+        channel.postMessage('update');
+      }
+    };
+
+    // Listen for local events (same tab)
+    window.addEventListener('points-updated', onPointsUpdated);
+
+    // Listen for messages from other tabs
+    channel.onmessage = (event) => {
+      if (event.data === 'update') {
+        if (isDev) console.log('📨 Received update signal from another tab');
+        handleScoreUpdate();
+      }
+    };
+
+    // Listen for server broadcasts (all users)
+    socket.on('progressUpdate', (data) => {
+      if (isDev) console.log('⚡ Global progress update detected, refreshing ranking...', data);
+      mutateRanking();
+      // If the update mentions our own ID, we should update our profile too
+      if (data?.userId === user?.id) {
+        mutateProfile();
+      }
+    });
+
+    // Keep storage listener as fallback for cross-tab sync
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'watchedVideos' || e.key === 'points-updated') {
+        handleScoreUpdate();
+      }
+    };
+    window.addEventListener('storage', onStorage);
+
+    return () => {
+      window.removeEventListener('points-updated', onPointsUpdated);
+      window.removeEventListener('storage', onStorage);
+      channel.close();
+      socket.disconnect();
+    };
+  }, [mutateProfile, mutateRanking, mutateProgress, mutateExercises, user?.id]);
 
   // Progress data for TopicDropdown
   const { watchedVideos, completedExercises, completedStages } = useVideoProgress();
