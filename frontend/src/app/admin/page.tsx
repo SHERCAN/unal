@@ -385,10 +385,10 @@ export default function AdminDashboard() {
             ? 'http://localhost:4000'
             : window.location.origin.replace(':3000', ':4000');
 
-        console.log('📡 Admin Panel: Connecting to real-time updates at', socketUrl);
         const socket = io(socketUrl, {
-            transports: ['websocket', 'polling'],
-            reconnectionAttempts: 5
+            transports: ['polling', 'websocket'],
+            reconnectionAttempts: 10,
+            reconnectionDelay: 1000
         });
 
         socket.on('connect', () => {

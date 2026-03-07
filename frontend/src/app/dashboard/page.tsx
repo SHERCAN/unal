@@ -196,6 +196,8 @@ export default function DashboardPage() {
   const [currentPage, setCurrentPage] = useState(0);
   const [mounted, setMounted] = useState(false);
   const nextLevelStarRef = useRef<HTMLDivElement>(null);
+  const socketRef = useRef<any>(null);
+  const channelRef = useRef<BroadcastChannel | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -270,12 +272,18 @@ export default function DashboardPage() {
     return null;
   }, [profileData, router]);
 
+  // Keep user ref updated for socket handlers to avoid dependency loops
+  const userRef = useRef<User | null>(user);
+  useEffect(() => {
+    userRef.current = user;
+  }, [user]);
+
   // Sync across tabs and handle real-time updates from server
   useEffect(() => {
-    // 1. Local tab synchronization using BroadcastChannel
-    const channel = new BroadcastChannel('points_sync');
+    if (!channelRef.current) {
+      channelRef.current = new BroadcastChannel('points_sync');
+    }
 
-    // 2. Real-time updates from server using Socket.io
     const socketUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
       ? 'http://localhost:4000'
       : window.location.origin.replace(':3000', ':4000');
@@ -283,8 +291,9 @@ export default function DashboardPage() {
     const isDev = process.env.NODE_ENV !== 'production' || process.env.NEXT_PUBLIC_ALLOW_VIDEO_FAST_FORWARD === 'true';
 
     if (isDev) console.log('📡 Dashboard: Connecting to real-time updates at', socketUrl);
+
     const socket = io(socketUrl, {
-      transports: ['websocket', 'polling'],
+      transports: ['polling', 'websocket'], // Start with polling for reliability, then upgrade
       reconnection: true,
       reconnectionAttempts: 10,
       reconnectionDelay: 1000,
@@ -292,16 +301,14 @@ export default function DashboardPage() {
       timeout: 20000,
     });
 
+    socketRef.current = socket;
+
     socket.on('connect', () => {
       if (isDev) console.log('✅ Real-time dashboard updates active');
     });
 
     socket.on('disconnect', (reason) => {
       if (isDev) console.log('🔌 Socket disconnected:', reason);
-    });
-
-    socket.on('reconnect_attempt', (attempt) => {
-      if (isDev) console.log('🔄 Attempting to reconnect...', attempt);
     });
 
     const handleScoreUpdate = () => {
@@ -315,8 +322,8 @@ export default function DashboardPage() {
     const onPointsUpdated = () => {
       handleScoreUpdate();
       // Notify other tabs
-      if (channel && channel.name) {
-        channel.postMessage('update');
+      if (channelRef.current) {
+        channelRef.current.postMessage('update');
       }
     };
 
@@ -324,19 +331,21 @@ export default function DashboardPage() {
     window.addEventListener('points-updated', onPointsUpdated);
 
     // Listen for messages from other tabs
-    channel.onmessage = (event) => {
-      if (event.data === 'update') {
-        if (isDev) console.log('📨 Received update signal from another tab');
-        handleScoreUpdate();
-      }
-    };
+    if (channelRef.current) {
+      channelRef.current.onmessage = (event) => {
+        if (event.data === 'update') {
+          if (isDev) console.log('📨 Received update signal from another tab');
+          handleScoreUpdate();
+        }
+      };
+    }
 
     // Listen for server broadcasts (all users)
     socket.on('progressUpdate', (data) => {
       if (isDev) console.log('⚡ Global progress update detected, refreshing ranking...', data);
       mutateRanking();
       // If the update mentions our own ID, we should update our profile too
-      if (data?.userId === user?.id) {
+      if (data?.userId && userRef.current?.id === data.userId) {
         mutateProfile();
       }
     });
@@ -352,10 +361,10 @@ export default function DashboardPage() {
     return () => {
       window.removeEventListener('points-updated', onPointsUpdated);
       window.removeEventListener('storage', onStorage);
-      channel.close();
       socket.disconnect();
+      // Channel stays open for the life of the component
     };
-  }, [mutateProfile, mutateRanking, mutateProgress, mutateExercises, user?.id]);
+  }, [mutateProfile, mutateRanking, mutateProgress, mutateExercises]);
 
   // Progress data for TopicDropdown
   const { watchedVideos, completedExercises, completedStages } = useVideoProgress();
