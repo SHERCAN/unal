@@ -368,7 +368,13 @@ export default function DashboardPage() {
   }, [mutateProfile, mutateRanking, mutateProgress, mutateExercises]);
 
   // Progress data for TopicDropdown
-  const { watchedVideos, completedExercises, completedStages } = useVideoProgress();
+  const { watchedVideos, completedExercises, completedStages, reloadProgressData } = useVideoProgress();
+
+  useEffect(() => {
+    if (token) {
+      reloadProgressData();
+    }
+  }, [token, reloadProgressData]);
 
   // Determine current topic based on page index
   const currentTopicInfo = React.useMemo(() => {

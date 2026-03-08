@@ -15,6 +15,7 @@ interface ProgressContextType {
     completeStage: (stageId: string, points?: number) => Promise<void>;
     submitExercise: (exerciseId: string, isCorrect: boolean, type?: string) => Promise<any>;
     submitGame: (gameId: string, isCorrect: boolean, type?: string) => Promise<any>;
+    reloadProgressData: () => Promise<void>;
 }
 
 const ProgressContext = createContext<ProgressContextType | undefined>(undefined);
@@ -28,7 +29,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     const [loading, setLoading] = useState(true);
     const { showToast } = useToast();
 
-    const loadInitialData = useCallback(async () => {
+    const reloadProgressData = useCallback(async () => {
         const localVideos = JSON.parse(localStorage.getItem(WATCHED_VIDEOS_KEY) || '[]');
         try {
             const token = localStorage.getItem('token');
@@ -58,7 +59,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     }, []);
 
     useEffect(() => {
-        loadInitialData();
+        reloadProgressData();
 
         // Still listen for cross-tab sync
         window.addEventListener('storage', (e) => {
@@ -67,7 +68,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
                 setWatchedVideos(updated);
             }
         });
-    }, [loadInitialData]);
+    }, [reloadProgressData]);
 
     const markVideoWatched = async (videoId: string) => {
         if (!watchedVideos.includes(videoId)) {
@@ -211,8 +212,9 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
         isExerciseCompleted,
         completeStage,
         submitExercise,
-        submitGame
-    }), [watchedVideos, completedStages, completedExercises, loading, markVideoWatched, isVideoWatched, isExerciseCompleted, completeStage, submitExercise, submitGame]);
+        submitGame,
+        reloadProgressData
+    }), [watchedVideos, completedStages, completedExercises, loading, markVideoWatched, isVideoWatched, isExerciseCompleted, completeStage, submitExercise, submitGame, reloadProgressData]);
 
     return (
         <ProgressContext.Provider value={value}>

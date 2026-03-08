@@ -102,6 +102,9 @@ export default function RegisterPage() {
         photoUrl: uploadedImage,
       });
       localStorage.setItem('token', response.data.token);
+      if (response.data.sessionId) {
+        localStorage.setItem('sessionId', response.data.sessionId);
+      }
       localStorage.setItem('user', JSON.stringify(response.data.user));
 
       // Guardar imagen subida si existe

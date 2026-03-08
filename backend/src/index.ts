@@ -12,6 +12,10 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
+const prisma = new PrismaClient();
+
 // Create videos directory if it doesn't exist
 const videosDir = path.join(__dirname, 'public', 'videos');
 if (!fs.existsSync(videosDir)) {
@@ -200,13 +204,62 @@ import { initSocket } from './socket';
 const server = createServer(app);
 const io = initSocket(server);
 
-server.listen(PORT, () => {
-  console.log(`\n${'='.repeat(50)}`);
-  console.log(`🚀 Math Learning Backend Server`);
-  console.log(`${'='.repeat(50)}`);
-  console.log(`📍 Port: ${PORT}`);
-  console.log(`📁 Videos directory: ${videosDir}`);
-  console.log(`📹 Videos available: ${fs.readdirSync(videosDir).length}`);
-  console.log(`🌐 Health check: http://localhost:${PORT}/api/health`);
-  console.log(`${'='.repeat(50)}\n`);
+async function initializeDatabase() {
+  if (process.env.RESET_DB_ON_START === 'true') {
+    console.log('⚠️  RESET_DB_ON_START is true. Wiping database...');
+    try {
+      // Delete in correct order to avoid foreign key constraint errors
+      await prisma.pageRating.deleteMany({});
+      await prisma.exerciseAttempt.deleteMany({});
+      await prisma.watchedVideo.deleteMany({});
+      await prisma.progreso.deleteMany({});
+      await prisma.userSession.deleteMany({});
+      await prisma.user.deleteMany({});
+      console.log('✅ Database wiped successfully.');
+    } catch (e) {
+      console.error('❌ Failed to wipe database:', e);
+    }
+  }
+
+  const adminUser = process.env.ADMIN_USERNAME || 'admin';
+  const adminPass = process.env.ADMIN_PASSWORD || 'Admin@123';
+
+  const existingAdmin = await prisma.user.findFirst({
+    where: { role: 'ADMIN', nickname: adminUser },
+  });
+
+  if (!existingAdmin) {
+    console.log(`✨ Creating Admin user: ${adminUser}`);
+    try {
+      const hashedPassword = await bcrypt.hash(adminPass, 10);
+      await prisma.user.create({
+        data: {
+          nickname: adminUser,
+          password: hashedPassword,
+          nombre: 'Administrador General',
+          edad: 30,
+          grado: 'Admin',
+          role: 'ADMIN',
+        },
+      });
+      console.log('✅ Admin user created.');
+    } catch (e) {
+      console.error('❌ Failed to create admin user:', e);
+    }
+  }
+}
+
+initializeDatabase().then(() => {
+  server.listen(PORT, () => {
+    console.log(`\n${'='.repeat(50)}`);
+    console.log(`🚀 Math Learning Backend Server`);
+    console.log(`${'='.repeat(50)}`);
+    console.log(`📍 Port: ${PORT}`);
+    console.log(`📁 Videos directory: ${videosDir}`);
+    console.log(`📹 Videos available: ${fs.readdirSync(videosDir).length}`);
+    console.log(`🌐 Health check: http://localhost:${PORT}/api/health`);
+    console.log(`${'='.repeat(50)}\n`);
+  });
+}).catch(err => {
+  console.error("Failed to initialize database:", err);
 });

@@ -38,8 +38,16 @@ export const register = async (req: Request, res: Response) => {
 
     const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET!, { expiresIn: '7d' });
 
+    // Create session for newly registered user
+    const session = await prisma.userSession.create({
+      data: {
+        userId: user.id
+      }
+    });
+
     res.status(201).json({
       token,
+      sessionId: session.id,
       user: {
         id: user.id,
         nickname: user.nickname,

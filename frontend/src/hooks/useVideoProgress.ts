@@ -11,7 +11,8 @@ export function useVideoProgress() {
         isExerciseCompleted,
         completeStage,
         submitExercise,
-        submitGame
+        submitGame,
+        reloadProgressData
     } = useProgress();
 
     return {
@@ -24,6 +25,7 @@ export function useVideoProgress() {
         isExerciseCompleted,
         completeStage,
         submitExercise,
-        submitGame
+        submitGame,
+        reloadProgressData
     };
 }
