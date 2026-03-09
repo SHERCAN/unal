@@ -28,6 +28,9 @@ services:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
       JWT_SECRET: ${JWT_SECRET}
       PORT: ${BACKEND_PORT}
+      RESET_DB_ON_START: ${RESET_DB_ON_START:-false}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin@123}
     expose:
       - ${BACKEND_PORT}
     depends_on:
