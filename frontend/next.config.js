@@ -21,7 +21,7 @@ const nextConfig = {
   },
 
   async rewrites() {
-    const backendUrl = process.env.API_URL ? process.env.API_URL.replace('/api', '') : 'http://math-learning-backend:4000';
+    const backendUrl = process.env.API_URL ? process.env.API_URL.replace('/api', '') : 'http://localhost:4000';
     return [
       {
         source: '/api/socket.io',

@@ -47,6 +47,11 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
             const element = pageRefs.current[page];
             if (element) {
                 isProgrammaticScroll.current = true;
+
+                setCurrentPage(page);
+                const newCompleted = Array.from(new Set([...Array.from({ length: page }, (_, i) => i)]));
+                setCompletedPages(newCompleted);
+
                 element.scrollIntoView({ behavior, block: 'start' });
 
                 // Unblock tracking after scroll finishes
@@ -140,7 +145,7 @@ export function InfiniteBook({ topics, onPageChange, onNavigationRequest }: Infi
             id: 'index-page',
             topicId: 'shared',
             component: ({ zoom }: { zoom?: number }) => (
-                <IndexPage topics={topics} onNavigate={navigateToPage} zoom={zoom} startPageIndex={1} />
+                <IndexPage topics={topics} onNavigate={navigateToPage} zoom={zoom} startPageIndex={3} />
             )
         },
         ...topics.flatMap(topic => [

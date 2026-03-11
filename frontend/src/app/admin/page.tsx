@@ -381,9 +381,7 @@ export default function AdminDashboard() {
     }, [fetchUsers, router]);
 
     useEffect(() => {
-        const socketUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? 'http://localhost:4000'
-            : window.location.origin.replace(':3000', ':4000');
+        const socketUrl = '';
 
         const socket = io(socketUrl, {
             path: '/api/socket.io',

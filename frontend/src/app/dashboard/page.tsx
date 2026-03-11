@@ -284,9 +284,7 @@ export default function DashboardPage() {
       channelRef.current = new BroadcastChannel('points_sync');
     }
 
-    const socketUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-      ? 'http://localhost:4000'
-      : window.location.origin.replace(':3000', ':4000');
+    const socketUrl = '';
 
     const isDev = process.env.NODE_ENV !== 'production' || process.env.NEXT_PUBLIC_ALLOW_VIDEO_FAST_FORWARD === 'true';
 
