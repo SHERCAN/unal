@@ -64,44 +64,45 @@ const formatModuleName = (id: string) => {
 };
 
 // Extraer el número de página de un ID
-const extractPageNumber = (id: string): string | null => {
+const extractPageNumber = (id: string): number | null => {
     const pagMatch = id.match(/-pag(\d+)-/i);
-    return pagMatch ? pagMatch[1] : null;
+    return pagMatch ? parseInt(pagMatch[1], 10) : null;
 };
 
-// Extraer un "sort key" para ordenar actividades dentro de una misma página
-const extractSortKey = (id: string): string => {
-    const pagMatch = id.match(/-pag\d+-(.+)$/i);
-    if (!pagMatch) return id;
-    return pagMatch[1];
+// Extraer el sufijo completo después de -pag[N]- (ej: "ej4-9", "v1", "act3")
+const extractItemSuffix = (id: string): string | null => {
+    const match = id.match(/-pag\d+-(.+)$/i);
+    return match ? match[1] : null;
 };
 
-// Generar nombre con formato: "Tipo: Página X1 - Tipo X2"
-const buildItemName = (type: 'Video' | 'Ejercicio' | 'Actividad', pageNum: string, seqNum: number): string => {
+// Extraer clave numérica de ordenamiento del sufijo (ej: "ej4-9" → [4, 9], "v1" → [1], "stage2" → [2])
+const extractSortNumbers = (suffix: string): number[] => {
+    const nums = suffix.match(/\d+/g);
+    return nums ? nums.map(n => parseInt(n, 10)) : [9999];
+};
+
+// Generar nombre con formato: "Tipo: Página X - Tipo N" reemplazando prefijos cortos
+const buildItemName = (type: 'Video' | 'Ejercicio' | 'Actividad', pageNum: number, suffix: string): string => {
     const labelPrefix = type === 'Video' ? 'Video' : (type === 'Actividad' ? 'Actividad' : 'Ejercicio');
-    return `${labelPrefix}: Página ${pageNum} - ${labelPrefix} ${seqNum}`;
+    // Reemplazar prefijos cortos (ej, v, act) con el nombre completo del tipo
+    const displaySuffix = suffix
+        .replace(/^ej/i, 'Ejercicio ')
+        .replace(/^v/i, 'Video ')
+        .replace(/^act/i, 'Actividad ')
+        .replace(/^game/i, 'Juego ')
+        .replace(/^activity/i, 'Actividad ')
+        .replace(/^stage/i, 'Etapa ');
+    return `${labelPrefix}: Página ${pageNum} - ${displaySuffix}`;
 };
 
-// Asignar nombres secuenciales a las actividades de un módulo
-const assignSequentialNames = (activities: ModuleActivity[]): void => {
-    // Agrupar por (página + tipo)
-    const groups: Record<string, ModuleActivity[]> = {};
+// Asignar nombres basados en el sufijo real del ID (tal como aparece en la BD)
+const assignRealNames = (activities: ModuleActivity[]): void => {
     activities.forEach(act => {
         const pag = extractPageNumber(act.id);
         if (!pag) return; // IDs sin página mantienen su nombre
-        const key = `${pag}-${act.type}`;
-        if (!groups[key]) groups[key] = [];
-        groups[key].push(act);
-    });
-
-    // Para cada grupo, ordenar y asignar números secuenciales
-    Object.entries(groups).forEach(([key, items]) => {
-        const [pag, type] = [key.split('-')[0], key.substring(key.indexOf('-') + 1) as 'Video' | 'Ejercicio' | 'Actividad'];
-        // Ordenar por el sufijo del ID para mantener orden consistente
-        items.sort((a, b) => extractSortKey(a.id).localeCompare(extractSortKey(b.id)));
-        items.forEach((item, index) => {
-            item.name = buildItemName(type, pag, index + 1);
-        });
+        const suffix = extractItemSuffix(act.id);
+        if (!suffix) return;
+        act.name = buildItemName(act.type as 'Video' | 'Ejercicio' | 'Actividad', pag, suffix);
     });
 };
 
@@ -261,8 +262,8 @@ const getUserModules = (user: User): GroupedModule[] => {
 
     return Object.values(map)
         .map(m => {
-            // Asignar nombres secuenciales por (página + tipo)
-            assignSequentialNames(m.activities);
+            // Asignar nombres reales basados en el ID del ejercicio
+            assignRealNames(m.activities);
             // Fallback para items sin nombre (IDs sin -pag[N]-)
             m.activities.forEach(act => {
                 if (!act.name) {
@@ -272,7 +273,22 @@ const getUserModules = (user: User): GroupedModule[] => {
                     act.name = `${labelPrefix}: ${lastPart.charAt(0).toUpperCase() + lastPart.slice(1).replace(/_/g, ' ')}`;
                 }
             });
-            m.activities.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+            // Ordenar por número de página y luego por sufijo numérico (orden de aparición)
+            m.activities.sort((a, b) => {
+                const pagA = extractPageNumber(a.id) ?? 9999;
+                const pagB = extractPageNumber(b.id) ?? 9999;
+                if (pagA !== pagB) return pagA - pagB;
+                const sufA = extractItemSuffix(a.id) ?? '';
+                const sufB = extractItemSuffix(b.id) ?? '';
+                const numsA = extractSortNumbers(sufA);
+                const numsB = extractSortNumbers(sufB);
+                for (let i = 0; i < Math.max(numsA.length, numsB.length); i++) {
+                    const nA = numsA[i] ?? 9999;
+                    const nB = numsB[i] ?? 9999;
+                    if (nA !== nB) return nA - nB;
+                }
+                return 0;
+            });
             return m;
         })
         .sort((a, b) => a.moduleName.localeCompare(b.moduleName));
