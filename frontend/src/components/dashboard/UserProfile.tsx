@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { getLevelInfo } from '@/lib/leveling';
+import axios from 'axios';
 
 interface UserProfileProps {
     user: {
@@ -22,9 +23,20 @@ interface UserProfileProps {
         puntosDefinitivos: number;
     }>;
     onBack: () => void;
+    mutate?: () => void;
 }
 
-export function UserProfile({ user, ranking, onBack }: UserProfileProps) {
+const AVATARS = Array.from({ length: 28 }, (_, i) => `/avatars/avatar${i + 1}-Photoroom.png`);
+
+export function UserProfile({ user, ranking, onBack, mutate }: UserProfileProps) {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [displayAvatar, setDisplayAvatar] = useState(user.photoUrl || user.avatar);
+
+    useEffect(() => {
+        setDisplayAvatar(user.photoUrl || user.avatar);
+    }, [user.photoUrl, user.avatar]);
+
     const totalPuntos = user.puntos + user.puntosDefinitivos;
     const levelInfo = getLevelInfo(totalPuntos);
     const nivel = levelInfo.currentLevel;
@@ -34,8 +46,36 @@ export function UserProfile({ user, ranking, onBack }: UserProfileProps) {
     // Encontrar posición del usuario en el ranking
     const userRankPosition = ranking.findIndex(u => u.nickname === user.nickname) + 1;
 
+    const handleAvatarSelect = async (avatarPath: string) => {
+        try {
+            setIsSaving(true);
+            const token = localStorage.getItem('token');
+            await axios.post('/api/users/avatar', 
+                { avatar: avatarPath },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+            // Actualizar localStorage y estado local
+            const localUser = JSON.parse(localStorage.getItem('user') || '{}');
+            localUser.avatar = avatarPath;
+            localUser.photoUrl = avatarPath; // Sincronizar con DashboardPage
+            localStorage.setItem('user', JSON.stringify(localUser));
+            localStorage.setItem('userAvatar', avatarPath); 
+            
+            setDisplayAvatar(avatarPath);
+            setIsModalOpen(false);
+            
+            if (mutate) mutate();
+        } catch (error) {
+            console.error('Error al cambiar avatar:', error);
+            alert('No se pudo cambiar el avatar. Intenta de nuevo.');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
     return (
-        <div className="h-screen bg-gradient-to-br from-[#dba9f3] to-[#c084fc] p-4 md:p-8 flex flex-col overflow-hidden">
+        <div className="h-screen bg-gradient-to-br from-[#dba9f3] to-[#c084fc] p-4 md:p-8 flex flex-col overflow-hidden relative">
             {/* Botón Volver */}
             <button
                 onClick={onBack}
@@ -57,19 +97,26 @@ export function UserProfile({ user, ranking, onBack }: UserProfileProps) {
                     {/* Columna Izquierda */}
                     <div className="space-y-6">
                         {/* Usuario */}
-                        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 text-center">
-                            <div className="w-32 h-32 mx-auto bg-gradient-to-tr from-[#7e22ce] to-[#9333ea] rounded-full p-[4px] shadow-xl mb-4">
-                                <div className="w-full h-full bg-white rounded-full flex items-center justify-center text-7xl overflow-hidden">
-                                    {user.photoUrl ? (
-                                        <img src={user.photoUrl} alt={user.nombre} className="w-full h-full object-cover" />
-                                    ) : (
-                                        user.avatar?.startsWith('/') ? (
-                                            <img src={user.avatar} alt={user.nombre} className="w-full h-full object-cover" />
+                        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 text-center relative">
+                            <div className="relative inline-block group">
+                                <div className="w-32 h-32 mx-auto bg-gradient-to-tr from-[#7e22ce] to-[#9333ea] rounded-full p-[4px] shadow-xl mb-4">
+                                    <div className="w-full h-full bg-white rounded-full flex items-center justify-center text-7xl overflow-hidden">
+                                        {displayAvatar?.startsWith('/') ? (
+                                            <img src={displayAvatar} alt={user.nombre} className="w-full h-full object-cover" />
                                         ) : (
-                                            <span>{user.avatar}</span>
-                                        )
-                                    )}
+                                            <span>{displayAvatar || '👤'}</span>
+                                        )}
+                                    </div>
                                 </div>
+                                <button
+                                    onClick={() => setIsModalOpen(true)}
+                                    className="absolute bottom-4 right-0 bg-[#7e22ce] text-white p-2 rounded-full shadow-lg hover:scale-110 transition-transform border-4 border-white"
+                                    title="Cambiar avatar"
+                                >
+                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                    </svg>
+                                </button>
                             </div>
                             <h2 className="text-3xl font-black text-[#7e22ce]">{user.nombre}</h2>
                         </div>
@@ -199,7 +246,7 @@ export function UserProfile({ user, ranking, onBack }: UserProfileProps) {
                                                 <img src={rankUser.avatar} alt={rankUser.nombre} className="w-full h-full object-cover" />
                                             </div>
                                         ) : (
-                                            <span className="text-3xl">{rankUser.avatar}</span>
+                                            <span className="text-3xl">{rankUser.avatar || '👤'}</span>
                                         )}
                                         <div className="flex-1 min-w-0">
                                             <p className={`font-black text-lg truncate ${rankUser.nickname === user.nickname ? 'text-white' : 'text-[#7e22ce]'
@@ -240,6 +287,64 @@ export function UserProfile({ user, ranking, onBack }: UserProfileProps) {
                     </div>
                 </div>
             </div>
+
+            {/* Avatar Selection Modal */}
+            {isModalOpen && (
+                <div className="fixed inset-0 z-[600] flex items-center justify-center p-4">
+                    <div 
+                        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                        onClick={() => setIsModalOpen(false)}
+                    ></div>
+                    <div className="bg-white rounded-3xl p-6 w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col relative z-10 shadow-2xl animate-in zoom-in-95 duration-200">
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-3xl font-black text-[#7e22ce]">ELIGE TU AVATAR</h2>
+                            <button 
+                                onClick={() => setIsModalOpen(false)}
+                                className="text-gray-400 hover:text-red-500 transition-colors"
+                            >
+                                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar grid grid-cols-4 md:grid-cols-7 gap-4">
+                            {AVATARS.map((avatar, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => handleAvatarSelect(avatar)}
+                                    disabled={isSaving}
+                                    className={`relative aspect-square rounded-2xl overflow-hidden border-4 transition-all hover:scale-105 ${
+                                        displayAvatar === avatar 
+                                            ? 'border-[#7e22ce] ring-4 ring-[#7e22ce]/20' 
+                                            : 'border-transparent hover:border-purple-200'
+                                    }`}
+                                >
+                                    <img src={avatar} alt={`Avatar ${index + 1}`} className="w-full h-full object-cover" />
+                                    {displayAvatar === avatar && (
+                                        <div className="absolute inset-0 bg-[#7e22ce]/10 flex items-center justify-center">
+                                            <div className="bg-[#7e22ce] text-white rounded-full p-1 shadow-lg">
+                                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    )}
+                                </button>
+                            ))}
+                        </div>
+
+                        {isSaving && (
+                            <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-20 backdrop-blur-[1px]">
+                                <div className="flex flex-col items-center gap-4">
+                                    <div className="w-12 h-12 border-4 border-[#7e22ce] border-t-transparent rounded-full animate-spin"></div>
+                                    <p className="font-black text-[#7e22ce]">GUARDANDO...</p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

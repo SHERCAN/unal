@@ -221,3 +221,39 @@ export const markVideoWatched = async (req: Request, res: Response) => {
   }
 };
 
+
+export const updateAvatar = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).userId;
+    const { avatar } = req.body;
+
+    if (!avatar) {
+      return res.status(400).json({ error: 'Avatar path is required' });
+    }
+
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: { 
+        avatar: avatar,
+        photoUrl: avatar // Set photoUrl too for consistency with frontend logic
+      },
+      select: {
+        id: true,
+        nickname: true,
+        nombre: true,
+        avatar: true,
+        photoUrl: true,
+        puntos: true,
+        puntosDefinitivos: true,
+      },
+    });
+
+    // Notify admin panel
+    notifyProgressUpdate(userId);
+
+    res.json({ message: 'Avatar actualizado', user });
+  } catch (error) {
+    console.error('Error updating avatar:', error);
+    res.status(500).json({ error: 'Error updating avatar' });
+  }
+};

@@ -1,11 +1,12 @@
 import { Router } from 'express';
-import { getProfile, getRanking, getUserProgress, updateProgress, getWatchedVideos, markVideoWatched } from '../controllers/user.controller';
+import { getProfile, getRanking, getUserProgress, updateProgress, getWatchedVideos, markVideoWatched, updateAvatar } from '../controllers/user.controller';
 import { submitExercise, submitGame, getCompletedExercises } from '../controllers/exercise.controller';
 import { authMiddleware } from '../middleware/auth.middleware';
 
 const router = Router();
 
 router.get('/profile', authMiddleware, getProfile);
+router.post('/avatar', authMiddleware, updateAvatar);
 router.get('/ranking', getRanking);
 router.get('/progress', authMiddleware, getUserProgress);
 router.post('/progress', authMiddleware, updateProgress);

@@ -536,6 +536,7 @@ export default function DashboardPage() {
             user={selectedUser}
             ranking={ranking}
             onBack={handleBackToDashboard}
+            mutate={mutateProfile}
           />
         </div>
       )}
