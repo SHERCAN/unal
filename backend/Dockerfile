@@ -10,6 +10,11 @@ WORKDIR /app
 
 # Instalar todas las dependencias (incluye prisma CLI)
 COPY package.json pnpm-lock.yaml* ./
+
+# Autorizar explícitamente los scripts de build de Prisma para evitar el error ERR_PNPM_IGNORED_BUILDS
+RUN pnpm config set allowed-build-from "@prisma/client,prisma,@prisma/engines"
+
+# Ahora el install correrá sin problemas de bloqueo interactivo
 RUN pnpm install --frozen-lockfile
 
 # Copiar el código fuente y generar cliente prisma / build
