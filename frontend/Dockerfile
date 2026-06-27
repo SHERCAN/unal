@@ -1,6 +1,6 @@
 FROM node:22-alpine AS builder
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@9 --activate
 
 WORKDIR /app
 
@@ -20,14 +20,14 @@ RUN pnpm build
 # -------------------------------------------------
 FROM node:22-alpine AS deps
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@9 --activate
 WORKDIR /app
 COPY package.json pnpm-lock.yaml* ./
 # Instalar sólo dependencias de producción en esta etapa para copiar a runtime
 RUN pnpm install --frozen-lockfile --prod
 
 FROM node:22-alpine AS runtime
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@9 --activate
 WORKDIR /app
 ENV NODE_ENV=production
 
