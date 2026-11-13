@@ -27,7 +27,7 @@ export default function Home() {
                 autoPlay
                 muted
                 className="w-full h-full object-cover"
-                src={`apiUrl/${VIDEO_IDS.HOME_INTRO}.mp4`}
+                src={`${apiUrl}/${VIDEO_IDS.HOME_INTRO}.mp4`}
                 controlsList="nodownload"
               >
                 Tu navegador no soporta la reproducción de videos.

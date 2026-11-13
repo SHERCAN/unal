@@ -83,7 +83,7 @@ export default function WelcomeModal({ onClose }: WelcomeModalProps) {
                   autoPlay
                   muted
                   className="w-full h-full object-cover"
-                  src={`apiUrl/${VIDEO_IDS.WELCOME}.mp4`}
+                  src={`${apiUrl}/${VIDEO_IDS.WELCOME}.mp4`}
                   controlsList="nodownload"
                 >
                   Tu navegador no soporta la reproducción de videos.
