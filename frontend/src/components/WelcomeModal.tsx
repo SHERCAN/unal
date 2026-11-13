@@ -3,8 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import VideoModal from '@/components/VideoModal';
-import { VIDEO_IDS } from '@/config/videos';
-const apiUrl = process.env.NEXT_PUBLIC_APIUNAL;
+import { VIDEO_IDS, getVideoUrl } from '@/config/videos';
 interface WelcomeModalProps {
   onClose: () => void;
 }
@@ -83,7 +82,7 @@ export default function WelcomeModal({ onClose }: WelcomeModalProps) {
                   autoPlay
                   muted
                   className="w-full h-full object-cover"
-                  src={`${apiUrl}/${VIDEO_IDS.WELCOME}.mp4`}
+                  src={getVideoUrl(VIDEO_IDS.WELCOME)}
                   controlsList="nodownload"
                 >
                   Tu navegador no soporta la reproducción de videos.

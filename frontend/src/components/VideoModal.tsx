@@ -2,8 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { VIDEO_IDS } from "@/config/videos";
-const apiUrl = process.env.NEXT_PUBLIC_APIUNAL;
+import { getVideoUrl } from "@/config/videos";
 interface VideoModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -100,7 +99,7 @@ export default function VideoModal({
               autoPlay
               muted={false}
               className="w-full h-full object-cover"
-              src={`${apiUrl}${videoId.startsWith('/') ? '' : '/'}${videoId}.mp4`}
+              src={getVideoUrl(videoId)}
               controlsList={(!canSkip && process.env.NEXT_PUBLIC_ALLOW_VIDEO_FAST_FORWARD !== 'true') ? "nodownload noplaybackrate" : "nodownload"}
               onTimeUpdate={handleTimeUpdate}
               onEnded={handleEnded}

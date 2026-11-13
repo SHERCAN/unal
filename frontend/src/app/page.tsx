@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import WelcomeModal from "@/components/WelcomeModal";
-import { VIDEO_IDS } from "@/config/videos";
-const apiUrl = process.env.NEXT_PUBLIC_APIUNAL;
+import { VIDEO_IDS, getVideoUrl } from "@/config/videos";
 export const dynamic = "force-dynamic";
 
 export default function Home() {
@@ -27,7 +26,7 @@ export default function Home() {
                 autoPlay
                 muted
                 className="w-full h-full object-cover"
-                src={`${apiUrl}/${VIDEO_IDS.HOME_INTRO}.mp4`}
+                src={getVideoUrl(VIDEO_IDS.HOME_INTRO)}
                 controlsList="nodownload"
               >
                 Tu navegador no soporta la reproducción de videos.

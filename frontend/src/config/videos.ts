@@ -10,6 +10,22 @@
 //   return `${API_URL}/api/videos/${videoId}.mp4`;
 // };
 
+// URL base del bucket de videos (Cloudflare R2).
+// Se puede sobreescribir en build time con NEXT_PUBLIC_APIUNAL.
+// El fallback evita que el bundle quede con "undefined" cuando el ARG no llega.
+const DEFAULT_APIUNAL = 'https://pub-662ec7c39f78445089b1267d1693bee7.r2.dev';
+
+const normalizeBase = (value?: string) => (value ?? '').trim().replace(/\/+$/, '');
+
+export const APIUNAL =
+  normalizeBase(process.env.NEXT_PUBLIC_APIUNAL) ||
+  normalizeBase(process.env.APIUNAL) ||
+  DEFAULT_APIUNAL;
+
+// Construye la URL de un video evitando dobles barras.
+export const getVideoUrl = (videoId: string): string =>
+  `${APIUNAL}/${videoId.replace(/^\/+/, '')}.mp4`;
+
 export const VIDEO_IDS = {
   // Página de inicio
   HOME_INTRO: 'regUsuario/intro', // Video de introducción al proyecto
