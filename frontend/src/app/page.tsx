@@ -3,7 +3,7 @@
 import { useState } from "react";
 import WelcomeModal from "@/components/WelcomeModal";
 import { VIDEO_IDS } from "@/config/videos";
-const apiUrl = import.meta.env.APIUNAL;
+const apiUrl = process.env.APIUNAL;
 export const dynamic = "force-dynamic";
 
 export default function Home() {

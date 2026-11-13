@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { VIDEO_IDS } from "@/config/videos";
-
+const apiUrl = process.env.APIUNAL;
 interface VideoModalProps {
   isOpen: boolean;
   onClose: () => void;
