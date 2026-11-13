@@ -44,8 +44,11 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - APIUNAL=${APIUNAL}
     environment:
       - API_URL=${FRONTEND_API_URL}
+      - APIUNAL=${APIUNAL}
     expose:
       - 3000
     depends_on:

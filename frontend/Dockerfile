@@ -14,6 +14,8 @@ COPY . .
 # Pasar las variables de entorno para que Next.js pueda compilarlas en el cliente
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ARG APIUNAL
+ENV APIUNAL=$APIUNAL
 
 RUN pnpm build
 # FINAL RUNTIME IMAGE (solo deps de producción)

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import WelcomeModal from "@/components/WelcomeModal";
 import { VIDEO_IDS } from "@/config/videos";
-
+const apiUrl = import.meta.env.APIUNAL;
 export const dynamic = "force-dynamic";
 
 export default function Home() {
@@ -27,7 +27,7 @@ export default function Home() {
                 autoPlay
                 muted
                 className="w-full h-full object-cover"
-                src={`https://unalapi.solindtec.net/${VIDEO_IDS.HOME_INTRO}.mp4`}
+                src={`apiUrl/${VIDEO_IDS.HOME_INTRO}.mp4`}
                 controlsList="nodownload"
               >
                 Tu navegador no soporta la reproducción de videos.
