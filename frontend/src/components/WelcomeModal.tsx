@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import VideoModal from '@/components/VideoModal';
 import { VIDEO_IDS } from '@/config/videos';
-const apiUrl = process.env.APIUNAL;
+const apiUrl = process.env.NEXT_PUBLIC_APIUNAL;
 interface WelcomeModalProps {
   onClose: () => void;
 }
